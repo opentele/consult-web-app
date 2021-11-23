@@ -1,0 +1,28 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Qondoan Iqnaka",
+    "started": "10 am",
+    "toEnd": "1.30 pm",
+    "importantMessage": "Your patient Hanksm Anshs (F) up in 15 minutes",
+    "statistics": "4 patients seen so far. 5 more in queue. 2 of your patient remaining",
+    "signedUp": true
+  },
+  {
+    "id": 2,
+    "name": "Hypertension Followup",
+    "started": "11 am",
+    "toEnd": "1.00 pm",
+    "importantMessage": "Your patient Pqoan Lakqoa (F) up in 90 minutes",
+    "statistics": "2 patients seen so far. 4 more in queue.",
+    "signedUp": false
+  },
+  {
+    "id": 3,
+    "name": "General Medicine",
+    "signedUp": false,
+    "started": "11.30 am",
+    "toEnd": "1.30 pm",
+    "statistics": "2 patients seen so far. 6 more in queue."
+  }
+]

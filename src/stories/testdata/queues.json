@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Oaklapa Kamaoldpa",
+    "items": [
+      {
+        "name": "Hainal Laaou",
+        "active": true
+      },
+      {
+        "name": "Nalains Hanusna"
+      },
+      {
+        "name": "Kaolaos Hansla"
+      },
+      {
+        "name": "Uaaona Palaisn"
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "name": "TB Followup Room",
+    "items": [
+      {
+        "name": "Nahsink",
+        "active": true
+      },
+      {
+        "name": "Poamss Nalsla"
+      }
+    ]
+  }
+]
