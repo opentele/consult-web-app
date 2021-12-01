@@ -6,7 +6,7 @@ import {Upcoming} from '@mui/icons-material';
 import Conferences from "../components/conference/Conferences";
 import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import {Container} from 'consult-app-common';
+import {Container} from 'react-app-common';
 import ConferenceService from "../services/ConferenceService";
 
 const styles = theme => ({});
@@ -15,12 +15,12 @@ class Main extends Component {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
-        this.state = {};
+        this.state = {conferences: []};
     }
 
     componentDidMount() {
         Container.get(ConferenceService).getConferences().then((conferences) => {
-            this.state.conferences = conferences;
+            this.setState({conferences: conferences});
         });
     }
 
@@ -33,18 +33,21 @@ class Main extends Component {
         const {conferences} = this.state;
         return <>
             <ConsultAppBar/>
-            <Accordion>
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    aria-controls="panel1a-content"
-                    id="panel1a-header"
-                >
-                    <Typography>Accordion 1</Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Conferences/>
-                </AccordionDetails>
-            </Accordion>
+            {
+                this.state.conferences.map(() =>
+                    <Accordion>
+                        <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            aria-controls="panel1a-content"
+                            id="panel1a-header"
+                        >
+                            <Typography>Accordion 1</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <Conferences/>
+                        </AccordionDetails>
+                    </Accordion>)
+            }
             <Upcoming/>
         </>;
     }
