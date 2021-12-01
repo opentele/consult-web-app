@@ -1,5 +1,5 @@
 import React from 'react';
-import {default as UP} from "../views/UpdateProfile";
+import {default as UP} from "../../views/UpdateProfile";
 
 //👇 This default export determines where your story goes in the story list
 export default {

@@ -1,6 +1,6 @@
 import React from 'react';
 
-import OrganisationRegister from '../views/OrganisationRegister';
+import OrganisationRegister from '../../views/OrganisationRegister';
 
 //👇 This default export determines where your story goes in the story list
 export default {

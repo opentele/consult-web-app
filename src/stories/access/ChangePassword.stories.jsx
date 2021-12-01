@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ChangePassword from "../views/ChangePassword";
+import ChangePassword from "../../views/ChangePassword";
 
 //👇 This default export determines where your story goes in the story list
 export default {
