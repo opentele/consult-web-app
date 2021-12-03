@@ -9,6 +9,7 @@ import {Container} from 'react-app-common';
 import ConferenceService from "../services/ConferenceService";
 import {i18n} from 'consult-app-common';
 import {Alert} from "@mui/material";
+import Conference from "../domain/Conference";
 
 const styles = theme => ({
     summaryContainer: {
@@ -57,8 +58,9 @@ class RemoteUsherMainView extends Component {
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
             </Tabs>
             {
-                conferences.map((conference) =>
-                    <Accordion>
+                conferences.map((conference) => {
+                    let alert = Conference.getAlert(conference);
+                    return <Accordion>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
@@ -69,12 +71,11 @@ class RemoteUsherMainView extends Component {
                                     <Typography>{`Started: ${conference["started"]}`}</Typography>
                                     <Typography>{`Open Till: ${conference["toEnd"]}`}</Typography>
                                 </Box>
-                                <Alert severity="info">This is an info alert — check it out!</Alert>
+                                <Alert sx={{alignSelf: "flex-start"}} severity={alert.type}>{alert.message}</Alert>
                             </Box>
                         </AccordionSummary>
                         <AccordionDetails>
                             <div className={classes.summary}>
-                                {ConferenceService.getClientMessage(conference) && <Typography>{conference["importantMessage"]}</Typography>}
                                 <Typography>{conference["statistics"]}</Typography>
                             </div>
                         </AccordionDetails>
@@ -83,7 +84,7 @@ class RemoteUsherMainView extends Component {
                             {conference["signedUp"] && <Button variant="contained">{i18n.t('join-conference')}</Button>}
                             {!conference["signedUp"] && <Button variant="contained">{i18n.t('add-client')}</Button>}
                         </AccordionActions>
-                    </Accordion>)
+                    </Accordion>})
             }
         </>;
     }

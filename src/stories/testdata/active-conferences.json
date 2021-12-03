@@ -6,6 +6,7 @@
     "toEnd": "1.30 pm",
     "nextClientIn": 15,
     "nextClient": "Hanksm Anshs (Female, 25 years)",
+    "clientCompleted": 0,
     "totalClients": 2,
     "queueCompleted": 4,
     "queueRemaining": 5,
