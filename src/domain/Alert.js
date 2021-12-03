@@ -16,6 +16,10 @@ class Alert {
     static success(message) {
         return new Alert("success", message);
     }
+
+    static error(message) {
+        return new Alert("error", message);
+    }
 }
 
 export default Alert;

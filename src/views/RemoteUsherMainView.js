@@ -12,16 +12,8 @@ import {Alert} from "@mui/material";
 import Conference from "../domain/Conference";
 
 const styles = theme => ({
-    summaryContainer: {
-        flexDirection: 'row',
-        flex: 1
-    },
-    summary: {
-        flexDirection: 'column',
-        flex: 0.66
-    },
-    summaryAlert: {
-        flex: 0.33
+    conferenceBox: {
+        marginTop: 15
     }
 });
 
@@ -59,19 +51,21 @@ class RemoteUsherMainView extends Component {
             </Tabs>
             {
                 conferences.map((conference) => {
-                    let alert = Conference.getAlert(conference);
-                    return <Accordion>
+                    const alerts = Conference.getAlerts(conference);
+                    return <Accordion className={classes.conferenceBox}>
                         <AccordionSummary
                             expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
-                            <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{ width: '100%' }}>
+                            <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <Typography variant="h5">{conference["name"]}</Typography>
                                     <Typography>{`Started: ${conference["started"]}`}</Typography>
                                     <Typography>{`Open Till: ${conference["toEnd"]}`}</Typography>
                                 </Box>
-                                <Alert sx={{alignSelf: "flex-start"}} severity={alert.type}>{alert.message}</Alert>
+                                <Box sx={{display: "flex", flexDirection: "column"}}>
+                                    {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 1}} severity={alert.type}>{alert.message}</Alert>)}
+                                </Box>
                             </Box>
                         </AccordionSummary>
                         <AccordionDetails>
@@ -80,11 +74,10 @@ class RemoteUsherMainView extends Component {
                             </div>
                         </AccordionDetails>
                         <AccordionActions>
-                            {conference["signedUp"] && <Button variant="contained">{i18n.t('view-my-clients')}</Button>}
-                            {conference["signedUp"] && <Button variant="contained">{i18n.t('join-conference')}</Button>}
-                            {!conference["signedUp"] && <Button variant="contained">{i18n.t('add-client')}</Button>}
+                            {Conference.getActions(conference).map((action) => <Button variant="contained">{action}</Button>)}
                         </AccordionActions>
-                    </Accordion>})
+                    </Accordion>
+                })
             }
         </>;
     }
