@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Upcoming} from '@mui/icons-material';
-import Conferences from "../components/conference/Conferences";
-import {Accordion, AccordionDetails, AccordionSummary, Typography} from "@material-ui/core";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Typography} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {Container} from 'react-app-common';
 import ConferenceService from "../services/ConferenceService";
+import {AccordionActions} from "@mui/material";
 
-const styles = theme => ({});
+const styles = theme => ({
+    summary: {
+        flexDirection: 'column'
+    }
+});
 
 class Main extends Component {
     constructor(props, context) {
@@ -34,18 +38,26 @@ class Main extends Component {
         return <>
             <ConsultAppBar/>
             {
-                this.state.conferences.map(() =>
+                conferences.map((conference) =>
                     <Accordion>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon />}
+                            expandIcon={<ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
-                            id="panel1a-header"
-                        >
-                            <Typography>Accordion 1</Typography>
+                            id="panel1a-header">
+                            <div className={classes.summary}>
+                                <Typography variant="h5">{conference["name"]}</Typography>
+                                <Typography>{`Started: ${conference["started"]}`}</Typography>
+                                <Typography>{`Open Till: ${conference["toEnd"]}`}</Typography>
+                            </div>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <Conferences/>
+                            {conference["importantMessage"] && <Typography>{conference["importantMessage"]}</Typography>}
+                            <Typography>{conference["statistics"]}</Typography>
                         </AccordionDetails>
+                        <AccordionActions>
+                            <Button variant="contained">Cancel</Button>
+                            <Button variant="contained">Join</Button>
+                        </AccordionActions>
                     </Accordion>)
             }
             <Upcoming/>

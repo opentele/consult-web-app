@@ -1,0 +1,23 @@
+Queue web requests
+https://github.com/orthecreedence/hustle
+
+https://think360studio.com/work/saas-application-doctors-clinics-telemedicine
+
+check
+https://github.com/storybookjs/react-native
+for storybook error related to datepicker in console
+
+https://github.com/goatandsheep/react-native-dotenv
+
+Field staff
+-----------
+Register people for sessions (offline-ish)
+Create health record when they come for the session
+Enter/Exit conference room
+
+Functional Modules
+------------------
+Access
+Registration, health record
+Conference
+Video call
