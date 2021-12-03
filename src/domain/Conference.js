@@ -23,7 +23,7 @@ class Conference {
         else if (!this.hasMoreClients(conference) && conference.totalClients > 0)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {numberOfClients: conference.totalClients})));
         else
-            alerts.push(Alert.success(i18n.t("conference-no-client")));
+            alerts.push(Alert.info(i18n.t("conference-no-client")));
 
         if (!this.hasVacancy(conference))
             alerts.push(Alert.error(i18n.t("conference-no-vacancy")));

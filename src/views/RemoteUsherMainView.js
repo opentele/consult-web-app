@@ -13,7 +13,8 @@ import Conference from "../domain/Conference";
 
 const styles = theme => ({
     conferenceBox: {
-        marginTop: 15
+        marginTop: 15,
+        padding: 6
     }
 });
 
@@ -64,17 +65,14 @@ class RemoteUsherMainView extends Component {
                                     <Typography>{`Open Till: ${conference["toEnd"]}`}</Typography>
                                 </Box>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 1}} severity={alert.type}>{alert.message}</Alert>)}
+                                    {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
                                 </Box>
                             </Box>
                         </AccordionSummary>
                         <AccordionDetails>
-                            <div className={classes.summary}>
-                                <Typography>{conference["statistics"]}</Typography>
-                            </div>
                         </AccordionDetails>
                         <AccordionActions>
-                            {Conference.getActions(conference).map((action) => <Button variant="contained">{action}</Button>)}
+                            {Conference.getActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
                         </AccordionActions>
                     </Accordion>
                 })
