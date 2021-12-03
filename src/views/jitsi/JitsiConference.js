@@ -9,13 +9,13 @@ const styles = theme => ({
 });
 
 const config = {
-    defaultLanguage: "es",
+    defaultLanguage: "en",
     prejoinPageEnabled: false
 };
 
 const interfaceConfig = {
     LANG_DETECTION: false,
-    lang: "es",
+    lang: "en",
     APP_NAME: "QoriMed",
     DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
     HIDE_INVITE_MORE_HEADER: true,
@@ -39,6 +39,7 @@ const interfaceConfig = {
     ]
 };
 
+//https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 class JitsiConference extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +51,7 @@ class JitsiConference extends Component {
 
     handleAPI(JitsiMeetAPI) {
         JitsiMeetAPI.executeCommand("toggleVideo");
+        setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
     };
 
     render() {
