@@ -28,7 +28,6 @@ const styles = theme => (styleObj);
 class UpdateProfile extends BaseView {
     constructor(props) {
         super(props);
-        this.setState = this.setState.bind(this);
         this.state = {
             name: props.name,
             email: props.email,
@@ -54,7 +53,7 @@ class UpdateProfile extends BaseView {
                 fullWidth
                 className={classes.formField}
                 label="Name"
-                onChange={this.nameChanged}
+                onChange={this.textChangedHandler("name")}
                 value={this.state.name}
             />
 
@@ -73,10 +72,6 @@ class UpdateProfile extends BaseView {
             </div>
         </div>;
     }
-
-    nameChanged = (e) => {
-        this.setValue("name", e);
-    };
 }
 
 export default withStyles(styles)(UpdateProfile);

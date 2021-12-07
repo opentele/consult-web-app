@@ -53,9 +53,10 @@ class RemoteUsherMainView extends Component {
             {
                 conferences.map((conference) => {
                     const alerts = Conference.getAlerts(conference);
+                    const hasAction = Conference.hasVacancy(conference) || Conference.hasMoreClients(conference);
                     return <Accordion className={classes.conferenceBox}>
                         <AccordionSummary
-                            expandIcon={<ExpandMoreIcon/>}
+                            expandIcon={hasAction && <ExpandMoreIcon/>}
                             aria-controls="panel1a-content"
                             id="panel1a-header">
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
@@ -69,11 +70,10 @@ class RemoteUsherMainView extends Component {
                                 </Box>
                             </Box>
                         </AccordionSummary>
-                        <AccordionDetails>
-                        </AccordionDetails>
-                        <AccordionActions>
+                        {hasAction && <AccordionDetails/>}
+                        {hasAction && <AccordionActions>
                             {Conference.getActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
-                        </AccordionActions>
+                        </AccordionActions>}
                     </Accordion>
                 })
             }
