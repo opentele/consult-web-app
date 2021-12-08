@@ -53,7 +53,7 @@ class UpdateProfile extends BaseView {
                 fullWidth
                 className={classes.formField}
                 label="Name"
-                onChange={this.textChangedHandler("name")}
+                onChange={this.getValueChangedHandler("name")}
                 value={this.state.name}
             />
 

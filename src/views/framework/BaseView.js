@@ -6,7 +6,7 @@ class BaseView extends Component {
         this.setState = this.setState.bind(this);
     }
 
-    textChangedHandler(fieldName) {
+    getValueChangedHandler(fieldName) {
         return (e) => {
             const newState = {};
             newState[fieldName] = e.target.value;
