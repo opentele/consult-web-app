@@ -1,16 +1,16 @@
-import React, {Component} from "react";
+import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import commonStyles from "./framework/CommonStyles";
+import {Box} from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 const styles = theme => ({
-    root: commonStyles.root
+    container: {
+    }
 });
 
-class UpdateProfile extends Component {
+class UpdateProfileView extends BaseView {
     constructor(props) {
         super(props);
-        this.setState = this.setState.bind(this);
         this.state = {};
     }
 
@@ -21,9 +21,9 @@ class UpdateProfile extends Component {
             classes
         } = this.props;
 
-        return <div className={classes.root}>
-        </div>;
+        return <Box className={classes.root}>
+        </Box>;
     }
 }
 
-export default withStyles(styles)(UpdateProfile);
+export default withStyles(styles)(UpdateProfileView);

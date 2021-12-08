@@ -3,6 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize, TextField} from "@material-ui/core";
 import BaseView from "../framework/BaseView";
 import FormLabel from "../../components/FormLabel";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     field: {
@@ -38,7 +39,7 @@ class PersonView extends BaseView {
         return <FormControl>
             <Box className={classes.container}>
                 <Box className={classes.field}>
-                    <FormLabel text="Full name"/>
+                    <FormLabel textKey="full-name"/>
                     <TextField
                         name="name"
                         onChange={this.getValueChangedHandler("name")}
@@ -46,11 +47,10 @@ class PersonView extends BaseView {
                     />
                 </Box>
                 <Box className={classes.field}>
-                    <FormLabel text="Age"/>
+                    <FormLabel textKey="age"/>
                     <Box sx={{display: "flex", flexDirection: "row"}}>
                         <TextField
                             name="age"
-                            required
                             onChange={this.getValueChangedHandler("age")}
                             value={this.state.age}
                             style={{marginRight: 7}}/>
@@ -64,7 +64,7 @@ class PersonView extends BaseView {
                     </Box>
                 </Box>
                 <Box className={[classes.field]}>
-                    <FormLabel text="Gender"/>
+                    <FormLabel textKey="gender"/>
                     <RadioGroup
                         defaultValue="male"
                         name="gender"
@@ -75,7 +75,7 @@ class PersonView extends BaseView {
                     </RadioGroup>
                 </Box>
                 <Box className={[classes.field]}>
-                    <FormLabel text="Mobile"/>
+                    <FormLabel textKey="mobile"/>
                     <TextField
                         name="mobile"
                         required
@@ -85,10 +85,10 @@ class PersonView extends BaseView {
                     />
                 </Box>
                 <Box className={classes.field}>
-                    <FormLabel text="Other details"/>
+                    <FormLabel textKey="other-details"/>
                     <TextareaAutosize
                         minRows={3}
-                        className={[classes.field, classes.name]}
+                        className={[classes.field]}
                         onChange={this.getValueChangedHandler("otherDetails")}
                         value={this.state.otherDetails}
                     />
