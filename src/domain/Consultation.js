@@ -3,6 +3,6 @@ export default class Consultation {
     by;
 
     static getSummary(consultation) {
-        return `On ${consultation.date} by ${consultation.by}`;
+        return `${consultation.date} by ${consultation.by}`;
     }
 }
