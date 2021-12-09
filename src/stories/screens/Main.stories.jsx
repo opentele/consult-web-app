@@ -19,5 +19,4 @@ const Template = (args) => <Main {...args} />;
 export const MainView = Template.bind({});
 
 MainView.args = {
-    message: "User already exists"
 };

@@ -2,7 +2,7 @@ import React from 'react';
 import PersonView from "../../views/consultation/PersonView";
 
 export default {
-    title: 'Person View',
+    title: 'Consultant and Remote Usher / Person View',
     component: PersonView,
 };
 
