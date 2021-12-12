@@ -8,7 +8,10 @@ import Client from "../../domain/Client";
 import Consultation from "../../domain/Consultation";
 
 const styles = theme => ({
-    container: {}
+    container: {
+        display: "flex",
+        flexDirection: "column"
+    }
 });
 
 class ClientListView extends BaseView {
@@ -27,7 +30,7 @@ class ClientListView extends BaseView {
             clients
         } = this.props;
 
-        return <Box className={classes.root}>
+        return <Box className={classes.container}>
             {clients.map((client) => {
                 return <Accordion>
                     <AccordionSummary
@@ -44,10 +47,10 @@ class ClientListView extends BaseView {
                     </AccordionDetails>
                     <AccordionActions>
                         <Button color="primary">Client Dashboard</Button>
-                        <Button color="primary">Close</Button>
                     </AccordionActions>
                 </Accordion>
             })}
+            <Button color="primary" variant="contained" style={{marginTop: 40}}>Close</Button>
         </Box>;
     }
 }

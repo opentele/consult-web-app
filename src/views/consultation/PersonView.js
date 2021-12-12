@@ -26,15 +26,23 @@ const styles = theme => ({
 class PersonView extends BaseView {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {client: {}};
     }
 
-    static propTypes = {}
+    static propTypes = {};
+
+    getClientFieldValueChangeHandler(fieldName) {
+        return this.getStateFieldValueChangedHandler("client", fieldName);
+    }
 
     render() {
         const {
             classes
         } = this.props;
+
+        const {
+            client
+        } = this.state;
 
         return <FormControl>
             <Box className={classes.container}>
@@ -42,8 +50,8 @@ class PersonView extends BaseView {
                     <FormLabel textKey="full-name"/>
                     <TextField
                         name="name"
-                        onChange={this.getValueChangedHandler("name")}
-                        value={this.state.name}
+                        onChange={this.getClientFieldValueChangeHandler("name")}
+                        value={client.name}
                     />
                 </Box>
                 <Box className={classes.field}>
@@ -51,15 +59,15 @@ class PersonView extends BaseView {
                     <Box sx={{display: "flex", flexDirection: "row"}}>
                         <TextField
                             name="age"
-                            onChange={this.getValueChangedHandler("age")}
-                            value={this.state.age}
+                            onChange={this.getClientFieldValueChangeHandler("age")}
+                            value={client.age}
                             style={{marginRight: 7}}/>
                         <RadioGroup
                             defaultValue="year"
                             name="durationType"
                             className={classes.radioGroup}>
-                            <FormControlLabel value="year" control={<Radio onChange={this.getValueChangedHandler("durationType")}/>} label="Years"/>
-                            <FormControlLabel value="month" control={<Radio onChange={this.getValueChangedHandler("durationType")}/>} label="Months"/>
+                            <FormControlLabel value="year" control={<Radio onChange={this.getClientFieldValueChangeHandler("durationType")}/>} label="Years"/>
+                            <FormControlLabel value="month" control={<Radio onChange={this.getClientFieldValueChangeHandler("durationType")}/>} label="Months"/>
                         </RadioGroup>
                     </Box>
                 </Box>
@@ -69,9 +77,9 @@ class PersonView extends BaseView {
                         defaultValue="male"
                         name="gender"
                         className={classes.radioGroup}>
-                        <FormControlLabel value="male" control={<Radio onChange={this.getValueChangedHandler("gender")}/>} label="Male"/>
-                        <FormControlLabel value="female" control={<Radio onChange={this.getValueChangedHandler("gender")}/>} label="Female"/>
-                        <FormControlLabel value="other" control={<Radio onChange={this.getValueChangedHandler("gender")}/>} label="Other"/>
+                        <FormControlLabel value="male" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Male"/>
+                        <FormControlLabel value="female" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Female"/>
+                        <FormControlLabel value="other" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Other"/>
                     </RadioGroup>
                 </Box>
                 <Box className={[classes.field]}>
@@ -80,8 +88,17 @@ class PersonView extends BaseView {
                         name="mobile"
                         required
                         className={[]}
-                        onChange={this.getValueChangedHandler("mobile")}
-                        value={this.state.mobile}
+                        onChange={this.getClientFieldValueChangeHandler("mobile")}
+                        value={client.mobile}
+                    />
+                </Box>
+                <Box className={[classes.field]}>
+                    <FormLabel textKey="registration-number" mandatory={false}/>
+                    <TextField
+                        name="registrationNumber"
+                        className={[]}
+                        onChange={this.getClientFieldValueChangeHandler("registrationNumber")}
+                        value={client.registrationNumber}
                     />
                 </Box>
                 <Box className={classes.field}>
@@ -89,8 +106,8 @@ class PersonView extends BaseView {
                     <TextareaAutosize
                         minRows={3}
                         className={[classes.field]}
-                        onChange={this.getValueChangedHandler("otherDetails")}
-                        value={this.state.otherDetails}
+                        onChange={this.getClientFieldValueChangeHandler("otherDetails")}
+                        value={client.otherDetails}
                     />
                 </Box>
                 <Button className={classes.field} color="primary" variant="contained">SAVE</Button>

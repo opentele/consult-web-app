@@ -2,11 +2,13 @@ export default class Client {
     name;
     age;
     gender;
+    registrationNumber;
     consultations;
+    otherDetails;
 
     static getAgeDisplay(age) {
         const ageInYears = Math.floor(age);
-        const months = (age - ageInYears) * 1.2;
+        const months = (age - ageInYears) * 12;
         if (ageInYears === 0)
             return `${months} months`
         return `${ageInYears} years, ${months} months`;
