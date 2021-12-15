@@ -3,7 +3,8 @@
   "dateOfBirth": "3rd March 1980",
   "age": "41 years",
   "registrationNumber": "6000452",
-  "phoneNumber": "9900990090",
+  "mobile": "9900990090",
+  "gender": "Female",
   "otherDetails": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec eget quam ac enim dignissim faucibus. In bibendum augue porttitor ex suscipit bibendum. Praesent sollicitudin enim sit amet viverra dictum. In sed nulla tellus. Duis purus diam, aliquet non enim nec, posuere condimentum elit. Vivamus iaculis erat ac tincidunt sagittis. Cras vel mollis lacus. Nulla quis erat et dolor vulputate accumsan. Aliquam erat volutpat.",
   "consultations": [
     {

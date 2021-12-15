@@ -1,6 +1,6 @@
 import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Card, Typography} from '@material-ui/core';
+import {Box, Card, Grid, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Client from "../../domain/Client";
 import FieldDisplay from "./FieldDisplay";
@@ -11,8 +11,7 @@ const styles = theme => ({
         flexDirection: 'column'
     },
     client: {
-        display: 'flex',
-        flexDirection: 'column'
+        padding: 15
     }
 });
 
@@ -34,16 +33,14 @@ class ClientDisplay extends Component {
 
         return <Box className={classes.container}>
             <Card className={classes.client}>
-                <Box>
+                <Grid container spacing={1}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
-                </Box>
-                <Box>
                     <FieldDisplay fieldName="age" fieldValue={Client.getAgeDisplay(client)}/>
                     <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
                     <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
-                </Box>
-                <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
+                    <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
+                </Grid>
             </Card>
         </Box>;
     }

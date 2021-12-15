@@ -1,10 +1,10 @@
 import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Typography} from '@material-ui/core';
+import {Box, Grid, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
+import {i18n} from "consult-app-common";
 
-const styles = theme => ({
-});
+const styles = theme => ({});
 
 class FieldDisplay extends Component {
     constructor(props) {
@@ -24,10 +24,12 @@ class FieldDisplay extends Component {
             fieldValue
         } = this.props;
 
-        return <Box>
-            <Typography>{fieldName}</Typography>
-            <Typography>{fieldValue}</Typography>
-        </Box>;
+        return <Grid item xs={5}>
+            <Box sx={{display: "flex", flexDirection: "column"}}>
+                <Typography variant="button">{i18n.t(fieldName)}</Typography>
+                <Typography variant="subtitle2">{fieldValue}</Typography>
+            </Box>
+        </Grid>;
     }
 }
 

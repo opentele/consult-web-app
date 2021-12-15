@@ -1,13 +1,13 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Card, Typography} from '@material-ui/core';
+import {Box} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import BaseView from "../../views/framework/BaseView";
-import Client from "../../domain/Client";
+import ClientDisplay from "../../components/consultation/ClientDisplay";
+import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 
 const styles = theme => ({
-    container: {
-    }
+    container: {}
 });
 
 class ClientDashboard extends BaseView {
@@ -17,21 +17,19 @@ class ClientDashboard extends BaseView {
     }
 
     static propTypes = {
-        client: PropTypes.object.isRequired
+        clientRecord: PropTypes.object.isRequired
     }
 
     render() {
         const {
             classes,
-            client
+            clientRecord
         } = this.props;
 
         return <Box className={classes.container}>
-
-            {client.consultations.map((consultation) =>
-                <Card>
-                    <Typography>{consultation.name}</Typography>
-                </Card>
+            <ClientDisplay client={clientRecord}/>
+            {clientRecord.consultations.map((consultation) =>
+                <ConsultationDisplay consultation={consultation}/>
             )}
         </Box>;
     }
