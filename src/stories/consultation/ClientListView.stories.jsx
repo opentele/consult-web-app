@@ -1,15 +1,15 @@
 import React from 'react';
-import ClientListView from "../../views/consultation/ClientListView";
+import About from "../../views/consultation/ClientListView";
 import Clients from '../testdata/clients.json';
 
 export default {
-    title: 'Consultant and Remote Usher / Client List View',
-    component: ClientListView,
+    title: 'Consultant and Remote Usher / Client List',
+    component: About,
 };
 
-const Template = (args) => <ClientListView {...args} />;
-export const ClientListViewT = Template.bind({});
+const Template = (args) => <About {...args} />;
+export const ClientList = Template.bind({});
 
-ClientListViewT.args = {
+ClientList.args = {
     clients: Clients
 };

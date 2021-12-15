@@ -1,13 +1,13 @@
 import React from 'react';
-import PersonView from "../../views/consultation/PersonView";
+import About from "../../views/consultation/PersonView";
 
 export default {
-    title: 'Consultant and Remote Usher / Person View',
-    component: PersonView,
+    title: 'Consultant and Remote Usher / Client Registration',
+    component: About
 };
 
-const Template = (args) => <PersonView {...args} />;
-export const PersonViewT = Template.bind({});
+const Template = (args) => <About {...args} />;
+export const ClientRegistration = Template.bind({});
 
-PersonViewT.args = {
+ClientRegistration.args = {
 };

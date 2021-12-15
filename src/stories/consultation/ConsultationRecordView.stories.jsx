@@ -1,13 +1,13 @@
 import React from 'react';
-import ConsultationRecordView from "../../views/consultation/ConsultationRecordView";
+import About from "../../views/consultation/ConsultationRecordView";
 
 export default {
-    title: 'Consultant and Remote Usher / Consultation Record View',
-    component: ConsultationRecordView,
+    title: 'Consultant and Remote Usher / Consultation Record',
+    component: About,
 };
 
-const Template = (args) => <ConsultationRecordView {...args} />;
-export const ConsultationRecordViewT = Template.bind({});
+const Template = (args) => <About {...args} />;
+export const ConsultationRecord = Template.bind({});
 
-ConsultationRecordViewT.args = {
+ConsultationRecord.args = {
 };

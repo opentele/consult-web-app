@@ -31,13 +31,24 @@ class Conference {
         return alerts;
     }
 
-    static getActions(conference) {
+    static getUsherActions(conference) {
         const actions = [];
         if (this.hasVacancy(conference))
             actions.push(i18n.t('add-client'));
         if (conference.totalClients > 0) {
             actions.push(i18n.t('view-my-clients'));
             actions.push(i18n.t('join-conference'));
+        }
+        return actions;
+    }
+
+    static getConsultantActions(conference) {
+        const actions = [];
+        if (this.hasVacancy(conference))
+            actions.push(i18n.t('add-client'));
+        if (conference.totalClients > 0) {
+            actions.push(i18n.t('view-my-clients'));
+            actions.push(i18n.t('start-conference'));
         }
         return actions;
     }

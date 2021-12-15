@@ -2,12 +2,12 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import ConsultAppBar from "../components/ConsultAppBar";
-import {Schedule, Today, History} from '@mui/icons-material';
-import {AccordionActions, Accordion, AccordionDetails, AccordionSummary, Button, Typography, Tabs, Tab, Box} from "@material-ui/core";
+import {Schedule, Today, History, AddCircle} from '@mui/icons-material';
+import {AccordionActions, Accordion, AccordionDetails, AccordionSummary, Button, Typography, Tabs, Tab, Box, Fab} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {Container} from 'react-app-common';
 import ConferenceService from "../services/ConferenceService";
-import {i18n} from 'consult-app-common';
+import {i18n, UserType} from 'consult-app-common';
 import {Alert} from "@mui/material";
 import Conference from "../domain/Conference";
 
@@ -15,10 +15,18 @@ const styles = theme => ({
     conferenceBox: {
         marginTop: 15,
         padding: 6
+    },
+    createRoom: {
+        position: 'absolute',
+        bottom: 16,
+        right: 16
+    },
+    createRoomIcon: {
+        marginRight: 10
     }
 });
 
-class RemoteUsherMainView extends Component {
+class ConsultationRooms extends Component {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
@@ -33,6 +41,7 @@ class RemoteUsherMainView extends Component {
 
     static propTypes = {
         classes: PropTypes.object.isRequired,
+        role: PropTypes.string.isRequired
     };
 
     onTabChange() {
@@ -40,15 +49,19 @@ class RemoteUsherMainView extends Component {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, role} = this.props;
         const {conferences, tabIndex} = this.state;
         return <>
             <ConsultAppBar/>
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()} aria-label="icon label tabs example">
-                <Tab icon={<History/>} label={i18n.t('paste-consultations')}/>
+                <Tab icon={<History/>} label={i18n.t('past-consultations')}/>
                 <Tab icon={<Today/>} label={i18n.t('happening-today')}/>
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
+                {role === UserType.Consultant && <Fab variant="extended" size="medium" className={classes.createRoom}>
+                    <AddCircle className={classes.createRoomIcon}/>
+                    {i18n.t('create-new-room')}
+                </Fab>}
             </Tabs>
             {
                 conferences.map((conference) => {
@@ -72,7 +85,7 @@ class RemoteUsherMainView extends Component {
                         </AccordionSummary>
                         {hasAction && <AccordionDetails/>}
                         {hasAction && <AccordionActions>
-                            {Conference.getActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
+                            {Conference.getUsherActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
                         </AccordionActions>}
                     </Accordion>
                 })
@@ -81,4 +94,4 @@ class RemoteUsherMainView extends Component {
     }
 }
 
-export default withStyles(styles)(RemoteUsherMainView);
+export default withStyles(styles)(ConsultationRooms);

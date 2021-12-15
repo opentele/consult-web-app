@@ -1,12 +1,13 @@
 import React from 'react';
-import Main from "../../views/RemoteUsherMainView";
+import About from "../../views/ConsultationRooms";
 import {Container} from 'react-app-common';
 import ConferenceService from "../../services/ConferenceService";
 import ActiveConferences from "../testdata/active-conferences.json";
+import {UserType} from "consult-app-common";
 
 export default {
-    title: 'Remote Usher / Main View',
-    component: Main,
+    title: 'Consultant / Main Screen',
+    component: About,
 };
 
 Container.add(ConferenceService, {
@@ -15,8 +16,9 @@ Container.add(ConferenceService, {
     }
 });
 
-const Template = (args) => <Main {...args} />;
-export const MainView = Template.bind({});
+const Template = (args) => <About {...args} />;
+export const MainScreen = Template.bind({});
 
-MainView.args = {
+MainScreen.args = {
+    role: UserType.Consultant
 };
