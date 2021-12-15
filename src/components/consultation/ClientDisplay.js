@@ -1,15 +1,22 @@
-import React from "react";
+import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
 import {Box, Card, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import Client from "../../domain/Client";
+import FieldDisplay from "./FieldDisplay";
 
 const styles = theme => ({
     container: {
+        display: 'flex',
+        flexDirection: 'column'
+    },
+    client: {
+        display: 'flex',
+        flexDirection: 'column'
     }
 });
 
-class ClientDisplay extends Comment {
+class ClientDisplay extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -26,12 +33,17 @@ class ClientDisplay extends Comment {
         } = this.props;
 
         return <Box className={classes.container}>
-            <Card>
-                <Typography>{client.name}</Typography>
-                <Typography>{Client.getAgeDisplay(client)}</Typography>
-                <Typography>{client.gender}</Typography>
-                <Typography>{client.mobile}</Typography>
-                <Typography>{client.otherDetails}</Typography>
+            <Card className={classes.client}>
+                <Box>
+                    <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
+                    <FieldDisplay fieldName="name" fieldValue={client.name}/>
+                </Box>
+                <Box>
+                    <FieldDisplay fieldName="age" fieldValue={Client.getAgeDisplay(client)}/>
+                    <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
+                    <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
+                </Box>
+                <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
             </Card>
         </Box>;
     }

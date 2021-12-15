@@ -1,8 +1,9 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, TextareaAutosize} from '@material-ui/core';
+import {Box, Button, TextareaAutosize, TextField} from '@material-ui/core';
 import BaseView from "../framework/BaseView";
 import FormLabel from "../../components/FormLabel";
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
     container: {
@@ -20,15 +21,25 @@ const styles = theme => ({
 class ConsultationRecordView extends BaseView {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {consultation: {}};
     }
 
-    static propTypes = {}
+    static propTypes = {
+        clientRecord: PropTypes.object.isRequired
+    }
+
+    getConsultationFieldValueChangeHandler(fieldName) {
+        return this.getStateFieldValueChangedHandler("consultation", fieldName);
+    }
 
     render() {
         const {
             classes
         } = this.props;
+
+        const {
+            consultation
+        } = this.state;
 
         return <Box className={classes.container}>
             <Box className={classes.field}>
@@ -37,7 +48,7 @@ class ConsultationRecordView extends BaseView {
                     minRows={3}
                     className={[classes.field]}
                     onChange={this.getValueChangedHandler("complaints")}
-                    value={this.state["complaints"]}
+                    value={consultation.complaints}
                 />
             </Box>
             <Box className={classes.field}>
@@ -46,7 +57,16 @@ class ConsultationRecordView extends BaseView {
                     minRows={3}
                     className={[classes.field]}
                     onChange={this.getValueChangedHandler("observations")}
-                    value={this.state["observations"]}
+                    value={consultation.observations}
+                />
+            </Box>
+            <Box className={classes.field}>
+                <FormLabel textKey="key-inference" mandatory={false}/>
+                <TextField
+                    name="keyInference"
+                    className={[]}
+                    onChange={this.getValueChangedHandler("registrationNumber")}
+                    value={consultation.keyInference}
                 />
             </Box>
             <Box className={classes.field}>
@@ -55,7 +75,7 @@ class ConsultationRecordView extends BaseView {
                     minRows={3}
                     className={[classes.field]}
                     onChange={this.getValueChangedHandler("recommendations")}
-                    value={this.state["recommendations"]}
+                    value={consultation.recommendations}
                 />
             </Box>
             <Button className={classes.field} color="primary" variant="contained">SAVE</Button>

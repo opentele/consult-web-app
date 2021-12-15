@@ -1,8 +1,13 @@
 export default class Consultation {
-    date;
+    dateOfConsultation;
     by;
+    complaints;
+    observations;
+    keyInference;
+    recommendations;
+    followUpIn;
 
     static getSummary(consultation) {
-        return `${consultation.date} by ${consultation.by}`;
+        return `${consultation.dateOfConsultation} by ${consultation.by}`;
     }
 }
