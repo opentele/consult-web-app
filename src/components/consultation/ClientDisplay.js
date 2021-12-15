@@ -33,7 +33,7 @@ class ClientDisplay extends Component {
 
         return <Box className={classes.container}>
             <Card className={classes.client}>
-                <Grid container spacing={1}>
+                <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
                     <FieldDisplay fieldName="age" fieldValue={Client.getAgeDisplay(client)}/>

@@ -7,7 +7,10 @@ import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 
 const styles = theme => ({
-    container: {}
+    container: {},
+    section: {
+        marginBottom: 20
+    }
 });
 
 class ClientDashboard extends BaseView {
@@ -27,9 +30,13 @@ class ClientDashboard extends BaseView {
         } = this.props;
 
         return <Box className={classes.container}>
-            <ClientDisplay client={clientRecord}/>
+            <Box className={classes.section}>
+                <ClientDisplay client={clientRecord}/>
+            </Box>
             {clientRecord.consultations.map((consultation) =>
-                <ConsultationDisplay consultation={consultation}/>
+                <Box className={classes.section}>
+                    <ConsultationDisplay consultation={consultation}/>
+                </Box>
             )}
         </Box>;
     }

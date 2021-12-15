@@ -1,12 +1,14 @@
 import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Card} from '@material-ui/core';
+import {Card, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import FieldDisplay from "./FieldDisplay";
 
 const styles = theme => ({
     container: {},
-    consultation: {}
+    consultation: {
+        padding: 15
+    }
 });
 
 class ConsultationDisplay extends Component {
@@ -26,13 +28,15 @@ class ConsultationDisplay extends Component {
         } = this.props;
 
         return <Card className={classes.consultation}>
+            <Grid container spacing={1}>
                 <FieldDisplay fieldName="date-of-consultation" fieldValue={consultation.dateOfConsultation}/>
                 <FieldDisplay fieldName="key-inference" fieldValue={consultation.keyInference}/>
                 <FieldDisplay fieldName="complaints" fieldValue={consultation.complaints}/>
                 <FieldDisplay fieldName="observations" fieldValue={consultation.observations}/>
                 <FieldDisplay fieldName="recommendations" fieldValue={consultation.recommendations}/>
                 <FieldDisplay fieldName="follow-up-in" fieldValue={consultation.followUpIn}/>
-            </Card>;
+            </Grid>
+        </Card>;
     }
 }
 
