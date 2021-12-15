@@ -1,15 +1,15 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import ConsultAppBar from "../components/ConsultAppBar";
+import ConsultAppBar from "../../components/ConsultAppBar";
 import {Schedule, Today, History, AddCircle} from '@mui/icons-material';
 import {AccordionActions, Accordion, AccordionDetails, AccordionSummary, Button, Typography, Tabs, Tab, Box, Fab} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {Container} from 'react-app-common';
-import ConferenceService from "../services/ConferenceService";
+import ConferenceService from "../../services/ConferenceService";
 import {i18n, UserType} from 'consult-app-common';
 import {Alert} from "@mui/material";
-import Conference from "../domain/Conference";
+import Conference from "../../domain/Conference";
 
 const styles = theme => ({
     conferenceBox: {
