@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import ConsultAppBar from "../../components/ConsultAppBar";
-import {Schedule, Today, History, AddCircle} from '@mui/icons-material';
+import {Schedule, Today, History, AddCircle, Edit} from '@mui/icons-material';
 import {AccordionActions, Accordion, AccordionDetails, AccordionSummary, Button, Typography, Tabs, Tab, Box, Fab} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {Container} from 'react-app-common';
@@ -74,7 +74,10 @@ class ConsultationRooms extends Component {
                             id="panel1a-header">
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    <Typography variant="h5">{conference["name"]}</Typography>
+                                    <Box sx={{display: "flex", flexDirection: "row"}}>
+                                        <Typography variant="h5" style={{marginRight: 10}}>{conference["name"]}</Typography>
+                                        <Edit/>
+                                    </Box>
                                     <Typography>{`Started: ${conference["started"]}`}</Typography>
                                     <Typography>{`Open Till: ${conference["toEnd"]}`}</Typography>
                                 </Box>

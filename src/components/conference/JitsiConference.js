@@ -1,11 +1,16 @@
 import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
-import commonStyles from "../framework/CommonStyles";
 import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
 
 const styles = theme => ({
-    root: commonStyles.root
+    root: {
+        "& > * + *": {
+            marginTop: 2
+        },
+        display: 'flex',
+        flexDirection: 'column'
+    }
 });
 
 const config = {

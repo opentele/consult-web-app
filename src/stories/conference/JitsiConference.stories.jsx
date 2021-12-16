@@ -1,5 +1,5 @@
 import React from 'react';
-import JitsiConference from "../../views/jitsi/JitsiConference";
+import JitsiConference from "../../components/conference/JitsiConference";
 
 export default {
     title: 'Jitsi Conference',

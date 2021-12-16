@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Checkbox, Chip, FormControl, TextField} from '@material-ui/core';
+import {Box, Button, Checkbox, Chip, FormControl, TextField} from '@material-ui/core';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
 import {Stack} from "@mui/material";
@@ -46,7 +46,8 @@ class CreateEditConsultationRoom extends BaseView {
             classes
         } = this.props;
         const {
-            room
+            room,
+            canSubmit
         } = this.state;
 
         return <FormControl>
@@ -93,8 +94,20 @@ class CreateEditConsultationRoom extends BaseView {
                     <FormLabel textKey="repeat-weekly"/>
                     <Checkbox className={classes.checkbox} onChange={this.getRoomFieldValueChangeHandler("repeatWeekly")}/>
                 </Box>
+                <Box className={classes.field}>
+                    <Button type="submit"
+                            fullWidth
+                            variant="contained" color="primary"
+                            onSubmit={this.getSaveHandler()}
+                            disabled={!canSubmit}>{i18n.t("save")}</Button>
+                </Box>
             </Box>
         </FormControl>;
+    }
+
+    getSaveHandler() {
+        return () => {
+        };
     }
 
     daySelectHandler(day) {
