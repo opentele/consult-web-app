@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Fab, Button, Tabs, List, ListItem, ListItemIcon, ListItemText, Typography, Accordion, AccordionSummary, AccordionDetails, Tab} from '@material-ui/core';
-import {PersonOutline, VideoCall, ExpandMore, Add, Schedule, ArrowCircleUp, ArrowCircleDown, Today, QueuePlayNext, HourglassFull} from '@mui/icons-material';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Fab, List, ListItem, ListItemIcon, ListItemText, Typography} from '@material-ui/core';
+import {Add, ArrowCircleDown, ArrowCircleUp, ExpandMore, HourglassFull, PersonOutline, VideoCall} from '@mui/icons-material';
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
     root: {
@@ -19,6 +20,10 @@ class ConferenceRoomDisplay extends Component {
         super(props, context);
     }
 
+    static propTypes = {
+        queue: PropTypes.object.isRequired
+    }
+
     render() {
         const {
             classes,
@@ -33,12 +38,6 @@ class ConferenceRoomDisplay extends Component {
                     <Typography className={classes.heading}>{queue.name}</Typography>
                     <HourglassFull/>
                 </AccordionSummary>
-                <Tabs value={0} onChange={() => {
-                }} aria-label="icon label tabs example">
-                    <Tab icon={<QueuePlayNext/>} label="IN QUEUE"/>
-                    <Tab icon={<Today/>} label="SEEN TODAY"/>
-                    <Tab icon={<Schedule/>} label="SCHEDULED"/>
-                </Tabs>
                 <AccordionDetails>
                     <List component="nav" aria-label="main">
                         {
