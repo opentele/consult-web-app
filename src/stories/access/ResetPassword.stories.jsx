@@ -1,15 +1,15 @@
 import React from 'react';
 
-import ResetPassword from "../../views/ResetPassword";
+import About from "../../views/ResetPassword";
 
 //👇 This default export determines where your story goes in the story list
 export default {
     title: 'Access / ResetPassword',
-    component: ResetPassword,
+    component: About,
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template = (args) => <ResetPassword {...args} />;
+const Template = (args) => <About {...args} />;
 
 export const ResetEmailPassword = Template.bind({});
 ResetEmailPassword.args = {

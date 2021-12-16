@@ -1,13 +1,13 @@
 import React from 'react';
-import JitsiConference from "../../components/conference/JitsiConference";
+import About from "../../components/conference/JitsiConference";
 
 export default {
-    title: 'Jitsi Conference',
-    component: JitsiConference,
+    title: 'Conference / Jitsi Conference',
+    component: About,
 };
 
-const Template = (args) => <JitsiConference {...args} />;
-export const JitsiConferenceView = Template.bind({});
+const Template = (args) => <About {...args} />;
+export const JitsiConference = Template.bind({});
 
-JitsiConferenceView.args = {
+JitsiConference.args = {
 };

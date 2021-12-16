@@ -1,15 +1,15 @@
 import React from 'react';
 
-import UserRegister from "../../views/UserRegister";
+import About from "../../views/UserRegister";
 
 //👇 This default export determines where your story goes in the story list
 export default {
-    title: 'Access',
-    component: UserRegister,
+    title: 'Access / Register User',
+    component: About,
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template = (args) => <UserRegister {...args} />;
+const Template = (args) => <About {...args} />;
 
 export const RegisterUser = Template.bind({});
 

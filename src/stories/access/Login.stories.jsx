@@ -1,15 +1,15 @@
 import React from 'react';
 
-import LocalUserLogin from "../../views/LocalUserLogin";
+import About from "../../views/LocalUserLogin";
 
 //👇 This default export determines where your story goes in the story list
 export default {
     title: 'Access / Login',
-    component: LocalUserLogin,
+    component: About,
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template = (args) => <LocalUserLogin {...args} />;
+const Template = (args) => <About {...args} />;
 
 export const LoginByEmailAndOtp = Template.bind({});
 LoginByEmailAndOtp.args = {
