@@ -11,7 +11,14 @@ const styles = theme => ({
     field: {
         marginTop: 25,
         flexDirection: "column",
-        display: "flex"
+        display: "flex",
+        alignItems: "flex-start"
+    },
+    checkbox: {
+        marginTop: -10
+    },
+    textField: {
+        width: "100%"
     }
 });
 
@@ -45,6 +52,7 @@ class CreateEditConsultationRoom extends BaseView {
                         name="name"
                         onChange={this.getRoomFieldValueChangeHandler("name")}
                         value={room.name}
+                        className={classes.textField}
                     />
                 </Box>
                 <Box className={classes.field}>
@@ -60,8 +68,8 @@ class CreateEditConsultationRoom extends BaseView {
                     </Stack>
                 </Box>
                 <Box className={classes.field}>
-                    <FormLabel textKey="repeat"/>
-                    <Checkbox/>
+                    <FormLabel textKey="repeat-weekly"/>
+                    <Checkbox className={classes.checkbox}/>
                 </Box>
             </Box>
         </FormControl>;
