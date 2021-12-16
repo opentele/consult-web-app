@@ -16,10 +16,9 @@ class BaseView extends Component {
 
     getStateFieldValueChangedHandler(stateFieldName, subFieldName) {
         return (e) => {
-            const stateFieldValue = {};
-            stateFieldValue[subFieldName] = e.target.value;
             const newState = {};
-            newState[stateFieldName] = stateFieldValue;
+            newState[stateFieldName] = {...this.state[stateFieldName]};
+            newState[stateFieldName][subFieldName] = e.target.value;
             this.setState(newState);
         }
     }
