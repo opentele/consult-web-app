@@ -34,7 +34,7 @@ class ConsultationRooms extends Component {
     }
 
     componentDidMount() {
-        Container.get(ConsultationRoomService).getConferences().then((conferences) => {
+        Container.get(ConsultationRoomService).getRooms().then((conferences) => {
             this.setState({conferences: conferences});
         });
     }
