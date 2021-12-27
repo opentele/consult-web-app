@@ -1,51 +1,67 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import {withStyles} from '@material-ui/core/styles';
-import {AppBar, IconButton, Menu, MenuItem, Toolbar, Typography} from "@material-ui/core";
-import MenuIcon from '@mui/icons-material/Menu';
-import {AccountCircle} from "@mui/icons-material";
+import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
 
-const styles = theme => ({});
+const styles = theme => ({
+    menuItem: {
+        color: "#ffffff"
+    }
+});
+
+const settings = ['Profile', 'Logout'];
+const pages = ['My Clients'];
 
 class ConsultAppBar extends React.Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
+        user: PropTypes.object.isRequired
     };
 
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
-        this.state = {};
+        this.state = {
+            anchorElNav: null,
+            anchorElUser: null
+        };
+    }
+
+    handleOpenUserMenu() {
+        return (event) => this.setState({...this.state, anchorElUser: event.currentTarget});
+    }
+
+    handleCloseNavMenu() {
+        return (event) => this.setState({...this.state, anchorElNav: null});
+    }
+
+    handleCloseUserMenu() {
+        return (event) => this.setState({...this.state, anchorElUser: null});
     }
 
     render() {
-        const {classes} = this.props;
-        return (<AppBar position="static">
-            <Toolbar>
-                <IconButton
-                    size="large"
-                    edge="start"
-                    color="inherit"
-                    aria-label="menu"
-                    sx={{mr: 2}}>
-                    <MenuIcon/>
-                </IconButton>
-                <Typography variant="h6" component="div" sx={{flexGrow: 1}}>Welcome Foo</Typography>
-                {(
-                    <div>
-                        <IconButton
-                            size="large"
-                            aria-label="account of current user"
-                            aria-controls="menu-appbar"
-                            aria-haspopup="true"
-                            onClick={this.handleMenu}
-                            color="inherit">
-                            <AccountCircle/>
-                        </IconButton>
+        const {classes, user} = this.props;
+        return  <AppBar position="static">
+            <Container maxWidth="xl">
+                <Toolbar disableGutters>
+                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                        {pages.map((page) => (
+                            <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
+                                {page}
+                            </Button>
+                        ))}
+                    </Box>
+
+                    <Box sx={{ flexGrow: 0 }}>
+                        <Tooltip title="Open settings">
+                            <IconButton onClick={this.handleOpenUserMenu()} sx={{ p: 0 }}>
+                                <Avatar alt={user.name} />
+                            </IconButton>
+                        </Tooltip>
                         <Menu
+                            sx={{ mt: '45px' }}
                             id="menu-appbar"
-                            anchorEl={this}
+                            anchorEl={this.state.anchorElUser}
                             anchorOrigin={{
                                 vertical: 'top',
                                 horizontal: 'right',
@@ -55,22 +71,18 @@ class ConsultAppBar extends React.Component {
                                 vertical: 'top',
                                 horizontal: 'right',
                             }}
-                            // open={Boolean(anchorEl)}
-                            open={false}
-                            onClose={this.handleClose}>
-                            <MenuItem onClick={this.handleClose}>Profile</MenuItem>
-                            <MenuItem onClick={this.handleClose}>My account</MenuItem>
+                            open={Boolean(this.state.anchorElUser)}
+                            onClose={this.handleCloseUserMenu()}>
+                            {settings.map((setting) => (
+                                <MenuItem key={setting} onClick={this.handleCloseNavMenu()}>
+                                    <Typography textAlign="center">{setting}</Typography>
+                                </MenuItem>
+                            ))}
                         </Menu>
-                    </div>
-                )}
-            </Toolbar>
-        </AppBar>);
-    }
-
-    handleClose() {
-    }
-
-    handleMenu() {
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>;
     }
 }
 

@@ -4,7 +4,7 @@ import About from '../../views/OrganisationRegister';
 
 //👇 This default export determines where your story goes in the story list
 export default {
-    title: 'Access / Organisation Register',
+    title: 'Access / Register Organisation',
     component: About,
 };
 

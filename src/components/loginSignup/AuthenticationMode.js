@@ -30,6 +30,7 @@ class AuthenticationMode extends Component {
             >
                 <FormControlLabel value="password" control={<Radio onChange={this.authModeChange}/>} label="Password"/>
                 <FormControlLabel value="otp" control={<Radio onChange={this.authModeChange}/>} label="OTP"/>
+                <FormControlLabel value="google" control={<Radio onChange={this.authModeChange}/>} label="Google"/>
             </RadioGroup>
         </>;
     }

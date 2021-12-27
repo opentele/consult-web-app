@@ -41,7 +41,8 @@ class ConsultationRooms extends Component {
 
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        role: PropTypes.string.isRequired
+        role: PropTypes.string.isRequired,
+        user: PropTypes.object.isRequired
     };
 
     onTabChange() {
@@ -49,10 +50,10 @@ class ConsultationRooms extends Component {
     }
 
     render() {
-        const {classes, role} = this.props;
+        const {classes, role, user} = this.props;
         const {conferences, tabIndex} = this.state;
         return <>
-            <ConsultAppBar/>
+            <ConsultAppBar user={user}/>
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()} aria-label="icon label tabs example">
                 <Tab icon={<History/>} label={i18n.t('past-consultations')}/>

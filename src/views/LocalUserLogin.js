@@ -2,10 +2,12 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import {Button, Tab, Link, Tabs, TextField, Typography} from "@material-ui/core";
-import {FieldValidator} from "consult-app-common";
+import {FieldValidator} from "react-app-common";
 import _ from 'lodash';
 import LoginState from "consult-app-common/access/domain/LoginState";
 import ServerErrorMessage from "../components/ServerErrorMessage";
+import {Email, Google, Phone} from "@mui/icons-material";
+import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 
 const styles = theme => ({
     root: {},
@@ -76,11 +78,13 @@ class LocalUserLogin extends Component {
         return (
             <div className={classes.form}>
                 <Tabs value={this.state.loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
-                    <Tab label="EMAIL" value="email"/>
-                    <Tab label="MOBILE" value="mobile"/>
+                    <Tab icon={<Email/>} label="EMAIL" value="email"/>
+                    <Tab icon={<Phone/>} label="MOBILE" value="mobile"/>
+                    <Tab icon={<Google/>} label="Google" value="google"/>
                 </Tabs>
                 {this.state.loginBy === "email" && this.email(classes, error)}
                 {this.state.loginBy === "mobile" && this.mobile(classes, error)}
+                {this.state.loginBy === "google" && <GoogleSignIn/>}
             </div>
         );
     }

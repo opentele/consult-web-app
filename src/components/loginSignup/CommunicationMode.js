@@ -46,7 +46,7 @@ class CommunicationMode extends Component{
             onStateChange
         } = this.props;
 
-        return <Card className={classes.card}>
+        return <Card className={classes.card} raised={true}>
             <FormLabel component="legend">{i18n.t('reg-comm')}</FormLabel>
             <RadioGroup
                 defaultValue="email"

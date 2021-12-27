@@ -16,5 +16,6 @@ const Template = (args) => <About {...args} />;
 export const MainScreen = Template.bind({});
 
 MainScreen.args = {
-    role: UserType.Usher
+    role: UserType.Usher,
+    user: {name: "Ramesh"}
 };

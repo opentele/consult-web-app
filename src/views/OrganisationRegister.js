@@ -11,6 +11,7 @@ import AuthenticationMode from "../components/loginSignup/AuthenticationMode";
 import WaitBackdrop from "../components/WaitBackdrop";
 import {onError, onSuccess, onWait} from "./framework/ServerCallHelper";
 import ServerErrorMessage from "../components/ServerErrorMessage";
+import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 
 const styles = theme => ({
     root: {},
@@ -107,36 +108,11 @@ class OrganisationRegister extends Component {
 
                     <CommunicationMode countryCode={this.state.countryCode} email={this.state.email} mobile={this.state.mobile} onStateChange={this.setState}/>
 
-                    <Card className={classes.card}>
+                    <Card className={classes.card} raised={true}>
                         <AuthenticationMode onAuthModeChange={this.setState} authMode={this.state.authMode}/>
-
-                        {this.state.authMode === "password" && <>
-                            <ValidatedTextField
-                                type="password"
-                                name="password"
-                                validations="minLength:8"
-                                validationErrors={{
-                                    minLength: "Too short"
-                                }}
-                                className={classes.field}
-                                label="Create a password"
-                                mandatory={true}
-                                textValue={this.state.password}
-                                handleChange={(event) => this.setState({password: event.target.value})}
-                            />
-                            <ValidatedTextField
-                                type="password"
-                                name="repeated_password"
-                                validations="equalsField:password"
-                                validationErrors={{
-                                    equalsField: "Needs to be the same password as above"
-                                }}
-                                mandatory={true}
-                                className={classes.field}
-                                label="Enter password again"
-                                textValue={this.state.confirmPassword}
-                                handleChange={(event) => this.setState({confirmPassword: event.target.value})}
-                            />
+                        {this.emailLogin(classes)}
+                        {this.state.authMode === "google" && <>
+                            <GoogleSignIn/>
                         </>}
                     </Card>
 
@@ -152,6 +128,37 @@ class OrganisationRegister extends Component {
                 </Formsy>
             </div>
         );
+    }
+
+    emailLogin(classes) {
+        return this.state.authMode === "password" && <>
+            <ValidatedTextField
+                type="password"
+                name="password"
+                validations="minLength:8"
+                validationErrors={{
+                    minLength: "Too short"
+                }}
+                className={classes.field}
+                label="Create a password"
+                mandatory={true}
+                textValue={this.state.password}
+                handleChange={(event) => this.setState({password: event.target.value})}
+            />
+            <ValidatedTextField
+                type="password"
+                name="repeated_password"
+                validations="equalsField:password"
+                validationErrors={{
+                    equalsField: "Needs to be the same password as above"
+                }}
+                mandatory={true}
+                className={classes.field}
+                label="Enter password again"
+                textValue={this.state.confirmPassword}
+                handleChange={(event) => this.setState({confirmPassword: event.target.value})}
+            />
+        </>;
     }
 
     submit = () => {
