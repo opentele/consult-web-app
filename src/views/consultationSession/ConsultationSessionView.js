@@ -1,19 +1,22 @@
-import React, {Component} from "react";
+import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 import {Backdrop, Box, CircularProgress} from '@material-ui/core';
 import PropTypes from 'prop-types';
-import ConsultationRoomDisplay from "../../components/conference/ConferenceRoomDisplay";
-import JitsiConference from "../../components/conference/JitsiConference";
-import ConferenceService from "../../services/ConferenceService";
+import OtherConsultationRoomsInConsultationSession from "../../components/consultationSession/OtherConsultationRoomsInConsultationSession";
+import JitsiConference from "../../components/consultationSession/JitsiConference";
+import ConsultationRoomService from "../../services/ConsultationRoomService";
 import {Container} from 'react-app-common';
 import _ from 'lodash';
 import BaseView from "../framework/BaseView";
 
 const styles = theme => ({
-    container: {}
+    container: {
+        display: "flex",
+        flexDirection: "row"
+    }
 });
 
-class ConferenceView extends BaseView {
+class ConsultationSessionView extends BaseView {
     constructor(props) {
         super(props);
         this.state = {queue: null};
@@ -29,7 +32,7 @@ class ConferenceView extends BaseView {
     }
 
     componentDidMount() {
-        let confService = Container.get(ConferenceService);
+        let confService = Container.get(ConsultationRoomService);
         confService.getQueue(this.props.conferenceId).then((queue) => {
             this.setState({queue: queue});
         });
@@ -52,9 +55,9 @@ class ConferenceView extends BaseView {
 
         return <Box className={classes.container}>
             <JitsiConference placeholder={jitsiPlaceHolder}/>
-            <ConsultationRoomDisplay queue={queue}/>
+            <OtherConsultationRoomsInConsultationSession queue={queue}/>
         </Box>;
     }
 }
 
-export default withStyles(styles)(ConferenceView);
+export default withStyles(styles)(ConsultationSessionView);

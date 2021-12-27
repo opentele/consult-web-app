@@ -2,8 +2,8 @@ import _ from "lodash";
 import ActiveConferences from "../testdata/active-conferences.json";
 import Queue from "../testdata/queue.json";
 
-class ConferenceServiceStub {
-    getConferences() {
+class ConsultationServiceStub {
+    getRooms() {
         return Promise.resolve(ActiveConferences);
     }
 
@@ -12,4 +12,4 @@ class ConferenceServiceStub {
     }
 }
 
-export default new ConferenceServiceStub();
+export default new ConsultationServiceStub();

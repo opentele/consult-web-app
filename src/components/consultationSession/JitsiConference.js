@@ -2,7 +2,7 @@ import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
-import {Box} from "@material-ui/core";
+import JitsiPlaceholder from "./JitsiPlaceholder";
 
 const styles = theme => ({
     root: {
@@ -54,7 +54,8 @@ class JitsiConference extends Component {
     }
 
     static propTypes = {
-        placeholder: PropTypes.bool
+        placeholder: PropTypes.bool,
+        conference: PropTypes.object.isRequired
     }
 
     static defaultProp = {
@@ -69,12 +70,13 @@ class JitsiConference extends Component {
     render() {
         const {
             classes,
-            placeholder
+            placeholder,
+            conference
         } = this.props;
 
         return <div className={classes.root}>
             <h2>My First Meeting!</h2>
-            {placeholder && <Box></Box>}
+            {placeholder && <JitsiPlaceholder/>}
             {!placeholder && <Jitsi
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}

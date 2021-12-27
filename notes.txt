@@ -25,3 +25,9 @@ Access
 Registration, health record
 Conference
 Video call
+
+Domain Aggregates
+-----------------
+Consultation (registration and consultation record)
+ConsultationRoom (rooms, queue)
+ConsultationSession

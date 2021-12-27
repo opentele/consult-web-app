@@ -1,7 +1,7 @@
 import {i18n} from 'consult-app-common';
 import Alert from "./Alert";
 
-class Conference {
+class ConsultationRoomAvailabilityDetails {
     totalClients;
     clientCompleted;
     nextClient;
@@ -54,4 +54,4 @@ class Conference {
     }
 }
 
-export default Conference;
+export default ConsultationRoomAvailabilityDetails;

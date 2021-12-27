@@ -1,5 +1,5 @@
 import React from 'react';
-import About from "../../components/conference/JitsiConference";
+import About from "../../components/consultationSession/JitsiConference";
 
 export default {
     title: 'Conference / Jitsi Conference',

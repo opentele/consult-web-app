@@ -6,10 +6,10 @@ import {Schedule, Today, History, AddCircle, Edit} from '@mui/icons-material';
 import {AccordionActions, Accordion, AccordionDetails, AccordionSummary, Button, Typography, Tabs, Tab, Box, Fab} from "@material-ui/core";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {Container} from 'react-app-common';
-import ConferenceService from "../../services/ConferenceService";
+import ConsultationRoomService from "../../services/ConsultationRoomService";
 import {i18n, UserType} from 'consult-app-common';
 import {Alert} from "@mui/material";
-import Conference from "../../domain/Conference";
+import ConsultationRoomAvailabilityDetails from "../../domain/ConsultationRoomAvailabilityDetails";
 
 const styles = theme => ({
     conferenceBox: {
@@ -34,7 +34,7 @@ class ConsultationRooms extends Component {
     }
 
     componentDidMount() {
-        Container.get(ConferenceService).getConferences().then((conferences) => {
+        Container.get(ConsultationRoomService).getConferences().then((conferences) => {
             this.setState({conferences: conferences});
         });
     }
@@ -65,8 +65,8 @@ class ConsultationRooms extends Component {
             </Tabs>
             {
                 conferences.map((conference) => {
-                    const alerts = Conference.getAlerts(conference);
-                    const hasAction = Conference.hasVacancy(conference) || Conference.hasMoreClients(conference);
+                    const alerts = ConsultationRoomAvailabilityDetails.getAlerts(conference);
+                    const hasAction = ConsultationRoomAvailabilityDetails.hasVacancy(conference) || ConsultationRoomAvailabilityDetails.hasMoreClients(conference);
                     return <Accordion className={classes.conferenceBox}>
                         <AccordionSummary
                             expandIcon={hasAction && <ExpandMoreIcon/>}
@@ -88,7 +88,7 @@ class ConsultationRooms extends Component {
                         </AccordionSummary>
                         {hasAction && <AccordionDetails/>}
                         {hasAction && <AccordionActions>
-                            {Conference.getUsherActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
+                            {ConsultationRoomAvailabilityDetails.getUsherActions(conference).map((action) => <Button variant="contained" color="primary">{action}</Button>)}
                         </AccordionActions>}
                     </Accordion>
                 })
