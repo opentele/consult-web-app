@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Fab, List, ListItem, ListItemIcon, ListItemText} from '@material-ui/core';
-import {Add, ArrowCircleDown, ArrowCircleUp, PersonOutline, VideoCall} from '@mui/icons-material';
+import {Box, Fab, Link, List, ListItem, ListItemIcon} from '@material-ui/core';
+import {Add, ArrowCircleDown, ArrowCircleUp, PersonOutline, VideoCall as VideoCallIcon} from '@mui/icons-material';
 import PropTypes from 'prop-types';
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     root: {
@@ -13,6 +14,13 @@ const styles = theme => ({
         fontWeight: theme.typography.fontWeightRegular,
         backgroundColor: 'lightblue'
     },
+    addClient: {
+        alignSelf: "flex-end"
+    },
+    container: {
+        display: "flex",
+        flexDirection: "column"
+    }
 });
 
 class OtherConsultationRoomsInConsultationSession extends Component {
@@ -27,11 +35,12 @@ class OtherConsultationRoomsInConsultationSession extends Component {
     render() {
         const {
             classes,
-            queue
+            queue,
+            style
         } = this.props;
 
         return (
-            <Box>
+            <Box style={style} className={classes.container}>
                 <List component="nav" aria-label="main">
                     {
                         queue.items.map((queueItem) =>
@@ -39,20 +48,25 @@ class OtherConsultationRoomsInConsultationSession extends Component {
                                 <ListItemIcon>
                                     <PersonOutline/>
                                 </ListItemIcon>
-                                <ListItemText primary={queueItem.name}/>
+                                <ListItem>
+                                    <Link href="#" underline="always">
+                                        {queueItem.name}
+                                    </Link>
+                                </ListItem>
                                 {queueItem.active &&
                                 <ListItemIcon>
-                                    <VideoCall/>
+                                    <VideoCallIcon/>
                                 </ListItemIcon>}
                                 {!queueItem.active && <ArrowCircleUp/>}
                                 {!queueItem.active && <ArrowCircleDown/>}
-                                {<Button primary variant="contained">OPEN RECORD</Button>}
                             </ListItem>)
                     }
                 </List>
-                <Fab color="primary" aria-label="add">
-                    <Add/>
-                </Fab>
+                <Box className={classes.addClient}>
+                    <Fab color="primary" aria-label="add" variant="extended">
+                        <Add/>{`${i18n.t('add-client')}`}
+                    </Fab>
+                </Box>
             </Box>
         );
     }

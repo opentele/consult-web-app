@@ -12,7 +12,8 @@ import BaseView from "../framework/BaseView";
 const styles = theme => ({
     container: {
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        alignItems: "center"
     }
 });
 
@@ -55,7 +56,7 @@ class ConsultationSessionView extends BaseView {
 
         return <Box className={classes.container}>
             <JitsiConference placeholder={jitsiPlaceHolder}/>
-            <OtherConsultationRoomsInConsultationSession queue={queue}/>
+            <OtherConsultationRoomsInConsultationSession queue={queue} style={{marginLeft: 20}}/>
         </Box>;
     }
 }
