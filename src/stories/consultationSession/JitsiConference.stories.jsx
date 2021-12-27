@@ -2,7 +2,7 @@ import React from 'react';
 import About from "../../components/consultationSession/JitsiConference";
 
 export default {
-    title: 'Conference / Jitsi Conference',
+    title: 'Session / Jitsi Conference',
     component: About,
 };
 
