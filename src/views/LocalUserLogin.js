@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import {Button, Tab, Link, Tabs, TextField, Typography} from "@material-ui/core";
-import {FieldValidator} from "react-app-common";
+import {DataElementValidator} from "react-app-common";
 import _ from 'lodash';
 import LoginState from "consult-app-common/access/domain/LoginState";
 import ServerErrorMessage from "../components/ServerErrorMessage";
@@ -227,17 +227,17 @@ class LocalUserLogin extends Component {
     }
 
     mobileChanged = (e) => {
-        let message = FieldValidator.mobileValidator(e.target.value);
+        let message = DataElementValidator.mobileValidator(e.target.value);
         this.setState({mobileError: message, mobile: e.target.value});
     }
 
     countryCodeChanged = (e) => {
-        let message = FieldValidator.countryCodeValidator(e.target.value);
+        let message = DataElementValidator.countryCodeValidator(e.target.value);
         this.setState({countryCodeError: message, countryCode: e.target.value});
     }
 
     emailChanged = (e) => {
-        let message = FieldValidator.emailValidator(e.target.value);
+        let message = DataElementValidator.emailValidator(e.target.value);
         this.setState({emailError: message, email: e.target.value});
     }
 

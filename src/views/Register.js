@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 
-import LocalUserRegister from "./LocalUserRegister";
+import LocalUserRegister from "./UserRegister";
 import commonStyles from "./framework/CommonStyles";
 
 const styles = theme => ({
