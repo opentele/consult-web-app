@@ -1,7 +1,7 @@
 setup:
 	ln -s ../common src/common
 
-run-web:
+start:
 	PORT=6052 yarn start
 
 storybook:
