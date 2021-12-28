@@ -1,33 +1,30 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
 import Card from '@material-ui/core/Card';
-import Fade from '@material-ui/core/Fade';
 import PropTypes from 'prop-types';
-
-import TabContent from '../components/loginSignup/TabContent';
 import Login from './Login';
-import Register from './Register';
-import OrganisationRegister from "./OrganisationRegister";
-
+import ConsultAppBar from "../components/ConsultAppBar";
+import {Box, Button, Typography} from "@material-ui/core";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     root: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         justifyContent: 'center'
     },
-    card: {
-        flexGrow: 1,
-        [theme.breakpoints.up('sm')]: {
-            flexBasis: '41rem',
-            flexGrow: 0
-        }
+    loginCard: {
+        padding: 20
+    },
+    content: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    otherActionsCard: {
     }
 });
 
-class LoginRegister extends Component {
+class Home extends Component {
 
     static propTypes = {
         transitionTimeout: PropTypes.number,
@@ -53,71 +50,24 @@ class LoginRegister extends Component {
 
     render() {
         const {
-            classes,
-            transitionTimeout,
-            header,
-            footer,
-            onLogin,
-            onRegister,
-            loginFailed,
-            registerFailed
+            classes
         } = this.props;
 
-        const {tab} = this.state;
-
-        let activeTab;
-        switch (tab) {
-            case 0:
-                activeTab =
-                    <TabContent>
-                        <Login onLogin={onLogin}
-                               loginFailed={loginFailed}
-                        />
-                    </TabContent>;
-                break;
-
-            case 1:
-                activeTab =
-                    <TabContent>
-                        <Register onRegister={onRegister} registerFailed={registerFailed}/>
-                    </TabContent>;
-                break;
-
-            case 2:
-                activeTab =
-                    <TabContent>
-                        <OrganisationRegister onRegister={onRegister} registerFailed={registerFailed}/>
-                    </TabContent>;
-                break;
-        }
-
         return (
-            <div className={classes.root}>
-                <Card className={classes.card} variant="outlined">
-                    {header && <div>{header}</div>}
-                    {
-                        <Tabs
-                            value={this.state.tab}
-                            onChange={this.handleTabChange}
-                            indicatorColor="primary"
-                            textColor="primary"
-                            variant="fullWidth"
-                        >
-                            <Tab label="Login"/>
-                            <Tab label="Register User"/>
-                            <Tab label="Register Organisation"/>
-                        </Tabs>
-                    }
-                    {
-                        transitionTimeout > 0 ?
-                            <Fade key={tab} in={true} timeout={transitionTimeout}>
-                                {activeTab}
-                            </Fade>
-                            : activeTab
-                    }
-                    {footer && <div>{footer}</div>}
-                </Card>
-            </div>
+            <Box className={classes.root}>
+                <ConsultAppBar/>
+                <Box className={classes.content}>
+                    <Card className={classes.loginCard} variant="outlined">
+                        <Login onLogin={() => {
+                        }} loginFailed={() => {
+                        }}/>
+                    </Card>
+                    <Card className={classes.otherActionsCard}>
+                        <Typography>{i18n.t("register-help")}</Typography>
+                        <Button variant="contained" color="primary">{i18n.t("register")}</Button>
+                    </Card>
+                </Box>
+            </Box>
         );
     }
 
@@ -126,4 +76,4 @@ class LoginRegister extends Component {
     }
 }
 
-export default withStyles(styles)(LoginRegister);
+export default withStyles(styles)(Home);

@@ -15,7 +15,7 @@ const pages = ['My Clients'];
 class ConsultAppBar extends React.Component {
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        user: PropTypes.object.isRequired
+        user: PropTypes.object
     };
 
     constructor(props, context) {
@@ -41,10 +41,10 @@ class ConsultAppBar extends React.Component {
 
     render() {
         const {classes, user} = this.props;
-        return  <AppBar position="static">
+        return <AppBar position="static">
             <Container maxWidth="xl">
                 <Toolbar disableGutters>
-                    <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
                         {pages.map((page) => (
                             <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
                                 {page}
@@ -52,14 +52,14 @@ class ConsultAppBar extends React.Component {
                         ))}
                     </Box>
 
-                    <Box sx={{ flexGrow: 0 }}>
-                        <Tooltip title="Open settings">
-                            <IconButton onClick={this.handleOpenUserMenu()} sx={{ p: 0 }}>
-                                <Avatar alt={user.name} />
+                    <Box sx={{flexGrow: 0}}>
+                        {user && <Tooltip title="Open settings">
+                            <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
+                                <Avatar alt={user.name}/>
                             </IconButton>
-                        </Tooltip>
+                        </Tooltip>}
                         <Menu
-                            sx={{ mt: '45px' }}
+                            sx={{mt: '45px'}}
                             id="menu-appbar"
                             anchorEl={this.state.anchorElUser}
                             anchorOrigin={{
