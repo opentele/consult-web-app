@@ -3,7 +3,6 @@ import {withStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import Login from './Login';
-import ConsultAppBar from "../components/ConsultAppBar";
 import {Box, Button, Typography} from "@material-ui/core";
 import {i18n} from "consult-app-common";
 
@@ -11,16 +10,32 @@ const styles = theme => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center'
+        alignItems: 'center'
     },
     loginCard: {
-        padding: 20
+        padding: 20,
+        marginRight: 20
     },
     content: {
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: "space-around",
+        flexWrap: "wrap"
+    },
+    welcome: {
+        marginTop: 60,
+        marginBottom: 40
     },
     otherActionsCard: {
+        display: 'flex',
+        flexDirection: 'column',
+        marginLeft: 20,
+        justifyContent: "center",
+        alignItems: "center"
+    },
+    registrationHelp: {
+        marginBottom: 20,
+        width: "75%"
     }
 });
 
@@ -55,16 +70,16 @@ class Home extends Component {
 
         return (
             <Box className={classes.root}>
-                <ConsultAppBar/>
+                <Typography variant="h3" className={classes.welcome}>{i18n.t("home-welcome")}</Typography>
                 <Box className={classes.content}>
-                    <Card className={classes.loginCard} variant="outlined">
+                    <Card className={classes.loginCard} variant="elevation" raised={true}>
                         <Login onLogin={() => {
                         }} loginFailed={() => {
                         }}/>
                     </Card>
-                    <Card className={classes.otherActionsCard}>
-                        <Typography>{i18n.t("register-help")}</Typography>
-                        <Button variant="contained" color="primary">{i18n.t("register")}</Button>
+                    <Card className={classes.otherActionsCard} variant="elevation" raised={true}>
+                        <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
+                        <Button variant="contained" color="primary">{i18n.t("register-organisation")}</Button>
                     </Card>
                 </Box>
             </Box>
