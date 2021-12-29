@@ -6,6 +6,7 @@ import Login from './Login';
 import {Box, Button, Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import {i18n} from "consult-app-common";
+import ConsultAppBar from "../components/ConsultAppBar";
 
 const styles = theme => ({
     root: {
@@ -14,8 +15,9 @@ const styles = theme => ({
         alignItems: 'center'
     },
     loginCard: {
-        padding: 20,
-        marginRight: 20
+        padding: 30,
+        margin: 10,
+        marginRight: 10
     },
     content: {
         display: 'flex',
@@ -30,7 +32,9 @@ const styles = theme => ({
     otherActionsCard: {
         display: 'flex',
         flexDirection: 'column',
-        marginLeft: 20,
+        margin: 10,
+        marginLeft: 10,
+        padding: 10,
         justifyContent: "center",
         alignItems: "center"
     },
@@ -71,6 +75,7 @@ class Home extends Component {
 
         return (
             <Box className={classes.root}>
+                <ConsultAppBar/>
                 <Typography variant="h3" className={classes.welcome}>{i18n.t("home-welcome")}</Typography>
                 <Box className={classes.content}>
                     <Card className={classes.loginCard} variant="elevation" raised={true}>

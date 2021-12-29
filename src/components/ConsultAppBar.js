@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
 import {Home} from "@mui/icons-material";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     toolbar: {
@@ -59,7 +60,11 @@ class ConsultAppBar extends React.Component {
             <Container maxWidth="xl">
                 <Toolbar disableGutters className={classes.toolbar}>
                     <Box className={classes.leftSet}>
-                        <Home fontSize="large"/>
+                        <IconButton component={Link} to="/setting">
+                            <div>
+                                <Home fontSize="large" style={{color: "#fff"}}/>
+                            </div>
+                        </IconButton>
                         <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
                     </Box>
                     <Box>

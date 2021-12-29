@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Formsy from 'formsy-react';
-import {Box, Button, Card, Typography} from '@material-ui/core';
+import {Box, Button, Card, Paper, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import ValidatedTextField from '../components/loginSignup/ValidatedTextField';
@@ -39,7 +39,7 @@ const styles = theme => ({
     form: {
         display: 'flex',
         flexDirection: 'column',
-        padding: 20,
+        padding: 25,
         flexGrow: 1
     },
     authMode: {
@@ -107,7 +107,7 @@ class RegisterOrganisation extends Component {
             <div className={classes.root}>
                 <ConsultAppBar/>
                 <Box className={classes.content}>
-                    <Card raised={true} className={classes.registrationCard}>
+                    <Paper className={classes.registrationCard}>
                         <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
                                 onValidSubmit={this.submit} className={classes.form}>
 
@@ -165,11 +165,11 @@ class RegisterOrganisation extends Component {
                                         disabled={!canSubmit}>Register Organisation</Button>
                             </div>
                         </Formsy>
-                    </Card>
-                    <Card className={classes.otherActionsCard} raised={true}>
+                    </Paper>
+                    <Paper elevation={1} className={classes.otherActionsCard} raised={true}>
                         <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
                         <Button component={Link} variant="contained" color="primary" to="/">{i18n.t("login")}</Button>
-                    </Card>
+                    </Paper>
                 </Box>
             </div>
         );
