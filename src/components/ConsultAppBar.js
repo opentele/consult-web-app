@@ -2,15 +2,29 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
+import {Home} from "@mui/icons-material";
 
 const styles = theme => ({
+    toolbar: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between"
+    },
+    leftSet: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    brandLabel: {
+        marginLeft: 20
+    },
     menuItem: {
         color: "#ffffff"
     }
 });
 
 const settings = ['Profile', 'Logout'];
-const pages = ['My Clients'];
+const pages = [];
 
 class ConsultAppBar extends React.Component {
     static propTypes = {
@@ -43,8 +57,12 @@ class ConsultAppBar extends React.Component {
         const {classes, user} = this.props;
         return <AppBar position="static">
             <Container maxWidth="xl">
-                <Toolbar disableGutters>
-                    <Box sx={{flexGrow: 1, display: {xs: 'none', md: 'flex'}}}>
+                <Toolbar disableGutters className={classes.toolbar}>
+                    <Box className={classes.leftSet}>
+                        <Home fontSize="large"/>
+                        <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
+                    </Box>
+                    <Box>
                         {pages.map((page) => (
                             <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
                                 {page}

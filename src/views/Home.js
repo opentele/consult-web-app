@@ -4,6 +4,7 @@ import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import Login from './Login';
 import {Box, Button, Typography} from "@material-ui/core";
+import { Link } from 'react-router-dom';
 import {i18n} from "consult-app-common";
 
 const styles = theme => ({
@@ -77,9 +78,9 @@ class Home extends Component {
                         }} loginFailed={() => {
                         }}/>
                     </Card>
-                    <Card className={classes.otherActionsCard} variant="elevation" raised={true}>
+                    <Card className={classes.otherActionsCard} raised={true}>
                         <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
-                        <Button variant="contained" color="primary">{i18n.t("register-organisation")}</Button>
+                        <Button component={Link} variant="contained" color="primary" to="/register">{i18n.t("register-organisation")}</Button>
                     </Card>
                 </Box>
             </Box>
