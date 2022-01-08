@@ -34,7 +34,8 @@ const styles = theme => ({
     },
     registrationCard: {
         margin: 10,
-        marginRight: 10
+        marginRight: 10,
+        backgroundColor: theme.palette.background.default
     },
     form: {
         display: 'flex',
@@ -107,11 +108,11 @@ class RegisterOrganisation extends Component {
             <div className={classes.root}>
                 <ConsultAppBar/>
                 <Box className={classes.content}>
-                    <Paper className={classes.registrationCard}>
+                    <Paper className={classes.registrationCard} elevation={5}>
                         <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
                                 onValidSubmit={this.submit} className={classes.form}>
 
-                            <Typography variant="h5" className={classes.registerText}>Register your organisation</Typography>
+                            <Typography variant="h5" className={classes.registerText}>{i18n.t('register-organisation')}</Typography>
                             <ValidatedTextField
                                 name="organisationName"
                                 autoComplete="organisationName"
@@ -166,7 +167,7 @@ class RegisterOrganisation extends Component {
                             </div>
                         </Formsy>
                     </Paper>
-                    <Paper elevation={1} className={classes.otherActionsCard} raised={true}>
+                    <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
                         <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
                         <Button component={Link} variant="contained" color="primary" to="/">{i18n.t("login")}</Button>
                     </Paper>

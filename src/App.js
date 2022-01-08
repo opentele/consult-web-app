@@ -3,8 +3,11 @@ import Home from "./views/Home";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {i18nPromise} from "consult-app-common";
 import {useState} from "react";
-import {CircularProgress} from "@material-ui/core";
+import {CircularProgress, CssBaseline} from "@material-ui/core";
 import RegisterOrganisation from "./views/RegisterOrganisation";
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme();
 
 export default function App() {
     let [loading, setLoading] = useState(true);
@@ -23,7 +26,10 @@ export default function App() {
                     <Home/>
                 </Route>
                 <Route path="/register">
-                    <RegisterOrganisation/>
+                    <ThemeProvider theme={theme}>
+                        <CssBaseline />
+                        <RegisterOrganisation/>
+                    </ThemeProvider>
                 </Route>
             </Switch>
         </Router>
