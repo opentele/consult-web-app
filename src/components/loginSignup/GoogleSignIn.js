@@ -2,10 +2,11 @@ import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
 import {i18n} from "consult-app-common";
 import {GoogleLogin} from "react-google-login";
-import {Box} from "@material-ui/core";
+import PropTypes from 'prop-types';
 
 const styles = theme => ({
-    container: {
+    googleSignIn: {
+        width: '100%'
     }
 });
 
@@ -15,18 +16,24 @@ class GoogleSignIn extends Component {
         this.state = {};
     }
 
-    static propTypes = {}
+    static propTypes = {
+        buttonText: PropTypes.string.isRequired
+    }
 
     render() {
         const {
-            classes
+            classes,
+            buttonText
         } = this.props;
 
         return <GoogleLogin clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
-                            buttonText={i18n.t("sign-in-with-google")}
+                            buttonText={buttonText}
                             onSuccess={this.successfulGoogleLoginHandler()}
                             onFailure={this.failedGoogleLoginHandler()}
                             cookiePolicy={'single_host_origin'}
+                            className={classes.googleSignIn}
+                            onAutoLoadFinished={this.successfulGoogleLoginHandler()}
+                            disabled={false}
         />;
     }
 

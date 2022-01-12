@@ -1,13 +1,11 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Formsy from 'formsy-react';
-import {Box, Button, Card, Paper, Typography} from '@material-ui/core';
+import {Box, Button, Grid, Paper, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
 
 import ValidatedTextField from '../components/loginSignup/ValidatedTextField';
 import {i18n, UserService} from "consult-app-common";
-import CommunicationMode from "../components/loginSignup/CommunicationMode";
-import AuthenticationMode from "../components/loginSignup/AuthenticationMode";
 import WaitBackdrop from "../components/WaitBackdrop";
 import {onError, onSuccess, onWait} from "./framework/ServerCallHelper";
 import ServerErrorMessage from "../components/ServerErrorMessage";
@@ -21,11 +19,10 @@ const styles = theme => ({
         flexDirection: "column",
         alignItems: "center"
     },
-    content: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: "space-around",
-        flexWrap: "wrap",
+    registerOrganisationTitle: {
+        marginTop: 50
+    },
+    registerOrganisationContent: {
         marginTop: 50,
         marginBottom: 30
     },
@@ -43,6 +40,12 @@ const styles = theme => ({
         padding: 25,
         flexGrow: 1
     },
+    googleForm: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: 25,
+        alignItems: 'stretch'
+    },
     authMode: {
         display: 'flex',
         flexDirection: 'column',
@@ -50,8 +53,13 @@ const styles = theme => ({
         padding: 30,
         marginLeft: 15
     },
-    field: {
-        marginTop: theme.spacing.unit
+    registerOrgField: {
+        marginTop: theme.spacing.unit,
+        alignItems: 'stretch'
+    },
+    googleSignInBox: {
+        marginTop: theme.spacing.unit * 3,
+        alignItems: 'stretch'
     },
     registerButton: {
         marginTop: theme.spacing.unit * 4
@@ -107,104 +115,124 @@ class RegisterOrganisation extends Component {
         return (
             <div className={classes.root}>
                 <ConsultAppBar/>
-                <Box className={classes.content}>
-                    <Paper className={classes.registrationCard} elevation={5}>
-                        <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
-                                onValidSubmit={this.submit} className={classes.form}>
+                <Typography variant="h4" className={classes.registerOrganisationTitle}>{i18n.t('Register your organisation/group')}</Typography>
+                <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
+                    <Grid item lg={4} xs={12}>
+                        <Paper className={classes.registrationCard} elevation={5}>
+                            <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
+                                    onValidSubmit={this.submit} className={classes.form}>
+                                <Typography variant="h5" className={classes.registerText}>{i18n.t('email-or-mobile')}</Typography>
+                                <ValidatedTextField
+                                    name="organisationName"
+                                    autoComplete="organisationName"
+                                    validations="minLength:3"
+                                    validationErrors={{
+                                        minLength: "Too short"
+                                    }}
+                                    mandatory={true}
+                                    className={classes.registerOrgField}
+                                    label="Organisation name"
+                                    helperText="min 3 characters"
+                                    textValue={this.state.orgName}
+                                    handleChange={(event) => this.setState({orgName: event.target.value})}
+                                />
 
-                            <Typography variant="h5" className={classes.registerText}>{i18n.t('register-organisation')}</Typography>
-                            <ValidatedTextField
-                                name="organisationName"
-                                autoComplete="organisationName"
-                                validations="minLength:3"
-                                validationErrors={{
-                                    minLength: "Too short"
-                                }}
-                                mandatory={true}
-                                className={classes.field}
-                                label="Organisation name"
-                                helperText="min 3 characters"
-                                textValue={this.state.orgName}
-                                handleChange={(event) => this.setState({orgName: event.target.value})}
-                            />
+                                <ValidatedTextField
+                                    name="name"
+                                    autoComplete="name"
+                                    validations="minLength:3"
+                                    validationErrors={{
+                                        minLength: "Too short"
+                                    }}
+                                    mandatory={true}
+                                    className={classes.registerOrgField}
+                                    label="Your name"
+                                    helperText="min 3 characters"
+                                    textValue={this.state.name}
+                                    handleChange={(event) => this.setState({name: event.target.value})}
+                                />
 
-                            <ValidatedTextField
-                                name="name"
-                                autoComplete="name"
-                                validations="minLength:3"
-                                validationErrors={{
-                                    minLength: "Too short"
-                                }}
-                                mandatory={true}
-                                className={classes.field}
-                                label="Your name"
-                                helperText="min 3 characters"
-                                textValue={this.state.name}
-                                handleChange={(event) => this.setState({name: event.target.value})}
-                            />
+                                <ValidatedTextField
+                                    name="userId"
+                                    autoComplete="userId"
+                                    mandatory={true}
+                                    className={classes.registerOrgField}
+                                    label="Email or mobile number"
+                                    textValue={this.state.userId}
+                                    handleChange={(event) => this.setState({userId: event.target.value})}
+                                />
 
-                            <Box sx={{display: "flex", flexDirection: "row"}}>
-                                <CommunicationMode countryCode={this.state.countryCode} email={this.state.email} mobile={this.state.mobile}
-                                                   onStateChange={this.setState}/>
+                                <ValidatedTextField
+                                    type="password"
+                                    name="password"
+                                    validations="minLength:8"
+                                    validationErrors={{
+                                        minLength: "Too short"
+                                    }}
+                                    className={classes.registerOrgField}
+                                    label="Create a password"
+                                    mandatory={true}
+                                    textValue={this.state.password}
+                                    handleChange={(event) => this.setState({password: event.target.value})}
+                                />
+                                <ValidatedTextField
+                                    type="password"
+                                    name="repeated_password"
+                                    validations="equalsField:password"
+                                    validationErrors={{
+                                        equalsField: "Needs to be the same password as above"
+                                    }}
+                                    mandatory={true}
+                                    className={classes.registerOrgField}
+                                    label="Enter password again"
+                                    textValue={this.state.confirmPassword}
+                                    handleChange={(event) => this.setState({confirmPassword: event.target.value})}
+                                />
 
-                                <Card className={classes.authMode}>
-                                    <AuthenticationMode onAuthModeChange={this.setState} authMode={this.state.authMode}/>
-                                    {this.emailLogin(classes)}
-                                    {this.state.authMode === "google" && <>
-                                        <GoogleSignIn/>
-                                    </>}
-                                </Card>
-                            </Box>
+                                <ServerErrorMessage error={error}/>
 
-                            <ServerErrorMessage error={error}/>
-
-                            <div className={classes.registerButton}>
-                                <Button type="submit"
+                                <Button type="submit" className={classes.registerButton}
                                         fullWidth
                                         variant="contained" color="primary"
                                         onSubmit={this.submit}
                                         disabled={!canSubmit}>Register Organisation</Button>
-                            </div>
-                        </Formsy>
-                    </Paper>
-                    <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
-                        <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
-                        <Button component={Link} variant="contained" color="primary" to="/">{i18n.t("login")}</Button>
-                    </Paper>
-                </Box>
+                            </Formsy>
+                        </Paper>
+                    </Grid>
+                    <Grid item lg={4} xs={12}>
+                        <Paper className={classes.registrationCard} elevation={5}>
+                            <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
+                                    onValidSubmit={this.submit} className={classes.googleForm}>
+                                <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>
+                                <ValidatedTextField
+                                    name="organisationName"
+                                    autoComplete="organisationName"
+                                    validations="minLength:3"
+                                    validationErrors={{
+                                        minLength: "Too short"
+                                    }}
+                                    mandatory={true}
+                                    className={classes.registerOrgField}
+                                    label="Organisation name"
+                                    helperText="min 3 characters"
+                                    textValue={this.state.orgName}
+                                    handleChange={(event) => this.setState({orgName: event.target.value})}
+                                />
+                                <Box className={classes.googleSignInBox}>
+                                    <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>
+                                </Box>
+                            </Formsy>
+                        </Paper>
+                    </Grid>
+                    <Grid item lg={4} xs={12}>
+                        <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
+                            <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
+                            <Button component={Link} variant="text" color="primary" to="/">{i18n.t("login")}</Button>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </div>
         );
-    }
-
-    emailLogin(classes) {
-        return this.state.authMode === "password" && <>
-            <ValidatedTextField
-                type="password"
-                name="password"
-                validations="minLength:8"
-                validationErrors={{
-                    minLength: "Too short"
-                }}
-                className={classes.field}
-                label="Create a password"
-                mandatory={true}
-                textValue={this.state.password}
-                handleChange={(event) => this.setState({password: event.target.value})}
-            />
-            <ValidatedTextField
-                type="password"
-                name="repeated_password"
-                validations="equalsField:password"
-                validationErrors={{
-                    equalsField: "Needs to be the same password as above"
-                }}
-                mandatory={true}
-                className={classes.field}
-                label="Enter password again"
-                textValue={this.state.confirmPassword}
-                handleChange={(event) => this.setState({confirmPassword: event.target.value})}
-            />
-        </>;
     }
 
     submit = () => {
