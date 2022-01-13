@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
-import Login from './Login';
-import {Box, Button, Typography} from "@material-ui/core";
+import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
 import { Link } from 'react-router-dom';
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
+import Login from "./Login";
 
 const styles = theme => ({
     root: {
@@ -16,14 +16,9 @@ const styles = theme => ({
     },
     loginCard: {
         padding: 30,
-        margin: 10,
         marginRight: 10
     },
     content: {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: "space-around",
-        flexWrap: "wrap"
     },
     welcome: {
         marginTop: 60,
@@ -32,15 +27,11 @@ const styles = theme => ({
     otherActionsCard: {
         display: 'flex',
         flexDirection: 'column',
-        margin: 10,
-        marginLeft: 10,
-        padding: 10,
-        justifyContent: "center",
-        alignItems: "center"
+        justifyContent: 'center',
+        alignItems: "center",
+        marginTop: 100
     },
     registrationHelp: {
-        marginBottom: 20,
-        width: "75%"
     }
 });
 
@@ -76,18 +67,22 @@ class Home extends Component {
         return (
             <Box className={classes.root}>
                 <ConsultAppBar/>
-                <Typography variant="h3" className={classes.welcome}>{i18n.t("home-welcome")}</Typography>
-                <Box className={classes.content}>
-                    <Card className={classes.loginCard} variant="elevation" raised={true}>
-                        <Login onLogin={() => {
-                        }} loginFailed={() => {
-                        }}/>
-                    </Card>
-                    <Card className={classes.otherActionsCard} raised={true}>
-                        <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
-                        <Button component={Link} variant="contained" color="primary" to="/register">{i18n.t("register-organisation")}</Button>
-                    </Card>
-                </Box>
+                <Typography variant="h4" className={classes.welcome}>{i18n.t("home-welcome")}</Typography>
+                <Grid container direction="row" justifyContent="center" alignItems="stretch">
+                    <Grid item lg={4} xs={12}>
+                        <Paper className={classes.loginCard} variant="elevation" raised={true} elevation={5}>
+                            <Login onLogin={() => {
+                            }} loginFailed={() => {
+                            }}/>
+                        </Paper>
+                    </Grid>
+                    <Grid lg={4} xs={12}>
+                        <Paper className={classes.otherActionsCard} elevation={0}>
+                            <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
+                            <Button component={Link} variant="text" color="primary" to="/register">{i18n.t("register-organisation")}</Button>
+                        </Paper>
+                    </Grid>
+                </Grid>
             </Box>
         );
     }

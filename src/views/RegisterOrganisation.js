@@ -115,7 +115,7 @@ class RegisterOrganisation extends Component {
         return (
             <div className={classes.root}>
                 <ConsultAppBar/>
-                <Typography variant="h4" className={classes.registerOrganisationTitle}>{i18n.t('Register your organisation/group')}</Typography>
+                <Typography variant="h4" className={classes.registerOrganisationTitle}>{i18n.t('register-organisation-group')}</Typography>
                 <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.registrationCard} elevation={5}>
@@ -157,7 +157,7 @@ class RegisterOrganisation extends Component {
                                     autoComplete="userId"
                                     mandatory={true}
                                     className={classes.registerOrgField}
-                                    label="Email or mobile number"
+                                    label={i18n.t("email-or-mobile")}
                                     textValue={this.state.userId}
                                     handleChange={(event) => this.setState({userId: event.target.value})}
                                 />
@@ -194,7 +194,7 @@ class RegisterOrganisation extends Component {
                                 <Button type="submit" className={classes.registerButton}
                                         fullWidth
                                         variant="contained" color="primary"
-                                        onSubmit={this.submit}
+                                        onSubmit={this.getSubmitHandler()}
                                         disabled={!canSubmit}>Register Organisation</Button>
                             </Formsy>
                         </Paper>
@@ -227,7 +227,7 @@ class RegisterOrganisation extends Component {
                     <Grid item lg={4} xs={12}>
                         <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
                             <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
-                            <Button component={Link} variant="text" color="primary" to="/">{i18n.t("login")}</Button>
+                            <Button component={Link} variant="text" color="primary" to="/">{i18n.t("login-to-your-organisation")}</Button>
                         </Paper>
                     </Grid>
                 </Grid>
@@ -235,9 +235,11 @@ class RegisterOrganisation extends Component {
         );
     }
 
-    submit = () => {
-        let {name, orgName, email, mobile, password, authMode} = this.state;
-        UserService.registerOrg(name, orgName, email, mobile, password, authMode, onSuccess, onError).then(onWait);
+    getSubmitHandler() {
+        return () => {
+            let {name, orgName, email, mobile, password, authMode} = this.state;
+            UserService.registerOrg(name, orgName, email, mobile, password, authMode, onSuccess, onError).then(onWait);
+        }
     }
 
     disableSubmit = () => {

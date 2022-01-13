@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {i18n} from "consult-app-common";
 import {GoogleLogin} from "react-google-login";
 import PropTypes from 'prop-types';
 
@@ -28,6 +27,7 @@ class GoogleSignIn extends Component {
 
         return <GoogleLogin clientId="658977310896-knrl3gka66fldh83dao2rhgbblmd4un9.apps.googleusercontent.com"
                             buttonText={buttonText}
+                            isSignedIn={false}
                             onSuccess={this.successfulGoogleLoginHandler()}
                             onFailure={this.failedGoogleLoginHandler()}
                             cookiePolicy={'single_host_origin'}
