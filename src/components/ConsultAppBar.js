@@ -60,7 +60,7 @@ class ConsultAppBar extends React.Component {
             <Container maxWidth="xl">
                 <Toolbar disableGutters className={classes.toolbar}>
                     <Box className={classes.leftSet}>
-                        <IconButton component={Link} to="/setting">
+                        <IconButton component={Link} to="/">
                             <div>
                                 <Home fontSize="large" style={{color: "#fff"}}/>
                             </div>

@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
 import PropTypes from 'prop-types';
 import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import Login from "./Login";

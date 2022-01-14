@@ -1,27 +1,49 @@
-import _ from "lodash";
 import React, {Component} from "react";
-import {Button, TextField} from "@material-ui/core";
+import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
-import {FieldValidator} from "consult-app-common";
-import commonStyles from "./framework/CommonStyles";
+import {DataElementValidator} from "react-app-common";
+import ConsultAppBar from "../components/ConsultAppBar";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
-    root: commonStyles.root,
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    },
+    resetPasswordContent: {
+        marginTop: 50,
+        marginBottom: 30
+    },
     userId: {
         alignSelf: 'center'
     },
+    resetPasswordTitle: {
+        marginTop: 50,
+    },
     actions: {
         marginTop: theme.spacing.unit * 2
+    },
+    resetPasswordSent: {
+        marginTop: 30,
     }
 });
+
+const passwordResetSentMessages = {
+    "Email": "password-reset-link-sent-email",
+    "Mobile": "password-reset-link-sent-mobile"
+};
 
 class ResetPassword extends Component {
     constructor(props) {
         super(props);
 
+        let [validUserId, userIdType] = this.validate(props.defaultUserId);
         this.state = {
             userId: props.defaultUserId,
-            userIdType: props.userIdType
+            validUserId: validUserId,
+            userIdType: userIdType,
+            resetPasswordMessageSent: false
         }
     }
 
@@ -31,33 +53,51 @@ class ResetPassword extends Component {
         } = this.props;
 
         return <div className={classes.root}>
-            <TextField
-                fullWidth
-                name="emailOrMobile"
-                autoComplete={this.state.userIdType === "email" ? "email" : "mobile"}
-                required
-                className={classes.userId}
-                label={this.state.userIdType === "email" ? "Email" : "Mobile"}
-                onChange={this.state.userIdType === "email" ? this.emailChanged : this.mobileChanged}
-                value={this.state.userId}
-            />
-            <div className={classes.actions}>
-                <Button type="submit"
-                        name="resetPassword"
+            <ConsultAppBar/>
+            <Typography variant="h4" className={classes.resetPasswordTitle}>{i18n.t('reset-password-title')}</Typography>
+            <Grid container direction="row" justifyContent="center" alignItems="stretch" className={classes.resetPasswordContent}>
+                <Grid item lg={4} xs={10}>
+                    <TextField
                         fullWidth
-                        variant="contained" color="primary" onClick={this.otpRequested}>Get Reset Password Link</Button>
-            </div>
+                        name="userId"
+                        autoComplete="email"
+                        required
+                        className={classes.userId}
+                        label="Email or mobile"
+                        onChange={this.getUserIdChangedHandler()}
+                        value={this.state.userId}
+                        disabled={this.state.resetPasswordMessageSent}
+                    />
+                    <div className={classes.actions}>
+                        <Button type="submit"
+                                name="resetPassword"
+                                fullWidth
+                                disabled={!this.state.validUserId || this.state.resetPasswordMessageSent}
+                                variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>Get Reset Password Link</Button>
+                    </div>
+                    {this.state.resetPasswordMessageSent && <Typography className={classes.resetPasswordSent}
+                                                                        variant="body1">{i18n.t(passwordResetSentMessages[this.state.userIdType])}</Typography>}
+                </Grid>
+            </Grid>
         </div>;
     }
 
-    emailChanged = (e) => {
-        let message = FieldValidator.emailValidator(e.target.value);
-        this.setState({error: message, userId: e.target.value});
+    getUserIdChangedHandler() {
+        return (e) => {
+            let userId = e.target.value;
+            let [validUserId, userIdType] = this.validate(userId);
+            this.setState({validUserId: validUserId, userIdType: userIdType, userId: userId});
+        }
     }
 
-    mobileChanged = (e) => {
-        let message = FieldValidator.mobileValidator(e.target.value);
-        this.setState({error: message, userId: e.target.value});
+    validate(userId) {
+        return DataElementValidator.validateEmailOrMobileWithCountryCode(userId);
+    }
+
+    getResetPasswordHandler() {
+        return (e) => {
+            this.setState({resetPasswordMessageSent: true});
+        }
     }
 }
 

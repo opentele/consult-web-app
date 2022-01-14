@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {Button, Tab, Link, Tabs, TextField, Typography, Box} from "@material-ui/core";
+import {Button, Tab, Tabs, TextField, Typography} from "@material-ui/core";
+import {Link} from 'react-router-dom';
 import {DataElementValidator} from "react-app-common";
 import _ from 'lodash';
 import LoginState from "consult-app-common/access/domain/LoginState";
@@ -104,7 +105,8 @@ class Login extends Component {
                         onChange={this.state.loginState.otpMode ? this.otpChanged : this.passwordChanged}
                         value={this.state.loginState.otpMode ? this.state.otp : this.state.password}
                     />
-                    <Link className={[classes.forgotPassword, classes.field]} href="#">Forgot password</Link>
+                    <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"
+                            to="/resetPassword">{i18n.t("forgot-password")}</Button>
                     <ServerErrorMessage error={error}/>
                     {this.loginOrChangeMode(classes, !userIdValid)}
                 </>}
@@ -181,12 +183,12 @@ class Login extends Component {
     }
 
     userIdChanged = (e) => {
-        let emailErrorMessage = DataElementValidator.emailValidator(e.target.value);
-        let mobileErrorMessage = DataElementValidator.mobileValidatorWithCountryCode(e.target.value);
-        if (_.isEmpty(emailErrorMessage) || _.isEmpty(mobileErrorMessage))
-            this.setState({userIdError: "", userId: e.target.value});
+        let userId = e.target.value;
+        let [matched] = DataElementValidator.validateEmailOrMobileWithCountryCode(userId);
+        if (matched)
+            this.setState({userIdError: "", userId: userId});
         else
-            this.setState({userIdError: "Invalid user id", userId: e.target.value});
+            this.setState({userIdError: "Invalid user id", userId: userId});
     }
 
     passwordChanged = (e) => {
