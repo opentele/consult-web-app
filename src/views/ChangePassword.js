@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";
 import {DataElementValidator} from "react-app-common";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     root: {
@@ -89,8 +90,11 @@ class ChangePassword extends Component {
                         <Button type="submit"
                                 name="updatePassword"
                                 fullWidth
+                                className={classes.changePasswordField}
                                 disabled={!this.state.valid}
                                 variant="contained" color="primary" onClick={this.submit}>{i18n.t('change-password')}</Button>
+                        <Button className={classes.changePasswordField}
+                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel")}</Button>
                     </div>
                 </Grid>
             </Grid>

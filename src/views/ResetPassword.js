@@ -4,6 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {DataElementValidator} from "react-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     root: {
@@ -23,6 +24,9 @@ const styles = theme => ({
     },
     actions: {
         marginTop: theme.spacing.unit * 2
+    },
+    resetPasswordButton: {
+        marginTop: theme.spacing.unit * 1
     },
     resetPasswordSent: {
         marginTop: 30,
@@ -72,8 +76,11 @@ class ResetPassword extends Component {
                         <Button type="submit"
                                 name="resetPassword"
                                 fullWidth
+                                className={classes.resetPasswordButton}
                                 disabled={!this.state.validUserId || this.state.resetPasswordMessageSent}
                                 variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>Get Reset Password Link</Button>
+                        {!this.state.resetPasswordMessageSent && <Button className={classes.resetPasswordButton}
+                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel")}</Button>}
                     </div>
                     {this.state.resetPasswordMessageSent && <Typography className={classes.resetPasswordSent}
                                                                         variant="body1">{i18n.t(passwordResetSentMessages[this.state.userIdType])}</Typography>}
