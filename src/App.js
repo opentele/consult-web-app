@@ -7,6 +7,7 @@ import {CircularProgress, CssBaseline} from "@material-ui/core";
 import RegisterOrganisation from "./views/RegisterOrganisation";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import ResetPassword from "./views/ResetPassword";
+import ChangePassword from "./views/ChangePassword";
 
 const theme = createTheme();
 
@@ -34,6 +35,9 @@ export default function App() {
                     </Route>
                     <Route path="/resetPassword">
                         <ResetPassword/>
+                    </Route>
+                    <Route path="/changePassword">
+                        <ChangePassword/>
                     </Route>
                 </Switch>
             </Router>

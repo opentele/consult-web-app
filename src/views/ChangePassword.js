@@ -1,16 +1,29 @@
 import React, {Component} from "react";
-import {Button, TextField, Typography} from "@material-ui/core";
+import {Button, Grid, TextField, Typography} from "@material-ui/core";
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import commonStyles from "./framework/CommonStyles";
+import ConsultAppBar from "../components/ConsultAppBar";
+import {i18n} from "consult-app-common";
+import {DataElementValidator} from "react-app-common";
 
 const styles = theme => ({
-    root: commonStyles.root,
-    userId: {
-        alignSelf: 'center'
+    root: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
     },
-    actions: {
-        marginTop: theme.spacing.unit * 2
+    changePasswordTitle: {
+        marginTop: 50,
+    },
+    changePasswordContent: {
+        marginTop: 20,
+        marginBottom: 30
+    },
+    changePasswordField: {
+        marginTop: theme.spacing.unit * 1
+    },
+    changePasswordActions: {
+        marginTop: theme.spacing.unit * 3
     }
 });
 
@@ -21,7 +34,8 @@ class ChangePassword extends Component {
         this.state = {
             currentPassword: props.defaultCurrentPassword,
             password: props.defaultPassword,
-            confirmPassword: props.defaultPassword
+            confirmPassword: props.defaultPassword,
+            valid: DataElementValidator.validatePasswords(props.defaultPassword, props.defaultPassword)
         }
     }
 
@@ -37,47 +51,49 @@ class ChangePassword extends Component {
         } = this.props;
 
         return <div className={classes.root}>
-            <div>
-                <Typography variant="h6">Update password</Typography>
-                <Typography variant="body1">{`USER: ${userId}`}</Typography>
-            </div>
-
-            {currentPasswordRequired && <TextField
-                type="password"
-                name="oldPassword"
-                required
-                fullWidth
-                className={classes.field}
-                label="Old Password"
-                onChange={this.currentPasswordChanged}
-                value={this.state.currentPassword}
-            />}
-            <TextField
-                type="password"
-                name="password"
-                required
-                fullWidth
-                className={classes.field}
-                label="Password"
-                onChange={this.passwordChanged}
-                value={this.state.password}
-            />
-            <TextField
-                type="password"
-                name="confirmPassword"
-                required
-                fullWidth
-                className={classes.field}
-                label="Confirm Password"
-                onChange={this.confirmPasswordChanged}
-                value={this.state.confirmPassword}
-            />
-            <div className={classes.actions}>
-                <Button type="submit"
-                        name="updatePassword"
+            <ConsultAppBar/>
+            <Typography variant="h4" className={classes.changePasswordTitle}>{i18n.t('change-password-title')}</Typography>
+            <Grid container direction="row" justifyContent="center" alignItems="stretch" className={classes.changePasswordContent}>
+                <Grid item lg={4} xs={10}>
+                    {currentPasswordRequired && <TextField
+                        type="password"
+                        name="oldPassword"
+                        required
                         fullWidth
-                        variant="contained" color="primary" onClick={this.submit}>Update Password</Button>
-            </div>
+                        className={classes.changePasswordField}
+                        label="Old Password"
+                        onChange={this.currentPasswordChanged}
+                        value={this.state.currentPassword}
+                    />}
+                    <TextField
+                        type="password"
+                        name="password"
+                        required
+                        fullWidth
+                        className={classes.changePasswordField}
+                        label="Password"
+                        onChange={this.passwordChanged}
+                        value={this.state.password}
+                    />
+                    <TextField
+                        type="password"
+                        name="confirmPassword"
+                        required
+                        fullWidth
+                        className={classes.changePasswordField}
+                        label="Confirm Password"
+                        onChange={this.confirmPasswordChanged}
+                        value={this.state.confirmPassword}
+                    />
+                    <div className={classes.changePasswordActions}>
+                        <Button type="submit"
+                                name="updatePassword"
+                                fullWidth
+                                disabled={!this.state.valid}
+                                variant="contained" color="primary" onClick={this.submit}>{i18n.t('change-password')}</Button>
+                    </div>
+                </Grid>
+            </Grid>
         </div>;
     }
 
@@ -86,11 +102,13 @@ class ChangePassword extends Component {
     }
 
     passwordChanged = (e) => {
-        this.setState({password: e.target.value});
+        let password = e.target.value;
+        this.setState({password: password, valid: DataElementValidator.validatePasswords(password, this.state.confirmPassword)});
     }
 
     confirmPasswordChanged = (e) => {
-        this.setState({confirmPassword: e.target.value});
+        let confirmPassword = e.target.value;
+        this.setState({confirmPassword: confirmPassword, valid: DataElementValidator.validatePasswords(confirmPassword, this.state.password)});
     }
 
     submit = (e) => {
