@@ -1,6 +1,6 @@
 import React from 'react';
 
-import About from "../../views/LocalUserLogin";
+import About from "../../views/Login";
 
 //👇 This default export determines where your story goes in the story list
 export default {

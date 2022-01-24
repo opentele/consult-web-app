@@ -1,9 +1,14 @@
+import _ from 'lodash';
 import {Component} from "react";
 
 class BaseView extends Component {
     constructor(props) {
         super(props);
         this.setState = this.setState.bind(this);
+
+        if (!_.isNil(props["injectedState"])) {
+            this.state = {...props["injectedState"]};
+        }
     }
 
     getValueChangedHandler(fieldName) {

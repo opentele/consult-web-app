@@ -1,6 +1,7 @@
 import React from 'react';
 
 import About from '../../views/RegisterOrganisation';
+import { MemoryRouter } from 'react-router-dom'
 
 //👇 This default export determines where your story goes in the story list
 export default {
@@ -9,15 +10,18 @@ export default {
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template = (args) => <About {...args} />;
+const Template = (args) => <MemoryRouter><About {...args} /></MemoryRouter>;
 
 export const RegisterOrganisation = Template.bind({});
 
 RegisterOrganisation.args = {
-    defaultName: "Vivek Singh",
-    defaultOrgName: "Samanvay",
-    defaultEmail: "petmongrels@gmail.com",
-    defaultPassword: "password",
-    defaultCountryCode: "91",
-    defaultMobile: "9090909090"
+    injectedState: {
+        name: "Vivek Singh",
+        orgName: "Samanvay",
+        userId: "petmongrels@gmail.com",
+        password: "password",
+        confirmPassword: "password",
+        countryCode: "91",
+        mobile: "9090909090"
+    }
 };

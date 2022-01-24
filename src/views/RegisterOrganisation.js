@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import Formsy from 'formsy-react';
 import {Box, Button, Grid, Paper, Typography} from '@material-ui/core';
@@ -12,6 +12,7 @@ import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
+import BaseView from "./framework/BaseView";
 
 const styles = theme => ({
     root: {
@@ -78,7 +79,7 @@ const styles = theme => ({
 });
 
 
-class RegisterOrganisation extends Component {
+class RegisterOrganisation extends BaseView {
     static propTypes = {
         defaultError: PropTypes.object
     };
@@ -87,20 +88,11 @@ class RegisterOrganisation extends Component {
         super(props);
 
         this.state = {
+            ...this.state,
             canSubmit: false,
             authMode: "password",
-            name: props.defaultName,
-            orgName: props.defaultOrgName,
-            password: props.defaultPassword,
-            confirmPassword: props.defaultPassword,
-            email: props.defaultEmail,
-            mobile: props.defaultMobile,
-            countryCode: props.defaultCountryCode,
-            error: props.defaultError,
             busy: false
         };
-
-        this.setState = this.setState.bind(this);
     }
 
     render() {
@@ -215,8 +207,8 @@ class RegisterOrganisation extends Component {
                                     className={classes.registerOrgField}
                                     label="Organisation name"
                                     helperText="min 3 characters"
-                                    textValue={this.state.orgName}
-                                    handleChange={(event) => this.setState({orgName: event.target.value})}
+                                    textValue={this.state.googleSignUpOrgName}
+                                    handleChange={(event) => this.setState({googleSignUpOrgName: event.target.value})}
                                 />
                                 <Box className={classes.googleSignInBox}>
                                     <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>
