@@ -1,15 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {Button, Tab, Tabs, TextField, Typography} from "@material-ui/core";
+import {Box, Button, Tab, Tabs, TextField} from "@material-ui/core";
 import {Link} from 'react-router-dom';
-import {DataElementValidator} from "react-app-common";
-import _ from 'lodash';
-import LoginState from "consult-app-common/access/domain/LoginState";
 import ServerErrorMessage from "../components/ServerErrorMessage";
-import {Email, Google} from "@mui/icons-material";
+import {Google, VerifiedUser} from "@mui/icons-material";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
-import {i18n} from "consult-app-common";
+import {i18n, UserService} from "consult-app-common";
+import PasswordField from "../components/loginSignup/PasswordField";
+import BaseView from "./framework/BaseView";
+import {DataElementValidator} from "react-app-common";
+import {onCompletion, onWait} from "./framework/ServerCallHelper";
 
 const styles = theme => ({
     root: {},
@@ -46,27 +47,20 @@ const styles = theme => ({
     }
 });
 
-
-class Login extends Component {
+class Login extends BaseView {
     static propTypes = {
         onLogin: PropTypes.func,
-        error: PropTypes.string,
-        loginBy: PropTypes.string
+        error: PropTypes.string
     };
-
-    static defaultProps = {
-        loginBy: "userId"
-    }
 
     constructor(props) {
         super(props);
 
         this.state = {
-            loginBy: props.loginBy,
-            userIdError: '',
-            userId: props.defaultEmail,
-            password: props.defaultPassword,
-            loginState: new LoginState()
+            ...this.state,
+            errors: {},
+            busy: false,
+            loginBy: "userId"
         }
     }
 
@@ -75,136 +69,52 @@ class Login extends Component {
             classes
         } = this.props;
 
-        const {error} = this.state;
-        const userIdValid = !_.isEmpty(this.state.userId) && _.isEmpty(this.state.userIdError);
-        let type = this.state.loginState.otpMode ? "otp" : "password";
+        const {password, userId, loginBy, serverError, serverStatus} = this.state;
         return (
-            <div className={classes.form}>
-                <Tabs value={this.state.loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
-                    <Tab icon={<Email/>} label="User ID" value="userId"/>
+            <div>
+                <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
+                    <Tab icon={<VerifiedUser/>} label="User ID" value="userId"/>
                     <Tab icon={<Google/>} label="Google" value="google"/>
                 </Tabs>
-                {this.state.loginBy === "userId" && <>
+                {loginBy === "userId" && <Box component="form" className={classes.form}>
                     <TextField
-                        name="email"
-                        autoComplete="email"
+                        name="userId"
                         required
                         className={classes.userIdField}
-                        label="Email or Mobile"
-                        onChange={this.userIdChanged}
-                        value={this.state.userId}
+                        label={i18n.t('userId-label')}
+                        onChange={this.getValueChangedHandler("userId")}
+                        error={this.hasError("userId")}
+                        helperText={this.getErrorText("userId", "userId-invalid-error")}
+                        value={userId}
                     />
-                    <TextField
-                        type={type}
-                        name={type}
-                        required
-                        mandatory={false}
-                        autoComplete={this.state.loginState.otpMode ? "34b0aa95-6872-4d68-9273-a7a543c818ef" : type}
-                        className={classes.field}
-                        label={this.state.loginState.otpMode ? "OTP" : "Password"}
-                        onChange={this.state.loginState.otpMode ? this.otpChanged : this.passwordChanged}
-                        value={this.state.loginState.otpMode ? this.state.otp : this.state.password}
-                    />
+                    <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
                     <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"
                             to="/resetPassword">{i18n.t("forgot-password")}</Button>
-                    <ServerErrorMessage error={error}/>
-                    {this.loginOrChangeMode(classes, !userIdValid)}
-                </>}
-                {this.state.loginBy === "google" && <GoogleSignIn/>}
+                    <ServerErrorMessage error={serverError} status={serverStatus} tryingLogin={true}/>
+                    <div className={classes.actions}>
+                        <Button type="submit"
+                                fullWidth
+                                variant="contained" color="primary" onClick={this.getSubmitHandler()}>{i18n.t("login")}</Button>
+                    </div>
+                </Box>}
+                {loginBy === "google" && <GoogleSignIn/>}
             </div>
         );
     }
 
-    loginOrChangeMode(classes, userIdInvalid) {
-        return <>
-            {this.state.loginState.canShowOtpSentMessage() && this.otpSentMessage(classes)}
-            {this.login(classes, userIdInvalid)}
-            {this.state.loginState.canRequestOtpOrSwitchPassword() && this.or(classes)}
-            {this.state.loginState.canRequestOtp() && this.requestOtp(classes, userIdInvalid)}
-            {this.state.loginState.canSwitchToPassword() && this.switchToPassword(classes, userIdInvalid)}
-        </>
-    }
-
-    otpSentMessage(classes) {
-        return <Typography variant="h6" className={[classes.actions, classes.actionOption]}>{i18n.t("otp-sent", {loginBy: this.state.loginBy})}</Typography>;
-    }
-
-    or(classes) {
-        return <Typography variant="h6" className={[classes.actions, classes.actionOption]}>{i18n.t("or")}</Typography>;
-    }
-
-    switchToPassword(classes, userIdInvalid) {
-        return <div className={classes.actions}>
-            <Button type="submit"
-                    name="switchToPassword"
-                    fullWidth
-                    variant="contained" color="primary" disabled={userIdInvalid} onClick={this.switchedToPassword}>{i18n.t("switch-to-password-login")}</Button>
-        </div>;
-    }
-
-    requestOtp(classes, userIdInvalid) {
-        return <div className={classes.actions}>
-            <Button type="submit"
-                    name="requestOTP"
-                    fullWidth
-                    variant="contained" color="primary" disabled={userIdInvalid} onClick={this.otpRequested}>{i18n.t("request-otp")}</Button>
-        </div>;
-    }
-
-    submitOtp(classes, otpInvalid) {
-        return <div className={classes.actions}>
-            <Button type="submit"
-                    name="submitOTP"
-                    fullWidth
-                    variant="contained" color="primary" disabled={otpInvalid} onClick={this.submit}>{i18n.t("submit-otp")}</Button>
-        </div>;
-    }
-
-    login(classes, userIdInvalid) {
-        return <div className={classes.actions}>
-            <Button type="submit"
-                    fullWidth
-                    variant="contained" color="primary" disabled={userIdInvalid || !this.state.loginState.passwordOrOTPProvided()}>{i18n.t("login")}</Button>
-        </div>;
-    }
-
-    updateLoginState() {
-        this.setState({loginState: LoginState.clone(this.state.loginState)});
-    }
-
-    switchedToPassword = () => {
-        this.state.loginState.passwordModeChosen();
-        this.updateLoginState();
-    }
-
-    otpRequested = () => {
-        this.state.loginState.otpRequested();
-        this.updateLoginState();
-    }
-
-    userIdChanged = (e) => {
-        let userId = e.target.value;
-        let [matched] = DataElementValidator.validateEmailOrMobileWithCountryCode(userId);
-        if (matched)
-            this.setState({userIdError: "", userId: userId});
-        else
-            this.setState({userIdError: "Invalid user id", userId: userId});
-    }
-
-    passwordChanged = (e) => {
-        this.state.loginState.passwordOrOTPChanged(e.target.value);
-        this.setState({loginState: LoginState.clone(this.state.loginState), password: e.target.value, otp: ""});
-    }
-
-    otpChanged = (e) => {
-        this.state.loginState.passwordOrOTPChanged(e.target.value);
-        this.setState({loginState: LoginState.clone(this.state.loginState), otp: e.target.value, password: ""});
-    }
-
-    submit = model => {
-        if (this.props.onLogin) {
-            this.props.onLogin(model);
-        }
+    getSubmitHandler() {
+        return (e) => {
+            e.preventDefault();
+            const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
+            if (validUserId) {
+                UserService.login(this.state.userId, this.state.password, onCompletion(this));
+                onWait(this);
+            } else {
+                const errors = {};
+                errors["userId"] = "invalid-user-id";
+                this.setState({errors: errors});
+            }
+        };
     }
 }
 

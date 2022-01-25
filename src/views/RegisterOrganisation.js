@@ -1,6 +1,6 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Grid, IconButton, InputAdornment, Paper, TextField, Typography} from '@material-ui/core';
+import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {DataElementValidator} from "react-app-common";
 import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
@@ -10,8 +10,6 @@ import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
-import _ from 'lodash';
-import {Visibility, VisibilityOff} from "@mui/icons-material";
 import PasswordField from "../components/loginSignup/PasswordField";
 
 const styles = theme => ({
@@ -87,18 +85,18 @@ class RegisterOrganisation extends BaseView {
         const {
             classes
         } = this.props;
-        const {busy, error} = this.state;
+        const {busy, error, orgName, password, confirmPassword, name, userId} = this.state;
 
         if (busy)
             return <WaitBackdrop/>;
 
         return (
-            <Box className={classes.root} component="form">
+            <Box className={classes.root}>
                 <ConsultAppBar/>
                 <Typography variant="h4" className={classes.registerOrganisationTitle}>{i18n.t('register-organisation-group')}</Typography>
                 <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
-                        <Paper className={classes.registrationCard} elevation={5}>
+                        <Paper className={classes.registrationCard} elevation={5} component="form">
                             <Typography variant="h5" className={classes.registerText}>{i18n.t('userId-label')}</Typography>
                             <TextField
                                 name="organisationName"
@@ -106,7 +104,7 @@ class RegisterOrganisation extends BaseView {
                                 required
                                 className={classes.registerOrgField}
                                 label={i18n.t("register-org-name-label")}
-                                value={this.state.orgName}
+                                value={orgName}
                                 onChange={this.getValueChangedHandler("orgName")}
                             />
 
@@ -116,7 +114,7 @@ class RegisterOrganisation extends BaseView {
                                 required
                                 className={classes.registerOrgField}
                                 label={i18n.t("register-org-person-name-label")}
-                                value={this.state.name}
+                                value={name}
                                 onChange={this.getValueChangedHandler("name")}
                             />
 
@@ -126,7 +124,7 @@ class RegisterOrganisation extends BaseView {
                                 required
                                 className={classes.registerOrgField}
                                 label={i18n.t("userId-label")}
-                                value={this.state.userId}
+                                value={userId}
                                 onChange={this.getValueChangedHandler("userId")}
                                 error={this.hasError("userId")}
                                 helperText={this.getErrorText("userId", "userId-invalid-error")}
@@ -134,14 +132,14 @@ class RegisterOrganisation extends BaseView {
                             <PasswordField className={classes.registerOrgField}
                                            labelKey="enter-password-label"
                                            name="password"
-                                           value={this.state.password}
+                                           value={password}
                                            onChangeHandler={this.getValueChangedHandler("password")}
                                            hasError={this.hasError("passwords")}
                                            errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
                             <PasswordField className={classes.registerOrgField}
                                            labelKey="enter-password-again-label"
                                            name="confirmPassword"
-                                           value={this.state.confirmPassword}
+                                           value={confirmPassword}
                                            onChangeHandler={this.getValueChangedHandler("confirmPassword")}
                                            hasError={this.hasError("passwords")}
                                            errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
@@ -182,10 +180,15 @@ class RegisterOrganisation extends BaseView {
     }
 
     getSubmitHandler() {
-        return () => {
-            if (!this.validate()) return;
-            let {name, orgName, userId, mobile, password} = this.state;
-            UserService.registerOrg(name, orgName, userId, mobile, password, onSuccess, onError).then(onWait);
+        return (e) => {
+            let [valid, userIdType] = this.validate();
+            if (!valid) {
+                e.preventDefault();
+                return;
+            }
+            let {name, orgName, userId, password} = this.state;
+            UserService.registerOrg(name, orgName, userId, userIdType, password, onSuccess(this), onError(this));
+            onWait(this);
         }
     }
 
@@ -194,12 +197,12 @@ class RegisterOrganisation extends BaseView {
         const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
         const passwordsValid = DataElementValidator.validatePasswords(this.state.password, this.state.confirmPassword);
 
-        if (passwordsValid && validUserId) return true;
+        if (passwordsValid && validUserId) return [true, userIdType];
 
         if (!passwordsValid) errors["passwords"] = "password-not-matching";
         if (!validUserId) errors["userId"] = "invalid-user-id";
         this.setState({errors: errors});
-        return false;
+        return [false, userIdType];
     }
 }
 

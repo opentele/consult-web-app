@@ -16,7 +16,7 @@ export const RegisterOrganisation = Template.bind({});
 RegisterOrganisation.args = {
     injectedState: {
         name: "Vivek Singh",
-        orgName: "Samanvay",
+        orgName: "Test Organisation",
         userId: "petmongrels@gmail.com",
         password: "password",
         confirmPassword: "password",
@@ -27,7 +27,7 @@ export const PasswordMismatch = Template.bind({});
 PasswordMismatch.args = {
     injectedState: {
         name: "Vivek Singh",
-        orgName: "Samanvay",
+        orgName: "Test Organisation",
         userId: "petmongrels@gmail.com",
         password: "password1",
         confirmPassword: "password2"

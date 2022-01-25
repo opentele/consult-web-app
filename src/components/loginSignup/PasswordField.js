@@ -19,7 +19,7 @@ class PasswordField extends React.Component {
     static propTypes = {
         name: PropTypes.string,
         className: PropTypes.string.isRequired,
-        labelKey: PropTypes.string.isRequired,
+        labelKey: PropTypes.string,
         value: PropTypes.string.isRequired,
         onChangeHandler: PropTypes.func.isRequired,
         hasError: PropTypes.bool.isRequired,
@@ -27,7 +27,8 @@ class PasswordField extends React.Component {
     }
 
     static defaultProps = {
-        name: "password"
+        name: "password",
+        labelKey: "enter-password-label"
     }
 
     render() {

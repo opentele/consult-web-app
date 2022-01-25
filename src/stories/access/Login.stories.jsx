@@ -1,6 +1,7 @@
 import React from 'react';
 
 import About from "../../views/Login";
+import {MemoryRouter} from "react-router-dom";
 
 //👇 This default export determines where your story goes in the story list
 export default {
@@ -9,30 +10,28 @@ export default {
 };
 
 //👇 We create a “template” of how args map to rendering
-const Template = (args) => <About {...args} />;
+const Template = (args) => <MemoryRouter><About {...args} /></MemoryRouter>;
 
-export const LoginByEmailAndOtp = Template.bind({});
-LoginByEmailAndOtp.args = {
-    defaultEmail: "sachink@gmail.com",
+export const LoginByUserId = Template.bind({});
+LoginByUserId.args = {
+    injectedState: {
+        userId: "petmongrels@gmail.com",
+        password: "password"
+    }
 };
 
-export const LoginByEmailAndPassword = Template.bind({});
-LoginByEmailAndPassword.args = {
-    defaultEmail: "sachink@gmail.com",
-    defaultPassword: "password"
+export const InvalidUserId = Template.bind({});
+InvalidUserId.args = {
+    injectedState: {
+        userId: "petmongrels",
+        password: "password"
+    }
 };
 
-export const LoginByMobileAndOtp = Template.bind({});
-LoginByMobileAndOtp.args = {
-    defaultCountryCode: "+91",
-    defaultMobile: "9090909090",
-    loginBy: "mobile"
-};
-
-export const LoginByMobileAndPassword = Template.bind({});
-LoginByMobileAndPassword.args = {
-    defaultCountryCode: "+91",
-    defaultMobile: "9090909090",
-    defaultPassword: "password",
-    loginBy: "mobile"
+export const IncorrectLogin = Template.bind({});
+IncorrectLogin.args = {
+    injectedState: {
+        userId: "petmongrels@gmail.com",
+        password: "notAPassword"
+    }
 };
