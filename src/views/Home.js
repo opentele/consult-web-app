@@ -78,7 +78,7 @@ class Home extends Component {
                     <Grid lg={4} xs={12}>
                         <Paper className={classes.otherActionsCard} elevation={0}>
                             <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
-                            <Button component={Link} variant="text" color="primary" to="/register">{i18n.t("register-organisation")}</Button>
+                            <Button component={Link} variant="text" color="primary" to="/register">{i18n.t("register-organisation-link")}</Button>
                         </Paper>
                     </Grid>
                 </Grid>

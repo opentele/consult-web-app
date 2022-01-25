@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import {Component} from "react";
+import {i18n} from "consult-app-common";
 
 class BaseView extends Component {
     constructor(props) {
@@ -8,6 +9,8 @@ class BaseView extends Component {
 
         if (!_.isNil(props["injectedState"])) {
             this.state = {...props["injectedState"]};
+        } else {
+            this.state = {};
         }
     }
 
@@ -26,6 +29,14 @@ class BaseView extends Component {
             newState[stateFieldName][subFieldName] = e.target.value;
             this.setState(newState);
         }
+    }
+
+    hasError(field) {
+        return !_.isNil(this.state.errors[field]);
+    }
+
+    getErrorText(field, errorMessageKey) {
+        return this.hasError(field) && i18n.t(errorMessageKey);
     }
 }
 

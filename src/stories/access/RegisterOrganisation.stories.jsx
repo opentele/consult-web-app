@@ -13,7 +13,6 @@ export default {
 const Template = (args) => <MemoryRouter><About {...args} /></MemoryRouter>;
 
 export const RegisterOrganisation = Template.bind({});
-
 RegisterOrganisation.args = {
     injectedState: {
         name: "Vivek Singh",
@@ -21,7 +20,16 @@ RegisterOrganisation.args = {
         userId: "petmongrels@gmail.com",
         password: "password",
         confirmPassword: "password",
-        countryCode: "91",
-        mobile: "9090909090"
+    }
+};
+
+export const PasswordMismatch = Template.bind({});
+PasswordMismatch.args = {
+    injectedState: {
+        name: "Vivek Singh",
+        orgName: "Samanvay",
+        userId: "petmongrels@gmail.com",
+        password: "password1",
+        confirmPassword: "password2"
     }
 };

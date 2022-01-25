@@ -1,10 +1,7 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Formsy from 'formsy-react';
-import {Box, Button, Grid, Paper, Typography} from '@material-ui/core';
-import PropTypes from 'prop-types';
-
-import ValidatedTextField from '../components/loginSignup/ValidatedTextField';
+import {Box, Button, Grid, IconButton, InputAdornment, Paper, TextField, Typography} from '@material-ui/core';
+import {DataElementValidator} from "react-app-common";
 import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import {onError, onSuccess, onWait} from "./framework/ServerCallHelper";
@@ -13,6 +10,9 @@ import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
+import _ from 'lodash';
+import {Visibility, VisibilityOff} from "@mui/icons-material";
+import PasswordField from "../components/loginSignup/PasswordField";
 
 const styles = theme => ({
     root: {
@@ -33,29 +33,23 @@ const styles = theme => ({
     registrationCard: {
         margin: 10,
         marginRight: 10,
-        backgroundColor: theme.palette.background.default
-    },
-    form: {
+        backgroundColor: theme.palette.background.default,
         display: 'flex',
         flexDirection: 'column',
         padding: 25,
         flexGrow: 1
     },
-    googleForm: {
+    googleRegistrationCard: {
+        margin: 10,
+        marginRight: 10,
+        backgroundColor: theme.palette.background.default,
         display: 'flex',
         flexDirection: 'column',
         padding: 25,
         alignItems: 'stretch'
     },
-    authMode: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: 20,
-        padding: 30,
-        marginLeft: 15
-    },
     registerOrgField: {
-        marginTop: theme.spacing.unit,
+        marginTop: theme.spacing.unit * 3,
         alignItems: 'stretch'
     },
     googleSignInBox: {
@@ -80,18 +74,12 @@ const styles = theme => ({
 
 
 class RegisterOrganisation extends BaseView {
-    static propTypes = {
-        defaultError: PropTypes.object
-    };
-
     constructor(props) {
         super(props);
-
         this.state = {
             ...this.state,
-            canSubmit: false,
-            authMode: "password",
-            busy: false
+            busy: false,
+            errors: {}
         };
     }
 
@@ -99,121 +87,87 @@ class RegisterOrganisation extends BaseView {
         const {
             classes
         } = this.props;
-        const {canSubmit, busy, error} = this.state;
+        const {busy, error} = this.state;
 
         if (busy)
             return <WaitBackdrop/>;
 
         return (
-            <div className={classes.root}>
+            <Box className={classes.root} component="form">
                 <ConsultAppBar/>
                 <Typography variant="h4" className={classes.registerOrganisationTitle}>{i18n.t('register-organisation-group')}</Typography>
                 <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.registrationCard} elevation={5}>
-                            <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
-                                    onValidSubmit={this.submit} className={classes.form}>
-                                <Typography variant="h5" className={classes.registerText}>{i18n.t('email-or-mobile')}</Typography>
-                                <ValidatedTextField
-                                    name="organisationName"
-                                    autoComplete="organisationName"
-                                    validations="minLength:3"
-                                    validationErrors={{
-                                        minLength: "Too short"
-                                    }}
-                                    mandatory={true}
-                                    className={classes.registerOrgField}
-                                    label="Organisation name"
-                                    helperText="min 3 characters"
-                                    textValue={this.state.orgName}
-                                    handleChange={(event) => this.setState({orgName: event.target.value})}
-                                />
+                            <Typography variant="h5" className={classes.registerText}>{i18n.t('userId-label')}</Typography>
+                            <TextField
+                                name="organisationName"
+                                autoComplete="organisation"
+                                required
+                                className={classes.registerOrgField}
+                                label={i18n.t("register-org-name-label")}
+                                value={this.state.orgName}
+                                onChange={this.getValueChangedHandler("orgName")}
+                            />
 
-                                <ValidatedTextField
-                                    name="name"
-                                    autoComplete="name"
-                                    validations="minLength:3"
-                                    validationErrors={{
-                                        minLength: "Too short"
-                                    }}
-                                    mandatory={true}
-                                    className={classes.registerOrgField}
-                                    label="Your name"
-                                    helperText="min 3 characters"
-                                    textValue={this.state.name}
-                                    handleChange={(event) => this.setState({name: event.target.value})}
-                                />
+                            <TextField
+                                name="name"
+                                autoComplete="name"
+                                required
+                                className={classes.registerOrgField}
+                                label={i18n.t("register-org-person-name-label")}
+                                value={this.state.name}
+                                onChange={this.getValueChangedHandler("name")}
+                            />
 
-                                <ValidatedTextField
-                                    name="userId"
-                                    autoComplete="userId"
-                                    mandatory={true}
-                                    className={classes.registerOrgField}
-                                    label={i18n.t("email-or-mobile")}
-                                    textValue={this.state.userId}
-                                    handleChange={(event) => this.setState({userId: event.target.value})}
-                                />
+                            <TextField
+                                name="userId"
+                                autoComplete="userId"
+                                required
+                                className={classes.registerOrgField}
+                                label={i18n.t("userId-label")}
+                                value={this.state.userId}
+                                onChange={this.getValueChangedHandler("userId")}
+                                error={this.hasError("userId")}
+                                helperText={this.getErrorText("userId", "userId-invalid-error")}
+                            />
+                            <PasswordField className={classes.registerOrgField}
+                                           labelKey="enter-password-label"
+                                           name="password"
+                                           value={this.state.password}
+                                           onChangeHandler={this.getValueChangedHandler("password")}
+                                           hasError={this.hasError("passwords")}
+                                           errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
+                            <PasswordField className={classes.registerOrgField}
+                                           labelKey="enter-password-again-label"
+                                           name="confirmPassword"
+                                           value={this.state.confirmPassword}
+                                           onChangeHandler={this.getValueChangedHandler("confirmPassword")}
+                                           hasError={this.hasError("passwords")}
+                                           errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
+                            <ServerErrorMessage error={error}/>
 
-                                <ValidatedTextField
-                                    type="password"
-                                    name="password"
-                                    validations="minLength:8"
-                                    validationErrors={{
-                                        minLength: "Too short"
-                                    }}
-                                    className={classes.registerOrgField}
-                                    label="Create a password"
-                                    mandatory={true}
-                                    textValue={this.state.password}
-                                    handleChange={(event) => this.setState({password: event.target.value})}
-                                />
-                                <ValidatedTextField
-                                    type="password"
-                                    name="repeated_password"
-                                    validations="equalsField:password"
-                                    validationErrors={{
-                                        equalsField: "Needs to be the same password as above"
-                                    }}
-                                    mandatory={true}
-                                    className={classes.registerOrgField}
-                                    label="Enter password again"
-                                    textValue={this.state.confirmPassword}
-                                    handleChange={(event) => this.setState({confirmPassword: event.target.value})}
-                                />
-
-                                <ServerErrorMessage error={error}/>
-
-                                <Button type="submit" className={classes.registerButton}
-                                        fullWidth
-                                        variant="contained" color="primary"
-                                        onSubmit={this.getSubmitHandler()}
-                                        disabled={!canSubmit}>Register Organisation</Button>
-                            </Formsy>
+                            <Button type="submit" className={classes.registerButton}
+                                    fullWidth
+                                    variant="contained" color="primary"
+                                    onClick={this.getSubmitHandler()}>{i18n.t("register-org-submit-button")}</Button>
                         </Paper>
                     </Grid>
                     <Grid item lg={4} xs={12}>
-                        <Paper className={classes.registrationCard} elevation={5}>
-                            <Formsy onValid={this.enableSubmit} onInvalid={this.disableSubmit}
-                                    onValidSubmit={this.submit} className={classes.googleForm}>
-                                <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>
-                                <ValidatedTextField
-                                    name="organisationName"
-                                    autoComplete="organisationName"
-                                    validations="minLength:3"
-                                    validationErrors={{
-                                        minLength: "Too short"
-                                    }}
-                                    mandatory={true}
-                                    className={classes.registerOrgField}
-                                    label="Organisation name"
-                                    helperText="min 3 characters"
-                                    textValue={this.state.googleSignUpOrgName}
-                                    handleChange={(event) => this.setState({googleSignUpOrgName: event.target.value})}
-                                />
-                                <Box className={classes.googleSignInBox}>
-                                    <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>
-                                </Box>
-                            </Formsy>
+                        <Paper className={classes.googleRegistrationCard} elevation={5}>
+                            <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>
+                            <TextField
+                                name="googleSignUpOrgName"
+                                autoComplete="organisation"
+                                required
+                                className={classes.registerOrgField}
+                                label="Organisation name"
+                                textValue={this.state.googleSignUpOrgName}
+                                onClick={this.getValueChangedHandler("googleSignUpOrgName")}
+                            />
+                            <Box className={classes.googleSignInBox}>
+                                <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>
+                            </Box>
                         </Paper>
                     </Grid>
                     <Grid item lg={4} xs={12}>
@@ -223,24 +177,30 @@ class RegisterOrganisation extends BaseView {
                         </Paper>
                     </Grid>
                 </Grid>
-            </div>
+            </Box>
         );
     }
 
     getSubmitHandler() {
         return () => {
-            let {name, orgName, email, mobile, password, authMode} = this.state;
-            UserService.registerOrg(name, orgName, email, mobile, password, authMode, onSuccess, onError).then(onWait);
+            if (!this.validate()) return;
+            let {name, orgName, userId, mobile, password} = this.state;
+            UserService.registerOrg(name, orgName, userId, mobile, password, onSuccess, onError).then(onWait);
         }
     }
 
-    disableSubmit = () => {
-        this.setState({canSubmit: false})
-    };
+    validate() {
+        const errors = {};
+        const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
+        const passwordsValid = DataElementValidator.validatePasswords(this.state.password, this.state.confirmPassword);
 
-    enableSubmit = () => {
-        this.setState({canSubmit: true})
-    };
+        if (passwordsValid && validUserId) return true;
+
+        if (!passwordsValid) errors["passwords"] = "password-not-matching";
+        if (!validUserId) errors["userId"] = "invalid-user-id";
+        this.setState({errors: errors});
+        return false;
+    }
 }
 
 export default withStyles(styles)(RegisterOrganisation);

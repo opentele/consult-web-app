@@ -6,3 +6,6 @@ start:
 
 storybook:
 	yarn storybook
+
+test:
+	yarn test
