@@ -34,7 +34,7 @@ const styles = theme => ({
     }
 });
 
-class Home extends Component {
+class Welcome extends Component {
 
     static propTypes = {
         transitionTimeout: PropTypes.number,
@@ -91,4 +91,4 @@ class Home extends Component {
     }
 }
 
-export default withStyles(styles)(Home);
+export default withStyles(styles)(Welcome);

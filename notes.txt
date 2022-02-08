@@ -6,6 +6,7 @@ justifyContent = main-axis
 React
 ------
 https://github.com/hiramzamorano/react-big-scheduler
+https://fafruch.github.io/react-rrule-generator/
 
 Queue web requests
 https://github.com/orthecreedence/hustle
@@ -26,13 +27,7 @@ Enter/Exit conference room
 
 Functional Modules
 ------------------
-Access
-Registration, health record
+Access (User, Customer)
+Consultation (Registration, Consultation Session Record)
+Consultation Room (Room)
 Conference
-Video call
-
-Domain Aggregates
------------------
-Consultation (registration and consultation record)
-ConsultationRoom (rooms, queue)
-ConsultationSession

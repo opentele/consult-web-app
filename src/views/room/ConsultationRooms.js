@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import ConsultAppBar from "../../components/ConsultAppBar";
-import {AddCircle, Edit, History, Schedule, Today} from '@mui/icons-material';
+import {AddCircle, Edit, History, Schedule, Today, AllInclusive} from '@mui/icons-material';
 import {Box, Button, Card, CardActions, CardContent, Fab, Tab, Tabs, Typography} from "@material-ui/core";
 import {Container} from 'react-app-common';
 import ConsultationRoomService from "../../services/ConsultationRoomService";
@@ -61,6 +61,7 @@ class ConsultationRooms extends Component {
                 <Tab icon={<History/>} label={i18n.t('past-consultations')}/>
                 <Tab icon={<Today/>} label={i18n.t('happening-today')}/>
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
+                <Tab icon={<AllInclusive/>} label={i18n.t('all-rooms')}/>
                 {role === UserType.Consultant && <Fab variant="extended" size="medium" className={classes.createRoom}>
                     <AddCircle className={classes.createRoomIcon}/>
                     {i18n.t('create-new-room')}
@@ -71,7 +72,7 @@ class ConsultationRooms extends Component {
                     conferences.map((conference) => {
                         const alerts = ConsultationRoomAvailabilityDetails.getAlerts(conference);
                         const hasAction = ConsultationRoomAvailabilityDetails.hasVacancy(conference) || ConsultationRoomAvailabilityDetails.hasMoreClients(conference);
-                        return <Card raised={true} className={classes.conferenceBox}>
+                        return <Card raised={true} elevation={3} className={classes.conferenceBox}>
                             <CardContent>
                                 <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                     <Box sx={{display: "flex", flexDirection: "column"}}>

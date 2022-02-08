@@ -2,7 +2,7 @@ export function onWait(view) {
     return () => view.setState({busy: true});
 }
 
-export function onCompletion(view) {
+export function getOnCompletionHandler(view) {
     return (obj) => {
         let stateChanges = {busy: false, serverStatus: obj.status};
         if (obj.ok) {

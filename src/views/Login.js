@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import {Box, Button, Tab, Tabs, TextField} from "@material-ui/core";
-import {Link} from 'react-router-dom';
+import {Link, Redirect} from 'react-router-dom';
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import {Google, VerifiedUser} from "@mui/icons-material";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
@@ -10,7 +10,7 @@ import {i18n, UserService} from "consult-app-common";
 import PasswordField from "../components/loginSignup/PasswordField";
 import BaseView from "./framework/BaseView";
 import {DataElementValidator} from "react-app-common";
-import {onCompletion, onWait} from "./framework/ServerCallHelper";
+import {getOnCompletionHandler, onWait} from "./framework/ServerCallHelper";
 
 const styles = theme => ({
     root: {},
@@ -65,11 +65,13 @@ class Login extends BaseView {
     }
 
     render() {
+        const {password, userId, loginBy, serverError, serverStatus} = this.state;
+        if (serverStatus === 200)
+            return <Redirect to="/changePassword"/>;
+
         const {
             classes
         } = this.props;
-
-        const {password, userId, loginBy, serverError, serverStatus} = this.state;
         return (
             <div>
                 <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
@@ -107,7 +109,7 @@ class Login extends BaseView {
             e.preventDefault();
             const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
             if (validUserId) {
-                UserService.login(this.state.userId, this.state.password, onCompletion(this));
+                UserService.login(this.state.userId, this.state.password, userIdType, getOnCompletionHandler(this));
                 onWait(this);
             } else {
                 const errors = {};

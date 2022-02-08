@@ -4,7 +4,7 @@ import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core
 import {DataElementValidator} from "react-app-common";
 import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
-import {onError, onSuccess, onWait} from "./framework/ServerCallHelper";
+import {onWait} from "./framework/ServerCallHelper";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
@@ -187,7 +187,7 @@ class RegisterOrganisation extends BaseView {
                 return;
             }
             let {name, orgName, userId, password} = this.state;
-            UserService.registerOrg(name, orgName, userId, userIdType, password, onSuccess(this), onError(this));
+            // UserService.registerOrg(name, orgName, userId, userIdType, password, onSuccess(this), onError(this));
             onWait(this);
         }
     }
