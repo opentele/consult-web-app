@@ -32,12 +32,28 @@ class ConsultationRooms extends Component {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
-        this.state = {conferences: [], tabIndex: 1};
+        this.state = {consultationRooms: [], tabIndex: 1};
+        this.tabActions = {
+            0: () => {},
+            1: this.getActiveRooms.bind(this),
+            2: () => {},
+            3: this.getAllConsultationSchedules.bind(this)
+        }
     }
 
     componentDidMount() {
-        Container.get(ConsultationRoomService).getRooms().then((conferences) => {
-            this.setState({conferences: conferences});
+        this.getActiveRooms();
+    }
+
+    getActiveRooms() {
+        Container.get(ConsultationRoomService).getActiveRooms((response) => {
+            this.setState({consultationRooms: response.data});
+        });
+    }
+
+    getAllConsultationSchedules() {
+        Container.get(ConsultationRoomService).getConsultationSchedules((response) => {
+            this.setState({consultationSchedules: response.data});
         });
     }
 
@@ -48,18 +64,21 @@ class ConsultationRooms extends Component {
     };
 
     onTabChange() {
-        return (event, tabId) => this.setState({tabIndex: tabId});
+        return (event, tabId) => {
+            this.setState({tabIndex: tabId, busy: true});
+            this.tabActions[tabId]();
+        }
     }
 
     render() {
         const {classes, role, user} = this.props;
-        const {conferences, tabIndex} = this.state;
+        const {consultationRooms, tabIndex} = this.state;
         return <>
             <ConsultAppBar user={user}/>
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()}>
                 <Tab icon={<History/>} label={i18n.t('past-consultations')}/>
-                <Tab icon={<Today/>} label={i18n.t('happening-today')}/>
+                <Tab icon={<Today/>} label={i18n.t('active')}/>
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
                 <Tab icon={<AllInclusive/>} label={i18n.t('all-rooms')}/>
                 {role === UserType.Consultant && <Fab variant="extended" size="medium" className={classes.createRoom}>
@@ -69,7 +88,7 @@ class ConsultationRooms extends Component {
             </Tabs>
             <Box className={classes.rooms}>
                 {
-                    conferences.map((conference) => {
+                    consultationRooms.map((conference) => {
                         const alerts = ConsultationRoomAvailabilityDetails.getAlerts(conference);
                         const hasAction = ConsultationRoomAvailabilityDetails.hasVacancy(conference) || ConsultationRoomAvailabilityDetails.hasMoreClients(conference);
                         return <Card raised={true} elevation={3} className={classes.conferenceBox}>

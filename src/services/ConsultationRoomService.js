@@ -1,15 +1,19 @@
-import _ from "lodash";
+import {RC} from "react-app-common";
 
 class ConsultationRoomService {
-    getRooms() {
+    static getActiveRooms(cb) {
+        return RC.getJSON("/api/consultationRoom/active", cb);
+    }
+
+    static getConsultationSchedules(cb) {
+        return RC.getJSON("/api/consultationRoomSchedule", cb);
+    }
+
+    static getQueue(conferenceId) {
         return null;
     }
 
-    getQueue(conferenceId) {
-        return null;
-    }
-
-    getConsultation(conferenceId) {
+    static getConsultation(conferenceId) {
     }
 }
 

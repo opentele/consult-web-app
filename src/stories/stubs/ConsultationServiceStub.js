@@ -3,7 +3,7 @@ import ActiveConferences from "../testdata/active-conferences.json";
 import Queue from "../testdata/queue.json";
 
 class ConsultationServiceStub {
-    getRooms() {
+    getActiveRooms() {
         return Promise.resolve(ActiveConferences);
     }
 
