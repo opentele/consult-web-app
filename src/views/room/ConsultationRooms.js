@@ -59,7 +59,6 @@ class ConsultationRooms extends Component {
 
     static propTypes = {
         classes: PropTypes.object.isRequired,
-        role: PropTypes.string.isRequired,
         user: PropTypes.object.isRequired
     };
 
@@ -81,7 +80,7 @@ class ConsultationRooms extends Component {
                 <Tab icon={<Today/>} label={i18n.t('active')}/>
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
                 <Tab icon={<AllInclusive/>} label={i18n.t('all-rooms')}/>
-                {role === UserType.Consultant && <Fab variant="extended" size="medium" className={classes.createRoom}>
+                {<Fab variant="extended" size="medium" className={classes.createRoom}>
                     <AddCircle className={classes.createRoomIcon}/>
                     {i18n.t('create-new-room')}
                 </Fab>}

@@ -5484,6 +5484,11 @@ boolbase@^1.0.0, boolbase@~1.0.0:
   resolved "https://registry.yarnpkg.com/boolbase/-/boolbase-1.0.0.tgz#68dff5fbe60c51eb37725ea9e3ed310dcc1e776e"
   integrity sha1-aN/1++YMUes3cl6p4+0xDcwed24=
 
+bootstrap@^4.0.0:
+  version "4.6.1"
+  resolved "https://registry.yarnpkg.com/bootstrap/-/bootstrap-4.6.1.tgz#bc25380c2c14192374e8dec07cf01b2742d222a2"
+  integrity sha512-0dj+VgI9Ecom+rvvpNZ4MUZJz8dcX7WCX+eTID9+/8HgOkv3dsRzi8BGeZJCQU6flWQVYxwTQnEZFrmJSEO7og==
+
 boxen@^5.1.2:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/boxen/-/boxen-5.1.2.tgz#788cb686fc83c1f486dfa8a40c68fc2b831d2b50"
@@ -13487,6 +13492,11 @@ react-router@6.0.2, react-router@^6.0.0:
   integrity sha512-8/Wm3Ed8t7TuedXjAvV39+c8j0vwrI5qVsYqjFr5WkJjsJpEvNSoLRUbtqSEYzqaTUj1IV+sbPJxvO+accvU0Q==
   dependencies:
     history "^5.1.0"
+
+react-rrule-generator@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/react-rrule-generator/-/react-rrule-generator-1.2.0.tgz#66402b044c67d1b6a6a4536bc72f78d22e0e0d07"
+  integrity sha512-6gBsrbfGaShZ+a8ASOqHwRr8aM/Yfmo5cfQaCEDHd7vU7PRLt7Te/cQl+4r56uvDQihNJaKBXU65DY2oKjqq0w==
 
 react-scripts@4.0.3:
   version "4.0.3"

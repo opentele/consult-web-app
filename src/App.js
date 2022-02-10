@@ -10,8 +10,11 @@ import ChangePassword from "./views/ChangePassword";
 import ConsultationRooms from "./views/room/ConsultationRooms";
 import React, {Component} from "react";
 import _ from 'lodash';
+import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
 
 const theme = createTheme();
+
+const nonLoginPaths = ["/", "/register", "/resetPassword"]
 
 export default class App extends Component {
     constructor(props) {
@@ -36,9 +39,9 @@ export default class App extends Component {
             return <CircularProgress/>;
 
         let pathname = window.location.pathname;
-        if (loggedIn && pathname === "/") {
+        if (loggedIn &&  nonLoginPaths.includes(pathname)) {
             window.location.replace("/home");
-        } else if (!loggedIn) {
+        } else if (!loggedIn && !nonLoginPaths.includes(pathname)) {
             window.location.replace("/");
         }
 
@@ -61,6 +64,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/home">
                         <ConsultationRooms/>
+                    </Route>
+                    <Route path="/test">
+                        <AddEditConsultationSchedule/>
                     </Route>
                 </Switch>
             </Router>

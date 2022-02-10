@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {DataElementValidator} from "react-app-common";
-import {i18n, UserService} from "consult-app-common";
+import {i18n} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import {onWait} from "./framework/ServerCallHelper";
 import ServerErrorMessage from "../components/ServerErrorMessage";
