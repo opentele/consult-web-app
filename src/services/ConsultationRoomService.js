@@ -1,19 +1,16 @@
-import {RC} from "react-app-common";
+import ServiceUtil from "./ServiceUtil";
 
 class ConsultationRoomService {
     static getActiveRooms(cb) {
-        return RC.getJSON("/api/consultationRoom/active", cb);
+        return ServiceUtil.getJson("consultationRoom/active", cb);
     }
 
     static getConsultationSchedules(cb) {
-        return RC.getJSON("/api/consultationRoomSchedule", cb);
+        return ServiceUtil.getJson("consultationRoomSchedule", cb);
     }
 
-    static getQueue(conferenceId) {
-        return null;
-    }
-
-    static getConsultation(conferenceId) {
+    static getSchedule(scheduleId, cb) {
+        return ServiceUtil.getJson(`consultationRoomSchedule/${scheduleId}`, cb);
     }
 }
 

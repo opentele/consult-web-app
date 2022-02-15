@@ -14,7 +14,7 @@ import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedul
 
 const theme = createTheme();
 
-const nonLoginPaths = ["/", "/register", "/resetPassword"]
+const nonLoginPaths = ["/", "/register", "/resetPassword", "/test"]
 
 export default class App extends Component {
     constructor(props) {

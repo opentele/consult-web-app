@@ -1,6 +1,9 @@
 import _ from 'lodash';
 import {Component} from "react";
 import {i18n} from "consult-app-common";
+import {ResponseUtil} from "react-app-common";
+import ErrorAlert from "../../components/ErrorAlert";
+import {CircularProgress} from "@material-ui/core";
 
 class BaseView extends Component {
     constructor(props) {
@@ -37,6 +40,13 @@ class BaseView extends Component {
 
     getErrorText(field, errorMessageKey) {
         return this.hasError(field) && i18n.t(errorMessageKey);
+    }
+
+    renderForErrorOrWait(response) {
+        if (_.isNil(response))
+            return <CircularProgress/>;
+        else
+            return <ErrorAlert/>;
     }
 }
 
