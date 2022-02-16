@@ -4,12 +4,12 @@ import RRuleGenerator from 'react-rrule-generator';
 import {withStyles} from "@material-ui/core/styles";
 import {i18n} from "consult-app-common";
 import React from "react";
-import DateField from "../../components/DateField";
+import DateInput from "../../components/DateInput";
 import PropTypes from 'prop-types';
 import {Container, ResponseUtil} from 'react-app-common';
 import ConsultationRoomService from "../../services/ConsultationRoomService";
 import ConsultationSchedule from "../../domain/ConsultationSchedule";
-import TimeField from "../../components/TimeField";
+import TimeInput from "../../components/TimeInput";
 
 const styles = theme => ({
     rruleBox: {
@@ -55,7 +55,7 @@ class AddEditConsultationSchedule extends BaseView {
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
-            Container.get(ConsultationRoomService).getSchedule(consultationScheduleId, (response) => {
+            return Container.get(ConsultationRoomService).getSchedule(consultationScheduleId, (response) => {
                 this.setState({response: response});
             });
         else
@@ -63,12 +63,11 @@ class AddEditConsultationSchedule extends BaseView {
     }
 
     render() {
-        const {classes} = this.props;
         const {response} = this.state;
-
         if (ResponseUtil.errorOrWait(response))
             return this.renderForErrorOrWait(response);
 
+        const {classes} = this.props;
         const schedule = this.state.response.data;
         return <Box>
             <AppBar position="static">
@@ -84,12 +83,12 @@ class AddEditConsultationSchedule extends BaseView {
                                label={i18n.t("schedule-title")} value={schedule.title}
                                onChange={this.getValueChangedHandler("title")}
                     />
-                    <DateField classNames={classes.addConsultationScheduleField} value={schedule.startDate}
+                    <DateInput classNames={classes.addConsultationScheduleField} value={schedule.startDate}
                                changeHandler={this.getValueChangedHandler("startDate")}/>
                     <Box>
-                        <TimeField classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
+                        <TimeInput classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
                                    changeHandler={this.getValueChangedHandler("startTime")} label="Start Time"/>
-                        <TimeField classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
+                        <TimeInput classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
                                    changeHandler={this.getValueChangedHandler("endTime")} label="End Time"/>
                     </Box>
 
@@ -102,7 +101,7 @@ class AddEditConsultationSchedule extends BaseView {
                             config={{frequency: ['Yearly', 'Monthly', 'Weekly', 'Daily']}}
                             onChange={() => {
                             }}
-                            value={"FREQ=YEARLY;BYMONTH=1;BYMONTHDAY=3"}
+                            value={"FREQ=WEEKLY;INTERVAL=1"}
                         />
                     </Box>
                 </Grid>

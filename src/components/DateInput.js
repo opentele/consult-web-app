@@ -5,7 +5,7 @@ import {TextField} from "@material-ui/core";
 
 const styles = theme => ({});
 
-class DateField extends React.Component {
+class DateInput extends React.Component {
     constructor(props, context) {
         super(props, context);
     }
@@ -31,4 +31,4 @@ class DateField extends React.Component {
     }
 }
 
-export default withStyles(styles)(DateField);
+export default withStyles(styles)(DateInput);

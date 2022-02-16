@@ -1,11 +1,10 @@
 import _ from "lodash";
 
 class ConsultationRoom {
-    name;
-    fromDate;
-    startTime;
-    endTime;
-    days;
+    title;
+    scheduledStartTime;
+    scheduledEndTime;
+    scheduledOn;
 
     constructor() {
         this.days = [];

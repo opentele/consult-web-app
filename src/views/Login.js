@@ -67,7 +67,7 @@ class Login extends BaseView {
     render() {
         const {password, userId, loginBy, serverError, serverStatus} = this.state;
         if (serverStatus === 200)
-            return <Redirect to="/changePassword"/>;
+            return <Redirect to="/"/>;
 
         const {
             classes
@@ -109,8 +109,7 @@ class Login extends BaseView {
             e.preventDefault();
             const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
             if (validUserId) {
-                UserService.login(this.state.userId, this.state.password, userIdType, getOnCompletionHandler(this));
-                onWait(this);
+                UserService.login(this.state.userId, this.state.password, userIdType, getOnCompletionHandler(this)).then(() => onWait(this));
             } else {
                 const errors = {};
                 errors["userId"] = "invalid-user-id";

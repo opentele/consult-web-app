@@ -1,8 +1,8 @@
 import ServiceUtil from "./ServiceUtil";
 
 class ConsultationRoomService {
-    static getActiveRooms(cb) {
-        return ServiceUtil.getJson("consultationRoom/active", cb);
+    static getTodayRooms(cb) {
+        return ServiceUtil.getJson("consultationRoom/today", cb);
     }
 
     static getConsultationSchedules(cb) {

@@ -1,20 +1,19 @@
 import './App.css';
 import Welcome from "./views/Welcome";
-import {BrowserRouter as Router, Redirect, Route, Switch} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {i18nPromise, UserService} from "consult-app-common";
 import {CircularProgress, CssBaseline} from "@material-ui/core";
 import RegisterOrganisation from "./views/RegisterOrganisation";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
 import ResetPassword from "./views/ResetPassword";
 import ChangePassword from "./views/ChangePassword";
-import ConsultationRooms from "./views/room/ConsultationRooms";
+import Home from "./views/room/Home";
 import React, {Component} from "react";
-import _ from 'lodash';
 import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
 
 const theme = createTheme();
 
-const nonLoginPaths = ["/", "/register", "/resetPassword", "/test"]
+const nonLoginPaths = ["/login", "/register", "/resetPassword"]
 
 export default class App extends Component {
     constructor(props) {
@@ -27,7 +26,7 @@ export default class App extends Component {
 
     componentDidMount() {
         i18nPromise.then(() => {
-            UserService.isLoggedIn((status) => {
+            return UserService.isLoggedIn((status) => {
                 this.setState({loading: false, loggedIn: status.data});
             });
         });
@@ -39,10 +38,10 @@ export default class App extends Component {
             return <CircularProgress/>;
 
         let pathname = window.location.pathname;
-        if (loggedIn &&  nonLoginPaths.includes(pathname)) {
-            window.location.replace("/home");
-        } else if (!loggedIn && !nonLoginPaths.includes(pathname)) {
+        if (loggedIn && nonLoginPaths.includes(pathname)) {
             window.location.replace("/");
+        } else if (!loggedIn && !nonLoginPaths.includes(pathname)) {
+            window.location.replace("/login");
         }
 
         return <ThemeProvider theme={theme}>
@@ -51,25 +50,29 @@ export default class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/">
-                        <Welcome/>
+                        <Home/>
                     </Route>
                     <Route path="/register">
-                        <RegisterOrganisation/>
+                        {this.getRoute(loggedIn, <RegisterOrganisation/>)}
                     </Route>
                     <Route path="/resetPassword">
-                        <ResetPassword/>
+                        {this.getRoute(loggedIn, <ResetPassword/>)}
                     </Route>
                     <Route path="/changePassword">
                         <ChangePassword/>
                     </Route>
-                    <Route path="/home">
-                        <ConsultationRooms/>
+                    <Route path="/login">
+                        {this.getRoute(loggedIn, <Welcome/>)}
                     </Route>
-                    <Route path="/test">
+                    <Route path="/consultationSchedule">
                         <AddEditConsultationSchedule/>
                     </Route>
                 </Switch>
             </Router>
         </ThemeProvider>;
+    }
+
+    getRoute(loggedIn, component) {
+        return loggedIn ? <CircularProgress/> : component;
     }
 }
