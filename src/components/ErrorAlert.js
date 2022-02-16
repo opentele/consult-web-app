@@ -8,7 +8,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
 
-export default function ErrorAlert({title, message}) {
+export default function ErrorAlert({title, message, response}) {
     const [open, setOpen] = React.useState(true);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));

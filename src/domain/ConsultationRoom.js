@@ -1,10 +1,22 @@
 import _ from "lodash";
+import Alert from "./Alert";
+import {i18n} from "consult-app-common";
+
+export const AllConsultationRoomActions = {
+    addClient: 'add-client',
+    viewMyClients: 'view-my-clients',
+    joinConference: 'join-conference'
+}
 
 class ConsultationRoom {
     title;
     scheduledStartTime;
     scheduledEndTime;
     scheduledOn;
+    totalSlots;
+    numberOfClients;
+    numberOfUserClients;
+    nextClientInfo;
 
     constructor() {
         this.days = [];
@@ -15,6 +27,51 @@ class ConsultationRoom {
             _.remove(room.days, (x) => x === day);
         else
             room.days.push(day);
+    }
+
+    static getAlerts(room) {
+        const alerts = [];
+        if (this.hasMoreClients(room))
+            alerts.push(Alert.info(i18n.t("conference-client-next", {nextClientInfo: room.nextClientInfo})));
+        else if (!this.hasMoreClients(room) && room.numberOfUserClients > 0)
+            alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {numberOfClients: room.numberOfUserClients})));
+        else
+            alerts.push(Alert.info(i18n.t("conference-no-client")));
+
+        if (!this.hasVacancy(room))
+            alerts.push(Alert.error(i18n.t("conference-no-vacancy")));
+
+        return alerts;
+    }
+
+    static hasMoreClients(room) {
+        return !_.isEmpty(room.nextClientInfo);
+    }
+
+    static hasVacancy(room) {
+        return room.totalSlots - room.numberOfClients > 0;
+    }
+
+    static getUsherActions(room) {
+        const actions = [];
+        if (this.hasVacancy(room))
+            actions.push(AllConsultationRoomActions.addClient);
+        if (room.numberOfUserClients > 0) {
+            actions.push(AllConsultationRoomActions.viewMyClients);
+            actions.push(AllConsultationRoomActions.joinConference);
+        }
+        return actions;
+    }
+
+    static getConsultantActions(room) {
+        const actions = [];
+        if (this.hasVacancy(room))
+            actions.push(i18n.t('add-client'));
+        if (room.numberOfUserClients > 0) {
+            actions.push(i18n.t('view-my-clients'));
+            actions.push(i18n.t('start-conference'));
+        }
+        return actions;
     }
 }
 

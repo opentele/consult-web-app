@@ -7,16 +7,22 @@ import {Autocomplete} from "@mui/material";
 import {i18n} from "consult-app-common";
 
 const styles = theme => ({
-    container: {
-        display: "grid",
-        flexDirection: "column",
-        alignItems: "center"
+    sscMain: {
+        paddingLeft: 230,
+        paddingRight: 210,
+        paddingTop: 20
     },
-    buttons: {
+    sscSeparation: {
+        marginTop: 300
+    },
+    sscSearch: {
+        width: '100%'
+    },
+    sscButtons: {
         marginTop: 20,
         display: "flex",
         flexDirection: "row",
-        justifyContent: "space-between"
+        justifyContent: "center"
     }
 });
 
@@ -26,33 +32,32 @@ class SearchSelectClient extends BaseView {
         this.state = {};
     }
 
-    static propTypes = {}
+    static propTypes = {
+        messageClose: PropTypes.func.isRequired
+    }
 
     render() {
         const {
-            classes
+            classes,
+            messageClose
         } = this.props;
 
-        return <Grid container spacing={4}>
-            <Grid item md={4} xs={1}/>
-            <Grid item md={4} xs={10}>
+        return <Grid container className={classes.sscMain}>
+            <Grid item lg={10}>
                 <Autocomplete
-                    id="searchClient"
+                    fullWidth={true}
                     freeSolo
                     options={["abc", "efg"]}
                     renderInput={(params) => <TextField {...params} label={i18n.t("search-client")}/>}
                 />
             </Grid>
-            <Grid item md={4} xs={1}/>
-
-            <Grid item md={4} xs={1}/>
-            <Grid container md={4} xs={5} direction="row"
-                  justifyContent="space-evenly"
-                  alignItems="flex-start">
-                <Button variant="contained" color="primary">{i18n.t("select")}</Button>
-                <Button variant="contained" color="inherit">{i18n.t("cancel")}</Button>
+            <Grid item lg={10}>
+                <Box className={classes.sscButtons}>
+                    <Button variant="contained" color="primary">{i18n.t("select")}</Button>
+                    <Button variant="contained" color="inherit" onClick={messageClose}>{i18n.t("cancel")}</Button>
+                </Box>
             </Grid>
-            <Grid item md={4} xs={1}/>
+            <Grid item lg={10} className={classes.sscSeparation}/>
         </Grid>;
     }
 }

@@ -10,6 +10,7 @@ import {Container, ResponseUtil} from 'react-app-common';
 import ConsultationRoomService from "../../services/ConsultationRoomService";
 import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
+import ModalContainerView from "../framework/ModalContainerView";
 
 const styles = theme => ({
     rruleBox: {
@@ -69,14 +70,7 @@ class AddEditConsultationSchedule extends BaseView {
 
         const {classes} = this.props;
         const schedule = this.state.response.data;
-        return <Box>
-            <AppBar position="static">
-                <Toolbar>
-                    <Typography variant="h6" component="div">
-                        {i18n.t('add-a-new-scheduled-consultation')}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
+        return <ModalContainerView>
             <Grid container>
                 <Grid item lg={6} xs={11} className={classes.addConsultationScheduleForm}>
                     <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
@@ -114,7 +108,7 @@ class AddEditConsultationSchedule extends BaseView {
                     </Box>
                 </Grid>
             </Grid>
-        </Box>;
+        </ModalContainerView>;
     }
 }
 

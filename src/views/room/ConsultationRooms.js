@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import ConsultationRoomAvailabilityDetails from "../../domain/ConsultationRoomAvailabilityDetails";
 import {Box, Button, Card, CardActions, CardContent, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
@@ -9,6 +8,9 @@ import {Container, ResponseUtil} from "react-app-common";
 import ConsultationRoomService from "../../services/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
+import ConsultationRoom, {AllConsultationRoomActions as Actions} from "../../domain/ConsultationRoom";
+import AddClient from "../client/AddClient";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     rooms: {
@@ -17,6 +19,9 @@ const styles = theme => ({
     conferenceBox: {
         marginTop: 15,
         padding: 10,
+    },
+    crCardActions: {
+        flexDirection: 'row-reverse'
     }
 });
 
@@ -27,6 +32,9 @@ const functionNames = {
 class ConsultationRooms extends BaseView {
     constructor(props, context) {
         super(props, context);
+        this.state = {
+            addingClient: false
+        }
     }
 
     static props = {
@@ -41,7 +49,7 @@ class ConsultationRooms extends BaseView {
     }
 
     render() {
-        const {response} = this.state;
+        const {response, addingClient} = this.state;
         if (ResponseUtil.errorOrWait(response))
             return this.renderForErrorOrWait(response);
 
@@ -51,8 +59,8 @@ class ConsultationRooms extends BaseView {
         return <Box className={classes.rooms}>
             {
                 consultationRooms.map((consultationRoom) => {
-                    const alerts = ConsultationRoomAvailabilityDetails.getAlerts(consultationRoom);
-                    const hasAction = ConsultationRoomAvailabilityDetails.hasVacancy(consultationRoom) || ConsultationRoomAvailabilityDetails.hasMoreClients(consultationRoom);
+                    const actions = ConsultationRoom.getUsherActions(consultationRoom);
+                    const alerts = ConsultationRoom.getAlerts(consultationRoom);
                     return <Card raised={true} elevation={3} className={classes.conferenceBox}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
@@ -69,24 +77,18 @@ class ConsultationRooms extends BaseView {
                                 </Box>
                             </Box>
                         </CardContent>
-                        <CardActions>
-                            {hasAction &&
-                            ConsultationRoomAvailabilityDetails.getUsherActions(consultationRoom).map((action) => <Button variant="contained"
-                                                                                                                          color="primary">{action}</Button>)}
+                        <CardActions className={classes.crCardActions}>
+                            {actions.includes(Actions.addClient) &&
+                            <Button variant="contained" color="primary" onClick={this.getModalOpenHandler("addingClient")}>{i18n.t(Actions.addClient)}</Button>}
+                            {actions.includes(Actions.viewMyClients) && <Button variant="contained" color="primary">{i18n.t(Actions.viewMyClients)}</Button>}
+                            {actions.includes(Actions.joinConference) && <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
                     </Card>
                 })
-                }
-                </Box>;
             }
-            }
+            {addingClient && <AddClient messageClose={this.getModalCloseHandler("addingClient")}/>}
+        </Box>;
+    }
+}
 
-    export
-    default
-
-    withStyles(styles)
-
-(
-    ConsultationRooms
-)
-    ;
+export default withStyles(styles)(ConsultationRooms);

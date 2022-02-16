@@ -1,5 +1,5 @@
 start:
-	PORT=6052 yarn start
+	HOST=consultweb PORT=6052 yarn start
 
 storybook:
 	yarn storybook

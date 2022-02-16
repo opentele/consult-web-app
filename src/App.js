@@ -50,29 +50,33 @@ export default class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/">
-                        <Home/>
+                        {this.getPrivateRoute(loggedIn, <Home/>)}
                     </Route>
                     <Route path="/register">
-                        {this.getRoute(loggedIn, <RegisterOrganisation/>)}
+                        {this.getPublicRoute(loggedIn, <RegisterOrganisation/>)}
                     </Route>
                     <Route path="/resetPassword">
-                        {this.getRoute(loggedIn, <ResetPassword/>)}
+                        {this.getPublicRoute(loggedIn, <ResetPassword/>)}
                     </Route>
                     <Route path="/changePassword">
-                        <ChangePassword/>
+                        {this.getPrivateRoute(loggedIn, <ChangePassword/>)}
                     </Route>
                     <Route path="/login">
-                        {this.getRoute(loggedIn, <Welcome/>)}
+                        {this.getPublicRoute(loggedIn, <Welcome/>)}
                     </Route>
                     <Route path="/consultationSchedule">
-                        <AddEditConsultationSchedule/>
+                        {this.getPrivateRoute(loggedIn, <AddEditConsultationSchedule/>)}
                     </Route>
                 </Switch>
             </Router>
         </ThemeProvider>;
     }
 
-    getRoute(loggedIn, component) {
+    getPublicRoute(loggedIn, component) {
         return loggedIn ? <CircularProgress/> : component;
+    }
+
+    getPrivateRoute(loggedIn, component) {
+        return loggedIn ? component : <CircularProgress/>;
     }
 }

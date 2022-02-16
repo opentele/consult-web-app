@@ -1,7 +1,6 @@
 import _ from 'lodash';
 import {Component} from "react";
 import {i18n} from "consult-app-common";
-import {ResponseUtil} from "react-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {CircularProgress} from "@material-ui/core";
 
@@ -46,7 +45,23 @@ class BaseView extends Component {
         if (_.isNil(response))
             return <CircularProgress/>;
         else
-            return <ErrorAlert/>;
+            return <ErrorAlert title={i18n.t('unexpected-error-title')} message={i18n.t('unexpected-error-message')} response={response}/>;
+    }
+
+    getModalCloseHandler(stateField) {
+        return () => {
+            let newState = {};
+            newState[stateField] = false;
+            this.setState(newState);
+        }
+    }
+
+    getModalOpenHandler(stateField) {
+        return () => {
+            let newState = {};
+            newState[stateField] = true;
+            this.setState(newState);
+        }
     }
 }
 
