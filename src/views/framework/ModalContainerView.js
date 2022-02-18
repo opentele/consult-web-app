@@ -1,15 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Box, Modal, Toolbar, Typography} from "@material-ui/core";
+import {AppBar, Box, Dialog, Toolbar, Typography} from "@material-ui/core";
 import {i18n} from "consult-app-common";
 
 const styles = theme => ({
-    mcvModal: {
-        display:'flex',
-        alignItems:'center',
-        justifyContent:'center'
-    },
     mvcMain: {
         backgroundColor: 'white'
     }
@@ -26,7 +21,7 @@ class ModalContainerView extends React.Component {
 
     render() {
         const {children, titleKey, classes} = this.props;
-        return <Modal open={true} className={classes.mcvModal}>
+        return <Dialog open={true} fullWidth={true} maxWidth="lg">
             <Box className={classes.mvcMain}>
                 <AppBar position="static">
                     <Toolbar>
@@ -37,7 +32,7 @@ class ModalContainerView extends React.Component {
                 </AppBar>
                 {children}
             </Box>
-        </Modal>;
+        </Dialog>;
     }
 }
 
