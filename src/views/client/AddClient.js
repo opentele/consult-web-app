@@ -14,14 +14,16 @@ class AddClient extends BaseView {
     }
 
     static propTypes = {
-        messageClose: PropTypes.func.isRequired
+        messageClose: PropTypes.func.isRequired,
+        clientSelected: PropTypes.func.isRequired,
+        serverCallStatus: PropTypes.object.isRequired
     };
 
     render() {
-        const {messageClose} = this.props;
+        const {messageClose, clientSelected, serverCallStatus} = this.props;
 
         return <ModalContainerView titleKey="add-client" messageClose={messageClose}>
-            <SearchSelectClient messageClose={messageClose}/>
+            <SearchSelectClient messageClose={messageClose} clientSelected={clientSelected} serverCallStatus={serverCallStatus}/>
         </ModalContainerView>;
     }
 }

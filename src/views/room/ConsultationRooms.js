@@ -4,8 +4,8 @@ import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Card, CardActions, CardContent, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
-import {Container, ResponseUtil} from "react-app-common";
-import ConsultationRoomService from "../../services/ConsultationRoomService";
+import {Container, ServerCall} from "react-app-common";
+import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
 import ConsultationRoom, {AllConsultationRoomActions as Actions} from "../../domain/ConsultationRoom";
@@ -33,8 +33,9 @@ class ConsultationRooms extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            serverCall: ServerCall.noOngoingCall([]),
             addingClient: false
-        }
+        };
     }
 
     static props = {
@@ -44,17 +45,27 @@ class ConsultationRooms extends BaseView {
     componentDidMount() {
         const service = Container.get(ConsultationRoomService);
         service[functionNames[this.props.type]]((response) => {
-            this.setState({response: response});
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
     }
 
+    clientSavedHandler() {
+        return (response) => {
+            ServerCall.responseReceived(this.state.serverCall, response);
+        }
+    }
+
+    clientSelectedHandler(consultationRoom) {
+        return (clientId) => Container.get(ConsultationRoomService).addClient(consultationRoom, clientId, this.clientSavedHandler);
+    }
+
     render() {
-        const {response, addingClient} = this.state;
-        if (ResponseUtil.errorOrWait(response))
-            return this.renderForErrorOrWait(response);
+        const {serverCall, addingClient} = this.state;
+        if (ServerCall.errorOrWait(serverCall))
+            return this.renderForErrorOrWait(serverCall);
 
         const {classes} = this.props;
-        const consultationRooms = this.state.response.data;
+        const consultationRooms = ServerCall.getData(serverCall);
 
         return <Box className={classes.rooms}>
             {
@@ -83,10 +94,11 @@ class ConsultationRooms extends BaseView {
                             {actions.includes(Actions.viewMyClients) && <Button variant="contained" color="primary">{i18n.t(Actions.viewMyClients)}</Button>}
                             {actions.includes(Actions.joinConference) && <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
+                        {addingClient && <AddClient messageClose={this.getModalCloseHandler("addingClient")} clientSelected={this.clientSelectedHandler(consultationRoom)}
+                                                    serverCallStatus={serverCall.serverCallStatus}/>}
                     </Card>
                 })
             }
-            {addingClient && <AddClient messageClose={this.getModalCloseHandler("addingClient")}/>}
         </Box>;
     }
 }

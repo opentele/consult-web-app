@@ -3,6 +3,7 @@ import {Component} from "react";
 import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {CircularProgress} from "@material-ui/core";
+import {ServerCall, ServerCallStatus} from "react-app-common";
 
 class BaseView extends Component {
     constructor(props) {
@@ -41,11 +42,11 @@ class BaseView extends Component {
         return this.hasError(field) && i18n.t(errorMessageKey);
     }
 
-    renderForErrorOrWait(response) {
-        if (_.isNil(response))
+    renderForErrorOrWait(serverCall) {
+        if (serverCall.lastCallStatus === ServerCallStatus.WAITING)
             return <CircularProgress/>;
         else
-            return <ErrorAlert title={i18n.t('unexpected-error-title')} message={i18n.t('unexpected-error-message')} response={response}/>;
+            return <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>;
     }
 
     getModalCloseHandler(stateField) {

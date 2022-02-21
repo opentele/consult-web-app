@@ -1,13 +1,13 @@
 import BaseView from "../framework/BaseView";
-import {AppBar, Box, Button, Grid, TextField, Toolbar, Typography} from "@material-ui/core";
+import {Box, Button, Grid, TextField} from "@material-ui/core";
 import RRuleGenerator from 'react-rrule-generator';
 import {withStyles} from "@material-ui/core/styles";
 import {i18n} from "consult-app-common";
 import React from "react";
 import DateInput from "../../components/DateInput";
 import PropTypes from 'prop-types';
-import {Container, ResponseUtil} from 'react-app-common';
-import ConsultationRoomService from "../../services/ConsultationRoomService";
+import {Container, ServerCall} from 'react-app-common';
+import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
 import ModalContainerView from "../framework/ModalContainerView";
@@ -57,19 +57,19 @@ class AddEditConsultationSchedule extends BaseView {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
             return Container.get(ConsultationRoomService).getSchedule(consultationScheduleId, (response) => {
-                this.setState({response: response});
+                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
             });
         else
-            this.setState({response: ResponseUtil.getOkResponse(ConsultationSchedule.newSchedule())});
+            this.setState({serverCall: ServerCall.noOngoingCall(ConsultationSchedule.newSchedule())});
     }
 
     render() {
-        const {response} = this.state;
-        if (ResponseUtil.errorOrWait(response))
-            return this.renderForErrorOrWait(response);
+        const {serverCall} = this.state;
+        if (ServerCall.errorOrWait(serverCall))
+            return this.renderForErrorOrWait(serverCall);
 
         const {classes} = this.props;
-        const schedule = this.state.response.data;
+        const schedule = ServerCall.getData(serverCall);
         return <ModalContainerView>
             <Grid container>
                 <Grid item lg={6} xs={11} className={classes.addConsultationScheduleForm}>

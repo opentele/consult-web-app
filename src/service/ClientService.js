@@ -3,7 +3,7 @@ import ServiceUtil from "./ServiceUtil";
 
 class ClientService {
     static search(q, cb) {
-        return ServiceUtil.getJson(`client/search?${q}`, cb);
+        return ServiceUtil.getJson(`client/search?q=${q}`, cb);
     }
 }
 

@@ -5,7 +5,7 @@ import ConsultAppBar from "../../components/ConsultAppBar";
 import {AddCircle, AllInclusive, History, Schedule, Today} from '@mui/icons-material';
 import {Fab, Tab, Tabs} from "@material-ui/core";
 import {Container} from 'react-app-common';
-import ConsultationRoomService from "../../services/ConsultationRoomService";
+import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {i18n} from 'consult-app-common';
 import ConsultationRooms from "./ConsultationRooms";
 

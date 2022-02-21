@@ -7,8 +7,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { useTheme } from '@mui/material/styles';
+import {i18n} from "consult-app-common";
 
-export default function ErrorAlert({title, message, response}) {
+export default function ErrorAlert({titleKey, messageKey}) {
     const [open, setOpen] = React.useState(true);
     const theme = useTheme();
     const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -26,10 +27,10 @@ export default function ErrorAlert({title, message, response}) {
                 aria-labelledby="responsive-dialog-title"
             >
                 <DialogTitle id="responsive-dialog-title">
-                    {title}
+                    {i18n.t(titleKey)}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText>{message}</DialogContentText>
+                    <DialogContentText>{i18n.t(messageKey)}</DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={handleClose}>
