@@ -11,6 +11,7 @@ import TimeField from "../../components/TimeField";
 import ConsultationRoom, {AllConsultationRoomActions as Actions} from "../../domain/ConsultationRoom";
 import AddClient from "../client/AddClient";
 import {i18n} from "consult-app-common";
+import ModalStatus from "../framework/ModalStatus";
 
 const styles = theme => ({
     rooms: {
@@ -34,8 +35,9 @@ class ConsultationRooms extends BaseView {
         super(props, context);
         this.state = {
             serverCall: ServerCall.noOngoingCall([]),
-            addingClient: false
+            addClientModalStatus: ModalStatus.NOT_OPENED
         };
+        this.serviceMethod = Container.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
 
     static props = {
@@ -43,24 +45,19 @@ class ConsultationRooms extends BaseView {
     };
 
     componentDidMount() {
-        const service = Container.get(ConsultationRoomService);
-        service[functionNames[this.props.type]]((response) => {
+        this.serviceMethod((response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
     }
 
-    clientSavedHandler() {
-        return (response) => {
-            ServerCall.responseReceived(this.state.serverCall, response);
-        }
-    }
-
-    clientSelectedHandler(consultationRoom) {
-        return (clientId) => Container.get(ConsultationRoomService).addClient(consultationRoom, clientId, this.clientSavedHandler);
+    refresh() {
+        this.serviceMethod((response) => {
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response), addClientModalStatus: ModalStatus.NOT_OPENED});
+        });
     }
 
     render() {
-        const {serverCall, addingClient} = this.state;
+        const {serverCall, addClientModalStatus} = this.state;
         if (ServerCall.errorOrWait(serverCall))
             return this.renderForErrorOrWait(serverCall);
 
@@ -90,12 +87,11 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {actions.includes(Actions.addClient) &&
-                            <Button variant="contained" color="primary" onClick={this.getModalOpenHandler("addingClient")}>{i18n.t(Actions.addClient)}</Button>}
+                            <Button variant="contained" color="primary" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
                             {actions.includes(Actions.viewMyClients) && <Button variant="contained" color="primary">{i18n.t(Actions.viewMyClients)}</Button>}
                             {actions.includes(Actions.joinConference) && <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
-                        {addingClient && <AddClient messageClose={this.getModalCloseHandler("addingClient")} clientSelected={this.clientSelectedHandler(consultationRoom)}
-                                                    serverCallStatus={serverCall.serverCallStatus}/>}
+                        {addClientModalStatus === ModalStatus.OPENED && <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}/>}
                     </Card>
                 })
             }

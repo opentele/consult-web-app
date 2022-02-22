@@ -16,7 +16,9 @@ class ConsultationRoom {
     totalSlots;
     numberOfClients;
     numberOfUserClients;
-    nextClientInfo;
+    numberOfClientsPending;
+    numberOfUserClientsPending;
+    nextClient;
 
     constructor() {
         this.days = [];
@@ -32,10 +34,14 @@ class ConsultationRoom {
     static getAlerts(room) {
         const alerts = [];
         if (this.hasMoreClients(room))
-            alerts.push(Alert.info(i18n.t("conference-client-next", {nextClientInfo: room.nextClientInfo})));
-        else if (!this.hasMoreClients(room) && room.numberOfUserClients > 0)
-            alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {numberOfClients: room.numberOfUserClients})));
-        else
+            alerts.push(Alert.info(i18n.t("conference-client-next", {nextClientInfo: room.nextClient})));
+
+        if (room.numberOfUserClientsPending > 0)
+            alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
+                numberOfClientsCompleted: this.numberOfUserClientCompleted(room),
+                numberOfClientsPending: room.numberOfUserClientsPending
+            })));
+        if (room.numberOfClients === 0)
             alerts.push(Alert.info(i18n.t("conference-no-client")));
 
         if (!this.hasVacancy(room))
@@ -44,8 +50,12 @@ class ConsultationRoom {
         return alerts;
     }
 
+    static numberOfUserClientCompleted(room) {
+        return room.numberOfUserClients - room.numberOfUserClientsPending;
+    }
+
     static hasMoreClients(room) {
-        return !_.isEmpty(room.nextClientInfo);
+        return !_.isEmpty(room.nextClient);
     }
 
     static hasVacancy(room) {

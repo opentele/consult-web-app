@@ -1,14 +1,12 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, CircularProgress, Grid, TextField} from '@material-ui/core';
+import {CircularProgress, Grid, TextField} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import BaseView from "../framework/BaseView";
 import {Autocomplete} from "@mui/material";
-import {i18n} from "consult-app-common";
-import {Container, ServerCall} from 'react-app-common';
+import {Container, ServerCall, ServerCallStatus} from 'react-app-common';
 import ClientService from "../../service/ClientService";
 import _ from 'lodash';
-import ErrorAlert from "../../components/ErrorAlert";
 
 const styles = theme => ({
     sscMain: {
@@ -16,20 +14,8 @@ const styles = theme => ({
         paddingRight: 210,
         paddingTop: 20
     },
-    sscSeparation: {
-        marginTop: 300
-    },
     sscSearch: {
         width: '100%'
-    },
-    sscButtons: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end"
-    },
-    sscSelectButton: {
-        marginRight: 10
     }
 });
 
@@ -38,21 +24,26 @@ class SearchSelectClient extends BaseView {
         super(props);
         this.state = {
             autoCompleteOpen: false,
-            serverCall: ServerCall.noOngoingCall()
+            serverCall: ServerCall.noOngoingCall([])
         };
+        this.service = Container.get(ClientService);
     }
 
     static propTypes = {
-        messageClose: PropTypes.func.isRequired,
         clientSelected: PropTypes.func.isRequired,
-        serverCallStatus: PropTypes.object.isRequired
+        searchParamName: PropTypes.string.isRequired,
+        searchParamValue: PropTypes.any.isRequired
     }
 
     searchOpenHandler = () => {
-        Container.get(ClientService).search('', (response) => {
+        this.search('', (response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
         this.setState({autoCompleteOpen: true});
+    }
+
+    search(q, cb) {
+        this.service.search(q, this.props.searchParamName, this.props.searchParamValue, cb);
     }
 
     searchCloseHandler = () => {
@@ -60,24 +51,19 @@ class SearchSelectClient extends BaseView {
     }
 
     searchChangeHandler = (e) => {
-        Container.get(ClientService).search(e.target.value, (response) => {
+        this.search(e.target.value, (response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
         this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
     }
 
-    clientSelectHandler = () => {
-        this.props.clientSelected(this.state.selectedClient.id);
-    }
-
     render() {
         const {
             classes,
-            messageClose,
-            inError
+            clientSelected
         } = this.props;
 
-        const {serverCall, autoCompleteOpen, selectedClient} = this.state;
+        const {serverCall, autoCompleteOpen} = this.state;
 
         return <Grid container className={classes.sscMain}>
             <Grid item lg={10}>
@@ -89,8 +75,8 @@ class SearchSelectClient extends BaseView {
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     getOptionLabel={(option) => `${option.name} - ${option.registrationNumber}`}
                     options={ServerCall.getData(serverCall)}
-                    loading={serverCall.lastCallStatus}
-                    onChange={(event, value) => this.setState({selectedClient: value})}
+                    loading={serverCall.lastCallStatus === ServerCallStatus.WAITING}
+                    onChange={(event, value) => clientSelected(_.isNil(value) ? null : value.id)}
                     renderInput={(params) => (
                         <TextField
                             {...params}
@@ -99,7 +85,7 @@ class SearchSelectClient extends BaseView {
                                 ...params.InputProps,
                                 endAdornment: (
                                     <React.Fragment>
-                                        {serverCall.lastCallStatus ? <CircularProgress color="inherit" size={20}/> : null}
+                                        {serverCall.lastCallStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit" size={20}/> : null}
                                         {params.InputProps.endAdornment}
                                     </React.Fragment>
                                 )
@@ -107,15 +93,6 @@ class SearchSelectClient extends BaseView {
                         />
                     )}
                 />
-            </Grid>
-            <Grid item lg={10}>
-                <Box className={classes.sscButtons}>
-                    <Button disabled={_.isNil(selectedClient)} variant="contained" color="primary" onClick={this.clientSelectHandler} className={classes.sscSelectButton}>{i18n.t("select")}</Button>
-                    <Button variant="contained" color="inherit" onClick={messageClose}>{i18n.t("cancel")}</Button>
-                </Box>
-            </Grid>
-            <Grid item lg={10} className={classes.sscSeparation}>
-                {inError && <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>}
             </Grid>
         </Grid>;
     }

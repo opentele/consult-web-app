@@ -4,6 +4,7 @@ import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {CircularProgress} from "@material-ui/core";
 import {ServerCall, ServerCallStatus} from "react-app-common";
+import ModalStatus from "./ModalStatus";
 
 class BaseView extends Component {
     constructor(props) {
@@ -50,17 +51,23 @@ class BaseView extends Component {
     }
 
     getModalCloseHandler(stateField) {
-        return () => {
+        return (saved) => {
             let newState = {};
-            newState[stateField] = false;
+            newState[stateField] = saved ? ModalStatus.CLOSED_WITH_SAVE : ModalStatus.CLOSED_WITHOUT_SAVE;
             this.setState(newState);
+            if (saved)
+                this.refresh();
         }
+    }
+
+    refresh() {
+        throw new Error("Must be implemented");
     }
 
     getModalOpenHandler(stateField) {
         return () => {
             let newState = {};
-            newState[stateField] = true;
+            newState[stateField] = ModalStatus.OPENED;
             this.setState(newState);
         }
     }
