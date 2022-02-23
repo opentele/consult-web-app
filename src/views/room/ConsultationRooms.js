@@ -12,6 +12,8 @@ import ConsultationRoom, {AllConsultationRoomActions as Actions} from "../../dom
 import AddClient from "../client/AddClient";
 import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
+import ClientList from "../client/ClientList";
+import ClientService from "../../service/ClientService";
 
 const styles = theme => ({
     rooms: {
@@ -39,7 +41,8 @@ class ConsultationRooms extends BaseView {
         super(props, context);
         this.state = {
             serverCall: ServerCall.noOngoingCall([]),
-            addClientModalStatus: ModalStatus.NOT_OPENED
+            addClientModalStatus: ModalStatus.NOT_OPENED,
+            viewClientsModalStatus: ModalStatus.NOT_OPENED
         };
         this.serviceMethod = Container.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
@@ -60,13 +63,22 @@ class ConsultationRooms extends BaseView {
         });
     }
 
+    getClientListHandler(consultationRoom) {
+        return () => {
+            return Container.get(ClientService).getClients(consultationRoom.id, (response) => {
+                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, 'clientList'), viewClientsModalStatus: ModalStatus.OPENED})
+            });
+        };
+    }
+
     render() {
-        const {serverCall, addClientModalStatus} = this.state;
+        const {serverCall, addClientModalStatus, viewClientsModalStatus} = this.state;
         if (ServerCall.errorOrWait(serverCall))
             return this.renderForErrorOrWait(serverCall);
 
         const {classes} = this.props;
         const consultationRooms = ServerCall.getData(serverCall);
+        const clientList = ServerCall.getData(serverCall, 'clientList');
 
         return <Box className={classes.rooms}>
             {
@@ -93,10 +105,16 @@ class ConsultationRooms extends BaseView {
                         <CardActions className={classes.crCardActions}>
                             {actions.includes(Actions.addClient) &&
                             <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
-                            {actions.includes(Actions.viewMyClients) && <Button className={classes.crButton} variant="contained" color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}
-                            {actions.includes(Actions.joinConference) && <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
+                            {actions.includes(Actions.viewMyClients) &&
+                            <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
+                                    color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}
+                            {actions.includes(Actions.joinConference) &&
+                            <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
-                        {addClientModalStatus === ModalStatus.OPENED && <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}/>}
+                        {addClientModalStatus === ModalStatus.OPENED &&
+                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}/>}
+                        {viewClientsModalStatus === ModalStatus.OPENED &&
+                        <ClientList clientList={clientList} messageClose={this.getModalCloseHandler("viewClientsModalStatus")}/>}
                     </Card>
                 })
             }
