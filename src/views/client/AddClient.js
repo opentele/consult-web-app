@@ -53,14 +53,12 @@ class AddClient extends BaseView {
         this.setState({clientId: clientId});
     }
 
-    clientSavedHandler() {
-        return (response) => {
-            let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
-            if (serverCall.lastCallStatus === ServerCallStatus.FAILURE)
-                this.setState({serverCall: serverCall});
-            else
-                this.props.messageClose(true);
-        }
+    clientSavedHandler = (response) => {
+        let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
+        if (serverCall.lastCallStatus === ServerCallStatus.FAILURE)
+            this.setState({serverCall: serverCall});
+        else
+            this.props.messageClose(true);
     }
 
     render() {
@@ -72,7 +70,7 @@ class AddClient extends BaseView {
             <Grid container className={classes.addClientMain}>
                 <Grid item lg={10}>
                     <Box className={classes.addClientButtons}>
-                        <Button disabled={_.isNil(clientId)} variant="contained" color="primary" onClick={this.getAddClientHandler(consultationRoom)}
+                        <Button disabled={_.isNil(clientId)} variant="contained" color="primary" onClick={this.getAddClientHandler()}
                                 className={classes.addClientSelectButton}>{i18n.t("select")}</Button>
                         <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("cancel")}</Button>
                     </Box>

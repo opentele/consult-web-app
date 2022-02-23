@@ -34,7 +34,7 @@ class ConsultationRoom {
     static getAlerts(room) {
         const alerts = [];
         if (this.hasMoreClients(room))
-            alerts.push(Alert.info(i18n.t("conference-client-next", {nextClientInfo: room.nextClient})));
+            alerts.push(Alert.info(i18n.t("conference-client-next", {client: room.nextClient})));
 
         if (room.numberOfUserClientsPending > 0)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
@@ -55,7 +55,8 @@ class ConsultationRoom {
     }
 
     static hasMoreClients(room) {
-        return !_.isEmpty(room.nextClient);
+        let b = _.isEmpty(room.nextClient);
+        return !b;
     }
 
     static hasVacancy(room) {

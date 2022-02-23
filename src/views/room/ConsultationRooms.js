@@ -22,7 +22,11 @@ const styles = theme => ({
         padding: 10,
     },
     crCardActions: {
-        flexDirection: 'row-reverse'
+        flexDirection: 'row-reverse',
+        marginTop: 20
+    },
+    crButton: {
+        marginRight: 9
     }
 });
 
@@ -73,12 +77,13 @@ class ConsultationRooms extends BaseView {
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    <Box sx={{display: "flex", flexDirection: "row"}}>
+                                    <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
                                         <Typography variant="h5" style={{marginRight: 10}}>{consultationRoom.title}</Typography>
                                         <Edit/>
                                     </Box>
-                                    <TimeField value={consultationRoom.scheduledStartTime} label="Start time"/>
-                                    <TimeField value={consultationRoom.scheduledEndTime} label="End time"/>
+                                    <TimeField value={consultationRoom.scheduledStartTime} labelKey='consultation-room-start-time-label'/>
+                                    <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
+                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.nextClient}`}</Typography>
                                 </Box>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
@@ -87,8 +92,8 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {actions.includes(Actions.addClient) &&
-                            <Button variant="contained" color="primary" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
-                            {actions.includes(Actions.viewMyClients) && <Button variant="contained" color="primary">{i18n.t(Actions.viewMyClients)}</Button>}
+                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
+                            {actions.includes(Actions.viewMyClients) && <Button className={classes.crButton} variant="contained" color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}
                             {actions.includes(Actions.joinConference) && <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
                         {addClientModalStatus === ModalStatus.OPENED && <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}/>}

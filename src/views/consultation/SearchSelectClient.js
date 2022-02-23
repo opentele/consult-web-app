@@ -39,7 +39,7 @@ class SearchSelectClient extends BaseView {
         this.search('', (response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
-        this.setState({autoCompleteOpen: true});
+        this.setState({autoCompleteOpen: true, serverCall: ServerCall.serverCallMade(this.state.serverCall)});
     }
 
     search(q, cb) {
