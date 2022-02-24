@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Card, CardActions, CardContent, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
-import {Container, ServerCall} from "react-app-common";
+import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
@@ -44,7 +44,7 @@ class ConsultationRooms extends BaseView {
             addClientModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED
         };
-        this.serviceMethod = Container.get(ConsultationRoomService)[functionNames[this.props.type]];
+        this.serviceMethod = BeanContainer.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
 
     static props = {
@@ -65,7 +65,7 @@ class ConsultationRooms extends BaseView {
 
     getClientListHandler(consultationRoom) {
         return () => {
-            return Container.get(ClientService).getClients(consultationRoom.id, (response) => {
+            return BeanContainer.get(ClientService).getClients(consultationRoom.id, (response) => {
                 this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, 'clientList'), viewClientsModalStatus: ModalStatus.OPENED})
             });
         };

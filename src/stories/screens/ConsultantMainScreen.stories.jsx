@@ -1,6 +1,6 @@
 import React from 'react';
 import About from "../../views/room/ConsultationRooms";
-import {Container} from 'react-app-common';
+import {BeanContainer} from 'react-app-common';
 import ConsultationRoomService from "../../services/ConsultationRoomService";
 import {UserType} from "consult-app-common";
 import ConsultationServiceStub from "../stubs/ConsultationServiceStub";

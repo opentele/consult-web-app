@@ -8,7 +8,7 @@ import {Box, Button, Grid} from "@material-ui/core";
 import _ from "lodash";
 import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
-import {Container, ServerCall, ServerCallStatus} from "react-app-common";
+import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 
 const styles = theme => ({
@@ -46,19 +46,11 @@ class AddClient extends BaseView {
     };
 
     getAddClientHandler() {
-        return () => Container.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.clientId, this.clientSavedHandler);
+        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.clientId, this.entitySavedHandler);
     }
 
     selectClientHandler = (clientId) => {
         this.setState({clientId: clientId});
-    }
-
-    clientSavedHandler = (response) => {
-        let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
-        if (serverCall.lastCallStatus === ServerCallStatus.FAILURE)
-            this.setState({serverCall: serverCall});
-        else
-            this.props.messageClose(true);
     }
 
     render() {

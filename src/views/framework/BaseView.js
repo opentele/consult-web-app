@@ -71,6 +71,14 @@ class BaseView extends Component {
             this.setState(newState);
         }
     }
+
+    entitySavedHandler = (response) => {
+        let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
+        if (serverCall.lastCallStatus === ServerCallStatus.FAILURE)
+            this.setState({serverCall: serverCall});
+        else
+            this.props.messageClose(true);
+    }
 }
 
 export default BaseView;

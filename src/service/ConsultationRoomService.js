@@ -20,6 +20,10 @@ class ConsultationRoomService {
         };
         return ServiceUtil.putJson(`appointment`, postObject, cb);
     }
+
+    static createRoom(consultationRoom, cb) {
+        return ServiceUtil.putJson("consultationRoom", consultationRoom, cb);
+    }
 }
 
 export default ConsultationRoomService;

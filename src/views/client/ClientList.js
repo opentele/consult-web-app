@@ -20,6 +20,9 @@ const styles = theme => ({
         flexDirection: "row",
         justifyContent: "flex-end"
     },
+    clientListMainBox: {
+        padding: 30
+    }
 });
 
 class ClientList extends BaseView {
@@ -34,35 +37,37 @@ class ClientList extends BaseView {
 
     render() {
         const {messageClose, classes, clientList} = this.props;
-        return <ModalContainerView titleKey="view-clients">
-            <TableContainer component={Paper}>
-                <Table sx={{minWidth: 700}} aria-label="customized table">
-                    <TableHead>
-                        <TableRow className={classes.viewClientsTableHeader}>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('name')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('gender')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('age')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('registration-number')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {clientList.map((x) => (
-                            <TableRow key={x.name}>
-                                <TableCell component="th" scope="row">
-                                    {x.name}
-                                </TableCell>
-                                <TableCell align="right">{i18n.t(x.gender)}</TableCell>
-                                <TableCell align="right">{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
-                                <TableCell align="right">{x.registrationNumber}</TableCell>
-                                <TableCell align="right">{x["queueNumber"]}</TableCell>
+        return <ModalContainerView titleKey="view-clients-title">
+            <Box className={classes.clientListMainBox}>
+                <TableContainer component={Paper}>
+                    <Table sx={{minWidth: 700}} aria-label="customized table">
+                        <TableHead>
+                            <TableRow className={classes.viewClientsTableHeader}>
+                                <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('name')}</TableCell>
+                                <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('gender')}</TableCell>
+                                <TableCell className={classes.viewClientsTableHeaderCell} align="center">{i18n.t('age')}</TableCell>
+                                <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('registration-number')}</TableCell>
+                                <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>
                             </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Box className={classes.viewClientsButtons}>
-                <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("close")}</Button>
+                        </TableHead>
+                        <TableBody>
+                            {clientList.map((x) => (
+                                <TableRow key={x.name}>
+                                    <TableCell component="th" scope="row">
+                                        {x.name}
+                                    </TableCell>
+                                    <TableCell align="right">{i18n.t(x.gender)}</TableCell>
+                                    <TableCell align="right">{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
+                                    <TableCell align="right">{x.registrationNumber}</TableCell>
+                                    <TableCell align="right">{x["queueNumber"]}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+                <Box className={classes.viewClientsButtons}>
+                    <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("close")}</Button>
+                </Box>
             </Box>
         </ModalContainerView>;
     }

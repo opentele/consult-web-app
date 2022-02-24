@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
+import {AppBar, Container, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
 import {Home} from "@mui/icons-material";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
+import {BeanContainer} from 'react-app-common';
+import {UserService} from "consult-app-common";
+import _ from 'lodash';
 
 const styles = theme => ({
     toolbar: {
@@ -24,7 +27,7 @@ const styles = theme => ({
     }
 });
 
-const settings = ['Profile', 'Logout'];
+const settings = ['profile', 'logout'];
 const pages = [];
 
 class ConsultAppBar extends React.Component {
@@ -38,8 +41,20 @@ class ConsultAppBar extends React.Component {
         this.setState = this.setState.bind(this);
         this.state = {
             anchorElNav: null,
-            anchorElUser: null
+            anchorElUser: null,
+            loggedIn: !_.isNil(this.props.user)
         };
+        this.menuHandlers = {
+            "profile": this.handleCloseNavMenu(),
+            "logout": this.logoutHandler
+        }
+    }
+
+    logoutHandler = () => {
+        this.setState({...this.state, anchorElNav: null});
+        BeanContainer.get(UserService).logout(() => {
+            this.setState({...this.state, loggedIn: false});
+        });
     }
 
     handleOpenUserMenu() {
@@ -55,6 +70,10 @@ class ConsultAppBar extends React.Component {
     }
 
     render() {
+        const {loggedIn} = this.state;
+        if (!loggedIn)
+            return <Redirect to="/login"/>;
+
         const {classes, user} = this.props;
         return <AppBar position="static">
             <Container maxWidth="xl">
@@ -97,7 +116,7 @@ class ConsultAppBar extends React.Component {
                             open={Boolean(this.state.anchorElUser)}
                             onClose={this.handleCloseUserMenu()}>
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={this.handleCloseNavMenu()}>
+                                <MenuItem key={setting} onClick={this.menuHandlers[setting]()}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}

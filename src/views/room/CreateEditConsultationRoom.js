@@ -1,15 +1,22 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Checkbox, Chip, FormControl, TextField} from '@material-ui/core';
+import {Box, Button, FormControl, TextField} from '@material-ui/core';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
-import {Stack} from "@mui/material";
 import {i18n} from "consult-app-common";
 import moment from "moment";
 import ConsultationRoom from "../../domain/ConsultationRoom";
+import ModalContainerView from "../framework/ModalContainerView";
+import PropTypes from "prop-types";
+import {BeanContainer} from "react-app-common";
+import ConsultationRoomService from "../../service/ConsultationRoomService";
 
 const styles = theme => ({
-    container: {},
+    cecrContainer: {
+        padding: 20,
+        display: "flex",
+        flexDirection: "column"
+    },
     field: {
         marginTop: 25,
         flexDirection: "column",
@@ -20,13 +27,17 @@ const styles = theme => ({
         marginTop: -10
     },
     textField: {
-        width: "100%"
+        width: "300px"
+    },
+    createEditConsultationRoomButtons: {
+        marginTop: 20,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end"
+    },
+    cecrSaveButton: {
+        marginRight: 10
     }
-});
-
-const days = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
-const dayTuples = days.map((day) => {
-    return {"name": day, "value": i18n.t(day + "-short")}
 });
 
 class CreateEditConsultationRoom extends BaseView {
@@ -35,7 +46,9 @@ class CreateEditConsultationRoom extends BaseView {
         this.state = {room: new ConsultationRoom()};
     }
 
-    static propTypes = {}
+    static propTypes = {
+        messageClose: PropTypes.func.isRequired
+    }
 
     getRoomFieldValueChangeHandler(fieldName) {
         return this.getStateFieldValueChangedHandler("room", fieldName);
@@ -43,71 +56,63 @@ class CreateEditConsultationRoom extends BaseView {
 
     render() {
         const {
-            classes
+            classes,
+            messageClose
         } = this.props;
         const {
-            room,
-            canSubmit
+            room
         } = this.state;
 
-        return <FormControl>
-            <Box className={classes.container}>
-                <Box className={classes.field}>
-                    <FormLabel textKey="room-name"/>
-                    <TextField
-                        name="name"
-                        onChange={this.getRoomFieldValueChangeHandler("name")}
-                        value={room.name}
-                        className={classes.textField}
-                    />
+        return <ModalContainerView titleKey="one-time-consultation-room-title">
+            <FormControl>
+                <Box className={classes.cecrContainer}>
+                    <Box className={classes.field}>
+                        <FormLabel textKey="room-name"/>
+                        <TextField
+                            name="name"
+                            onChange={this.getRoomFieldValueChangeHandler("name")}
+                            value={room.name}
+                            className={classes.textField}
+                        />
+                    </Box>
+                    <Box className={classes.field}>
+                        <FormLabel textKey="from-date"/>
+                        <TextField type="date"
+                                   defaultValue={moment().format('YYYY-MM-DD')} sx={{width: 220}} InputLabelProps={{shrink: true}}
+                                   onChange={this.getRoomFieldValueChangeHandler("fromDate")}
+                        />
+                    </Box>
+                    <Box className={classes.field}>
+                        <FormLabel textKey="start-time"/>
+                        <TextField type="time" defaultValue="10:00" InputLabelProps={{shrink: true}}
+                                   inputProps={{step: 300}}
+                                   sx={{width: 150}}
+                                   onChange={this.getRoomFieldValueChangeHandler("startTime")}
+                        />
+                    </Box>
+                    <Box className={classes.field}>
+                        <FormLabel textKey="end-time"/>
+                        <TextField type="time" defaultValue="16:00" InputLabelProps={{shrink: true}}
+                                   inputProps={{step: 300}}
+                                   sx={{width: 150}}
+                                   onChange={this.getRoomFieldValueChangeHandler("endTime")}
+                        />
+                    </Box>
+                    <Box className={classes.createEditConsultationRoomButtons}>
+                        <Button type="submit"
+                                className={classes.cecrSaveButton}
+                                variant="contained" color="primary"
+                                onSubmit={this.getSaveHandler()}
+                                disabled={!room.name}>{i18n.t("save")}</Button>
+                        <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("close")}</Button>
+                    </Box>
                 </Box>
-                <Box className={classes.field}>
-                    <FormLabel textKey="from-date"/>
-                    <TextField type="date"
-                               defaultValue={moment().format('YYYY-MM-DD')} sx={{width: 220}} InputLabelProps={{shrink: true}}
-                               onChange={this.getRoomFieldValueChangeHandler("fromDate")}
-                    />
-                </Box>
-                <Box className={classes.field}>
-                    <FormLabel textKey="start-time"/>
-                    <TextField type="time" defaultValue="10:00" InputLabelProps={{shrink: true}}
-                               inputProps={{step: 300}}
-                               sx={{width: 150}}
-                               onChange={this.getRoomFieldValueChangeHandler("startTime")}
-                    />
-                </Box>
-                <Box className={classes.field}>
-                    <FormLabel textKey="end-time"/>
-                    <TextField type="time" defaultValue="16:00" InputLabelProps={{shrink: true}}
-                               inputProps={{step: 300}}
-                               sx={{width: 150}}
-                               onChange={this.getRoomFieldValueChangeHandler("endTime")}
-                    />
-                </Box>
-                <Box className={classes.field}>
-                    <FormLabel textKey="day"/>
-                    <Stack direction="row" spacing={1}>
-                        {dayTuples.map((dayTuple) => <Chip label={dayTuple["value"]} color="primary" onClick={this.daySelectHandler(dayTuple["name"])}/>)}
-                    </Stack>
-                </Box>
-                <Box className={classes.field}>
-                    <FormLabel textKey="repeat-weekly"/>
-                    <Checkbox className={classes.checkbox} onChange={this.getRoomFieldValueChangeHandler("repeatWeekly")}/>
-                </Box>
-                <Box className={classes.field}>
-                    <Button type="submit"
-                            fullWidth
-                            variant="contained" color="primary"
-                            onSubmit={this.getSaveHandler()}
-                            disabled={!canSubmit}>{i18n.t("save")}</Button>
-                </Box>
-            </Box>
-        </FormControl>;
+            </FormControl>
+        </ModalContainerView>;
     }
 
     getSaveHandler() {
-        return () => {
-        };
+        return () => BeanContainer.get(ConsultationRoomService).createRoom(this.state.room, this.entitySavedHandler);
     }
 
     daySelectHandler(day) {

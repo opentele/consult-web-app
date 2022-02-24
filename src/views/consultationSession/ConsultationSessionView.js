@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import OtherConsultationRoomsInConsultationSession from "../../components/consultationSession/OtherConsultationRoomsInConsultationSession";
 import JitsiConference from "../../components/consultationSession/JitsiConference";
 import ConsultationRoomService from "../../services/ConsultationRoomService";
-import {Container} from 'react-app-common';
+import {BeanContainer} from 'react-app-common';
 import _ from 'lodash';
 import BaseView from "../framework/BaseView";
 
@@ -33,7 +33,7 @@ class ConsultationSessionView extends BaseView {
     }
 
     componentDidMount() {
-        let confService = Container.get(ConsultationRoomService);
+        let confService = BeanContainer.get(ConsultationRoomService);
         confService.getQueue(this.props.conferenceId).then((queue) => {
             this.setState({queue: queue});
         });

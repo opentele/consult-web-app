@@ -1,7 +1,7 @@
 import React from 'react';
 import About from "../../views/consultationSession/ConsultationSessionView";
 import ConsultationRoomService from "../../services/ConsultationRoomService";
-import {Container} from 'react-app-common';
+import {BeanContainer} from 'react-app-common';
 import ConsultationServiceStub from "../stubs/ConsultationServiceStub";
 
 export default {

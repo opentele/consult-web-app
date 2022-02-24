@@ -1,13 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import ConsultAppBar from "../../components/ConsultAppBar";
 import {AddCircle, AllInclusive, History, Schedule, Today} from '@mui/icons-material';
 import {Fab, Tab, Tabs} from "@material-ui/core";
-import {Container} from 'react-app-common';
+import {BeanContainer} from 'react-app-common';
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {i18n} from 'consult-app-common';
 import ConsultationRooms from "./ConsultationRooms";
+import ModalStatus from "../framework/ModalStatus";
+import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
+import BaseView from "../framework/BaseView";
 
 const styles = theme => ({
     createRoom: {
@@ -20,7 +23,7 @@ const styles = theme => ({
     }
 });
 
-class Home extends Component {
+class Home extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
@@ -42,7 +45,7 @@ class Home extends Component {
     }
 
     getAllConsultationSchedules() {
-        return Container.get(ConsultationRoomService).getConsultationSchedules((response) => {
+        return BeanContainer.get(ConsultationRoomService).getConsultationSchedules((response) => {
             this.setState({consultationSchedules: response.data});
         });
     }
@@ -60,7 +63,7 @@ class Home extends Component {
 
     render() {
         const {classes, user} = this.props;
-        const {tabIndex} = this.state;
+        const {tabIndex, oneTimeConsultationRoomStatus} = this.state;
         return <>
             <ConsultAppBar user={user}/>
             <br/>
@@ -69,12 +72,14 @@ class Home extends Component {
                 <Tab icon={<Today/>} label={i18n.t('today')}/>
                 <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
                 <Tab icon={<AllInclusive/>} label={i18n.t('all-rooms')}/>
-                {<Fab variant="extended" size="medium" className={classes.createRoom}>
+                {<Fab variant="extended" size="medium" className={classes.createRoom} onClick={this.getModalOpenHandler("oneTimeConsultationRoomStatus")}>
                     <AddCircle className={classes.createRoomIcon}/>
-                    {i18n.t('create-new-room')}
+                    {i18n.t('create-one-time-room')}
                 </Fab>}
             </Tabs>
             {this.tabComponents[tabIndex]()}
+            {oneTimeConsultationRoomStatus === ModalStatus.OPENED &&
+            <CreateEditConsultationRoom messageClose={this.getModalCloseHandler("oneTimeConsultationRoomStatus")}/>}
         </>;
     }
 }

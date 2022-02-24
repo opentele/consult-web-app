@@ -4,7 +4,7 @@ import {CircularProgress, Grid, TextField} from '@material-ui/core';
 import PropTypes from 'prop-types';
 import BaseView from "../framework/BaseView";
 import {Autocomplete} from "@mui/material";
-import {Container, ServerCall, ServerCallStatus} from 'react-app-common';
+import {BeanContainer, ServerCall, ServerCallStatus} from 'react-app-common';
 import ClientService from "../../service/ClientService";
 import _ from 'lodash';
 
@@ -14,8 +14,8 @@ const styles = theme => ({
         paddingRight: 210,
         paddingTop: 20
     },
-    sscSearch: {
-        width: '100%'
+    sscAutocomplete: {
+        width: '300px'
     }
 });
 
@@ -26,7 +26,7 @@ class SearchSelectClient extends BaseView {
             autoCompleteOpen: false,
             serverCall: ServerCall.noOngoingCall([])
         };
-        this.service = Container.get(ClientService);
+        this.service = BeanContainer.get(ClientService);
     }
 
     static propTypes = {
@@ -68,6 +68,7 @@ class SearchSelectClient extends BaseView {
         return <Grid container className={classes.sscMain}>
             <Grid item lg={10}>
                 <Autocomplete
+                    className={classes.sscAutocomplete}
                     open={autoCompleteOpen}
                     onInputChange={this.searchChangeHandler}
                     onOpen={this.searchOpenHandler}

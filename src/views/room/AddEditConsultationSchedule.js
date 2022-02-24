@@ -6,7 +6,7 @@ import {i18n} from "consult-app-common";
 import React from "react";
 import DateInput from "../../components/DateInput";
 import PropTypes from 'prop-types';
-import {Container, ServerCall} from 'react-app-common';
+import {BeanContainer, ServerCall} from 'react-app-common';
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
@@ -56,7 +56,7 @@ class AddEditConsultationSchedule extends BaseView {
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
-            return Container.get(ConsultationRoomService).getSchedule(consultationScheduleId, (response) => {
+            return BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId, (response) => {
                 this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
             });
         else

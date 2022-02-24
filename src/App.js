@@ -50,7 +50,7 @@ export default class App extends Component {
             <Router>
                 <Switch>
                     <Route exact path="/">
-                        {this.getPrivateRoute(loggedIn, <Home/>)}
+                        {this.getPrivateRoute(loggedIn, <Home user={{}}/>)}
                     </Route>
                     <Route path="/register">
                         {this.getPublicRoute(loggedIn, <RegisterOrganisation/>)}
