@@ -52,7 +52,7 @@ class ConsultAppBar extends React.Component {
 
     logoutHandler = () => {
         this.setState({...this.state, anchorElNav: null});
-        BeanContainer.get(UserService).logout(() => {
+        BeanContainer.get(UserService).logout().then(() => {
             this.setState({...this.state, loggedIn: false});
         });
     }
@@ -70,10 +70,6 @@ class ConsultAppBar extends React.Component {
     }
 
     render() {
-        const {loggedIn} = this.state;
-        if (!loggedIn)
-            return <Redirect to="/login"/>;
-
         const {classes, user} = this.props;
         return <AppBar position="static">
             <Container maxWidth="xl">
@@ -116,7 +112,7 @@ class ConsultAppBar extends React.Component {
                             open={Boolean(this.state.anchorElUser)}
                             onClose={this.handleCloseUserMenu()}>
                             {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={this.menuHandlers[setting]()}>
+                                <MenuItem key={setting} onClick={this.menuHandlers[setting]}>
                                     <Typography textAlign="center">{setting}</Typography>
                                 </MenuItem>
                             ))}

@@ -46,7 +46,7 @@ class AddClient extends BaseView {
     };
 
     getAddClientHandler() {
-        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.clientId, this.entitySavedHandler);
+        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.clientId).then(this.entitySavedHandler);
     }
 
     selectClientHandler = (clientId) => {

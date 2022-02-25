@@ -1,10 +1,9 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
-import {DataElementValidator} from "react-app-common";
-import {i18n} from "consult-app-common";
+import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
+import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
-import {onWait} from "./framework/ServerCallHelper";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
@@ -75,9 +74,8 @@ class RegisterOrganisation extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            ...this.state,
-            busy: false,
-            errors: {}
+            errors: {},
+            serverCall: ServerCall.noOngoingCall(null)
         };
     }
 
@@ -85,9 +83,9 @@ class RegisterOrganisation extends BaseView {
         const {
             classes
         } = this.props;
-        const {busy, error, orgName, password, confirmPassword, name, userId} = this.state;
+        const {orgName, password, confirmPassword, name, userId, serverCall} = this.state;
 
-        if (busy)
+        if (serverCall.lastCallStatus === ServerCallStatus.WAITING)
             return <WaitBackdrop/>;
 
         return (
@@ -143,7 +141,7 @@ class RegisterOrganisation extends BaseView {
                                            onChangeHandler={this.getValueChangedHandler("confirmPassword")}
                                            hasError={this.hasError("passwords")}
                                            errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
-                            <ServerErrorMessage error={error}/>
+                            <ServerErrorMessage serverCall={serverCall}/>
 
                             <Button type="submit" className={classes.registerButton}
                                     fullWidth
@@ -187,8 +185,10 @@ class RegisterOrganisation extends BaseView {
                 return;
             }
             let {name, orgName, userId, password} = this.state;
-            // UserService.registerOrg(name, orgName, userId, userIdType, password, onSuccess(this), onError(this));
-            onWait(this);
+            UserService.registerOrg(name, orgName, userId, userIdType, password).then((response) => {
+                this.setState({serverCall: ServerCall.responseReceived(response)})
+            });
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)})
         }
     }
 

@@ -112,7 +112,7 @@ class CreateEditConsultationRoom extends BaseView {
     }
 
     getSaveHandler() {
-        return () => BeanContainer.get(ConsultationRoomService).createRoom(this.state.room, this.entitySavedHandler);
+        return () => BeanContainer.get(ConsultationRoomService).createRoom(this.state.room).then(this.entitySavedHandler);
     }
 
     daySelectHandler(day) {

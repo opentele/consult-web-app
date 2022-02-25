@@ -1,28 +1,28 @@
 import ServiceUtil from "./ServiceUtil";
 
 class ConsultationRoomService {
-    static getTodayRooms(cb) {
-        return ServiceUtil.getJson("consultationRoom/today", cb);
+    static getTodayRooms() {
+        return ServiceUtil.getJson("consultationRoom/today");
     }
 
-    static getConsultationSchedules(cb) {
-        return ServiceUtil.getJson("consultationRoomSchedule", cb);
+    static getConsultationSchedules() {
+        return ServiceUtil.getJson("consultationRoomSchedule");
     }
 
-    static getSchedule(scheduleId, cb) {
-        return ServiceUtil.getJson(`consultationRoomSchedule/${scheduleId}`, cb);
+    static getSchedule(scheduleId) {
+        return ServiceUtil.getJson(`consultationRoomSchedule/${scheduleId}`);
     }
 
-    static addClient(consultationRoom, clientId, cb) {
+    static addClient(consultationRoom, clientId) {
         const postObject = {
             consultationRoomId: consultationRoom.id,
             clientId: clientId
         };
-        return ServiceUtil.putJson(`appointment`, postObject, cb);
+        return ServiceUtil.putJson(`appointment`, postObject);
     }
 
-    static createRoom(consultationRoom, cb) {
-        return ServiceUtil.putJson("consultationRoom", consultationRoom, cb);
+    static createRoom(consultationRoom) {
+        return ServiceUtil.putJson("consultationRoom", consultationRoom);
     }
 }
 

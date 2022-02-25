@@ -10,34 +10,45 @@ import ChangePassword from "./views/ChangePassword";
 import Home from "./views/room/Home";
 import React, {Component} from "react";
 import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
+import _ from 'lodash';
+import {UserContext} from './framework/Context';
+import {ServerCall} from "react-app-common";
 
 const theme = createTheme();
 
-const nonLoginPaths = ["/login", "/register", "/resetPassword"]
+const nonLoginPaths = ["/login", "/register", "/resetPassword"];
 
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            loading: true,
-            loggedIn: null
+            serverCall: ServerCall.noOngoingCall(null),
+            userContext: {user: null, setUser: this.setUserHandler}
         }
     }
 
     componentDidMount() {
         i18nPromise.then(() => {
-            return UserService.isLoggedIn((status) => {
-                this.setState({loading: false, loggedIn: status.data});
+            UserService.isLoggedIn().then((response) => {
+                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
             });
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
         });
     }
 
+    setUserHandler = (user) => {
+        const userContext = this.state.userContext;
+        userContext.user = user;
+        this.setState({userContext: userContext});
+    };
+
     render() {
-        const {loading, loggedIn} = this.state;
-        if (loading)
+        const {serverCall} = this.state;
+        if (ServerCall.noCallOrWait(serverCall))
             return <CircularProgress/>;
 
         let pathname = window.location.pathname;
+        const loggedIn = ServerCall.getData(serverCall);
         if (loggedIn && nonLoginPaths.includes(pathname)) {
             window.location.replace("/");
         } else if (!loggedIn && !nonLoginPaths.includes(pathname)) {
@@ -47,28 +58,30 @@ export default class App extends Component {
         return <ThemeProvider theme={theme}>
             <CssBaseline/>
 
-            <Router>
-                <Switch>
-                    <Route exact path="/">
-                        {this.getPrivateRoute(loggedIn, <Home user={{}}/>)}
-                    </Route>
-                    <Route path="/register">
-                        {this.getPublicRoute(loggedIn, <RegisterOrganisation/>)}
-                    </Route>
-                    <Route path="/resetPassword">
-                        {this.getPublicRoute(loggedIn, <ResetPassword/>)}
-                    </Route>
-                    <Route path="/changePassword">
-                        {this.getPrivateRoute(loggedIn, <ChangePassword/>)}
-                    </Route>
-                    <Route path="/login">
-                        {this.getPublicRoute(loggedIn, <Welcome/>)}
-                    </Route>
-                    <Route path="/consultationSchedule">
-                        {this.getPrivateRoute(loggedIn, <AddEditConsultationSchedule/>)}
-                    </Route>
-                </Switch>
-            </Router>
+            <UserContext.Provider value={this.state.userContext}>
+                <Router>
+                    <Switch>
+                        <Route exact path="/">
+                            {this.getPrivateRoute(loggedIn, <Home/>)}
+                        </Route>
+                        <Route path="/register">
+                            {this.getPublicRoute(loggedIn, <RegisterOrganisation/>)}
+                        </Route>
+                        <Route path="/resetPassword">
+                            {this.getPublicRoute(loggedIn, <ResetPassword/>)}
+                        </Route>
+                        <Route path="/changePassword">
+                            {this.getPrivateRoute(loggedIn, <ChangePassword/>)}
+                        </Route>
+                        <Route path="/login">
+                            {_.isNil(this.state.userContext.user) ? this.getPublicRoute(loggedIn, <Welcome/>) : this.getPrivateRoute(loggedIn, <Home/>)}
+                        </Route>
+                        <Route path="/consultationSchedule">
+                            {this.getPrivateRoute(loggedIn, <AddEditConsultationSchedule/>)}
+                        </Route>
+                    </Switch>
+                </Router>
+            </UserContext.Provider>
         </ThemeProvider>;
     }
 

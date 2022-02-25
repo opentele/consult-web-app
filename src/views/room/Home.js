@@ -45,7 +45,7 @@ class Home extends BaseView {
     }
 
     getAllConsultationSchedules() {
-        return BeanContainer.get(ConsultationRoomService).getConsultationSchedules((response) => {
+        return BeanContainer.get(ConsultationRoomService).getConsultationSchedules().then((response) => {
             this.setState({consultationSchedules: response.data});
         });
     }

@@ -1,12 +1,12 @@
 import ServiceUtil from "./ServiceUtil";
 
 class ClientService {
-    static search(q, searchParamName, searchParamValue, cb) {
-        return ServiceUtil.getJson(`client/search?q=${q}&${searchParamName}=${searchParamValue}`, cb);
+    static search(q, searchParamName, searchParamValue) {
+        return ServiceUtil.getJson(`client/search?q=${q}&${searchParamName}=${searchParamValue}`);
     }
 
-    static getClients(consultationRoomId, cb) {
-        return ServiceUtil.getJson(`client?consultationRoomId=${consultationRoomId}`, cb);
+    static getClients(consultationRoomId) {
+        return ServiceUtil.getJson(`client?consultationRoomId=${consultationRoomId}`);
     }
 }
 

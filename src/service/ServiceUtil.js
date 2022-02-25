@@ -1,15 +1,15 @@
 import {RC} from "react-app-common";
 
 export default class ServiceUtil {
-    static getJson(relativeApiUrl, cb) {
-        return RC.getJSON(`api/${relativeApiUrl}`, cb);
+    static getJson(relativeApiUrl) {
+        return RC.getJSON(`api/${relativeApiUrl}`);
     }
 
-    static postJson(relativeApiUrl, obj, cb) {
-        return RC.post(`api/${relativeApiUrl}`, obj, cb);
+    static postJson(relativeApiUrl, obj) {
+        return RC.post(`api/${relativeApiUrl}`, obj);
     }
 
-    static putJson(relativeApiUrl, obj, cb) {
-        return RC.put(`api/${relativeApiUrl}`, obj, cb);
+    static putJson(relativeApiUrl, obj) {
+        return RC.put(`api/${relativeApiUrl}`, obj);
     }
 }

@@ -82,7 +82,7 @@ class UserRegister extends Component {
                         <AuthenticationMode onAuthModeChange={this.setState} authMode={this.state.authMode}/>
                     </Card>
 
-                    <ServerErrorMessage error={error}/>
+                    <ServerErrorMessage serverCall={null}/>
 
                     <div className={classes.actions}>
                         <Button type="submit"
@@ -98,7 +98,7 @@ class UserRegister extends Component {
 
     submit = () => {
         let {name, orgName, email, mobile, password} = this.state;
-        UserService.registerOrg(name, orgName, email, mobile, password,() => {
+        UserService.registerOrg(name, orgName, email, mobile, password).then(() => {
         }, () => {
         });
     }

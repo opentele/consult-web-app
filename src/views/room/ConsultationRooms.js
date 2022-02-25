@@ -52,20 +52,20 @@ class ConsultationRooms extends BaseView {
     };
 
     componentDidMount() {
-        this.serviceMethod((response) => {
+        this.serviceMethod().then((response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
         });
     }
 
     refresh() {
-        this.serviceMethod((response) => {
+        this.serviceMethod().then((response) => {
             this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response), addClientModalStatus: ModalStatus.NOT_OPENED});
         });
     }
 
     getClientListHandler(consultationRoom) {
         return () => {
-            return BeanContainer.get(ClientService).getClients(consultationRoom.id, (response) => {
+            return BeanContainer.get(ClientService).getClients(consultationRoom.id).then((response) => {
                 this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, 'clientList'), viewClientsModalStatus: ModalStatus.OPENED})
             });
         };

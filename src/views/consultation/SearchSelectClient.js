@@ -43,7 +43,7 @@ class SearchSelectClient extends BaseView {
     }
 
     search(q, cb) {
-        this.service.search(q, this.props.searchParamName, this.props.searchParamValue, cb);
+        this.service.search(q, this.props.searchParamName, this.props.searchParamValue).then(cb);
     }
 
     searchCloseHandler = () => {
