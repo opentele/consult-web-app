@@ -65,7 +65,7 @@ class Home extends BaseView {
         const {classes, user} = this.props;
         const {tabIndex, oneTimeConsultationRoomStatus} = this.state;
         return <>
-            <ConsultAppBar user={user}/>
+            <ConsultAppBar/>
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()}>
                 <Tab icon={<History/>} label={i18n.t('past-consultations')}/>

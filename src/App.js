@@ -18,11 +18,14 @@ const theme = createTheme();
 
 const nonLoginPaths = ["/login", "/register", "/resetPassword"];
 
+const IsLoggedInCallName = "isLoggedIn";
+const GetUserCallName = "getUser";
+
 export default class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            serverCall: ServerCall.noOngoingCall(null),
+            serverCall: ServerCall.noOngoingCall(null, IsLoggedInCallName),
             userContext: {user: null, setUser: this.setUserHandler}
         }
     }
@@ -30,14 +33,25 @@ export default class App extends Component {
     componentDidMount() {
         i18nPromise.then(() => {
             UserService.isLoggedIn().then((response) => {
-                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
+                const serverCall1 = ServerCall.responseReceived(this.state.serverCall, response, IsLoggedInCallName);
+                if (ServerCall.isSuccessful(serverCall1)) {
+                    UserService.getUser().then((response) => {
+                        const serverCall2 = ServerCall.responseReceived(this.state.serverCall, response, GetUserCallName);
+                        if (ServerCall.isSuccessful(serverCall2, GetUserCallName))
+                            this.setState({serverCall: serverCall2, userContext: {user: ServerCall.getData(serverCall2, GetUserCallName), setUser: this.state.userContext.setUser}});
+                        else
+                            this.setState({serverCall: serverCall2});
+                    });
+                }
+                else
+                    this.setState({serverCall: serverCall1});
             });
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, IsLoggedInCallName)});
         });
     }
 
     setUserHandler = (user) => {
-        const userContext = this.state.userContext;
+        const userContext = {...this.state.userContext};
         userContext.user = user;
         this.setState({userContext: userContext});
     };

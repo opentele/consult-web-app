@@ -79,6 +79,27 @@ class BaseView extends Component {
         else
             this.props.messageClose(true);
     }
+
+    makeServerCall(promise, preState, postState, serverCallName) {
+        promise.then((response) => {
+            this.serverResponseReceived(postState, response, serverCallName);
+        });
+        this.serverCallMade(preState, serverCallName);
+    }
+
+    serverResponseReceived(postState, response, serverCallName) {
+        if (postState)
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, serverCallName), ...postState});
+        else
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, serverCallName)});
+    }
+
+    serverCallMade(preState, serverCallName) {
+        if (preState)
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, serverCallName), ...preState});
+        else
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, serverCallName)});
+    }
 }
 
 export default BaseView;

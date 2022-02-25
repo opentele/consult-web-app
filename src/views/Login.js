@@ -72,14 +72,17 @@ class Login extends BaseView {
             const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
             if (validUserId) {
                 UserService.login(this.state.userId, this.state.password, userIdType).then((response) => {
-                    this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, LoginServerCall)});
-                    if (ServerCall.isSuccessful(this.state.serverCall, LoginServerCall)) {
+                    const serverCall1 = ServerCall.responseReceived(this.state.serverCall, response, LoginServerCall);
+                    if (ServerCall.isSuccessful(serverCall1, LoginServerCall)) {
                         UserService.getUser().then((response) => {
-                            let serverCall = ServerCall.responseReceived(this.state.serverCall, response, GetUserServerCall);
-                            this.setState({serverCall: serverCall});
-                            setUser(ServerCall.getData(serverCall, GetUserServerCall));
+                            let serverCall2 = ServerCall.responseReceived(serverCall1, response, GetUserServerCall);
+                            if (ServerCall.isSuccessful(serverCall2, LoginServerCall)) {
+                                setUser(ServerCall.getData(serverCall2, GetUserServerCall));
+                            }
+                            this.setState({serverCall: serverCall2});
                         });
-                        this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, GetUserServerCall)});
+                    } else {
+                        this.setState({serverCall: serverCall1});
                     }
                 });
                 this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, LoginServerCall)});

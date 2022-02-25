@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Container, Avatar, Box, Button, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
+import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
 import {Home} from "@mui/icons-material";
-import {Link, Redirect} from "react-router-dom";
-import {BeanContainer} from 'react-app-common';
+import {Link} from "react-router-dom";
+import {BeanContainer, ServerCall} from 'react-app-common';
 import {UserService} from "consult-app-common";
-import _ from 'lodash';
+import {UserContext} from "../framework/Context";
+import BaseView from "../views/framework/BaseView";
 
 const styles = theme => ({
     toolbar: {
@@ -27,10 +28,9 @@ const styles = theme => ({
     }
 });
 
-const settings = ['profile', 'logout'];
 const pages = [];
 
-class ConsultAppBar extends React.Component {
+class ConsultAppBar extends BaseView {
     static propTypes = {
         classes: PropTypes.object.isRequired,
         user: PropTypes.object
@@ -42,27 +42,26 @@ class ConsultAppBar extends React.Component {
         this.state = {
             anchorElNav: null,
             anchorElUser: null,
-            loggedIn: !_.isNil(this.props.user)
+            serverCall: ServerCall.noOngoingCall()
         };
-        this.menuHandlers = {
-            "profile": this.handleCloseNavMenu(),
-            "logout": this.logoutHandler
+    }
+
+    logoutHandler(setUser) {
+        return () => {
+            BeanContainer.get(UserService).logout().then((response) => {
+                this.serverResponseReceived({anchorElNav: null}, response);
+                setUser(null);
+            });
+            this.serverCallMade();
         }
     }
 
-    logoutHandler = () => {
-        this.setState({...this.state, anchorElNav: null});
-        BeanContainer.get(UserService).logout().then(() => {
-            this.setState({...this.state, loggedIn: false});
-        });
-    }
-
     handleOpenUserMenu() {
-        return (event) => this.setState({...this.state, anchorElUser: event.currentTarget});
+        return (event) => this.setState({anchorElUser: event.currentTarget});
     }
 
     handleCloseNavMenu() {
-        return (event) => this.setState({...this.state, anchorElNav: null});
+        return (event) => this.setState({anchorElNav: null});
     }
 
     handleCloseUserMenu() {
@@ -70,57 +69,58 @@ class ConsultAppBar extends React.Component {
     }
 
     render() {
-        const {classes, user} = this.props;
-        return <AppBar position="static">
-            <Container maxWidth="xl">
-                <Toolbar disableGutters className={classes.toolbar}>
-                    <Box className={classes.leftSet}>
-                        <IconButton component={Link} to="/">
-                            <div>
-                                <Home fontSize="large" style={{color: "#fff"}}/>
-                            </div>
-                        </IconButton>
-                        <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
-                    </Box>
-                    <Box>
-                        {pages.map((page) => (
-                            <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
-                                {page}
-                            </Button>
-                        ))}
-                    </Box>
+        const {classes} = this.props;
+        return <UserContext.Consumer>
+            {({user, setUser}) => (
+                <AppBar position="static">
+                    <Container maxWidth="xl">
+                        <Toolbar disableGutters className={classes.toolbar}>
+                            <Box className={classes.leftSet}>
+                                <IconButton component={Link} to="/">
+                                    <div>
+                                        <Home fontSize="large" style={{color: "#fff"}}/>
+                                    </div>
+                                </IconButton>
+                                <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
+                            </Box>
+                            <Box>
+                                {pages.map((page) => (
+                                    <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
+                                        {page}
+                                    </Button>
+                                ))}
+                            </Box>
 
-                    <Box sx={{flexGrow: 0}}>
-                        {user && <Tooltip title="Open settings">
-                            <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
-                                <Avatar alt={user.name}/>
-                            </IconButton>
-                        </Tooltip>}
-                        <Menu
-                            sx={{mt: '45px'}}
-                            id="menu-appbar"
-                            anchorEl={this.state.anchorElUser}
-                            anchorOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            keepMounted
-                            transformOrigin={{
-                                vertical: 'top',
-                                horizontal: 'right',
-                            }}
-                            open={Boolean(this.state.anchorElUser)}
-                            onClose={this.handleCloseUserMenu()}>
-                            {settings.map((setting) => (
-                                <MenuItem key={setting} onClick={this.menuHandlers[setting]}>
-                                    <Typography textAlign="center">{setting}</Typography>
-                                </MenuItem>
-                            ))}
-                        </Menu>
-                    </Box>
-                </Toolbar>
-            </Container>
-        </AppBar>;
+                            <Box sx={{flexGrow: 0}}>
+                                {user && <Tooltip title="Open settings">
+                                    <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
+                                        <Avatar alt={user.name}/>
+                                    </IconButton>
+                                </Tooltip>}
+                                <Menu sx={{mt: '45px'}} id="menu-appbar" anchorEl={this.state.anchorElUser}
+                                    anchorOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    keepMounted
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
+                                    open={Boolean(this.state.anchorElUser)}
+                                    onClose={this.handleCloseUserMenu()}>
+                                    <MenuItem key='profile' onClick={this.handleCloseNavMenu()}>
+                                        <Typography textAlign="center">Profile</Typography>
+                                    </MenuItem>
+                                    <MenuItem key='logout' onClick={this.logoutHandler(setUser)}>
+                                        <Typography textAlign="center">Logout</Typography>
+                                    </MenuItem>
+                                </Menu>
+                            </Box>
+                        </Toolbar>
+                    </Container>
+                </AppBar>)}
+        </UserContext.Consumer>;
     }
 }
 

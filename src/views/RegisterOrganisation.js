@@ -1,6 +1,6 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
+import {Box, Button, Checkbox, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
@@ -10,6 +10,7 @@ import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
 import PasswordField from "../components/loginSignup/PasswordField";
+import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 
 const styles = theme => ({
     root: {
@@ -26,6 +27,10 @@ const styles = theme => ({
     },
     registerText: {
         marginTop: 20
+    },
+    registerUserHelpText: {
+        marginTop: 10,
+        marginLeft: 5
     },
     registrationCard: {
         margin: 10,
@@ -75,15 +80,31 @@ class RegisterOrganisation extends BaseView {
         super(props);
         this.state = {
             errors: {},
+            registerAs: 'org',
             serverCall: ServerCall.noOngoingCall(null)
         };
+    }
+
+    getSubmitHandler() {
+        return (e) => {
+            let [valid, userIdType] = this.validate();
+            if (!valid) {
+                e.preventDefault();
+                return;
+            }
+            let {name, orgName, userId, password} = this.state;
+            UserService.registerOrg(name, orgName, userId, userIdType, password).then((response) => {
+                this.setState({serverCall: ServerCall.responseReceived(response)})
+            });
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)})
+        }
     }
 
     render() {
         const {
             classes
         } = this.props;
-        const {orgName, password, confirmPassword, name, userId, serverCall} = this.state;
+        const {orgName, password, confirmPassword, name, userId, serverCall, registerAs} = this.state;
 
         if (serverCall.lastCallStatus === ServerCallStatus.WAITING)
             return <WaitBackdrop/>;
@@ -96,7 +117,20 @@ class RegisterOrganisation extends BaseView {
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.registrationCard} elevation={5} component="form">
                             <Typography variant="h5" className={classes.registerText}>{i18n.t('userId-label')}</Typography>
-                            <TextField
+
+                            <ToggleButtonGroup
+                                color="primary"
+                                value={registerAs}
+                                exclusive
+                                className={classes.registerOrgField}
+                                onChange={(e) => this.setState({registerAs: e.target.value})}>
+                                <ToggleButton value="org">{i18n.t('organisation')}</ToggleButton>
+                                <ToggleButton value="user">{i18n.t('user')}</ToggleButton>
+                            </ToggleButtonGroup>
+
+                            {registerAs === 'user' && <Typography className={classes.registerUserHelpText} variant="body2">{i18n.t('register-as-user-help')}</Typography>}
+
+                            {registerAs === 'org' && <TextField
                                 name="organisationName"
                                 autoComplete="organisation"
                                 required
@@ -104,7 +138,7 @@ class RegisterOrganisation extends BaseView {
                                 label={i18n.t("register-org-name-label")}
                                 value={orgName}
                                 onChange={this.getValueChangedHandler("orgName")}
-                            />
+                            />}
 
                             <TextField
                                 name="name"
@@ -169,27 +203,12 @@ class RegisterOrganisation extends BaseView {
                     <Grid item lg={4} xs={12}>
                         <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
                             <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
-                            <Button component={Link} variant="text" color="primary" to="/">{i18n.t("login-to-your-organisation")}</Button>
+                            <Button component={Link} variant="text" color="primary" to="/login">{i18n.t("login-to-your-organisation")}</Button>
                         </Paper>
                     </Grid>
                 </Grid>
             </Box>
         );
-    }
-
-    getSubmitHandler() {
-        return (e) => {
-            let [valid, userIdType] = this.validate();
-            if (!valid) {
-                e.preventDefault();
-                return;
-            }
-            let {name, orgName, userId, password} = this.state;
-            UserService.registerOrg(name, orgName, userId, userIdType, password).then((response) => {
-                this.setState({serverCall: ServerCall.responseReceived(response)})
-            });
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)})
-        }
     }
 
     validate() {

@@ -6,6 +6,9 @@ import {i18n} from "consult-app-common";
 import {ServerCall} from "react-app-common";
 
 export default function ServerErrorMessage({serverCall, tryingLogin = false}) {
+    if (ServerCall.isSuccessful(serverCall))
+        return null;
+
     let userMessage;
     if (serverCall.lastCallStatus === 401 && tryingLogin)
         userMessage = i18n.t("invalid-login-credentials");
