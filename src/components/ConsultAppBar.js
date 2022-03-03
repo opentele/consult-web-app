@@ -6,8 +6,8 @@ import {Home} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
 import {UserService} from "consult-app-common";
-import {UserContext} from "../framework/Context";
 import BaseView from "../views/framework/BaseView";
+import GlobalContext from '../framework/GlobalContext';
 
 const styles = theme => ({
     toolbar: {
@@ -42,15 +42,15 @@ class ConsultAppBar extends BaseView {
         this.state = {
             anchorElNav: null,
             anchorElUser: null,
-            serverCall: ServerCall.noOngoingCall()
+            serverCall: ServerCall.createInitial()
         };
     }
 
-    logoutHandler(setUser) {
+    logoutHandler() {
         return () => {
             BeanContainer.get(UserService).logout().then((response) => {
                 this.serverResponseReceived({anchorElNav: null}, response);
-                setUser(null);
+                GlobalContext.setUser(null);
             });
             this.serverCallMade();
         }
@@ -70,57 +70,54 @@ class ConsultAppBar extends BaseView {
 
     render() {
         const {classes} = this.props;
-        return <UserContext.Consumer>
-            {({user, setUser}) => (
-                <AppBar position="static">
-                    <Container maxWidth="xl">
-                        <Toolbar disableGutters className={classes.toolbar}>
-                            <Box className={classes.leftSet}>
-                                <IconButton component={Link} to="/">
-                                    <div>
-                                        <Home fontSize="large" style={{color: "#fff"}}/>
-                                    </div>
-                                </IconButton>
-                                <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
-                            </Box>
-                            <Box>
-                                {pages.map((page) => (
-                                    <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
-                                        {page}
-                                    </Button>
-                                ))}
-                            </Box>
+        return <AppBar position="static">
+            <Container maxWidth="xl">
+                <Toolbar disableGutters className={classes.toolbar}>
+                    <Box className={classes.leftSet}>
+                        <IconButton component={Link} to="/">
+                            <div>
+                                <Home fontSize="large" style={{color: "#fff"}}/>
+                            </div>
+                        </IconButton>
+                        <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
+                    </Box>
+                    <Box>
+                        {pages.map((page) => (
+                            <Button key={page} onClick={this.handleCloseNavMenu()} color="inherit">
+                                {page}
+                            </Button>
+                        ))}
+                    </Box>
 
-                            <Box sx={{flexGrow: 0}}>
-                                {user && <Tooltip title="Open settings">
-                                    <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
-                                        <Avatar alt={user.name}/>
-                                    </IconButton>
-                                </Tooltip>}
-                                <Menu sx={{mt: '45px'}} id="menu-appbar" anchorEl={this.state.anchorElUser}
-                                    anchorOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    keepMounted
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={Boolean(this.state.anchorElUser)}
-                                    onClose={this.handleCloseUserMenu()}>
-                                    <MenuItem key='profile' onClick={this.handleCloseNavMenu()}>
-                                        <Typography textAlign="center">Profile</Typography>
-                                    </MenuItem>
-                                    <MenuItem key='logout' onClick={this.logoutHandler(setUser)}>
-                                        <Typography textAlign="center">Logout</Typography>
-                                    </MenuItem>
-                                </Menu>
-                            </Box>
-                        </Toolbar>
-                    </Container>
-                </AppBar>)}
-        </UserContext.Consumer>;
+                    <Box sx={{flexGrow: 0}}>
+                        {GlobalContext.getUser() && <Tooltip title="Open settings">
+                            <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
+                                <Avatar alt={GlobalContext.getUser().name}/>
+                            </IconButton>
+                        </Tooltip>}
+                        <Menu sx={{mt: '45px'}} id="menu-appbar" anchorEl={this.state.anchorElUser}
+                              anchorOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                              }}
+                              keepMounted
+                              transformOrigin={{
+                                  vertical: 'top',
+                                  horizontal: 'right',
+                              }}
+                              open={Boolean(this.state.anchorElUser)}
+                              onClose={this.handleCloseUserMenu()}>
+                            <MenuItem key='profile' onClick={this.handleCloseNavMenu()}>
+                                <Typography textAlign="center">Profile</Typography>
+                            </MenuItem>
+                            <MenuItem key='logout' onClick={this.logoutHandler()}>
+                                <Typography textAlign="center">Logout</Typography>
+                            </MenuItem>
+                        </Menu>
+                    </Box>
+                </Toolbar>
+            </Container>
+        </AppBar>;
     }
 }
 

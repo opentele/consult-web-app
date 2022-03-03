@@ -44,7 +44,7 @@ class BaseView extends Component {
     }
 
     renderForErrorOrWait(serverCall) {
-        if (serverCall.lastCallStatus === ServerCallStatus.WAITING)
+        if (serverCall.callStatus === ServerCallStatus.WAITING)
             return <CircularProgress/>;
         else
             return <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>;
@@ -74,31 +74,31 @@ class BaseView extends Component {
 
     entitySavedHandler = (response) => {
         let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
-        if (serverCall.lastCallStatus === ServerCallStatus.FAILURE)
+        if (serverCall.callStatus === ServerCallStatus.FAILURE)
             this.setState({serverCall: serverCall});
         else
             this.props.messageClose(true);
     }
 
-    makeServerCall(promise, preState, postState, serverCallName) {
+    makeDefaultServerCall(promise, preState, postState) {
         promise.then((response) => {
-            this.serverResponseReceived(postState, response, serverCallName);
+            this.serverResponseReceived(postState, response);
         });
-        this.serverCallMade(preState, serverCallName);
+        this.serverCallMade(preState);
     }
 
-    serverResponseReceived(postState, response, serverCallName) {
+    serverResponseReceived(postState, response) {
         if (postState)
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, serverCallName), ...postState});
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response), ...postState});
         else
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, serverCallName)});
+            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
     }
 
-    serverCallMade(preState, serverCallName) {
+    serverCallMade(preState) {
         if (preState)
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, serverCallName), ...preState});
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall), ...preState});
         else
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, serverCallName)});
+            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
     }
 }
 

@@ -8,7 +8,7 @@ import {BeanContainer, ServerCall, ServerCallStatus} from 'react-app-common';
 import ClientService from "../../service/ClientService";
 import _ from 'lodash';
 
-const styles = theme => ({
+const styles = () => ({
     sscMain: {
         paddingLeft: 230,
         paddingRight: 210,
@@ -24,7 +24,7 @@ class SearchSelectClient extends BaseView {
         super(props);
         this.state = {
             autoCompleteOpen: false,
-            serverCall: ServerCall.noOngoingCall([])
+            serverCall: ServerCall.createInitial([])
         };
         this.service = BeanContainer.get(ClientService);
     }
@@ -36,14 +36,11 @@ class SearchSelectClient extends BaseView {
     }
 
     searchOpenHandler = () => {
-        this.search('', (response) => {
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
-        });
-        this.setState({autoCompleteOpen: true, serverCall: ServerCall.serverCallMade(this.state.serverCall)});
+        this.makeDefaultServerCall(this.search(''), {autoCompleteOpen: true});
     }
 
-    search(q, cb) {
-        this.service.search(q, this.props.searchParamName, this.props.searchParamValue).then(cb);
+    search(q) {
+        return this.service.search(q, this.props.searchParamName, this.props.searchParamValue);
     }
 
     searchCloseHandler = () => {
@@ -51,10 +48,7 @@ class SearchSelectClient extends BaseView {
     }
 
     searchChangeHandler = (e) => {
-        this.search(e.target.value, (response) => {
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
-        });
-        this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
+        this.makeDefaultServerCall(this.search(e.target.value));
     }
 
     render() {
@@ -76,7 +70,7 @@ class SearchSelectClient extends BaseView {
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     getOptionLabel={(option) => `${option.name} - ${option.registrationNumber}`}
                     options={ServerCall.getData(serverCall)}
-                    loading={serverCall.lastCallStatus === ServerCallStatus.WAITING}
+                    loading={serverCall.callStatus === ServerCallStatus.WAITING}
                     onChange={(event, value) => clientSelected(_.isNil(value) ? null : value.id)}
                     renderInput={(params) => (
                         <TextField
@@ -86,7 +80,7 @@ class SearchSelectClient extends BaseView {
                                 ...params.InputProps,
                                 endAdornment: (
                                     <React.Fragment>
-                                        {serverCall.lastCallStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit" size={20}/> : null}
+                                        {serverCall.callStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit" size={20}/> : null}
                                         {params.InputProps.endAdornment}
                                     </React.Fragment>
                                 )

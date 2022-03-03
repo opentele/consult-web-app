@@ -62,7 +62,7 @@ class Home extends BaseView {
     }
 
     render() {
-        const {classes, user} = this.props;
+        const {classes} = this.props;
         const {tabIndex, oneTimeConsultationRoomStatus} = this.state;
         return <>
             <ConsultAppBar/>

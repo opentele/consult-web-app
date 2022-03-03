@@ -10,7 +10,7 @@ import {i18n, UserService} from "consult-app-common";
 import PasswordField from "../components/loginSignup/PasswordField";
 import BaseView from "./framework/BaseView";
 import {DataElementValidator, ServerCall} from "react-app-common";
-import {UserContext} from '../framework/Context';
+import GlobalContext from '../framework/GlobalContext';
 
 const styles = theme => ({
     root: {},
@@ -47,9 +47,6 @@ const styles = theme => ({
     }
 });
 
-const LoginServerCall = 'login';
-const GetUserServerCall = 'getUser';
-
 class Login extends BaseView {
     static propTypes = {
         onLogin: PropTypes.func,
@@ -62,30 +59,31 @@ class Login extends BaseView {
         this.state = {
             errors: {},
             loginBy: "userId",
-            serverCall: ServerCall.noOngoingCall(null, LoginServerCall)
+            loginServerCall: ServerCall.createInitial(),
+            getUserServerCall: ServerCall.createInitial(null)
         }
     }
 
-    getSubmitHandler(setUser) {
+    getSubmitHandler() {
         return (e) => {
             e.preventDefault();
             const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
             if (validUserId) {
                 UserService.login(this.state.userId, this.state.password, userIdType).then((response) => {
-                    const serverCall1 = ServerCall.responseReceived(this.state.serverCall, response, LoginServerCall);
-                    if (ServerCall.isSuccessful(serverCall1, LoginServerCall)) {
+                    const loginServerCall = ServerCall.responseReceived(this.state.loginServerCall, response);
+                    if (ServerCall.isSuccessful(loginServerCall)) {
                         UserService.getUser().then((response) => {
-                            let serverCall2 = ServerCall.responseReceived(serverCall1, response, GetUserServerCall);
-                            if (ServerCall.isSuccessful(serverCall2, LoginServerCall)) {
-                                setUser(ServerCall.getData(serverCall2, GetUserServerCall));
+                            let getUserServerCall = ServerCall.responseReceived(this.state.getUserServerCall, response);
+                            if (ServerCall.isSuccessful(getUserServerCall)) {
+                                GlobalContext.setUser(ServerCall.getData(getUserServerCall));
                             }
-                            this.setState({serverCall: serverCall2});
+                            this.setState({getUserServerCall: getUserServerCall});
                         });
                     } else {
-                        this.setState({serverCall: serverCall1});
+                        this.setState({loginServerCall: loginServerCall});
                     }
                 });
-                this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall, LoginServerCall)});
+                this.setState({loginServerCall: ServerCall.serverCallMade(this.state.loginServerCall)});
             } else {
                 const errors = {};
                 errors["userId"] = "invalid-user-id";
@@ -95,42 +93,38 @@ class Login extends BaseView {
     }
 
     render() {
-        const {password, userId, loginBy, serverCall} = this.state;
+        const {password, userId, loginBy, loginServerCall, getUserServerCall} = this.state;
         const {
             classes
         } = this.props;
-        return (
-            <UserContext.Consumer>
-                {({user, setUser}) => (
-                    <div>
-                        <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
-                            <Tab icon={<VerifiedUser/>} label="User ID" value="userId"/>
-                            <Tab icon={<Google/>} label="Google" value="google"/>
-                        </Tabs>
-                        {loginBy === "userId" && <Box component="form" className={classes.form}>
-                            <TextField
-                                name="userId"
-                                required
-                                className={classes.userIdField}
-                                label={i18n.t('userId-label')}
-                                onChange={this.getValueChangedHandler("userId")}
-                                error={this.hasError("userId")}
-                                helperText={this.getErrorText("userId", "userId-invalid-error")}
-                                value={userId}
-                            />
-                            <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
-                            <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"
-                                    to="/resetPassword">{i18n.t("forgot-password")}</Button>
-                            <ServerErrorMessage serverCall={serverCall} tryingLogin={true}/>
-                            <div className={classes.actions}>
-                                <Button type="submit"
-                                        fullWidth
-                                        variant="contained" color="primary" onClick={this.getSubmitHandler(setUser)}>{i18n.t("login")}</Button>
-                            </div>
-                        </Box>}
-                        {loginBy === "google" && <GoogleSignIn/>}
-                    </div>)}
-            </UserContext.Consumer>);
+        return (<div>
+            <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
+                <Tab icon={<VerifiedUser/>} label="User ID" value="userId"/>
+                <Tab icon={<Google/>} label="Google" value="google"/>
+            </Tabs>
+            {loginBy === "userId" && <Box component="form" className={classes.form}>
+                <TextField
+                    name="userId"
+                    required
+                    className={classes.userIdField}
+                    label={i18n.t('userId-label')}
+                    onChange={this.getValueChangedHandler("userId")}
+                    error={this.hasError("userId")}
+                    helperText={this.getErrorText("userId", "userId-invalid-error")}
+                    value={userId}
+                />
+                <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
+                <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"
+                        to="/resetPassword">{i18n.t("forgot-password")}</Button>
+                <ServerErrorMessage serverCall={ServerCall.isCallComplete(getUserServerCall) ? getUserServerCall : loginServerCall} tryingLogin={true}/>
+                <div className={classes.actions}>
+                    <Button type="submit"
+                            fullWidth
+                            variant="contained" color="primary" onClick={this.getSubmitHandler()}>{i18n.t("login")}</Button>
+                </div>
+            </Box>}
+            {loginBy === "google" && <GoogleSignIn/>}
+        </div>);
     }
 }
 

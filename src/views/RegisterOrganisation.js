@@ -81,7 +81,7 @@ class RegisterOrganisation extends BaseView {
         this.state = {
             errors: {},
             registerAs: 'org',
-            serverCall: ServerCall.noOngoingCall(null)
+            serverCall: ServerCall.createInitial()
         };
     }
 
@@ -93,10 +93,7 @@ class RegisterOrganisation extends BaseView {
                 return;
             }
             let {name, orgName, userId, password} = this.state;
-            UserService.registerOrg(name, orgName, userId, userIdType, password).then((response) => {
-                this.setState({serverCall: ServerCall.responseReceived(response)})
-            });
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)})
+            this.makeDefaultServerCall(UserService.registerOrg(name, orgName, userId, userIdType, password));
         }
     }
 
@@ -106,7 +103,7 @@ class RegisterOrganisation extends BaseView {
         } = this.props;
         const {orgName, password, confirmPassword, name, userId, serverCall, registerAs} = this.state;
 
-        if (serverCall.lastCallStatus === ServerCallStatus.WAITING)
+        if (serverCall.callStatus === ServerCallStatus.WAITING)
             return <WaitBackdrop/>;
 
         return (

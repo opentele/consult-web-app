@@ -36,7 +36,7 @@ class AddClient extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            serverCall: ServerCall.noOngoingCall()
+            serverCall: ServerCall.createInitial()
         };
     }
 
@@ -68,7 +68,7 @@ class AddClient extends BaseView {
                     </Box>
                 </Grid>
                 <Grid item lg={10} className={classes.addClient}>
-                    {serverCall.lastCallStatus === ServerCallStatus.FAILURE && <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>}
+                    {serverCall.callStatus === ServerCallStatus.FAILURE && <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>}
                 </Grid>
             </Grid>
         </ModalContainerView>;

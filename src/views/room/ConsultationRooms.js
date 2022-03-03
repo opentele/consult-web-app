@@ -40,7 +40,8 @@ class ConsultationRooms extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            serverCall: ServerCall.noOngoingCall([]),
+            getRoomsCall: ServerCall.createInitial([]),
+            clientListCall: ServerCall.createInitial([]),
             addClientModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED
         };
@@ -53,32 +54,30 @@ class ConsultationRooms extends BaseView {
 
     componentDidMount() {
         this.serviceMethod().then((response) => {
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
+            this.setState({getRoomsCall: ServerCall.responseReceived(this.state.getRoomsCall, response)});
         });
     }
 
     refresh() {
         this.serviceMethod().then((response) => {
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response), addClientModalStatus: ModalStatus.NOT_OPENED});
+            this.setState({getRoomsCall: ServerCall.responseReceived(this.state.getRoomsCall, response), addClientModalStatus: ModalStatus.NOT_OPENED});
         });
     }
 
     getClientListHandler(consultationRoom) {
         return () => {
             return BeanContainer.get(ClientService).getClients(consultationRoom.id).then((response) => {
-                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response, 'clientList'), viewClientsModalStatus: ModalStatus.OPENED})
+                this.setState({clientListCall: ServerCall.responseReceived(this.state.clientListCall, response), viewClientsModalStatus: ModalStatus.OPENED})
             });
         };
     }
 
     render() {
-        const {serverCall, addClientModalStatus, viewClientsModalStatus} = this.state;
-        if (ServerCall.errorOrWait(serverCall))
-            return this.renderForErrorOrWait(serverCall);
+        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus} = this.state;
 
         const {classes} = this.props;
-        const consultationRooms = ServerCall.getData(serverCall);
-        const clientList = ServerCall.getData(serverCall, 'clientList');
+        const consultationRooms = ServerCall.getData(getRoomsCall);
+        const clientList = ServerCall.getData(clientListCall);
 
         return <Box className={classes.rooms}>
             {

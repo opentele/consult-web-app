@@ -12,7 +12,7 @@ import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
 import ModalContainerView from "../framework/ModalContainerView";
 
-const styles = theme => ({
+const styles = () => ({
     rruleBox: {
         marginTop: 20
     },
@@ -45,10 +45,6 @@ const styles = theme => ({
 });
 
 class AddEditConsultationSchedule extends BaseView {
-    constructor(props) {
-        super(props);
-    }
-
     static propTypes = {
         consultationScheduleId: PropTypes.number
     }
@@ -56,11 +52,9 @@ class AddEditConsultationSchedule extends BaseView {
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
-            return BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId).then((response) => {
-                this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
-            });
+            this.makeDefaultServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId));
         else
-            this.setState({serverCall: ServerCall.noOngoingCall(ConsultationSchedule.newSchedule())});
+            this.setState({serverCall: ServerCall.createInitial(ConsultationSchedule.newSchedule())});
     }
 
     render() {
