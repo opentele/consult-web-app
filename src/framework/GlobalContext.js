@@ -1,6 +1,14 @@
+import _ from "lodash";
+
 class GlobalContext {
+    setLogoutHandler(logoutHandler) {
+        this.logoutHandler = logoutHandler;
+    }
+
     setUser(user) {
         this.user = user;
+        if (_.isNil(user))
+            this.logoutHandler();
     }
 
     getUser() {

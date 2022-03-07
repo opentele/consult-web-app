@@ -11,7 +11,7 @@ import Home from "./views/room/Home";
 import React, {Component} from "react";
 import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
 import _ from 'lodash';
-import {ServerCall, ServerCallStatus} from "react-app-common";
+import {ServerCall} from "react-app-common";
 import GlobalContext from './framework/GlobalContext';
 
 const theme = createTheme();
@@ -23,8 +23,9 @@ export default class App extends Component {
         super(props);
         this.state = {
             isLoggedInServerCall: ServerCall.createInitial(),
-            getUserServerCall: ServerCall.notNeededYet(null)
+            getUserServerCall: ServerCall.createInitial(null)
         }
+        GlobalContext.setLogoutHandler(this.logoutHandler);
     }
 
     componentDidMount() {
@@ -37,24 +38,35 @@ export default class App extends Component {
                         GlobalContext.setUser(ServerCall.getData(getUserServerCall))
                         this.setState({getUserServerCall: getUserServerCall});
                     });
-                } else {
-                    this.setState({isLoggedInServerCall: isLoggedInServerCall});
                 }
+                this.setState({isLoggedInServerCall: isLoggedInServerCall});
             });
             this.setState({isLoggedInServerCall: ServerCall.serverCallMade(this.state.isLoggedInServerCall)});
         });
     }
 
+    isWaiting(isLoggedInServerCall, getUserServerCall) {
+        if (ServerCall.noCallOrWait(isLoggedInServerCall))
+            return true;
+
+        if (ServerCall.isSuccessful(isLoggedInServerCall) && !ServerCall.isCallComplete(getUserServerCall))
+            return true;
+
+        return false;
+    }
+
     render() {
         let pathname = window.location.pathname;
         const {isLoggedInServerCall, getUserServerCall} = this.state;
-        if (ServerCall.noCallOrWait(isLoggedInServerCall) || ServerCall.noCallOrWait(getUserServerCall))
+        if (this.isWaiting(isLoggedInServerCall, getUserServerCall))
             return <CircularProgress/>;
 
         const isLoggedIn = ServerCall.isSuccessful(getUserServerCall);
         if (isLoggedIn && nonLoginPaths.includes(pathname)) {
+            console.log("Redirecting to /");
             window.location.replace("/");
         } else if (!isLoggedIn && !nonLoginPaths.includes(pathname)) {
+            console.log("Redirecting to /login");
             window.location.replace("/login");
         }
 
@@ -76,7 +88,7 @@ export default class App extends Component {
                         {this.getPrivateRoute(isLoggedIn, <ChangePassword/>)}
                     </Route>
                     <Route path="/login">
-                        {this.getPublicRoute(isLoggedIn, <Welcome/>)}
+                        {this.getPublicRoute(isLoggedIn, <Welcome onLogin={this.loginHandler}/>)}
                     </Route>
                     <Route path="/consultationSchedule">
                         {this.getPrivateRoute(isLoggedIn, <AddEditConsultationSchedule/>)}
@@ -84,6 +96,15 @@ export default class App extends Component {
                 </Switch>
             </Router>
         </ThemeProvider>;
+    }
+
+    loginHandler = (successful) => {
+        if (successful)
+            window.location.reload();
+    }
+
+    logoutHandler = () => {
+        window.location.reload();
     }
 
     getPublicRoute(loggedIn, component) {

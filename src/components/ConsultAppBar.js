@@ -32,8 +32,7 @@ const pages = [];
 
 class ConsultAppBar extends BaseView {
     static propTypes = {
-        classes: PropTypes.object.isRequired,
-        user: PropTypes.object
+        classes: PropTypes.object.isRequired
     };
 
     constructor(props, context) {

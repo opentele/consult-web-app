@@ -41,7 +41,6 @@ class Welcome extends Component {
         header: PropTypes.element,
         footer: PropTypes.element,
         onLogin: PropTypes.func,
-        loginFailed: PropTypes.string,
         registerFailed: PropTypes.string,
         onRegister: PropTypes.func
     };
@@ -70,9 +69,7 @@ class Welcome extends Component {
                 <Grid container direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.loginCard} variant="elevation" raised={true} elevation={5}>
-                            <Login onLogin={() => {
-                            }} loginFailed={() => {
-                            }}/>
+                            <Login onLogin={this.props.onLogin} />
                         </Paper>
                     </Grid>
                     <Grid lg={4} xs={12}>
