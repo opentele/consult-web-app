@@ -13,6 +13,7 @@ import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedul
 import _ from 'lodash';
 import {ServerCall} from "react-app-common";
 import GlobalContext from './framework/GlobalContext';
+import Users from "./views/access/Users";
 
 const theme = createTheme();
 
@@ -92,6 +93,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/consultationSchedule">
                         {this.getPrivateRoute(isLoggedIn, <AddEditConsultationSchedule/>)}
+                    </Route>
+                    <Route path="/users">
+                        {this.getPrivateRoute(isLoggedIn, <Users/>)}
                     </Route>
                 </Switch>
             </Router>

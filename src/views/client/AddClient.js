@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
-import SearchSelectClient from "../consultation/SearchSelectClient";
+import SearchEntities from "../../components/SearchEntities";
 import ModalContainerView from "../framework/ModalContainerView";
 import {Box, Button, Grid} from "@material-ui/core";
 import _ from "lodash";
@@ -10,27 +10,10 @@ import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
+import ClientService from "../../service/ClientService";
+import AddEntity from "../../components/AddEntity";
 
-const styles = theme => ({
-    addClientMain: {
-        paddingLeft: 230,
-        paddingRight: 210,
-        paddingTop: 20,
-        marginBottom: 270
-    },
-    addClientButtons: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end"
-    },
-    addClientSelectButton: {
-        marginRight: 10
-    },
-    addClientSeparation: {
-        marginTop: 300
-    }
-});
+const styles = theme => ({});
 
 class AddClient extends BaseView {
     constructor(props, context) {
@@ -38,39 +21,31 @@ class AddClient extends BaseView {
         this.state = {
             serverCall: ServerCall.createInitial()
         };
+        this.clientService = BeanContainer.get(ClientService);
     }
 
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
-        consultationRoom: PropTypes.object.isRequired
+        consultationRoom: PropTypes.object.isRequired,
+        autocompletePlaceholderMessageKey: PropTypes.string.isRequired
     };
 
     getAddClientHandler() {
-        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.clientId).then(this.entitySavedHandler);
+        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client).then(this.entitySavedHandler);
     }
 
-    selectClientHandler = (clientId) => {
-        this.setState({clientId: clientId});
+    selectClientHandler = (client) => {
+        this.setState({client: client});
     }
 
     render() {
-        const {messageClose, classes, consultationRoom} = this.props;
-        const {serverCall, clientId} = this.state;
+        const {consultationRoom, messageClose} = this.props;
+        const {serverCall, client} = this.state;
 
         return <ModalContainerView titleKey="add-client">
-            <SearchSelectClient clientSelected={this.selectClientHandler} searchParamName={"consultationRoomId"} searchParamValue={consultationRoom.id}/>
-            <Grid container className={classes.addClientMain}>
-                <Grid item lg={10}>
-                    <Box className={classes.addClientButtons}>
-                        <Button disabled={_.isNil(clientId)} variant="contained" color="primary" onClick={this.getAddClientHandler()}
-                                className={classes.addClientSelectButton}>{i18n.t("select")}</Button>
-                        <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("cancel")}</Button>
-                    </Box>
-                </Grid>
-                <Grid item lg={10} className={classes.addClient}>
-                    {serverCall.callStatus === ServerCallStatus.FAILURE && <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>}
-                </Grid>
-            </Grid>
+            <SearchEntities entitySelected={this.selectClientHandler} searchParamName={"consultationRoomId"} searchParamValue={consultationRoom.id}
+                            searchFn={this.clientService.search}/>
+            <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCallStatus={serverCall.callStatus}/>
         </ModalContainerView>;
     }
 }

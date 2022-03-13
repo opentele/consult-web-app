@@ -111,7 +111,7 @@ class ConsultationRooms extends BaseView {
                             <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
                         {addClientModalStatus === ModalStatus.OPENED &&
-                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}/>}
+                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom} autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                         <ClientList clientList={clientList} messageClose={this.getModalCloseHandler("viewClientsModalStatus")}/>}
                     </Card>

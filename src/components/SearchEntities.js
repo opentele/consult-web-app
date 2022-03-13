@@ -1,38 +1,37 @@
-import React from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {CircularProgress, Grid, TextField} from '@material-ui/core';
+import React from 'react';
 import PropTypes from 'prop-types';
-import BaseView from "../framework/BaseView";
+import {withStyles} from '@material-ui/core/styles';
+import {CircularProgress, Grid, TextField} from "@material-ui/core";
 import {Autocomplete} from "@mui/material";
-import {BeanContainer, ServerCall, ServerCallStatus} from 'react-app-common';
-import ClientService from "../../service/ClientService";
-import _ from 'lodash';
+import {ServerCall, ServerCallStatus} from "react-app-common";
+import {i18n} from "consult-app-common";
 
 const styles = () => ({
-    sscMain: {
+    seMain: {
         paddingLeft: 230,
         paddingRight: 210,
         paddingTop: 20
     },
-    sscAutocomplete: {
+    seAutocomplete: {
         width: '300px'
     }
 });
 
-class SearchSelectClient extends BaseView {
-    constructor(props) {
-        super(props);
+class SearchEntities extends React.Component {
+    constructor(props, context) {
+        super(props, context);
         this.state = {
             autoCompleteOpen: false,
             serverCall: ServerCall.createInitial([])
         };
-        this.service = BeanContainer.get(ClientService);
     }
 
     static propTypes = {
-        clientSelected: PropTypes.func.isRequired,
-        searchParamName: PropTypes.string.isRequired,
-        searchParamValue: PropTypes.any.isRequired
+        entitySelected: PropTypes.func.isRequired,
+        searchParamName: PropTypes.string,
+        searchParamValue: PropTypes.any,
+        searchFn: PropTypes.func.isRequired,
+        autocompletePlaceholderMessageKey: PropTypes.string.isRequired
     }
 
     searchOpenHandler = () => {
@@ -40,7 +39,7 @@ class SearchSelectClient extends BaseView {
     }
 
     search(q) {
-        return this.service.search(q, this.props.searchParamName, this.props.searchParamValue);
+        return this.props.searchFn(q, this.props.searchParamName, this.props.searchParamValue);
     }
 
     searchCloseHandler = () => {
@@ -54,15 +53,16 @@ class SearchSelectClient extends BaseView {
     render() {
         const {
             classes,
-            clientSelected
+            entitySelected,
+            autocompletePlaceholderMessageKey
         } = this.props;
 
         const {serverCall, autoCompleteOpen} = this.state;
 
-        return <Grid container className={classes.sscMain}>
+        return <Grid container className={classes.seMain}>
             <Grid item lg={10}>
                 <Autocomplete
-                    className={classes.sscAutocomplete}
+                    className={classes.seAutocomplete}
                     open={autoCompleteOpen}
                     onInputChange={this.searchChangeHandler}
                     onOpen={this.searchOpenHandler}
@@ -71,11 +71,11 @@ class SearchSelectClient extends BaseView {
                     getOptionLabel={(option) => `${option.name} - ${option.registrationNumber}`}
                     options={ServerCall.getData(serverCall)}
                     loading={serverCall.callStatus === ServerCallStatus.WAITING}
-                    onChange={(event, value) => clientSelected(_.isNil(value) ? null : value.id)}
+                    onChange={(event, value) => entitySelected(value)}
                     renderInput={(params) => (
                         <TextField
                             {...params}
-                            label="Search clients"
+                            label={i18n.t(autocompletePlaceholderMessageKey)}
                             InputProps={{
                                 ...params.InputProps,
                                 endAdornment: (
@@ -90,7 +90,6 @@ class SearchSelectClient extends BaseView {
                 />
             </Grid>
         </Grid>;
-    }
-}
+    }}
 
-export default withStyles(styles)(SearchSelectClient);
+export default withStyles(styles)(SearchEntities);
