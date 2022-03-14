@@ -5,6 +5,7 @@ import {CircularProgress, Grid, TextField} from "@material-ui/core";
 import {Autocomplete} from "@mui/material";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n} from "consult-app-common";
+import BaseView from "../views/framework/BaseView";
 
 const styles = () => ({
     seMain: {
@@ -17,7 +18,7 @@ const styles = () => ({
     }
 });
 
-class SearchEntities extends React.Component {
+class SearchEntities extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -31,6 +32,7 @@ class SearchEntities extends React.Component {
         searchParamName: PropTypes.string,
         searchParamValue: PropTypes.any,
         searchFn: PropTypes.func.isRequired,
+        displayFn: PropTypes.func.isRequired,
         autocompletePlaceholderMessageKey: PropTypes.string.isRequired
     }
 
@@ -54,7 +56,8 @@ class SearchEntities extends React.Component {
         const {
             classes,
             entitySelected,
-            autocompletePlaceholderMessageKey
+            autocompletePlaceholderMessageKey,
+            displayFn
         } = this.props;
 
         const {serverCall, autoCompleteOpen} = this.state;
@@ -68,7 +71,7 @@ class SearchEntities extends React.Component {
                     onOpen={this.searchOpenHandler}
                     onClose={this.searchCloseHandler}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
-                    getOptionLabel={(option) => `${option.name} - ${option.registrationNumber}`}
+                    getOptionLabel={(option) => `${displayFn(option)}`}
                     options={ServerCall.getData(serverCall)}
                     loading={serverCall.callStatus === ServerCallStatus.WAITING}
                     onChange={(event, value) => entitySelected(value)}

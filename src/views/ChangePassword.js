@@ -94,7 +94,7 @@ class ChangePassword extends Component {
                                 disabled={!this.state.valid}
                                 variant="contained" color="primary" onClick={this.submit}>{i18n.t('change-password')}</Button>
                         <Button className={classes.changePasswordField}
-                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel")}</Button>
+                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel-button")}</Button>
                     </div>
                 </Grid>
             </Grid>

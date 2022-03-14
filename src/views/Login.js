@@ -75,7 +75,7 @@ class Login extends BaseView {
                 this.setState({loginServerCall: ServerCall.serverCallMade(this.state.loginServerCall)});
             } else {
                 const errors = {};
-                errors["userId"] = "invalid-user-id";
+                errors["userId"] = "invalid-user-name";
                 this.setState({errors: errors});
             }
         };
@@ -103,7 +103,7 @@ class Login extends BaseView {
                     label={i18n.t('userId-label')}
                     onChange={this.getValueChangedHandler("userId")}
                     error={this.hasError("userId")}
-                    helperText={this.getErrorText("userId", "userId-invalid-error")}
+                    helperText={this.getErrorText("userId", "username-invalid-error")}
                     value={userId}
                 />
                 <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>

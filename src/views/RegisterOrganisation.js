@@ -156,7 +156,7 @@ class RegisterOrganisation extends BaseView {
                                 value={userId}
                                 onChange={this.getValueChangedHandler("userId")}
                                 error={this.hasError("userId")}
-                                helperText={this.getErrorText("userId", "userId-invalid-error")}
+                                helperText={this.getErrorText("userId", "username-invalid-error")}
                             />
                             <PasswordField className={classes.registerOrgField}
                                            labelKey="enter-password-label"

@@ -80,7 +80,7 @@ class ResetPassword extends Component {
                                 disabled={!this.state.validUserId || this.state.resetPasswordMessageSent}
                                 variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>Get Reset Password Link</Button>
                         {!this.state.resetPasswordMessageSent && <Button className={classes.resetPasswordButton}
-                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel")}</Button>}
+                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel-button")}</Button>}
                     </div>
                     {this.state.resetPasswordMessageSent && <Typography className={classes.resetPasswordSent}
                                                                         variant="body1">{i18n.t(passwordResetSentMessages[this.state.userIdType])}</Typography>}

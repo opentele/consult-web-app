@@ -2,18 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
-import SearchEntities from "../../components/SearchEntities";
 import ModalContainerView from "../framework/ModalContainerView";
-import {UserService} from "consult-app-common";
-import {ServerCall} from "react-app-common";
-import AddEntity from "../../components/AddEntity";
+import {i18n, UserService} from "consult-app-common";
+import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
+import {Box, Button, TextField} from "@material-ui/core";
+import _ from "lodash";
+import {Alert} from "@mui/material";
 
 const styles = theme => ({
     addUserMain: {
-        paddingLeft: 230,
-        paddingRight: 210,
-        paddingTop: 20,
-        marginBottom: 270
+        width: "500px",
+        display: "flex",
+        flexDirection: "column",
+        padding: 20
+    },
+    addUserServerError: {
+        marginTop: 20
     },
     addUserButtons: {
         marginTop: 20,
@@ -21,19 +25,17 @@ const styles = theme => ({
         flexDirection: "row",
         justifyContent: "flex-end"
     },
-    addUserSelectButton: {
+    addUserAddButton: {
         marginRight: 10
     },
-    addUserSeparation: {
-        marginTop: 300
-    }
 });
 
 class AddUser extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            serverCall: ServerCall.createInitial()
+            serverCall: ServerCall.createInitial(),
+            errors: {}
         };
     }
 
@@ -43,21 +45,44 @@ class AddUser extends BaseView {
     };
 
     getAddUserHandler() {
-        return () => UserService.addUser(this.state.user).then(this.entitySavedHandler);
-    }
-
-    selectUserHandler = (user) => {
-        this.setState({user: user});
+        return (e) => {
+            let [valid, userIdType] = this.validate();
+            if (!valid) {
+                e.preventDefault();
+                return;
+            }
+            this.makeDefaultServerCall(UserService.addUser(this.state["userName"]));
+        }
     }
 
     render() {
-        const {messageClose, classes, autocompletePlaceholderMessageKey} = this.props;
-        const {serverCall, user} = this.state;
+        const {messageClose, classes} = this.props;
+        const {serverCall, userName} = this.state;
 
-        return <ModalContainerView titleKey="add-user-title">
-            <SearchEntities entitySelected={this.selectUserHandler} searchFn={UserService.search} autocompletePlaceholderMessageKey={autocompletePlaceholderMessageKey}/>
-            <AddEntity serverCallStatus={serverCall.serverCallStatus} entity={user} addEntityHandler={this.getAddUserHandler()} messageClose={messageClose}/>
+        return <ModalContainerView titleKey="add-user-window-title">
+            <Box className={classes.addUserMain}>
+                <TextField label={i18n.t('add-user-text-placeholder')} onChange={this.getValueChangedHandler("userName")}
+                           error={this.hasError("userName")}
+                           helperText={this.getErrorText("userName", "username-invalid-error")}/>
+                <Box className={classes.addUserButtons}>
+                    <Button disabled={_.isEmpty(userName)} variant="contained" color="primary" onClick={this.getAddUserHandler()}
+                            className={classes.addUserAddButton}>{i18n.t("add-button")}</Button>
+                    <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("cancel-button")}</Button>
+                </Box>
+                {serverCall.callStatus === ServerCallStatus.FAILURE &&
+                    <Alert severity="error" className={classes.addUserServerError}>{i18n.t(ServerCall.getErrorMessage(serverCall))}</Alert>
+                }
+            </Box>
         </ModalContainerView>;
+    }
+
+    validate() {
+        const errors = {};
+        const [validUserName, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
+
+        if (!validUserName) errors["userName"] = "invalid-user-name";
+        this.setState({errors: errors});
+        return [validUserName, userIdType];
     }
 }
 

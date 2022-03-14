@@ -1,10 +1,9 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
-import AccessControlService from "../../service/AccessControlService";
 import {ServerCall} from "react-app-common";
 import {Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
-import {i18n} from "consult-app-common";
+import {i18n, UserService} from "consult-app-common";
 import ConsultAppBar from "../../components/ConsultAppBar";
 import AddUser from "./AddUser";
 
@@ -28,7 +27,7 @@ class Users extends BaseView {
     static propTypes = {};
 
     componentDidMount() {
-        AccessControlService.getUsers().then((response) => {
+        UserService.getUsers().then((response) => {
             this.setState({getUsersServerCall: ServerCall.responseReceived(this.state.getUsersServerCall, response)});
         })
     }
@@ -45,7 +44,7 @@ class Users extends BaseView {
                     <TableHead>
                         <TableRow className={classes.viewClientsTableHeader}>
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('name')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('role')}</TableCell>
+                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('role-column-text')}</TableCell>
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('email')}</TableCell>
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('mobile')}</TableCell>
                         </TableRow>
