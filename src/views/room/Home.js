@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import ConsultAppBar from "../../components/ConsultAppBar";
 import {AddCircle, AllInclusive, History, Schedule, Today} from '@mui/icons-material';
 import {Fab, Tab, Tabs} from "@material-ui/core";
 import {BeanContainer} from 'react-app-common';
@@ -11,6 +10,7 @@ import ConsultationRooms from "./ConsultationRooms";
 import ModalStatus from "../framework/ModalStatus";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import BaseView from "../framework/BaseView";
+import ContainerView from "../framework/ContainerView";
 
 const styles = theme => ({
     createRoom: {
@@ -64,8 +64,7 @@ class Home extends BaseView {
     render() {
         const {classes} = this.props;
         const {tabIndex, oneTimeConsultationRoomStatus} = this.state;
-        return <>
-            <ConsultAppBar/>
+        return <ContainerView activeTab="home">
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()}>
                 <Tab icon={<History/>} label={i18n.t('past-consultations')}/>
@@ -80,7 +79,7 @@ class Home extends BaseView {
             {this.tabComponents[tabIndex]()}
             {oneTimeConsultationRoomStatus === ModalStatus.OPENED &&
             <CreateEditConsultationRoom messageClose={this.getModalCloseHandler("oneTimeConsultationRoomStatus")}/>}
-        </>;
+        </ContainerView>;
     }
 }
 

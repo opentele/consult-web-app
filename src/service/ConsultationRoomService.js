@@ -24,6 +24,10 @@ class ConsultationRoomService {
     static createRoom(consultationRoom) {
         return ServiceUtil.putJson("consultationRoom", consultationRoom);
     }
+
+    static getClient(consultationRoomId) {
+        return ServiceUtil.getJson(`client?consultationRoomId=${consultationRoomId}`);
+    }
 }
 
 export default ConsultationRoomService;

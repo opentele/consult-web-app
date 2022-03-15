@@ -14,6 +14,7 @@ import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ClientList from "../client/ClientList";
 import ClientService from "../../service/ClientService";
+import ModalContainerView from "../framework/ModalContainerView";
 
 const styles = theme => ({
     rooms: {
@@ -29,6 +30,12 @@ const styles = theme => ({
     },
     crButton: {
         marginRight: 9
+    },
+    viewClientsButtons: {
+        marginTop: 20,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end"
     }
 });
 
@@ -66,7 +73,7 @@ class ConsultationRooms extends BaseView {
 
     getClientListHandler(consultationRoom) {
         return () => {
-            return BeanContainer.get(ClientService).getClients(consultationRoom.id).then((response) => {
+            return BeanContainer.get(ConsultationRoomService).getClients(consultationRoom.id).then((response) => {
                 this.setState({clientListCall: ServerCall.responseReceived(this.state.clientListCall, response), viewClientsModalStatus: ModalStatus.OPENED})
             });
         };
@@ -113,7 +120,12 @@ class ConsultationRooms extends BaseView {
                         {addClientModalStatus === ModalStatus.OPENED &&
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom} autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
-                        <ClientList clientList={clientList} messageClose={this.getModalCloseHandler("viewClientsModalStatus")}/>}
+                            <ModalContainerView titleKey="view-clients-title">
+                                <ClientList clientList={clientList}/>}
+                            </ModalContainerView>}
+                        <Box className={classes.viewClientsButtons}>
+                            <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>
+                        </Box>
                     </Card>
                 })
             }

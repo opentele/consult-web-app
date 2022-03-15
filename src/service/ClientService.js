@@ -5,8 +5,8 @@ class ClientService {
         return ServiceUtil.getJson(`client/search?q=${q}&${searchParamName}=${searchParamValue}`);
     }
 
-    static getClients(consultationRoomId) {
-        return ServiceUtil.getJson(`client?consultationRoomId=${consultationRoomId}`);
+    static getClients(name, registrationNumber) {
+        return ServiceUtil.getJson(`client/search?name=${name ? name : ""}&registrationNumber=${registrationNumber ? registrationNumber : ""}`);
     }
 }
 

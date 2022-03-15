@@ -9,7 +9,6 @@ import {UserService} from "consult-app-common";
 import BaseView from "../views/framework/BaseView";
 import GlobalContext from '../framework/GlobalContext';
 import MenuIcon from '@mui/icons-material/Menu';
-import SideMenuBar from "../views/app/SideMenuBar";
 
 const styles = theme => ({
     toolbar: {
@@ -41,7 +40,6 @@ class ConsultAppBar extends BaseView {
         super(props, context);
         this.setState = this.setState.bind(this);
         this.state = {
-            sideMenuOpen: false,
             anchorElNav: null,
             anchorElUser: null,
             serverCall: ServerCall.createInitial()
@@ -72,15 +70,11 @@ class ConsultAppBar extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {sideMenuOpen} = this.state;
         return <>
             <AppBar position="static">
                 <Container maxWidth="xl">
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
-                            <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{mr: 2}}>
-                                <MenuIcon onClick={() => this.setState({sideMenuOpen: true})}/>
-                            </IconButton>
                             <IconButton component={Link} to="/">
                                 <Home fontSize="large" style={{color: "#fff"}}/>
                             </IconButton>
@@ -123,7 +117,6 @@ class ConsultAppBar extends BaseView {
                     </Toolbar>
                 </Container>
             </AppBar>
-            {sideMenuOpen && <SideMenuBar onClose={() => this.setState({sideMenuOpen: false})}/>}
         </>;
     }
 }

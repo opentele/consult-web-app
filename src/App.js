@@ -14,6 +14,7 @@ import _ from 'lodash';
 import {ServerCall} from "react-app-common";
 import GlobalContext from './framework/GlobalContext';
 import Users from "./views/access/Users";
+import Clients from "./views/access/Clients";
 
 const theme = createTheme();
 
@@ -96,6 +97,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/users">
                         {this.getPrivateRoute(isLoggedIn, <Users/>)}
+                    </Route>
+                    <Route path="/clients">
+                        {this.getPrivateRoute(isLoggedIn, <Clients/>)}
                     </Route>
                 </Switch>
             </Router>
