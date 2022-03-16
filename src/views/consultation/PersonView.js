@@ -39,7 +39,7 @@ class PersonView extends BaseView {
                 return;
             }
 
-            this.makeDefaultServerCall(ClientService.save(this.state.client));
+            ClientService.save(this.state.client).then(this.entitySavedHandler);
         }
     }
 
