@@ -13,7 +13,6 @@ import AddClient from "../client/AddClient";
 import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ClientList from "../client/ClientList";
-import ClientService from "../../service/ClientService";
 import ModalContainerView from "../framework/ModalContainerView";
 
 const styles = theme => ({
@@ -121,7 +120,7 @@ class ConsultationRooms extends BaseView {
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom} autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                             <ModalContainerView titleKey="view-clients-title">
-                                <ClientList clientList={clientList}/>}
+                                <ClientList clientList={clientList} displayQueueNumber={true}/>}
                             </ModalContainerView>}
                         <Box className={classes.viewClientsButtons}>
                             <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>

@@ -23,7 +23,7 @@ class ModalContainerView extends React.Component {
         const {children, titleKey, classes} = this.props;
         return <Dialog open={true} maxWidth="lg">
             <Box className={classes.mvcMain}>
-                <AppBar position="static">
+                <AppBar position="sticky">
                     <Toolbar>
                         <Typography variant="h6" component="div">
                             {i18n.t(titleKey)}

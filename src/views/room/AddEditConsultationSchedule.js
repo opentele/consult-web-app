@@ -11,6 +11,7 @@ import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
 import ModalContainerView from "../framework/ModalContainerView";
+import CancelButton from "../../components/CancelButton";
 
 const styles = () => ({
     rruleBox: {
@@ -98,7 +99,7 @@ class AddEditConsultationSchedule extends BaseView {
                 <Grid item lg={6} xs={9}>
                     <Box className={classes.scheduleButtonsBox}>
                         <Button className={classes.scheduleActionButton} color="primary" variant="contained">{i18n.t('save-schedule')}</Button>
-                        <Button className={classes.scheduleActionButton} color="secondary" variant="contained">{i18n.t('cancel')}</Button>
+                        <CancelButton className={classes.scheduleActionButton} onClickHandler={() => {}}/>
                     </Box>
                 </Grid>
             </Grid>

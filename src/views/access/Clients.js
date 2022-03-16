@@ -8,22 +8,8 @@ import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
 import ClientService from "../../service/ClientService";
 import ClientList from "../client/ClientList";
-import AddClient from "../client/AddClient";
 import AddIcon from '@mui/icons-material/Add';
-
-const styles = theme => ({
-    clientsContainer: {
-        padding: 30,
-        flexDirection: "column",
-        display: "flex"
-    },
-    addClientButton: {
-    },
-    clientsWindow: {
-        padding: 20
-    },
-    clientsSearchSection: {}
-});
+import PersonView from "../consultation/PersonView";
 
 class Clients extends BaseView {
     constructor(props, context) {
@@ -49,36 +35,72 @@ class Clients extends BaseView {
         })
     }
 
+    getSearchHandler() {
+        return () => {
+            this.refresh();
+        };
+    }
+
     render() {
         const {classes} = this.props;
         const {getClientsServerCall, addClientModalStatus} = this.state;
         const clientSearchResults = ServerCall.getData(getClientsServerCall);
+        const totalClientsMessage = i18n.t("total-number-of-clients", {
+            totalCount: clientSearchResults.totalCount,
+            displayCount: clientSearchResults.clients.length
+        });
 
         return <ContainerView activeTab="client">
             <br/>
             {addClientModalStatus === ModalStatus.OPENED &&
-            <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} autocompletePlaceholderMessageKey="add-user-autocomplete-placeholder"/>}
-            <Box className={classes.clientsWindow}>
-                <Box className={classes.clientsSearchSection}>
-                    <Box style={{flexDirection: "row", display: "flex", justifyContent: "space-between"}}>
-                        <Box>
-                            <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")}/>
-                            <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}/>
-                            <Button variant="contained" color="secondary">{i18n.t('search')}</Button>
-                        </Box>
-                        <Fab className={classes.addClientButton} variant="extended" color="primary" aria-label="add"
-                             onClick={this.getModalOpenHandler("addClientModalStatus")}>
-                            <AddIcon sx={{mr: 1}}/>{i18n.t('register-client')}
-                        </Fab>
+            <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
+            <Box className={classes.clientsWrapperSection}>
+                <Box className={classes.clientsSearchAndRegisterSection}>
+                    <Box className={classes.clientsSearchSection}>
+                        <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} className={classes.clientSearchSectionItem}/>
+                        <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}
+                                   className={classes.clientSearchSectionItem}/>
+                        <Button variant="contained" color="secondary" onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
                     </Box>
+                    <Fab className={classes.addClientButton} variant="extended" color="primary" aria-label="add"
+                         onClick={this.getModalOpenHandler("addClientModalStatus")}>
+                        <AddIcon sx={{mr: 1}}/>{i18n.t('register-client')}
+                    </Fab>
                 </Box>
-                <Typography variant="h6">{i18n.t("total-number-of-clients", {
-                    number: clientSearchResults.totalCount
-                })}</Typography>
-                <ClientList clientList={clientSearchResults.clients}/>
+                <Typography variant="subtitle1" className={classes.totalClients}>{totalClientsMessage}</Typography>
+                <ClientList clientList={clientSearchResults.clients} displayQueueNumber={false}/>
             </Box>
         </ContainerView>;
     }
 }
+
+const styles = theme => ({
+    addClientButton: {},
+    clientsWrapperSection: {
+        padding: 20,
+        flexDirection: "column",
+        display: "flex",
+        marginBottom: 40
+    },
+    clientsSearchAndRegisterSection: {
+        flexDirection: "row",
+        display: "flex",
+        justifyContent: "space-between",
+        padding: 20
+    },
+    clientsSearchSection: {
+        flexDirection: "row",
+        display: "flex",
+        justifyContent: "flex-start"
+    },
+    clientSearchSectionItem: {
+        marginRight: 20
+    },
+    totalClients: {
+        marginTop: 30,
+        marginRight: 30,
+        alignSelf: "flex-end"
+    }
+});
 
 export default withStyles(styles)(Clients);

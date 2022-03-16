@@ -3,6 +3,7 @@ import {DateTimeUtil} from "react-app-common";
 export default class Client {
     name;
     age;
+    durationType,
     gender;
     registrationNumber;
     consultations;

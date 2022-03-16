@@ -13,7 +13,7 @@ const styles = theme => ({
         color: theme.palette.common.white
     },
     clientListMainBox: {
-        padding: 30
+        padding: 20
     }
 });
 
@@ -23,21 +23,22 @@ class ClientList extends BaseView {
     }
 
     static propTypes = {
-        clientList: PropTypes.array.isRequired
+        clientList: PropTypes.array.isRequired,
+        displayQueueNumber: PropTypes.bool.isRequired
     };
 
     render() {
-        const {classes, clientList} = this.props;
+        const {classes, clientList, displayQueueNumber} = this.props;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 700}} aria-label="customized table">
                     <TableHead>
                         <TableRow className={classes.viewClientsTableHeader}>
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('name')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('gender')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="center">{i18n.t('age')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('registration-number')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>
+                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('gender')}</TableCell>
+                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('age')}</TableCell>
+                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('registration-number')}</TableCell>
+                            {displayQueueNumber && <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -46,10 +47,10 @@ class ClientList extends BaseView {
                                 <TableCell component="th" scope="row">
                                     {x.name}
                                 </TableCell>
-                                <TableCell align="right">{i18n.t(x.gender)}</TableCell>
-                                <TableCell align="right">{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
-                                <TableCell align="right">{x.registrationNumber}</TableCell>
-                                <TableCell align="right">{x["queueNumber"]}</TableCell>
+                                <TableCell>{i18n.t(x.gender)}</TableCell>
+                                <TableCell>{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
+                                <TableCell>{x.registrationNumber}</TableCell>
+                                {displayQueueNumber && <TableCell align="right">{x["queueNumber"]}</TableCell>}
                             </TableRow>
                         ))}
                     </TableBody>

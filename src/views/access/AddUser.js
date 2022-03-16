@@ -8,6 +8,8 @@ import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-comm
 import {Box, Button, TextField} from "@material-ui/core";
 import _ from "lodash";
 import {Alert} from "@mui/material";
+import CancelButton from "../../components/CancelButton";
+import ServerErrorMessage from "../../components/ServerErrorMessage";
 
 const styles = theme => ({
     addUserMain: {
@@ -67,11 +69,9 @@ class AddUser extends BaseView {
                 <Box className={classes.addUserButtons}>
                     <Button disabled={_.isEmpty(userName)} variant="contained" color="primary" onClick={this.getAddUserHandler()}
                             className={classes.addUserAddButton}>{i18n.t("add-button")}</Button>
-                    <Button variant="contained" color="inherit" onClick={() => messageClose(false)}>{i18n.t("cancel-button")}</Button>
+                    <CancelButton onClickHandler={() => messageClose(false)}/>
                 </Box>
-                {serverCall.callStatus === ServerCallStatus.FAILURE &&
-                    <Alert severity="error" className={classes.addUserServerError}>{i18n.t(ServerCall.getErrorMessage(serverCall))}</Alert>
-                }
+                <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
             </Box>
         </ModalContainerView>;
     }

@@ -5,7 +5,7 @@ import _ from 'lodash';
 import {i18n} from "consult-app-common";
 import {ServerCall} from "react-app-common";
 
-export default function ServerErrorMessage({serverCall, tryingLogin = false}) {
+export default function ServerErrorMessage({serverCall, className, tryingLogin = false}) {
     if (ServerCall.isSuccessful(serverCall))
         return null;
 
@@ -15,12 +15,13 @@ export default function ServerErrorMessage({serverCall, tryingLogin = false}) {
     else if (serverCall.callStatus === 401)
         userMessage = i18n.t("server-session-expired");
     else
-        userMessage = ServerCall.getErrorMessage(serverCall);
-    return !_.isEmpty(userMessage) && <Alert severity="error">{userMessage}</Alert>;
+        userMessage = ServerCall.getErrorMessage(serverCall, i18n.t);
+
+    return !_.isEmpty(userMessage) && <Alert className={className} severity="error">{userMessage}</Alert>;
 }
 
 ServerErrorMessage.propTypes = {
     error: PropTypes.string.isRequired,
-    status: PropTypes.number.isRequired,
-    tryingLogin: PropTypes.bool
+    tryingLogin: PropTypes.bool,
+    className: PropTypes.string
 };
