@@ -1,10 +1,14 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 import {Box} from '@material-ui/core';
-import PropTypes from 'prop-types';
 import BaseView from "../../views/framework/BaseView";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
+import ContainerView from "../framework/ContainerView";
+import ClientService from "../../service/ClientService";
+import {ServerCall} from "react-app-common";
+import WaitBackdrop from "../../components/WaitBackdrop";
+import {withRouter} from "react-router-dom";
 
 const styles = theme => ({
     container: {},
@@ -16,30 +20,41 @@ const styles = theme => ({
 class ClientDashboard extends BaseView {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state = {
+            serverCall: ServerCall.createInitial({})
+        };
     }
 
     static propTypes = {
-        clientRecord: PropTypes.object.isRequired
+    }
+
+    componentDidMount() {
+        const clientId = new URLSearchParams(this.props.location.search).get("id");
+        this.makeDefaultServerCall(ClientService.getClient(clientId));
     }
 
     render() {
-        const {
-            classes,
-            clientRecord
-        } = this.props;
+        const {classes} = this.props;
+        const {serverCall} = this.state;
 
-        return <Box className={classes.container}>
-            <Box className={classes.section}>
-                <ClientDisplay client={clientRecord}/>
-            </Box>
-            {clientRecord.consultations.map((consultation) =>
+        if (ServerCall.noCallOrWait(serverCall))
+            return <WaitBackdrop/>;
+
+        const client = ServerCall.getData(serverCall);
+
+        return <ContainerView activeTab="client">
+            <Box className={classes.container}>
                 <Box className={classes.section}>
-                    <ConsultationDisplay consultation={consultation}/>
+                    <ClientDisplay client={client}/>
                 </Box>
-            )}
-        </Box>;
+                {client.consultationSessionRecords.map((consultation) =>
+                    <Box className={classes.section}>
+                        <ConsultationDisplay consultation={consultation}/>
+                    </Box>
+                )}
+            </Box>
+        </ContainerView>;
     }
 }
 
-export default withStyles(styles)(ClientDashboard);
+export default withStyles(styles)(withRouter(ClientDashboard));

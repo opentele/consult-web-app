@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {withStyles} from '@material-ui/core/styles';
 import {Box, Card, Grid} from '@material-ui/core';
 import PropTypes from 'prop-types';
-import Client from "../../domain/Client";
 import FieldDisplay from "./FieldDisplay";
+import {DateTimeUtil} from "react-app-common";
 
 const styles = theme => ({
     container: {
@@ -36,7 +36,7 @@ class ClientDisplay extends Component {
                 <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
-                    <FieldDisplay fieldName="age" fieldValue={Client.getAgeDisplay(client)}/>
+                    <FieldDisplay fieldName="age" fieldValue={DateTimeUtil.getAgeDisplay(client.age)}/>
                     <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
                     <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
                     <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>

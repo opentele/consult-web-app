@@ -21,6 +21,10 @@ class ClientService {
     static getClients(name, registrationNumber) {
         return ServiceUtil.getJson(`client/search?name=${name ? name : ""}&registrationNumber=${registrationNumber ? registrationNumber : ""}`);
     }
+
+    static getClient(clientId) {
+        return ServiceUtil.getJson(`client?id=${clientId}`)
+    }
 }
 
 export default ClientService;

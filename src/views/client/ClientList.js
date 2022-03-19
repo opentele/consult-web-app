@@ -24,11 +24,12 @@ class ClientList extends BaseView {
 
     static propTypes = {
         clientList: PropTypes.array.isRequired,
-        displayQueueNumber: PropTypes.bool.isRequired
+        displayQueueNumber: PropTypes.bool.isRequired,
+        displayNumberOfSessions: PropTypes.bool.isRequired
     };
 
     render() {
-        const {classes, clientList, displayQueueNumber} = this.props;
+        const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 700}} aria-label="customized table">
@@ -39,6 +40,7 @@ class ClientList extends BaseView {
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('age')}</TableCell>
                             <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('registration-number')}</TableCell>
                             {displayQueueNumber && <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>}
+                            {displayNumberOfSessions && <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('number-of-sessions')}</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -51,6 +53,7 @@ class ClientList extends BaseView {
                                 <TableCell>{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
                                 <TableCell>{x.registrationNumber}</TableCell>
                                 {displayQueueNumber && <TableCell align="right">{x["queueNumber"]}</TableCell>}
+                                {displayNumberOfSessions && <TableCell align="right"><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
                             </TableRow>
                         ))}
                     </TableBody>

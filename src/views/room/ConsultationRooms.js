@@ -120,7 +120,7 @@ class ConsultationRooms extends BaseView {
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom} autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                             <ModalContainerView titleKey="view-clients-title">
-                                <ClientList clientList={clientList} displayQueueNumber={true}/>}
+                                <ClientList clientList={clientList} displayQueueNumber={true} displayNumberOfSessions={false}/>}
                             </ModalContainerView>}
                         <Box className={classes.viewClientsButtons}>
                             <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>

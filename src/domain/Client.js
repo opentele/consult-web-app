@@ -3,10 +3,10 @@ import {DateTimeUtil} from "react-app-common";
 export default class Client {
     name;
     age;
-    durationType,
+    durationType;
     gender;
     registrationNumber;
-    consultations;
+    consultationSessionRecords;
     otherDetails;
 
     static displayName(client) {
@@ -14,8 +14,8 @@ export default class Client {
     }
 
     static totalConsultationsDisplay(client) {
-        if (client.consultations.length > 1)
-            return `${client.consultations.length} consultations`;
+        if (client.consultationSessionRecords.length > 1)
+            return `${client.consultationSessionRecords.length} consultations`;
         return `One consultation`;
     }
 }

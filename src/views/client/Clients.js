@@ -68,7 +68,7 @@ class Clients extends BaseView {
                     </Fab>
                 </Box>
                 <Typography variant="subtitle1" className={classes.totalClients}>{totalClientsMessage}</Typography>
-                <ClientList clientList={clientSearchResults.clients} displayQueueNumber={false}/>
+                <ClientList clientList={clientSearchResults.clients} displayQueueNumber={false} displayNumberOfSessions={true}/>
             </Box>
         </ContainerView>;
     }

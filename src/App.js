@@ -10,11 +10,11 @@ import ChangePassword from "./views/ChangePassword";
 import Home from "./views/room/Home";
 import React, {Component} from "react";
 import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
-import _ from 'lodash';
 import {ServerCall} from "react-app-common";
 import GlobalContext from './framework/GlobalContext';
 import Users from "./views/access/Users";
-import Clients from "./views/access/Clients";
+import Clients from "./views/client/Clients";
+import ClientDashboard from "./views/consultation/ClientDashboard";
 
 const theme = createTheme();
 
@@ -100,6 +100,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/clients">
                         {this.getPrivateRoute(isLoggedIn, <Clients/>)}
+                    </Route>
+                    <Route path="/client">
+                        {this.getPrivateRoute(isLoggedIn, <ClientDashboard/>)}
                     </Route>
                 </Switch>
             </Router>
