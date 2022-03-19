@@ -8,7 +8,6 @@ import {BeanContainer, ServerCall} from 'react-app-common';
 import {UserService} from "consult-app-common";
 import BaseView from "../views/framework/BaseView";
 import GlobalContext from '../framework/GlobalContext';
-import MenuIcon from '@mui/icons-material/Menu';
 
 const styles = theme => ({
     toolbar: {
@@ -19,6 +18,7 @@ const styles = theme => ({
     leftSet: {
         display: "flex",
         flexDirection: "row",
+        marginLeft: -20,
         alignItems: "center"
     },
     brandLabel: {

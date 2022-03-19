@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import BaseView from "../framework/BaseView";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import Client from "../../domain/Client";
-import Consultation from "../../domain/Consultation";
+import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 
 const styles = theme => ({
     container: {
@@ -43,7 +43,7 @@ class ClientListView extends BaseView {
                     </AccordionSummary>
                     <AccordionDetails style={{display: "flex", flexDirection: "column"}}>
                         <Typography variant="h6">{Client.totalConsultationsDisplay(client)}</Typography>
-                        {client.consultations.map((consultation) => <Typography variant="body1">{Consultation.getSummary(consultation)}</Typography>)}
+                        {client.consultations.map((consultation) => <Typography variant="body1">{ConsultationSessionRecord.getSummary(consultation)}</Typography>)}
                     </AccordionDetails>
                     <AccordionActions>
                         <Button color="primary">Client Dashboard</Button>

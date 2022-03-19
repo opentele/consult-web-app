@@ -42,14 +42,14 @@ class ClientDashboard extends BaseView {
 
         const client = ServerCall.getData(serverCall);
 
-        return <ContainerView activeTab="client">
+        return <ContainerView activeTab="client" showBackButton={true}>
             <Box className={classes.container}>
                 <Box className={classes.section}>
                     <ClientDisplay client={client}/>
                 </Box>
-                {client.consultationSessionRecords.map((consultation) =>
+                {client.consultationSessionRecords.map((record) =>
                     <Box className={classes.section}>
-                        <ConsultationDisplay consultation={consultation}/>
+                        <ConsultationDisplay consultationSessionRecord={record}/>
                     </Box>
                 )}
             </Box>

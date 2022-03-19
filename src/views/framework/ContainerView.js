@@ -3,15 +3,22 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import BaseView from "./BaseView";
 import ConsultAppBar from "../../components/ConsultAppBar";
-import {BottomNavigation, BottomNavigationAction, Box} from "@material-ui/core";
+import {BottomNavigation, BottomNavigationAction, Box, Button} from "@material-ui/core";
 import SecurityIcon from '@mui/icons-material/Security';
 import PeopleIcon from '@mui/icons-material/People';
 import HomeIcon from '@mui/icons-material/Home';
 import {Paper} from "@mui/material";
 import {i18n} from "consult-app-common";
-import {Link} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom'
+import BackIcon from "@mui/icons-material/ArrowBack";
 
-const styles = theme => ({});
+const styles = theme => ({
+    backButton: {
+        marginTop: 10,
+        marginBottom: 10,
+        marginLeft: 5
+    }
+});
 
 const tabIndexes = {
     "home": 0,
@@ -26,12 +33,20 @@ class ContainerView extends BaseView {
 
     static propTypes = {
         activeTab: PropTypes.oneOf(['home','client', 'users']),
+        showBackButton: PropTypes.bool
+    }
+
+    static defaultProps = {
+        showBackButton: false
     }
 
     render() {
-        const {classes, children, activeTab} = this.props;
+        const {classes, children, activeTab, showBackButton} = this.props;
         return <Box>
             <ConsultAppBar/>
+            {showBackButton && <Button onClick={this.props.history.goBack} variant="text" color="secondary" startIcon={<BackIcon/>} className={classes.backButton}>
+                {i18n.t('back-button')}
+            </Button>}
             {children}
             <Paper sx={{position: 'fixed', bottom: 0, left: 0, right: 0}} elevation={5}>
                 <BottomNavigation
@@ -47,4 +62,4 @@ class ContainerView extends BaseView {
     }
 }
 
-export default withStyles(styles)(ContainerView);
+export default withStyles(styles)(withRouter(ContainerView));
