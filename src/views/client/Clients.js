@@ -17,7 +17,7 @@ class Clients extends BaseView {
         this.state = {
             getClientsServerCall: ServerCall.createInitial({
                 count: 0,
-                clients: []
+                entities: []
             }),
             addClientModalStatus: ModalStatus.NOT_OPENED
         }
@@ -68,7 +68,7 @@ class Clients extends BaseView {
                     </Fab>
                 </Box>
                 <Typography variant="subtitle1" className={classes.totalClients}>{totalClientsMessage}</Typography>
-                <ClientList clientList={clientSearchResults.clients} displayQueueNumber={false} displayNumberOfSessions={true}/>
+                <ClientList clientList={clientSearchResults.entities} displayQueueNumber={false} displayNumberOfSessions={true}/>
             </Box>
         </ContainerView>;
     }

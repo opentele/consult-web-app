@@ -36,10 +36,6 @@ class ContainerView extends BaseView {
         showBackButton: PropTypes.bool
     }
 
-    static defaultProps = {
-        showBackButton: false
-    }
-
     render() {
         const {classes, children, activeTab, showBackButton} = this.props;
         return <Box>
@@ -60,6 +56,10 @@ class ContainerView extends BaseView {
             </Paper>
         </Box>;
     }
+}
+
+ContainerView.defaultProps = {
+    showBackButton: false
 }
 
 export default withStyles(styles)(withRouter(ContainerView));

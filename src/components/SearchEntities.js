@@ -6,6 +6,7 @@ import {Autocomplete} from "@mui/material";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n} from "consult-app-common";
 import BaseView from "../views/framework/BaseView";
+import ServerErrorMessage from "./ServerErrorMessage";
 
 const styles = () => ({
     seMain: {
@@ -23,14 +24,12 @@ class SearchEntities extends BaseView {
         super(props, context);
         this.state = {
             autoCompleteOpen: false,
-            serverCall: ServerCall.createInitial([])
+            serverCall: ServerCall.createInitial({entities: []})
         };
     }
 
     static propTypes = {
         entitySelected: PropTypes.func.isRequired,
-        searchParamName: PropTypes.string,
-        searchParamValue: PropTypes.any,
         searchFn: PropTypes.func.isRequired,
         displayFn: PropTypes.func.isRequired,
         autocompletePlaceholderMessageKey: PropTypes.string.isRequired
@@ -41,7 +40,7 @@ class SearchEntities extends BaseView {
     }
 
     search(q) {
-        return this.props.searchFn(q, this.props.searchParamName, this.props.searchParamValue);
+        return this.props.searchFn(q);
     }
 
     searchCloseHandler = () => {
@@ -72,7 +71,7 @@ class SearchEntities extends BaseView {
                     onClose={this.searchCloseHandler}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     getOptionLabel={(option) => `${displayFn(option)}`}
-                    options={ServerCall.getData(serverCall)}
+                    options={ServerCall.hasFailed(serverCall) ? [] : ServerCall.getData(serverCall).entities}
                     loading={serverCall.callStatus === ServerCallStatus.WAITING}
                     onChange={(event, value) => entitySelected(value)}
                     renderInput={(params) => (
@@ -91,8 +90,10 @@ class SearchEntities extends BaseView {
                         />
                     )}
                 />
+                <ServerErrorMessage serverCall={serverCall}/>
             </Grid>
         </Grid>;
-    }}
+    }
+}
 
 export default withStyles(styles)(SearchEntities);

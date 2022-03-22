@@ -109,7 +109,7 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {actions.includes(Actions.addClient) &&
-                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
+                            <Button variant="text" color="primary" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
                             {actions.includes(Actions.viewMyClients) &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}
@@ -117,14 +117,15 @@ class ConsultationRooms extends BaseView {
                             <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
                         </CardActions>
                         {addClientModalStatus === ModalStatus.OPENED &&
-                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom} autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
+                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
+                                   autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
-                            <ModalContainerView titleKey="view-clients-title">
-                                <ClientList clientList={clientList} displayQueueNumber={true} displayNumberOfSessions={false}/>}
-                            </ModalContainerView>}
-                        <Box className={classes.viewClientsButtons}>
-                            <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>
-                        </Box>
+                        <ModalContainerView titleKey="view-clients-title">
+                            <ClientList clientList={clientList} displayQueueNumber={true} displayNumberOfSessions={false}/>
+                            <Box className={classes.viewClientsButtons}>
+                                <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>
+                            </Box>
+                        </ModalContainerView>}
                     </Card>
                 })
             }

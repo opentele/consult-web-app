@@ -13,6 +13,10 @@ export default class Client {
         return `${client.name} | ${DateTimeUtil.getAgeDisplay(client.age)} | ${client.gender}`;
     }
 
+    static shortDisplay(client) {
+        return `${client.name} [${DateTimeUtil.getAgeDisplay(client.age)}]`;
+    }
+
     static totalConsultationsDisplay(client) {
         if (client.consultationSessionRecords.length > 1)
             return `${client.consultationSessionRecords.length} consultations`;

@@ -14,12 +14,12 @@ class ClientService {
         return ServiceUtil.putJson("client", contractObj);
     }
 
-    static search(q, searchParamName, searchParamValue) {
-        return ServiceUtil.getJson(`client/search?q=${q}&${searchParamName}=${searchParamValue}`);
+    static getClients(name, registrationNumber) {
+        return ServiceUtil.getJson(`client/findBy?name=${name ? name : ""}&registrationNumber=${registrationNumber ? registrationNumber : ""}`);
     }
 
-    static getClients(name, registrationNumber) {
-        return ServiceUtil.getJson(`client/search?name=${name ? name : ""}&registrationNumber=${registrationNumber ? registrationNumber : ""}`);
+    static searchClients(query) {
+        return ServiceUtil.getJson(`client/search?q=${query}`);
     }
 
     static getClient(clientId) {

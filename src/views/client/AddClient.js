@@ -8,6 +8,7 @@ import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ClientService from "../../service/ClientService";
 import AddEntity from "../../components/AddEntity";
+import Client from '../../domain/Client';
 
 const styles = theme => ({});
 
@@ -35,12 +36,12 @@ class AddClient extends BaseView {
     }
 
     render() {
-        const {consultationRoom, messageClose} = this.props;
+        const {messageClose} = this.props;
         const {serverCall, client} = this.state;
 
         return <ModalContainerView titleKey="add-client">
-            <SearchEntities entitySelected={this.selectClientHandler} searchParamName={"consultationRoomId"} searchParamValue={consultationRoom.id}
-                            searchFn={this.clientService.search}/>
+            <SearchEntities entitySelected={this.selectClientHandler} searchFn={this.clientService.searchClients} displayFn={Client.shortDisplay}
+                            autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
             <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCallStatus={serverCall.callStatus}/>
         </ModalContainerView>;
     }
