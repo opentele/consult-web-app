@@ -4,12 +4,6 @@ import {i18n} from "consult-app-common";
 import GlobalContext from "../framework/GlobalContext";
 import {ProviderType} from 'consult-app-common';
 
-export const AllConsultationRoomActions = {
-    addClient: 'add-client',
-    viewMyClients: 'view-my-clients',
-    joinConference: 'join-conference'
-}
-
 class ConsultationRoom {
     title;
     scheduledStartTime;
@@ -63,26 +57,16 @@ class ConsultationRoom {
         return room.totalSlots - room.numberOfClients > 0;
     }
 
-    static getUsherActions(room) {
-        const actions = [];
-        if (this.hasVacancy(room))
-            actions.push(AllConsultationRoomActions.addClient);
-        if (room.numberOfUserClients > 0) {
-            actions.push(AllConsultationRoomActions.viewMyClients);
-            actions.push(AllConsultationRoomActions.joinConference);
-        }
-        return actions;
+    static canAddClient(room) {
+        return this.hasVacancy(room);
     }
 
-    static getConsultantActions(room) {
-        const actions = [];
-        if (this.hasVacancy(room))
-            actions.push(i18n.t('add-client'));
-        if (room.numberOfUserClients > 0) {
-            actions.push(i18n.t('view-my-clients'));
-            actions.push(i18n.t('start-conference'));
-        }
-        return actions;
+    static canViewClients(room) {
+        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClients > 0) : (room.numberOfUserClients > 0);
+    }
+
+    static canJoinConference(room) {
+        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClientsPending > 0) : (room.numberOfUserClientsPending > 0);
     }
 }
 

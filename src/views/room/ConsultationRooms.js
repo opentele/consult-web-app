@@ -8,14 +8,12 @@ import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
-import ConsultationRoom, {AllConsultationRoomActions as Actions} from "../../domain/ConsultationRoom";
+import ConsultationRoom from "../../domain/ConsultationRoom";
 import AddClient from "../client/AddClient";
-import {i18n} from "consult-app-common";
+import {i18n, ProviderType} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
-import ClientList from "../client/ClientList";
-import ModalContainerView from "../framework/ModalContainerView";
 import GlobalContext from "../../framework/GlobalContext";
-import {ProviderType} from 'consult-app-common';
+import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
 
 const styles = theme => ({
     rooms: {
@@ -31,12 +29,6 @@ const styles = theme => ({
     },
     crButton: {
         marginRight: 9
-    },
-    viewClientsButtons: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end"
     }
 });
 
@@ -74,7 +66,7 @@ class ConsultationRooms extends BaseView {
 
     getClientListHandler(consultationRoom) {
         return () => {
-            return BeanContainer.get(ConsultationRoomService).getClients(consultationRoom.id).then((response) => {
+            return BeanContainer.get(ConsultationRoomService).getClientsByConsultationRoom(consultationRoom.id).then((response) => {
                 this.setState({clientListCall: ServerCall.responseReceived(this.state.clientListCall, response), viewClientsModalStatus: ModalStatus.OPENED})
             });
         };
@@ -92,7 +84,6 @@ class ConsultationRooms extends BaseView {
         return <Box className={classes.rooms}>
             {
                 consultationRooms.map((consultationRoom) => {
-                    const actions = ConsultationRoom.getUsherActions(consultationRoom);
                     const alerts = ConsultationRoom.getAlerts(consultationRoom);
                     return <Card raised={true} elevation={3} className={classes.conferenceBox}>
                         <CardContent>
@@ -115,24 +106,19 @@ class ConsultationRooms extends BaseView {
                             </Box>
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
-                            {actions.includes(Actions.addClient) &&
-                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
-                            {actions.includes(Actions.viewMyClients) &&
+                            {ConsultationRoom.canAddClient(consultationRoom) &&
+                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
+                            {ConsultationRoom.canViewClients(consultationRoom) &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
-                                    color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}
-                            {actions.includes(Actions.joinConference) &&
-                            <Button variant="contained" color="primary">{i18n.t(Actions.joinConference)}</Button>}
+                                    color="inherit">{i18n.t("view-my-clients")}</Button>}
+                            {ConsultationRoom.canJoinConference(consultationRoom) &&
+                            <Button variant="contained" color="primary">{i18n.t("join-conference")}</Button>}
                         </CardActions>
                         {addClientModalStatus === ModalStatus.OPENED &&
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
                                    autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
-                        <ModalContainerView titleKey="view-clients-title">
-                            <ClientList clientList={clientList} displayQueueNumber={true} displayNumberOfSessions={false}/>
-                            <Box className={classes.viewClientsButtons}>
-                                <Button variant="contained" color="inherit" onClick={this.getModalCloseHandler("viewClientsModalStatus")}>{i18n.t("close")}</Button>
-                            </Box>
-                        </ModalContainerView>}
+                        <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
                     </Card>
                 })
             }

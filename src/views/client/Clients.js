@@ -30,7 +30,7 @@ class Clients extends BaseView {
     }
 
     refresh() {
-        ClientService.getClients(this.state.name, this.state.registrationNumber).then((response) => {
+        ClientService.getClientsByNameAndRegistrationNumber(this.state.name, this.state.registrationNumber).then((response) => {
             this.setState({getClientsServerCall: ServerCall.responseReceived(this.state.getClientsServerCall, response)});
         })
     }

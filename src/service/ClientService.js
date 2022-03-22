@@ -14,7 +14,7 @@ class ClientService {
         return ServiceUtil.putJson("client", contractObj);
     }
 
-    static getClients(name, registrationNumber) {
+    static getClientsByNameAndRegistrationNumber(name, registrationNumber) {
         return ServiceUtil.getJson(`client/findBy?name=${name ? name : ""}&registrationNumber=${registrationNumber ? registrationNumber : ""}`);
     }
 

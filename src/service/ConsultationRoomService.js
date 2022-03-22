@@ -25,8 +25,8 @@ class ConsultationRoomService {
         return ServiceUtil.putJson("consultationRoom", consultationRoom);
     }
 
-    static getClient(consultationRoomId) {
-        return ServiceUtil.getJson(`client?consultationRoomId=${consultationRoomId}`);
+    static getClientsByConsultationRoom(consultationRoomId) {
+        return ServiceUtil.getJson(`consultationRoom/client?consultationRoomId=${consultationRoomId}`);
     }
 }
 
