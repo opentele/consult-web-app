@@ -14,6 +14,8 @@ import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ClientList from "../client/ClientList";
 import ModalContainerView from "../framework/ModalContainerView";
+import GlobalContext from "../../framework/GlobalContext";
+import {ProviderType} from 'consult-app-common';
 
 const styles = theme => ({
     rooms: {
@@ -84,6 +86,8 @@ class ConsultationRooms extends BaseView {
         const {classes} = this.props;
         const consultationRooms = ServerCall.getData(getRoomsCall);
         const clientList = ServerCall.getData(clientListCall);
+        const user = GlobalContext.getUser();
+        const isConsultant = user["providerType"] === ProviderType.Consultant
 
         return <Box className={classes.rooms}>
             {
@@ -100,7 +104,10 @@ class ConsultationRooms extends BaseView {
                                     </Box>
                                     <TimeField value={consultationRoom.scheduledStartTime} labelKey='consultation-room-start-time-label'/>
                                     <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
-                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.nextClient}`}</Typography>
+                                    {isConsultant &&
+                                    <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
+                                    {consultationRoom.nextClient && isConsultant &&
+                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.nextClient}`}</Typography>}
                                 </Box>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
@@ -109,7 +116,7 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {actions.includes(Actions.addClient) &&
-                            <Button variant="text" color="primary" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
+                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t(Actions.addClient)}</Button>}
                             {actions.includes(Actions.viewMyClients) &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t(Actions.viewMyClients)}</Button>}

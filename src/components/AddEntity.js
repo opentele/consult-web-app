@@ -7,6 +7,7 @@ import {i18n} from "consult-app-common";
 import {ServerCallStatus} from "react-app-common";
 import ErrorAlert from "./ErrorAlert";
 import CancelButton from "./CancelButton";
+import ServerErrorMessage from "./ServerErrorMessage";
 
 const styles = theme => ({
     addEntityMain: {
@@ -38,11 +39,11 @@ class AddEntity extends React.Component {
         entity: PropTypes.object,
         addEntityHandler: PropTypes.func.isRequired,
         messageClose: PropTypes.func.isRequired,
-        serverCallStatus: PropTypes.object
+        serverCall: PropTypes.object
     };
 
     render() {
-        const {classes, entity, addEntityHandler, messageClose, serverCallStatus} = this.props;
+        const {classes, entity, addEntityHandler, messageClose, serverCall} = this.props;
 
         return <Grid container className={classes.addEntityMain}>
             <Grid item lg={10}>
@@ -53,7 +54,7 @@ class AddEntity extends React.Component {
                 </Box>
             </Grid>
             <Grid item lg={10}>
-                {serverCallStatus === ServerCallStatus.FAILURE && <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>}
+                <ServerErrorMessage serverCall={serverCall}/>
             </Grid>
         </Grid>;
     }

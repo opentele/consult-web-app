@@ -28,7 +28,7 @@ class AddClient extends BaseView {
     };
 
     getAddClientHandler() {
-        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client).then(this.entitySavedHandler);
+        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client.id).then(this.entitySavedHandler);
     }
 
     selectClientHandler = (client) => {
@@ -42,7 +42,7 @@ class AddClient extends BaseView {
         return <ModalContainerView titleKey="add-client">
             <SearchEntities entitySelected={this.selectClientHandler} searchFn={this.clientService.searchClients} displayFn={Client.shortDisplay}
                             autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
-            <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCallStatus={serverCall.callStatus}/>
+            <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCall={serverCall}/>
         </ModalContainerView>;
     }
 }

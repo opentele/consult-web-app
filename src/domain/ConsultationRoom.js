@@ -1,6 +1,8 @@
 import _ from "lodash";
 import Alert from "./Alert";
 import {i18n} from "consult-app-common";
+import GlobalContext from "../framework/GlobalContext";
+import {ProviderType} from 'consult-app-common';
 
 export const AllConsultationRoomActions = {
     addClient: 'add-client',
@@ -32,19 +34,17 @@ class ConsultationRoom {
     }
 
     static getAlerts(room) {
+        const user = GlobalContext.getUser();
         const alerts = [];
-        if (this.hasMoreClients(room))
+        if (this.hasMoreClients(room) && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.info(i18n.t("conference-client-next", {client: room.nextClient})));
 
-        if (room.numberOfUserClientsPending > 0)
+        if (room.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
                 numberOfClientsCompleted: this.numberOfUserClientCompleted(room),
                 numberOfClientsPending: room.numberOfUserClientsPending
             })));
-        if (room.numberOfClients === 0)
-            alerts.push(Alert.info(i18n.t("conference-no-client")));
-
-        if (!this.hasVacancy(room))
+        if (!this.hasVacancy(room) && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.error(i18n.t("conference-no-vacancy")));
 
         return alerts;
