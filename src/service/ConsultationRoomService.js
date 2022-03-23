@@ -29,7 +29,10 @@ class ConsultationRoomService {
         return ServiceUtil.putJson(`appointment`, postObject);
     }
 
-    static createRoom(consultationRoom) {
+    static createUpdateRoom(consultationRoom) {
+        if (consultationRoom.id !== 0)
+            return ServiceUtil.postJson("consultationRoom", consultationRoom);
+
         return ServiceUtil.putJson("consultationRoom", consultationRoom);
     }
 

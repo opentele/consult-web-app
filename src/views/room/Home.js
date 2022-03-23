@@ -63,7 +63,7 @@ class Home extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {tabIndex, oneTimeConsultationRoomStatus} = this.state;
+        const {tabIndex} = this.state;
         return <ContainerView activeTab="home">
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()}>
@@ -77,8 +77,6 @@ class Home extends BaseView {
                 </Fab>}
             </Tabs>
             {this.tabComponents[tabIndex]()}
-            {oneTimeConsultationRoomStatus === ModalStatus.OPENED &&
-            <CreateEditConsultationRoom messageClose={this.getModalCloseHandler("oneTimeConsultationRoomStatus")}/>}
         </ContainerView>;
     }
 }

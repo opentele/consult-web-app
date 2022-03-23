@@ -6,6 +6,7 @@ import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
 
 class ConsultationRoom {
+    id;
     title;
     scheduledStartTime;
     scheduledEndTime;
@@ -17,15 +18,8 @@ class ConsultationRoom {
     numberOfUserClientsPending;
     nextClient;
 
-    constructor() {
-        this.days = [];
-    }
-
-    static toggleDay(room, day) {
-        if (room.days.includes(day))
-            _.remove(room.days, (x) => x === day);
-        else
-            room.days.push(day);
+    static isNew(room) {
+        return !(room.id > 0);
     }
 
     static getAlerts(room) {
@@ -72,6 +66,10 @@ class ConsultationRoom {
 
     static canJoinConference(room) {
         return (!this.isInPast(room)) && (GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClientsPending > 0) : (room.numberOfUserClientsPending > 0));
+    }
+
+    static getDisplayTitle(room) {
+        return `${room.title} - ${moment(room.scheduledOn).format("DD MMM")}`
     }
 }
 

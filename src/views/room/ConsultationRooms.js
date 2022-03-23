@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Card, CardActions, CardContent, Typography} from "@material-ui/core";
+import {Box, Button, Card, CardActions, CardContent, IconButton, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
 import {BeanContainer, ServerCall} from "react-app-common";
@@ -14,6 +14,8 @@ import {i18n, ProviderType} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
+import {Link, withRouter} from 'react-router-dom';
+import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 
 const styles = theme => ({
     rooms: {
@@ -46,7 +48,8 @@ class ConsultationRooms extends BaseView {
             getRoomsCall: ServerCall.createInitial([]),
             clientListCall: ServerCall.createInitial([]),
             addClientModalStatus: ModalStatus.NOT_OPENED,
-            viewClientsModalStatus: ModalStatus.NOT_OPENED
+            viewClientsModalStatus: ModalStatus.NOT_OPENED,
+            editConsultationRoomStatus: ModalStatus.NOT_OPENED
         };
         this.serviceMethod = BeanContainer.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
@@ -76,7 +79,7 @@ class ConsultationRooms extends BaseView {
     }
 
     render() {
-        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus} = this.state;
+        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus} = this.state;
 
         const {classes} = this.props;
         const consultationRooms = ServerCall.getData(getRoomsCall);
@@ -93,8 +96,10 @@ class ConsultationRooms extends BaseView {
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
-                                        <Typography variant="h5" style={{marginRight: 10}}>{consultationRoom.title}</Typography>
-                                        <Edit/>
+                                        <Typography variant="h4">{ConsultationRoom.getDisplayTitle(consultationRoom)}</Typography>
+                                        <IconButton>
+                                            <Edit onClick={this.getModalOpenHandler("editConsultationRoomStatus")}/>
+                                        </IconButton>
                                     </Box>
                                     <TimeField value={consultationRoom.scheduledStartTime} labelKey='consultation-room-start-time-label'/>
                                     <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
@@ -110,18 +115,22 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {ConsultationRoom.canAddClient(consultationRoom) &&
-                            <Button variant="contained" color="inherit" className={classes.crButton} onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
+                            <Button variant="contained" color="inherit" className={classes.crButton}
+                                    onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
                             {ConsultationRoom.canViewClients(consultationRoom) &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t("view-clients")}</Button>}
                             {ConsultationRoom.canJoinConference(consultationRoom) &&
                             <Button variant="contained" color="primary" className={classes.crButton}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
+
                         {addClientModalStatus === ModalStatus.OPENED &&
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
                                    autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                         <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
+                        {editConsultationRoomStatus === ModalStatus.OPENED &&
+                        <CreateEditConsultationRoom room={consultationRoom} messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
                     </Card>
                 })
             }

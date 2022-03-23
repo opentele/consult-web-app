@@ -9,7 +9,7 @@ import PeopleIcon from '@mui/icons-material/People';
 import HomeIcon from '@mui/icons-material/Home';
 import {Paper} from "@mui/material";
 import {i18n} from "consult-app-common";
-import {Link, withRouter} from 'react-router-dom'
+import {Link, withRouter} from 'react-router-dom';
 import BackIcon from "@mui/icons-material/ArrowBack";
 
 const styles = theme => ({
