@@ -9,6 +9,10 @@ class ConsultationRoomService {
         return ServiceUtil.getJson("consultationRoom/past");
     }
 
+    static getFutureRooms() {
+        return ServiceUtil.getJson("consultationRoom/future");
+    }
+
     static getConsultationSchedules() {
         return ServiceUtil.getJson("consultationRoomSchedule");
     }

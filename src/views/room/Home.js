@@ -31,7 +31,7 @@ class Home extends BaseView {
         this.tabComponents = {
             0: () => <><ConsultationRooms type="past"/></>,
             1: () => <ConsultationRooms type="today"/>,
-            2: () => <ConsultationRooms type="today"/>,
+            2: () => <><ConsultationRooms type="future"/></>,
             3: () => <></>
         }
     }

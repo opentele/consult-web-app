@@ -35,7 +35,8 @@ const styles = theme => ({
 
 const functionNames = {
     today: "getTodayRooms",
-    past: "getPastRooms"
+    past: "getPastRooms",
+    future: "getFutureRooms"
 }
 
 class ConsultationRooms extends BaseView {
