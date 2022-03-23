@@ -5,6 +5,10 @@ class ConsultationRoomService {
         return ServiceUtil.getJson("consultationRoom/today");
     }
 
+    static getPastRooms() {
+        return ServiceUtil.getJson("consultationRoom/past");
+    }
+
     static getConsultationSchedules() {
         return ServiceUtil.getJson("consultationRoomSchedule");
     }

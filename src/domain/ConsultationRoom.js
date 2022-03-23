@@ -3,6 +3,7 @@ import Alert from "./Alert";
 import {i18n} from "consult-app-common";
 import GlobalContext from "../framework/GlobalContext";
 import {ProviderType} from 'consult-app-common';
+import moment from 'moment';
 
 class ConsultationRoom {
     title;
@@ -53,8 +54,12 @@ class ConsultationRoom {
         return !b;
     }
 
+    static isInPast(room) {
+        return moment(room.scheduledOn).startOf('day').isBefore(moment().startOf('day'));
+    }
+
     static hasVacancy(room) {
-        return room.totalSlots - room.numberOfClients > 0;
+        return !this.isInPast(room) && (room.totalSlots - room.numberOfClients > 0);
     }
 
     static canAddClient(room) {
@@ -66,7 +71,7 @@ class ConsultationRoom {
     }
 
     static canJoinConference(room) {
-        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClientsPending > 0) : (room.numberOfUserClientsPending > 0);
+        return (!this.isInPast(room)) && (GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClientsPending > 0) : (room.numberOfUserClientsPending > 0));
     }
 }
 

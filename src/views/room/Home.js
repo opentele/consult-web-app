@@ -29,7 +29,7 @@ class Home extends BaseView {
         this.setState = this.setState.bind(this);
         this.state = {consultationRooms: [], tabIndex: 1};
         this.tabComponents = {
-            0: () => <ConsultationRooms type="today"/>,
+            0: () => <><ConsultationRooms type="past"/></>,
             1: () => <ConsultationRooms type="today"/>,
             2: () => <ConsultationRooms type="today"/>,
             3: () => <></>

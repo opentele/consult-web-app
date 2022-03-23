@@ -47,7 +47,7 @@ class Clients extends BaseView {
         const clientSearchResults = ServerCall.getData(getClientsServerCall);
         const totalClientsMessage = i18n.t("total-number-of-clients", {
             totalCount: clientSearchResults.totalCount,
-            displayCount: clientSearchResults.clients.length
+            displayCount: clientSearchResults.entities.length
         });
 
         return <ContainerView activeTab="client">

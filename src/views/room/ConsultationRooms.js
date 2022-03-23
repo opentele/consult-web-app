@@ -21,19 +21,21 @@ const styles = theme => ({
     },
     conferenceBox: {
         marginTop: 15,
-        padding: 10,
+        padding: 10
     },
     crCardActions: {
         flexDirection: 'row-reverse',
         marginTop: 20
     },
     crButton: {
-        marginRight: 9
+        marginRight: 5,
+        marginLeft: 5
     }
 });
 
 const functionNames = {
-    today: "getTodayRooms"
+    today: "getTodayRooms",
+    past: "getPastRooms"
 }
 
 class ConsultationRooms extends BaseView {
@@ -107,12 +109,12 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {ConsultationRoom.canAddClient(consultationRoom) &&
-                            <Button variant="contained" color="inherit" onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
+                            <Button variant="contained" color="inherit" className={classes.crButton} onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
                             {ConsultationRoom.canViewClients(consultationRoom) &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
-                                    color="inherit">{i18n.t("view-my-clients")}</Button>}
+                                    color="inherit">{i18n.t("view-clients")}</Button>}
                             {ConsultationRoom.canJoinConference(consultationRoom) &&
-                            <Button variant="contained" color="primary">{i18n.t("join-conference")}</Button>}
+                            <Button variant="contained" color="primary" className={classes.crButton}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
                         {addClientModalStatus === ModalStatus.OPENED &&
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
