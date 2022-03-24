@@ -17,6 +17,7 @@ class ConsultationRoom {
     numberOfClientsPending;
     numberOfUserClientsPending;
     nextClient;
+    providers;
 
     static isNew(room) {
         return !(room.id > 0);

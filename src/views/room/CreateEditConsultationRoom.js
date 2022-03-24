@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, FormControl, TextField} from '@material-ui/core';
+import {Box, Chip, FormControl, MenuItem, OutlinedInput, Select, TextField} from '@material-ui/core';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
 import moment from "moment";
@@ -11,6 +11,8 @@ import ConsultationRoomService from "../../service/ConsultationRoomService";
 import CancelButton from "../../components/CancelButton";
 import SaveButton from "../../components/SaveButton";
 import ConsultationRoom from "../../domain/ConsultationRoom";
+import {ProviderType, UserService} from "consult-app-common";
+import WaitBackdrop from "../../components/WaitBackdrop";
 
 const styles = theme => ({
     cecrContainer: {
@@ -50,7 +52,7 @@ const styles = theme => ({
 class CreateEditConsultationRoom extends BaseView {
     constructor(props) {
         super(props);
-        this.state = {room: props.room, serverCall: ServerCall.createInitial()};
+        this.state = {room: props.room, saveRoomServerCall: ServerCall.createInitial(), getProvidersServerCall: ServerCall.createInitial([])};
     }
 
     static propTypes = {
@@ -58,8 +60,19 @@ class CreateEditConsultationRoom extends BaseView {
         room: PropTypes.object.isRequired
     }
 
+    componentDidMount() {
+        this.makeServerCall(UserService.getUsers(ProviderType.Consultant), null, null, "getProvidersServerCall");
+    }
+
     getRoomFieldValueChangeHandler(fieldName) {
         return this.getStateFieldValueChangedHandler("room", fieldName);
+    }
+
+    getProvidersChangedHandler() {
+        return (e) => {
+            const value = e.target.value;
+            console.log();
+        }
     }
 
     render() {
@@ -69,8 +82,11 @@ class CreateEditConsultationRoom extends BaseView {
         } = this.props;
         const {
             room,
-            serverCall
+            saveRoomServerCall,
+            getProvidersServerCall
         } = this.state;
+
+        const allProviders = ServerCall.getData(getProvidersServerCall);
 
         return <ModalContainerView titleKey={ConsultationRoom.isNew(room) ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
             <FormControl>
@@ -115,18 +131,36 @@ class CreateEditConsultationRoom extends BaseView {
                                    onChange={this.getRoomFieldValueChangeHandler("totalSlots")}
                         />
                     </Box>
+                    <Box className={classes.cercField}>
+                        <FormLabel textKey="providers"/>
+                        <Select multiple value={room.providers}
+                                onChange={this.getProvidersChangedHandler()}
+                                input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
+                                renderValue={(selectedProviders) => (
+                                    <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                                        {selectedProviders.map((provider) => (
+                                            <Chip key={provider.id} label={provider.name}/>
+                                        ))}
+                                    </Box>
+                                )}>
+                            {allProviders.map((provider) => (
+                                <MenuItem key={provider.id} value={provider}>{provider.name}</MenuItem>
+                            ))}
+                        </Select>
+                    </Box>
                     <Box className={classes.createEditConsultationRoomButtons}>
-                        <SaveButton serverCall={serverCall} className={classes.cecrSaveButton} disabled={!room.title} onSaveHandler={this.getSaveHandler()}/>
+                        <SaveButton serverCall={saveRoomServerCall} className={classes.cecrSaveButton} disabled={!room.title} onSaveHandler={this.getSaveHandler()}/>
                         <CancelButton onClickHandler={() => messageClose(false)}/>
                     </Box>
                 </Box>
             </FormControl>
+            {ServerCall.noCallOrWait(getProvidersServerCall) && <WaitBackdrop/>}
         </ModalContainerView>;
     }
 
     getSaveHandler() {
         let service = BeanContainer.get(ConsultationRoomService);
-        return () => service.createUpdateRoom(this.state.room).then(this.entitySavedHandler);
+        return () => service.createUpdateRoom(this.state.room).then(this.getEntitySavedHandler());
     }
 }
 

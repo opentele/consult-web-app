@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {AddCircle, AllInclusive, History, Schedule, Today} from '@mui/icons-material';
-import {Fab, Tab, Tabs} from "@material-ui/core";
+import {Fab, IconButton, Tab, Tabs} from "@material-ui/core";
 import {BeanContainer} from 'react-app-common';
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {i18n} from 'consult-app-common';
@@ -67,10 +67,10 @@ class Home extends BaseView {
         return <ContainerView activeTab="home">
             <br/>
             <Tabs value={tabIndex} onChange={this.onTabChange()}>
-                <Tab icon={<History/>} label={i18n.t('past-consultations')}/>
-                <Tab icon={<Today/>} label={i18n.t('today')}/>
-                <Tab icon={<Schedule/>} label={i18n.t('scheduled-later')}/>
-                <Tab icon={<AllInclusive/>} label={i18n.t('all-rooms')}/>
+                <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
+                <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
+                <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
+                <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-rooms')}/>
                 {<Fab variant="extended" size="medium" className={classes.createRoom} onClick={this.getModalOpenHandler("oneTimeConsultationRoomStatus")}>
                     <AddCircle className={classes.createRoomIcon}/>
                     {i18n.t('create-one-time-room')}

@@ -53,7 +53,7 @@ class AddEditConsultationSchedule extends BaseView {
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
-            this.makeDefaultServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId));
+            this.makeServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId));
         else
             this.setState({serverCall: ServerCall.createInitial(ConsultationSchedule.newSchedule())});
     }

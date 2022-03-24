@@ -36,7 +36,7 @@ class SearchEntities extends BaseView {
     }
 
     searchOpenHandler = () => {
-        this.makeDefaultServerCall(this.search(''), {autoCompleteOpen: true});
+        this.makeServerCall(this.search(''), {autoCompleteOpen: true});
     }
 
     search(q) {
@@ -48,7 +48,7 @@ class SearchEntities extends BaseView {
     }
 
     searchChangeHandler = (e) => {
-        this.makeDefaultServerCall(this.search(e.target.value));
+        this.makeServerCall(this.search(e.target.value));
     }
 
     render() {

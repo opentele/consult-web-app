@@ -30,7 +30,7 @@ class ClientDashboard extends BaseView {
 
     componentDidMount() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
-        this.makeDefaultServerCall(ClientService.getClient(clientId));
+        this.makeServerCall(ClientService.getClient(clientId));
     }
 
     render() {

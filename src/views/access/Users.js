@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
 import {Box, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
-import {i18n, UserService} from "consult-app-common";
+import {i18n, UserService, ProviderType} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";

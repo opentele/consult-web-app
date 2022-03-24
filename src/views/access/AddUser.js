@@ -53,7 +53,7 @@ class AddUser extends BaseView {
                 e.preventDefault();
                 return;
             }
-            this.makeDefaultServerCall(UserService.addUser(this.state["userName"]));
+            this.makeServerCall(UserService.addUser(this.state["userName"]));
         }
     }
 

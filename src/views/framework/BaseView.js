@@ -72,33 +72,42 @@ class BaseView extends Component {
         }
     }
 
-    entitySavedHandler = (response) => {
-        let serverCall = ServerCall.responseReceived(this.state.serverCall, response);
-        if (serverCall.callStatus === ServerCallStatus.FAILURE)
-            this.setState({serverCall: serverCall});
-        else
-            this.props.messageClose(true);
+    getEntitySavedHandler(serverCallName = "serverCall") {
+        return (response) => {
+            let serverCall = ServerCall.responseReceived(this.state[serverCallName], response);
+            if (serverCall.callStatus === ServerCallStatus.FAILURE) {
+                let newState = {};
+                newState[serverCallName] = serverCall;
+                this.setState(newState);
+            } else
+                this.props.messageClose(true);
+        }
     }
 
-    makeDefaultServerCall(promise, preState, postState) {
+    makeServerCall(promise, preState, postState, serverCallName = "serverCall") {
         promise.then((response) => {
-            this.serverResponseReceived(postState, response);
+            this.serverResponseReceived(postState, response, serverCallName);
         });
-        this.serverCallMade(preState);
+        this.serverCallMade(preState, serverCallName);
     }
 
-    serverResponseReceived(postState, response) {
+    serverResponseReceived(postState, response, serverCallName = "serverCall") {
+        const newState = {};
+        newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
         if (postState)
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response), ...postState});
+            this.setState({...newState, ...postState});
         else
-            this.setState({serverCall: ServerCall.responseReceived(this.state.serverCall, response)});
+            this.setState(newState);
     }
 
-    serverCallMade(preState) {
-        if (preState)
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall), ...preState});
-        else
-            this.setState({serverCall: ServerCall.serverCallMade(this.state.serverCall)});
+    serverCallMade(preState, serverCallName = "serverCall") {
+        const newState = {};
+        newState[serverCallName] = ServerCall.serverCallMade(this.state[serverCallName]);
+        if (preState) {
+            this.setState({...newState, ...preState});
+        } else {
+            this.setState(newState);
+        }
     }
 }
 

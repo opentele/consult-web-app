@@ -93,7 +93,7 @@ class RegisterOrganisation extends BaseView {
                 return;
             }
             let {name, orgName, userId, password} = this.state;
-            this.makeDefaultServerCall(UserService.registerOrg(name, orgName, userId, userIdType, password));
+            this.makeServerCall(UserService.registerOrg(name, orgName, userId, userIdType, password));
         }
     }
 
