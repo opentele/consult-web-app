@@ -4,7 +4,7 @@ import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
-import {BeanContainer, ServerCall} from "react-app-common";
+import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
@@ -14,8 +14,8 @@ import {i18n, ProviderType} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
-import {Link, withRouter} from 'react-router-dom';
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
+import {Redirect} from "react-router-dom";
 
 const styles = theme => ({
     rooms: {
@@ -47,6 +47,7 @@ class ConsultationRooms extends BaseView {
         this.state = {
             getRoomsCall: ServerCall.createInitial([]),
             clientListCall: ServerCall.createInitial([]),
+            setupTeleConferenceCall: ServerCall.createInitial(),
             addClientModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED,
             editConsultationRoomStatus: ModalStatus.NOT_OPENED
@@ -79,7 +80,7 @@ class ConsultationRooms extends BaseView {
     }
 
     render() {
-        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus} = this.state;
+        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall} = this.state;
 
         const {classes} = this.props;
         const consultationRooms = ServerCall.getData(getRoomsCall);
@@ -87,11 +88,15 @@ class ConsultationRooms extends BaseView {
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
 
+        if (setupTeleConferenceCall.callStatus === ServerCallStatus.SUCCESS) {
+            return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
+        }
+
         return <Box className={classes.rooms}>
             {
                 consultationRooms.map((consultationRoom) => {
                     const alerts = ConsultationRoom.getAlerts(consultationRoom);
-                    return <Card raised={true} elevation={3} className={classes.conferenceBox}>
+                    return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
@@ -126,7 +131,8 @@ class ConsultationRooms extends BaseView {
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t("view-clients")}</Button>}
                             {ConsultationRoom.canJoinConference(consultationRoom) &&
-                            <Button variant="contained" color="primary" className={classes.crButton}>{i18n.t("join-conference")}</Button>}
+                            <Button variant="contained" color="primary" className={classes.crButton}
+                                    onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
 
                         {addClientModalStatus === ModalStatus.OPENED &&
@@ -141,11 +147,10 @@ class ConsultationRooms extends BaseView {
             }
         </Box>;
     }
+
+    getJoinConferenceHandler(consultationRoom) {
+        return () => this.makeServerCall(ConsultationRoomService.setupConference(consultationRoom), "setupTeleConferenceCall");
+    }
 }
 
-export default withStyles(styles)
-
-(
-    ConsultationRooms
-)
-;
+export default withStyles(styles)(ConsultationRooms);

@@ -18,6 +18,8 @@ class ConsultationRoom {
     numberOfUserClientsPending;
     nextClient;
     providers;
+    appointments;
+    activeTeleConferenceId;
 
     static isNew(room) {
         return !(room.id > 0);

@@ -11,6 +11,7 @@ import ModalStatus from "../framework/ModalStatus";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
+import WaitView from "../../components/WaitView";
 
 const styles = theme => ({
     createRoom: {

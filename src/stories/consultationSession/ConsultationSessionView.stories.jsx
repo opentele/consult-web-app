@@ -1,5 +1,5 @@
 import React from 'react';
-import About from "../../views/consultationSession/ConsultationSessionView";
+import About from "../../views/consultationSession/TeleConferenceView";
 import ConsultationRoomService from "../../services/ConsultationRoomService";
 import {BeanContainer} from 'react-app-common';
 import ConsultationServiceStub from "../stubs/ConsultationServiceStub";

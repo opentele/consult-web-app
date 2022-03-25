@@ -135,7 +135,7 @@ class CreateEditConsultationRoom extends BaseView {
                         />
                     </Box>
                     <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduledOn"/>
+                        <FormLabel textKey="scheduled-on"/>
                         <TextField type="date"
                                    value={moment(room.scheduledOn).format('YYYY-MM-DD')}
                                    sx={{width: 220}} InputLabelProps={{shrink: true}}
@@ -143,7 +143,7 @@ class CreateEditConsultationRoom extends BaseView {
                         />
                     </Box>
                     <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduledStartTime"/>
+                        <FormLabel textKey="scheduled-start-time"/>
                         <TextField type="time" value={room.scheduledStartTime} InputLabelProps={{shrink: true}}
                                    inputProps={{step: 300}}
                                    sx={{width: 150}}
@@ -151,7 +151,7 @@ class CreateEditConsultationRoom extends BaseView {
                         />
                     </Box>
                     <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduledEndTime"/>
+                        <FormLabel textKey="scheduled-end-time"/>
                         <TextField type="time" value={room.scheduledEndTime} InputLabelProps={{shrink: true}}
                                    inputProps={{step: 300}}
                                    sx={{width: 150}}

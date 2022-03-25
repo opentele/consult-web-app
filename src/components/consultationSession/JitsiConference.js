@@ -22,8 +22,8 @@ const config = {
 const interfaceConfig = {
     LANG_DETECTION: false,
     lang: "en",
-    APP_NAME: "QoriMed",
-    DISABLE_JOIN_LEAVE_NOTIFICATIONS: true,
+    APP_NAME: "OpenTele Consultation",
+    DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
     HIDE_INVITE_MORE_HEADER: true,
     MOBILE_APP_PROMO: false,
     SHOW_CHROME_EXTENSION_BANNER: false,
@@ -55,7 +55,7 @@ class JitsiConference extends Component {
 
     static propTypes = {
         placeholder: PropTypes.bool,
-        conference: PropTypes.object.isRequired
+        consultationRoom: PropTypes.object.isRequired
     }
 
     static defaultProp = {
@@ -71,7 +71,7 @@ class JitsiConference extends Component {
         const {
             classes,
             placeholder,
-            conference
+            consultationRoom
         } = this.props;
 
         return <div className={classes.root}>
@@ -80,7 +80,7 @@ class JitsiConference extends Component {
             {!placeholder && <Jitsi
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}
-                roomName={"60b7ed3b-9368-4cde-ac41-98fad08b4524"}
+                roomName={consultationRoom.activeTeleConferenceId}
                 displayName={"demo"}
                 interfaceConfig={interfaceConfig}
                 config={config}

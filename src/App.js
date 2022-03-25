@@ -15,6 +15,7 @@ import GlobalContext from './framework/GlobalContext';
 import Users from "./views/access/Users";
 import Clients from "./views/client/Clients";
 import ClientDashboard from "./views/consultation/ClientDashboard";
+import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 
 const theme = createTheme();
 
@@ -103,6 +104,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/client">
                         {this.getPrivateRoute(isLoggedIn, <ClientDashboard/>)}
+                    </Route>
+                    <Route path="/teleConference">
+                        {this.getPrivateRoute(isLoggedIn, <TeleConferenceView/>)}
                     </Route>
                 </Switch>
             </Router>

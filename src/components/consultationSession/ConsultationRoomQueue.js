@@ -23,19 +23,19 @@ const styles = theme => ({
     }
 });
 
-class OtherConsultationRoomsInConsultationSession extends Component {
+class ConsultationRoomQueue extends Component {
     constructor(props, context) {
         super(props, context);
     }
 
     static propTypes = {
-        queue: PropTypes.object.isRequired
+        consultationRoom: PropTypes.object.isRequired
     }
 
     render() {
         const {
             classes,
-            queue,
+            consultationRoom,
             style
         } = this.props;
 
@@ -43,22 +43,22 @@ class OtherConsultationRoomsInConsultationSession extends Component {
             <Box style={style} className={classes.container}>
                 <List component="nav" aria-label="main">
                     {
-                        queue.items.map((queueItem) =>
+                        consultationRoom.appointments.map((appointment) =>
                             <ListItem>
                                 <ListItemIcon>
                                     <PersonOutline/>
                                 </ListItemIcon>
                                 <ListItem>
                                     <Link href="#" underline="always">
-                                        {queueItem.name}
+                                        {appointment.clientName}
                                     </Link>
                                 </ListItem>
-                                {queueItem.active &&
+                                {appointment.active &&
                                 <ListItemIcon>
                                     <VideoCallIcon/>
                                 </ListItemIcon>}
-                                {!queueItem.active && <ArrowCircleUp/>}
-                                {!queueItem.active && <ArrowCircleDown/>}
+                                {!appointment.active && <ArrowCircleUp/>}
+                                {!appointment.active && <ArrowCircleDown/>}
                             </ListItem>)
                     }
                 </List>
@@ -72,4 +72,4 @@ class OtherConsultationRoomsInConsultationSession extends Component {
     }
 }
 
-export default withStyles(styles)(OtherConsultationRoomsInConsultationSession);
+export default withStyles(styles)(ConsultationRoomQueue);
