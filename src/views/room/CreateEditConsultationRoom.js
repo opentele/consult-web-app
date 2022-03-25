@@ -1,24 +1,28 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Chip, FormControl, MenuItem, OutlinedInput, Select, TextField} from '@material-ui/core';
+import {Box, Chip, FormControl, OutlinedInput, TextField} from '@material-ui/core';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
 import moment from "moment";
 import ModalContainerView from "../framework/ModalContainerView";
 import PropTypes from "prop-types";
-import {BeanContainer, ServerCall} from "react-app-common";
+import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import CancelButton from "../../components/CancelButton";
 import SaveButton from "../../components/SaveButton";
 import ConsultationRoom from "../../domain/ConsultationRoom";
-import {ProviderType, UserService} from "consult-app-common";
+import {UserService} from "consult-app-common";
 import WaitBackdrop from "../../components/WaitBackdrop";
+import _ from 'lodash';
+import {MenuItem, Select} from "@mui/material";
+import ServerErrorMessage from "../../components/ServerErrorMessage";
 
 const styles = theme => ({
     cecrContainer: {
         padding: 20,
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        width: 400
     },
     cercFirstField: {
         marginTop: 10,
@@ -46,32 +50,56 @@ const styles = theme => ({
     },
     cecrSaveButton: {
         marginRight: 10
+    },
+    cercSelectedProvider: {
+        fontWeight: theme.typography.fontWeightRegular,
+        color: 'white'
+    },
+    cercUnselectedProvider: {
+        fontWeight: theme.typography.fontWeightMedium,
+        color: 'black'
     }
 });
 
 class CreateEditConsultationRoom extends BaseView {
     constructor(props) {
         super(props);
-        this.state = {room: props.room, saveRoomServerCall: ServerCall.createInitial(), getProvidersServerCall: ServerCall.createInitial([])};
+        let room = {providers: []};
+        this.state = {
+            getRoomServerCall: ServerCall.createInitial(room),
+            saveRoomServerCall: ServerCall.createInitial(),
+            getProvidersServerCall: ServerCall.createInitial([]),
+            room: room
+        };
     }
 
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
-        room: PropTypes.object.isRequired
+        roomId: PropTypes.number.isRequired
     }
 
     componentDidMount() {
-        this.makeServerCall(UserService.getUsers(ProviderType.Consultant), null, null, "getProvidersServerCall");
+        this.makeServerCall(UserService.getUsers(), "getProvidersServerCall").then(() => this.makeServerCall(ConsultationRoomService.getRoom(this.props.roomId), "getRoomServerCall"));
+    }
+
+    serverResponseReceived(response, serverCallName) {
+        const newState = {};
+        newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
+        if (serverCallName === "getRoomServerCall")
+            newState.room = ServerCall.getData(newState[serverCallName])
+        this.setState(newState);
     }
 
     getRoomFieldValueChangeHandler(fieldName) {
         return this.getStateFieldValueChangedHandler("room", fieldName);
     }
 
-    getProvidersChangedHandler() {
+    getProvidersChangedHandler(allProviders) {
         return (e) => {
-            const value = e.target.value;
-            console.log();
+            const providerIds = e.target.value;
+            ConsultationRoom.setProviders(this.state.room, providerIds, allProviders);
+            const newRoom = {...this.state.room};
+            this.setState({room: newRoom});
         }
     }
 
@@ -81,12 +109,18 @@ class CreateEditConsultationRoom extends BaseView {
             messageClose
         } = this.props;
         const {
-            room,
             saveRoomServerCall,
-            getProvidersServerCall
+            getRoomServerCall,
+            getProvidersServerCall,
+            room
         } = this.state;
 
         const allProviders = ServerCall.getData(getProvidersServerCall);
+
+        if (saveRoomServerCall.callStatus === ServerCallStatus.SUCCESS) {
+            messageClose(true);
+            return null;
+        }
 
         return <ModalContainerView titleKey={ConsultationRoom.isNew(room) ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
             <FormControl>
@@ -133,34 +167,37 @@ class CreateEditConsultationRoom extends BaseView {
                     </Box>
                     <Box className={classes.cercField}>
                         <FormLabel textKey="providers"/>
-                        <Select multiple value={room.providers}
-                                onChange={this.getProvidersChangedHandler()}
+                        <Select multiple value={ConsultationRoom.getProviderIds(room)}
+                                onChange={this.getProvidersChangedHandler(allProviders)}
                                 input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
-                                renderValue={(selectedProviders) => (
+                                renderValue={(selectedProviderIds) => (
                                     <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                                        {selectedProviders.map((provider) => (
-                                            <Chip key={provider.id} label={provider.name}/>
+                                        {selectedProviderIds.map((providerId) => (
+                                            <Chip key={providerId} label={ConsultationRoom.getProvider(room, providerId).name}/>
                                         ))}
                                     </Box>
                                 )}>
                             {allProviders.map((provider) => (
-                                <MenuItem key={provider.id} value={provider}>{provider.name}</MenuItem>
+                                <MenuItem key={provider.id} value={provider.id}>
+                                    {provider.name}
+                                </MenuItem>
                             ))}
                         </Select>
                     </Box>
+                    <ServerErrorMessage serverCall={saveRoomServerCall}/>
                     <Box className={classes.createEditConsultationRoomButtons}>
                         <SaveButton serverCall={saveRoomServerCall} className={classes.cecrSaveButton} disabled={!room.title} onSaveHandler={this.getSaveHandler()}/>
                         <CancelButton onClickHandler={() => messageClose(false)}/>
                     </Box>
                 </Box>
             </FormControl>
-            {ServerCall.noCallOrWait(getProvidersServerCall) && <WaitBackdrop/>}
+            {ServerCall.noCallOrWait(getProvidersServerCall, getRoomServerCall) && <WaitBackdrop/>}
         </ModalContainerView>;
     }
 
     getSaveHandler() {
         let service = BeanContainer.get(ConsultationRoomService);
-        return () => service.createUpdateRoom(this.state.room).then(this.getEntitySavedHandler());
+        return () => this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall");
     }
 }
 

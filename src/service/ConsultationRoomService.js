@@ -39,6 +39,10 @@ class ConsultationRoomService {
     static getClientsByConsultationRoom(consultationRoomId) {
         return ServiceUtil.getJson(`consultationRoom/client?consultationRoomId=${consultationRoomId}`);
     }
+
+    static getRoom(consultationRoomId) {
+        return ServiceUtil.getJson(`consultationRoom/${consultationRoomId}`);
+    }
 }
 
 export default ConsultationRoomService;

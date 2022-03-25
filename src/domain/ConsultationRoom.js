@@ -72,6 +72,18 @@ class ConsultationRoom {
     static getDisplayTitle(room) {
         return `${room.title} - ${moment(room.scheduledOn).format("DD MMM")}`
     }
+
+    static getProviderIds(room) {
+        return room.providers.map((x) => x.id);
+    }
+
+    static getProvider(room, providerId) {
+        return _.find(room.providers, (x) => x.id === providerId);
+    }
+
+    static setProviders(room, providerIds, allProviders) {
+        room.providers = providerIds.map((providerId) => _.find(allProviders, (x) => x.id === providerId));
+    }
 }
 
 export default ConsultationRoom;

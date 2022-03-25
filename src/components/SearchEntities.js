@@ -36,7 +36,14 @@ class SearchEntities extends BaseView {
     }
 
     searchOpenHandler = () => {
-        this.makeServerCall(this.search(''), {autoCompleteOpen: true});
+        this.makeServerCall(this.search(''));
+    }
+
+    serverCallMade(serverCallName) {
+        const newState = {};
+        newState[serverCallName] = ServerCall.serverCallMade(this.state[serverCallName]);
+        newState.autoCompleteOpen = true;
+        this.setState(newState);
     }
 
     search(q) {

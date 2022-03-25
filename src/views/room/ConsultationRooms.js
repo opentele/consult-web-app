@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Card, CardActions, CardContent, IconButton, Typography} from "@material-ui/core";
+import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@material-ui/core";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
 import {BeanContainer, ServerCall} from "react-app-common";
@@ -108,8 +108,13 @@ class ConsultationRooms extends BaseView {
                                     {consultationRoom.nextClient && isConsultant &&
                                     <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.nextClient}`}</Typography>}
                                 </Box>
-                                <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
+                                <Box>
+                                    <Box>
+                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary"/>)}
+                                    </Box>
+                                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                                        {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
+                                    </Box>
                                 </Box>
                             </Box>
                         </CardContent>
@@ -130,7 +135,7 @@ class ConsultationRooms extends BaseView {
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                         <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
                         {editConsultationRoomStatus === ModalStatus.OPENED &&
-                        <CreateEditConsultationRoom room={consultationRoom} messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
+                        <CreateEditConsultationRoom roomId={consultationRoom.id} messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
                     </Card>
                 })
             }
@@ -138,4 +143,9 @@ class ConsultationRooms extends BaseView {
     }
 }
 
-export default withStyles(styles)(ConsultationRooms);
+export default withStyles(styles)
+
+(
+    ConsultationRooms
+)
+;
