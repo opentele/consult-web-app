@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Fab, Link, List, ListItem, ListItemIcon} from '@material-ui/core';
-import {Add, ArrowCircleDown, ArrowCircleUp, PersonOutline, VideoCall as VideoCallIcon} from '@mui/icons-material';
+import {Box, Fab, Link, List, ListItem, ListItemIcon, Paper} from '@material-ui/core';
+import {Add, ArrowCircleDown, ArrowCircleUp, Person, VideoCall as VideoCallIcon} from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import {i18n} from "consult-app-common";
 
@@ -9,17 +9,15 @@ const styles = theme => ({
     root: {
         width: '100%',
     },
-    heading: {
-        fontSize: theme.typography.pxToRem(22),
-        fontWeight: theme.typography.fontWeightRegular,
-        backgroundColor: 'lightblue'
-    },
     addClient: {
         alignSelf: "flex-end"
     },
-    container: {
+    crqContainer: {
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        justifyContent: "space-between",
+        padding: 20,
+        marginBottom: 50
     }
 });
 
@@ -29,45 +27,49 @@ class ConsultationRoomQueue extends Component {
     }
 
     static propTypes = {
-        consultationRoom: PropTypes.object.isRequired
+        consultationRoom: PropTypes.object.isRequired,
+        containerClassName: PropTypes.string
     }
 
     render() {
         const {
             classes,
             consultationRoom,
-            style
+            containerClassName
         } = this.props;
 
         return (
-            <Box style={style} className={classes.container}>
-                <List component="nav" aria-label="main">
-                    {
-                        consultationRoom.appointments.map((appointment) =>
-                            <ListItem>
-                                <ListItemIcon>
-                                    <PersonOutline/>
-                                </ListItemIcon>
-                                <ListItem>
-                                    <Link href="#" underline="always">
-                                        {appointment.clientName}
-                                    </Link>
-                                </ListItem>
-                                {appointment.active &&
-                                <ListItemIcon>
-                                    <VideoCallIcon/>
-                                </ListItemIcon>}
-                                {!appointment.active && <ArrowCircleUp/>}
-                                {!appointment.active && <ArrowCircleDown/>}
-                            </ListItem>)
-                    }
-                </List>
+            <Paper className={[classes.crqContainer, containerClassName]} elevation={2}>
+                <Box>
+                    <h4>Patients</h4>
+                    <List>
+                        {
+                            consultationRoom.appointments.map((appointment, index, arr) =>
+                                <ListItem style={{marginTop: -10}}>
+                                    <ListItemIcon>
+                                        <Person/>
+                                    </ListItemIcon>
+                                    <ListItem style={{marginLeft: -35}}>
+                                        <Link href="#" underline="always">
+                                            {appointment.clientName}
+                                        </Link>
+                                    </ListItem>
+                                    {appointment.active &&
+                                    <ListItemIcon>
+                                        <VideoCallIcon/>
+                                    </ListItemIcon>}
+                                    {index !== 0 && <ArrowCircleUp/>}
+                                    {index !== (arr.length - 1) && <ArrowCircleDown/>}
+                                </ListItem>)
+                        }
+                    </List>
+                </Box>
                 <Box className={classes.addClient}>
-                    <Fab color="primary" aria-label="add" variant="extended">
+                    <Fab color="primary" variant="extended">
                         <Add/>{`${i18n.t('add-client')}`}
                     </Fab>
                 </Box>
-            </Box>
+            </Paper>
         );
     }
 }

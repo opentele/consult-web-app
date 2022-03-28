@@ -18,8 +18,7 @@ class JitsiPlaceholder extends Component {
 
         return <Box className={classes.container}
                     sx={{
-                        width: 600,
-                        height: 400,
+                        height: 500,
                         bgcolor: '#00802b'
                     }}>
         </Box>;

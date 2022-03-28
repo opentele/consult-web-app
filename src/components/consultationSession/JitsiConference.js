@@ -3,14 +3,23 @@ import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
+import {Box, Fab} from "@material-ui/core";
+import {NavigateNextRounded, NavigateBeforeRounded} from '@mui/icons-material';
 
 const styles = theme => ({
-    root: {
-        "& > * + *": {
-            marginTop: 2
-        },
-        display: 'flex',
-        flexDirection: 'column'
+    jcContainer: {
+        display: "flex",
+        flexDirection: "column"
+    },
+    jcPatientControlButtons: {
+        alignSelf: "flex-end",
+        display: "flex",
+        flexDirection: "column"
+    },
+    jcClientControlButton: {
+        bottom: 100,
+        marginBottom: 10,
+        marginRight: 10
     }
 });
 
@@ -55,7 +64,8 @@ class JitsiConference extends Component {
 
     static propTypes = {
         placeholder: PropTypes.bool,
-        consultationRoom: PropTypes.object.isRequired
+        consultationRoom: PropTypes.object.isRequired,
+        parentClassName: PropTypes.string
     }
 
     static defaultProp = {
@@ -71,13 +81,13 @@ class JitsiConference extends Component {
         const {
             classes,
             placeholder,
-            consultationRoom
+            consultationRoom,
+            parentClassName
         } = this.props;
 
-        return <div className={classes.root}>
-            <h2>My First Meeting!</h2>
-            {placeholder && <JitsiPlaceholder/>}
-            {!placeholder && <Jitsi
+        return <Box className={[classes.jcContainer, parentClassName]}>
+            <h2>{consultationRoom.title}</h2>
+            {placeholder ? <JitsiPlaceholder/> : <Jitsi
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}
                 roomName={consultationRoom.activeTeleConferenceId}
@@ -85,7 +95,15 @@ class JitsiConference extends Component {
                 interfaceConfig={interfaceConfig}
                 config={config}
             />}
-        </div>;
+            <Box className={classes.jcPatientControlButtons}>
+                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    <NavigateBeforeRounded/>Previous Patient
+                </Fab>
+                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    <NavigateNextRounded/>Next Patient
+                </Fab>
+            </Box>
+        </Box>;
     }
 }
 

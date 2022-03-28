@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import OtherConsultationRoomsInConsultationSession from "../../components/consultationSession/ConsultationRoomQueue";
+import ConsultationRoomQueue from "../../components/consultationSession/ConsultationRoomQueue";
 import JitsiConference from "../../components/consultationSession/JitsiConference";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {BeanContainer, ServerCall} from 'react-app-common';
@@ -9,12 +9,17 @@ import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
 import WaitView from "../../components/WaitView";
 import {withRouter} from "react-router-dom";
+import {Box} from "@material-ui/core";
 
 const styles = theme => ({
-    container: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center"
+    tcvMain: {
+        width: '100%'
+    },
+    tcvConsultationRoomQueue: {
+        marginLeft: 40
+    },
+    tcvJitsiConf: {
+        flexGrow: 1
     }
 });
 
@@ -55,8 +60,10 @@ class TeleConferenceView extends BaseView {
 
         const data = ServerCall.getData(getTeleConferenceRoomCall);
         return <ContainerView showBackButton={true} activeTab="home">
-            <JitsiConference placeholder={jitsiPlaceHolder} consultationRoom={data}/>
-            <OtherConsultationRoomsInConsultationSession style={{marginLeft: 20}} consultationRoom={data}/>
+            <Box style={{display: "flex", flexDirection: "row", padding: 30, width: '100%'}}>
+                <JitsiConference placeholder={true} consultationRoom={data} parentClassName={classes.tcvJitsiConf}/>
+                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data}/>
+            </Box>
         </ContainerView>;
     }
 }
