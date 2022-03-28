@@ -20,6 +20,7 @@ class ConsultationRoom {
     providers;
     appointments;
     activeTeleConferenceId;
+    currentClientId;
 
     static isNew(room) {
         return !(room.id > 0);
@@ -85,6 +86,14 @@ class ConsultationRoom {
 
     static setProviders(room, providerIds, allProviders) {
         room.providers = providerIds.map((providerId) => _.find(allProviders, (x) => x.id === providerId));
+    }
+
+    static isFirstClient(room) {
+        return _.first(room.appointments)["clientId"] === room.currentClientId;
+    }
+
+    static isLastClient(room) {
+        return _.last(room.appointments)["clientId"] === room.currentClientId;
     }
 }
 

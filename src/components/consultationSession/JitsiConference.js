@@ -5,6 +5,8 @@ import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
 import {Box, Fab} from "@material-ui/core";
 import {NavigateNextRounded, NavigateBeforeRounded} from '@mui/icons-material';
+import ConsultationRoom from "../../domain/ConsultationRoom";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     jcContainer: {
@@ -17,7 +19,7 @@ const styles = theme => ({
         flexDirection: "column"
     },
     jcClientControlButton: {
-        bottom: 100,
+        bottom: 135,
         marginBottom: 10,
         marginRight: 10
     }
@@ -96,12 +98,15 @@ class JitsiConference extends Component {
                 config={config}
             />}
             <Box className={classes.jcPatientControlButtons}>
-                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
-                    <NavigateBeforeRounded/>Previous Patient
-                </Fab>
-                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
-                    <NavigateNextRounded/>Next Patient
-                </Fab>
+                {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    {i18n.t("open-client-record")}
+                </Fab>}
+                {!ConsultationRoom.isFirstClient(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    <NavigateBeforeRounded/>{i18n.t("go-to-previous-client")}
+                </Fab>}
+                {!ConsultationRoom.isLastClient(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    <NavigateNextRounded/>{i18n.t("go-to-next-client")}
+                </Fab>}
             </Box>
         </Box>;
     }
