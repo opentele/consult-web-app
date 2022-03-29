@@ -10,11 +10,7 @@ export default class Client {
     otherDetails;
 
     static displayName(client) {
-        return `${client.name} | ${DateTimeUtil.getAgeDisplay(client.age)} | ${client.gender}`;
-    }
-
-    static shortDisplay(client) {
-        return `${client.name} [${DateTimeUtil.getAgeDisplay(client.age)}]`;
+        return `${client.name}; ${DateTimeUtil.getAgeDisplay(client.age)}; ${client.gender}`;
     }
 
     static totalConsultationsDisplay(client) {

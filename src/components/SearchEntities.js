@@ -15,7 +15,7 @@ const styles = () => ({
         paddingTop: 20
     },
     seAutocomplete: {
-        width: '300px'
+        width: '400px'
     }
 });
 

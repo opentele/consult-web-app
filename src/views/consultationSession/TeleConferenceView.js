@@ -40,6 +40,10 @@ class TeleConferenceView extends BaseView {
     }
 
     componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
         let confService = BeanContainer.get(ConsultationRoomService);
         const consultationRoomId = new URLSearchParams(this.props.location.search).get("consultationRoomId");
         this.makeServerCall(confService.getRoomForTeleConference(consultationRoomId), "getTeleConferenceRoomCall");
@@ -62,7 +66,7 @@ class TeleConferenceView extends BaseView {
         return <ContainerView showBackButton={true} activeTab="home">
             <Box style={{display: "flex", flexDirection: "row", padding: 30, width: '100%'}}>
                 <JitsiConference placeholder={true} consultationRoom={data} parentClassName={classes.tcvJitsiConf}/>
-                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data}/>
+                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data} onDataChanged={() => this.refresh()}/>
             </Box>
         </ContainerView>;
     }

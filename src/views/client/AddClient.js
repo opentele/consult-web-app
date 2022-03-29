@@ -6,7 +6,6 @@ import SearchEntities from "../../components/SearchEntities";
 import ModalContainerView from "../framework/ModalContainerView";
 import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
-import ClientService from "../../service/ClientService";
 import AddEntity from "../../components/AddEntity";
 import Client from '../../domain/Client';
 
@@ -18,7 +17,6 @@ class AddClient extends BaseView {
         this.state = {
             serverCall: ServerCall.createInitial()
         };
-        this.clientService = BeanContainer.get(ClientService);
     }
 
     static propTypes = {
@@ -36,11 +34,12 @@ class AddClient extends BaseView {
     }
 
     render() {
-        const {messageClose} = this.props;
+        const {messageClose, consultationRoom} = this.props;
         const {serverCall, client} = this.state;
 
         return <ModalContainerView titleKey="add-client">
-            <SearchEntities entitySelected={this.selectClientHandler} searchFn={this.clientService.searchClients} displayFn={Client.shortDisplay}
+            <SearchEntities entitySelected={this.selectClientHandler} searchFn={(q) => ConsultationRoomService.searchClients(q, consultationRoom.id)}
+                            displayFn={Client.displayName}
                             autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
             <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCall={serverCall}/>
         </ModalContainerView>;

@@ -51,6 +51,10 @@ class ConsultationRoomService {
     static getRoomForTeleConference(consultationRoomId) {
         return ServiceUtil.getJson(`consultationRoom/teleConference/${consultationRoomId}`);
     }
+
+    static searchClients(q, consultationRoomId) {
+        return ServiceUtil.getJson(`consultationRoom/client/search?q=${q}&consultationRoomId=${consultationRoomId}`);
+    }
 }
 
 export default ConsultationRoomService;
