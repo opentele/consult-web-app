@@ -92,16 +92,22 @@ class BaseView extends Component {
         return x;
     }
 
-    serverResponseReceived(response, serverCallName = "serverCall") {
-        const newState = {};
-        newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
-        this.setState(newState);
-    }
-
     serverCallMade(serverCallName = "serverCall") {
         const newState = {};
         newState[serverCallName] = ServerCall.serverCallMade(this.state[serverCallName]);
         this.setState(newState);
+    }
+
+    serverResponseReceived(response, serverCallName = "serverCall") {
+        const newState = {};
+        newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
+        this.setState(newState);
+        if (ServerCall.isSuccessful(newState[serverCallName])) {
+            this.onSuccessfulServerCall(serverCallName);
+        }
+    }
+
+    onSuccessfulServerCall(serverCallName) {
     }
 }
 

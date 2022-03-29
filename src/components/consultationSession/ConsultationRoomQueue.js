@@ -10,7 +10,6 @@ import {ListItemButton} from "@mui/material";
 import ModalStatus from "../../views/framework/ModalStatus";
 import AddClient from "../../views/client/AddClient";
 import BaseView from "../../views/framework/BaseView";
-import ConsultationRoom from "../../domain/ConsultationRoom";
 
 const styles = theme => ({
     root: {

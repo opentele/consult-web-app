@@ -55,6 +55,14 @@ class ConsultationRoomService {
     static searchClients(q, consultationRoomId) {
         return ServiceUtil.getJson(`consultationRoom/client/search?q=${q}&consultationRoomId=${consultationRoomId}`);
     }
+
+    static moveToNextToken(consultationRoom) {
+        return ServiceUtil.postJson(`consultationRoom/appointmentToken/next?consultationRoomId=${consultationRoom.id}`)
+    }
+
+    static moveToPreviousToken(consultationRoom) {
+        return ServiceUtil.postJson(`consultationRoom/appointmentToken/previous?consultationRoomId=${consultationRoom.id}`)
+    }
 }
 
 export default ConsultationRoomService;

@@ -7,6 +7,9 @@ import {Box, Fab} from "@material-ui/core";
 import {NavigateNextRounded, NavigateBeforeRounded} from '@mui/icons-material';
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
+import ConsultationRoomService from "../../service/ConsultationRoomService";
+import BaseView from "../../views/framework/BaseView";
+import {ServerCall} from "react-app-common";
 
 const styles = theme => ({
     jcContainer: {
@@ -57,17 +60,20 @@ const interfaceConfig = {
 };
 
 //https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
-class JitsiConference extends Component {
+class JitsiConference extends BaseView {
     constructor(props) {
         super(props);
         this.setState = this.setState.bind(this);
-        this.state = {};
+        this.state = {
+            moveTokenCall: ServerCall.createInitial()
+        };
     }
 
     static propTypes = {
         placeholder: PropTypes.bool,
         consultationRoom: PropTypes.object.isRequired,
-        parentClassName: PropTypes.string
+        parentClassName: PropTypes.string,
+        onDataChanged: PropTypes.func.isRequired
     }
 
     static defaultProp = {
@@ -78,6 +84,18 @@ class JitsiConference extends Component {
         JitsiMeetAPI.executeCommand("toggleVideo");
         setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
     };
+
+    getGoToNextClientHandler() {
+        return () => this.makeServerCall(ConsultationRoomService.moveToNextToken(this.props.consultationRoom), "moveTokenCall");
+    }
+
+    getGoToPreviousClientHandler() {
+        return () => this.makeServerCall(ConsultationRoomService.moveToPreviousToken(this.props.consultationRoom), "moveTokenCall");
+    }
+
+    onSuccessfulServerCall(serverCallName) {
+        this.props.onDataChanged();
+    }
 
     render() {
         const {
@@ -101,10 +119,14 @@ class JitsiConference extends Component {
                 {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
                     {i18n.t("open-client-record")}
                 </Fab>}
-                {!ConsultationRoom.isFirstClientActive(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+
+                {!ConsultationRoom.isFirstClientActive(consultationRoom) &&
+                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={this.getGoToPreviousClientHandler()}>
                     <NavigateBeforeRounded/>{i18n.t("go-to-previous-client")}
                 </Fab>}
-                {!ConsultationRoom.isLastClientActive(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+
+                {!ConsultationRoom.isLastClientActive(consultationRoom) &&
+                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={this.getGoToNextClientHandler()}>
                     {i18n.t("go-to-next-client")}<NavigateNextRounded/>
                 </Fab>}
             </Box>
