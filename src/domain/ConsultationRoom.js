@@ -102,6 +102,11 @@ class ConsultationRoom {
         const currentAppointment = this.getCurrentAppointment(room);
         return _.isNil(currentAppointment) ? i18n.t('no-active-client') : currentAppointment.clientName;
     }
+
+    static getCurrentClientId(room) {
+        const currentAppointment = this.getCurrentAppointment(room);
+        return currentAppointment.clientId;
+    }
 }
 
 export default ConsultationRoom;

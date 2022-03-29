@@ -3,13 +3,15 @@ import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
-import {Box, Fab} from "@material-ui/core";
+import {Box, CircularProgress, Fab} from "@material-ui/core";
 import {NavigateNextRounded, NavigateBeforeRounded} from '@mui/icons-material';
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../../views/framework/BaseView";
-import {ServerCall} from "react-app-common";
+import {ServerCall, ServerCallStatus} from "react-app-common";
+import ConsultationRecordDuringConferenceView from "../../views/consultation/ConsultationRecordDuringConferenceView";
+import ModalStatus from "../../views/framework/ModalStatus";
 
 const styles = theme => ({
     jcContainer: {
@@ -65,7 +67,8 @@ class JitsiConference extends BaseView {
         super(props);
         this.setState = this.setState.bind(this);
         this.state = {
-            moveTokenCall: ServerCall.createInitial()
+            moveTokenCall: ServerCall.createInitial(),
+            clientRecordModalStatus: ModalStatus.NOT_OPENED
         };
     }
 
@@ -105,6 +108,8 @@ class JitsiConference extends BaseView {
             parentClassName
         } = this.props;
 
+        const {moveTokenCall, clientRecordModalStatus} = this.state;
+
         return <Box className={[classes.jcContainer, parentClassName]}>
             <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
             {placeholder ? <JitsiPlaceholder/> : <Jitsi
@@ -116,21 +121,28 @@ class JitsiConference extends BaseView {
                 config={config}
             />}
             <Box className={classes.jcPatientControlButtons}>
-                {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}
+                      onClick={this.getModalOpenHandler("clientRecordModalStatus")}>
                     {i18n.t("open-client-record")}
                 </Fab>}
 
                 {!ConsultationRoom.isFirstClientActive(consultationRoom) &&
-                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={this.getGoToPreviousClientHandler()}>
-                    <NavigateBeforeRounded/>{i18n.t("go-to-previous-client")}
-                </Fab>}
+                this.getFab(classes, moveTokenCall, this.getGoToPreviousClientHandler(), "go-to-previous-client")}
 
                 {!ConsultationRoom.isLastClientActive(consultationRoom) &&
-                <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={this.getGoToNextClientHandler()}>
-                    {i18n.t("go-to-next-client")}<NavigateNextRounded/>
-                </Fab>}
+                this.getFab(classes, moveTokenCall, this.getGoToNextClientHandler(), "go-to-next-client")}
             </Box>
+
+            {clientRecordModalStatus === ModalStatus.OPENED &&
+            <ConsultationRecordDuringConferenceView clientId={ConsultationRoom.getCurrentClientId(consultationRoom)}/>}
         </Box>;
+    }
+
+    getFab(classes, moveTokenCall, onClickHandler, labelKey) {
+        return <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={onClickHandler}>
+            <>{moveTokenCall.callStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit"/> :
+                <NavigateBeforeRounded/>}{i18n.t(labelKey)}</>
+        </Fab>;
     }
 }
 

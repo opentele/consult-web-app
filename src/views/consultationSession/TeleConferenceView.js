@@ -10,6 +10,7 @@ import ContainerView from "../framework/ContainerView";
 import WaitView from "../../components/WaitView";
 import {withRouter} from "react-router-dom";
 import {Box} from "@material-ui/core";
+import _ from 'lodash';
 
 const styles = theme => ({
     tcvMain: {
@@ -59,7 +60,7 @@ class TeleConferenceView extends BaseView {
             getTeleConferenceRoomCall
         } = this.state;
 
-        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall))
+        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(ServerCall.getData(getTeleConferenceRoomCall)))
             return <WaitView/>;
 
         const data = ServerCall.getData(getTeleConferenceRoomCall);
