@@ -16,6 +16,7 @@ import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import {Redirect} from "react-router-dom";
+import _ from 'lodash';
 
 const styles = theme => ({
     rooms: {
@@ -110,8 +111,8 @@ class ConsultationRooms extends BaseView {
                                     <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
                                     {isConsultant &&
                                     <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
-                                    {consultationRoom.nextClient && isConsultant &&
-                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.nextClient}`}</Typography>}
+                                    {!_.isNil(ConsultationRoom.getCurrentAppointment(consultationRoom)) && isConsultant &&
+                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</Typography>}
                                 </Box>
                                 <Box>
                                     <Box>

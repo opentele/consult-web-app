@@ -88,7 +88,7 @@ class JitsiConference extends Component {
         } = this.props;
 
         return <Box className={[classes.jcContainer, parentClassName]}>
-            <h2>{consultationRoom.title}</h2>
+            <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
             {placeholder ? <JitsiPlaceholder/> : <Jitsi
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}
@@ -101,11 +101,11 @@ class JitsiConference extends Component {
                 {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
                     {i18n.t("open-client-record")}
                 </Fab>}
-                {!ConsultationRoom.isFirstClient(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                {!ConsultationRoom.isFirstClientActive(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
                     <NavigateBeforeRounded/>{i18n.t("go-to-previous-client")}
                 </Fab>}
-                {!ConsultationRoom.isLastClient(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
-                    <NavigateNextRounded/>{i18n.t("go-to-next-client")}
+                {!ConsultationRoom.isLastClientActive(consultationRoom) && <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}>
+                    {i18n.t("go-to-next-client")}<NavigateNextRounded/>
                 </Fab>}
             </Box>
         </Box>;

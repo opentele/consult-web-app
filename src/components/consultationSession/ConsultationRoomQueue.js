@@ -10,6 +10,7 @@ import {ListItemButton} from "@mui/material";
 import ModalStatus from "../../views/framework/ModalStatus";
 import AddClient from "../../views/client/AddClient";
 import BaseView from "../../views/framework/BaseView";
+import ConsultationRoom from "../../domain/ConsultationRoom";
 
 const styles = theme => ({
     root: {
@@ -24,6 +25,11 @@ const styles = theme => ({
         justifyContent: "space-between",
         padding: 20,
         marginBottom: 100
+    },
+    crqActivePatient: {
+        backgroundColor: "lightsteelblue"
+    },
+    crqPatient: {
     }
 });
 
@@ -68,13 +74,15 @@ class ConsultationRoomQueue extends BaseView {
                     <h4>Patients</h4>
                     <List>
                         {
-                            consultationRoom.appointments.map((appointment, index, arr) =>
-                                <ListItem style={{marginTop: -10}} onClick={(e) => this.setState({clientMenuAnchor: e.currentTarget, selectedAppointment: appointment})}>
+                            consultationRoom.appointments.map((appointment, index, arr) => {
+                                const className = appointment.current ? [classes.crqPatient, classes.crqActivePatient] : classes.crqPatient;
+                                return <ListItem className={className}
+                                                 onClick={(e) => this.setState({clientMenuAnchor: e.currentTarget, selectedAppointment: appointment})}>
                                     <ListItemButton style={{marginLeft: -15}}>
                                         <ListItemIcon>
                                             <Person/>
                                         </ListItemIcon>
-                                        <ListItemText primary={appointment.clientName} style={{marginLeft: -25}} />
+                                        <ListItemText primary={appointment.clientName} style={{marginLeft: -25}}/>
                                     </ListItemButton>
                                     {appointment.active &&
                                     <ListItemIcon>
@@ -82,7 +90,8 @@ class ConsultationRoomQueue extends BaseView {
                                     </ListItemIcon>}
                                     {index !== 0 && <ArrowCircleUp/>}
                                     {index !== (arr.length - 1) && <ArrowCircleDown/>}
-                                </ListItem>)
+                                </ListItem>;
+                            })
                         }
                     </List>
                     {!_.isNil(clientMenuAnchor) && <Menu anchorEl={clientMenuAnchor} open={true} onClose={this.getCloseClientMenuHandler()}

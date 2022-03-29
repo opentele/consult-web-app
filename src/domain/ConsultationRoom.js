@@ -16,11 +16,9 @@ class ConsultationRoom {
     numberOfUserClients;
     numberOfClientsPending;
     numberOfUserClientsPending;
-    nextClient;
     providers;
     appointments;
     activeTeleConferenceId;
-    currentClientId;
 
     static isNew(room) {
         return !(room.id > 0);
@@ -30,7 +28,7 @@ class ConsultationRoom {
         const user = GlobalContext.getUser();
         const alerts = [];
         if (this.hasMoreClients(room) && user["providerType"] === ProviderType.Usher)
-            alerts.push(Alert.info(i18n.t("conference-client-next", {client: room.nextClient})));
+            alerts.push(Alert.info(i18n.t("conference-client-next", {client: ConsultationRoom.getCurrentClientName(room)})));
 
         if (room.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
@@ -48,8 +46,8 @@ class ConsultationRoom {
     }
 
     static hasMoreClients(room) {
-        let b = _.isEmpty(room.nextClient);
-        return !b;
+        const currentAppointment = this.getCurrentAppointment(room);
+        return _.some(room.appointments, (app) => app.queueNumber > currentAppointment.queueNumber);
     }
 
     static isInPast(room) {
@@ -88,12 +86,21 @@ class ConsultationRoom {
         room.providers = providerIds.map((providerId) => _.find(allProviders, (x) => x.id === providerId));
     }
 
-    static isFirstClient(room) {
-        return _.first(room.appointments)["clientId"] === room.currentClientId;
+    static isFirstClientActive(room) {
+        return _.first(room.appointments).current;
     }
 
-    static isLastClient(room) {
-        return _.last(room.appointments)["clientId"] === room.currentClientId;
+    static isLastClientActive(room) {
+        return _.last(room.appointments).current;
+    }
+
+    static getCurrentAppointment(room) {
+        return _.find(room.appointments, (app) => app.current);
+    }
+
+    static getCurrentClientName(room) {
+        const currentAppointment = this.getCurrentAppointment(room);
+        return _.isNil(currentAppointment) ? i18n.t('no-active-client') : currentAppointment.clientName;
     }
 }
 
