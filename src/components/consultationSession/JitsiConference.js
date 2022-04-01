@@ -1,10 +1,10 @@
-import React, {Component} from "react";
+import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
 import {Box, CircularProgress, Fab} from "@material-ui/core";
-import {NavigateNextRounded, NavigateBeforeRounded} from '@mui/icons-material';
+import {NavigateBeforeRounded} from '@mui/icons-material';
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -12,6 +12,7 @@ import BaseView from "../../views/framework/BaseView";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRecordDuringConferenceView from "../../views/consultation/ConsultationRecordDuringConferenceView";
 import ModalStatus from "../../views/framework/ModalStatus";
+import GlobalContext from '../../framework/GlobalContext';
 
 const styles = theme => ({
     jcContainer: {
@@ -34,6 +35,7 @@ const config = {
     defaultLanguage: "en",
     prejoinPageEnabled: false
 };
+//https://jitsi.github.io/handbook/docs/user-guide/user-guide-advanced
 
 const interfaceConfig = {
     LANG_DETECTION: false,
@@ -55,11 +57,13 @@ const interfaceConfig = {
         "videoquality",
         "tileview",
         "download",
-        "help",
-        "mute-everyone"
+        "mute-everyone",
+        "raisehand",
+        "filmstrip"
         // 'security'
     ]
 };
+//explore - 'recording'
 
 //https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 class JitsiConference extends BaseView {
@@ -85,7 +89,7 @@ class JitsiConference extends BaseView {
 
     handleAPI(JitsiMeetAPI) {
         JitsiMeetAPI.executeCommand("toggleVideo");
-        setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
+        // setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
     };
 
     getGoToNextClientHandler() {
@@ -113,10 +117,11 @@ class JitsiConference extends BaseView {
         return <Box className={[classes.jcContainer, parentClassName]}>
             <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
             {placeholder ? <JitsiPlaceholder/> : <Jitsi
+                containerStyle={{height: "500px"}}
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}
                 roomName={consultationRoom.activeTeleConferenceId}
-                displayName={"demo"}
+                displayName={GlobalContext.getUser().name}
                 interfaceConfig={interfaceConfig}
                 config={config}
             />}

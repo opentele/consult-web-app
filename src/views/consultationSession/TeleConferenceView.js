@@ -66,7 +66,7 @@ class TeleConferenceView extends BaseView {
         const data = ServerCall.getData(getTeleConferenceRoomCall);
         return <ContainerView showBackButton={true} activeTab="home">
             <Box style={{display: "flex", flexDirection: "row", padding: 30, width: '100%'}}>
-                <JitsiConference placeholder={true} consultationRoom={data} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
+                <JitsiConference placeholder={false} consultationRoom={data} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
                 <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data} onDataChanged={() => this.refresh()}/>
             </Box>
         </ContainerView>;
