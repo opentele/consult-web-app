@@ -16,6 +16,7 @@ import WaitBackdrop from "../../components/WaitBackdrop";
 import _ from 'lodash';
 import {MenuItem, Select} from "@mui/material";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
+import SaveCancelButtons from "../../components/SaveCancelButtons";
 
 const styles = theme => ({
     cecrContainer: {
@@ -41,15 +42,6 @@ const styles = theme => ({
     },
     textField: {
         width: "300px"
-    },
-    createEditConsultationRoomButtons: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end"
-    },
-    cecrSaveButton: {
-        marginRight: 10
     },
     cercSelectedProvider: {
         fontWeight: theme.typography.fontWeightRegular,
@@ -185,10 +177,7 @@ class CreateEditConsultationRoom extends BaseView {
                         </Select>
                     </Box>
                     <ServerErrorMessage serverCall={saveRoomServerCall}/>
-                    <Box className={classes.createEditConsultationRoomButtons}>
-                        <SaveButton serverCall={saveRoomServerCall} className={classes.cecrSaveButton} disabled={!room.title} onSaveHandler={this.getSaveHandler()}/>
-                        <CancelButton onClickHandler={() => messageClose(false)}/>
-                    </Box>
+                    <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRoomServerCall} onCancelHandler={() => messageClose(false)}/>
                 </Box>
             </FormControl>
             {ServerCall.noCallOrWait(getProvidersServerCall, getRoomServerCall) && <WaitBackdrop/>}

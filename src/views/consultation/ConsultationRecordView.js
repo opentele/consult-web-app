@@ -78,7 +78,6 @@ class ConsultationRecordView extends BaseView {
                     value={consultation.recommendations}
                 />
             </Box>
-            <Button className={classes.field} color="primary" variant="contained">SAVE</Button>
         </Box>;
     }
 }

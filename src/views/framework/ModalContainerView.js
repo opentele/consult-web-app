@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import {AppBar, Box, Dialog, Toolbar, Typography} from "@material-ui/core";
+import Paper from '@mui/material/Paper';
 import {i18n} from "consult-app-common";
+import Draggable from 'react-draggable';
+import {DialogTitle} from "@mui/material";
 
 const styles = theme => ({
     mvcMain: {
@@ -10,26 +13,33 @@ const styles = theme => ({
     }
 });
 
+function PaperComponent(props) {
+    return (
+        <Draggable
+            handle="#draggable-dialog-title"
+            cancel={'[class*="MuiDialogContent-root"]'}>
+            <Paper {...props} />
+        </Draggable>
+    );
+}
+
 class ModalContainerView extends React.Component {
     constructor(props, context) {
         super(props, context);
     }
 
     static propTypes = {
-        titleKey: PropTypes.string.isRequired
+        titleKey: PropTypes.string.isRequired,
+        titleObj: PropTypes.object
     };
 
     render() {
-        const {children, titleKey, classes} = this.props;
-        return <Dialog open={true} maxWidth="lg">
+        const {children, titleKey, classes, titleObj} = this.props;
+        return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title">
             <Box className={classes.mvcMain}>
-                <AppBar position="sticky">
-                    <Toolbar>
-                        <Typography variant="h6" component="div">
-                            {i18n.t(titleKey)}
-                        </Typography>
-                    </Toolbar>
-                </AppBar>
+                <DialogTitle style={{cursor: 'move', backgroundColor: "springgreen"}} id="draggable-dialog-title">
+                    {i18n.t(titleKey, titleObj)}
+                </DialogTitle>
                 {children}
             </Box>
         </Dialog>;

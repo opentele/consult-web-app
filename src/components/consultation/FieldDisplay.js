@@ -24,7 +24,7 @@ class FieldDisplay extends Component {
             fieldValue
         } = this.props;
 
-        return <Grid item xs={5}>
+        return <Grid item xs={6}>
             <Box sx={{display: "flex", flexDirection: "column"}}>
                 <Typography variant="button">{i18n.t(fieldName)}</Typography>
                 <Typography variant="subtitle2">{fieldValue}</Typography>

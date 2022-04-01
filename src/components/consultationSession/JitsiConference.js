@@ -134,7 +134,8 @@ class JitsiConference extends BaseView {
             </Box>
 
             {clientRecordModalStatus === ModalStatus.OPENED &&
-            <ConsultationRecordDuringConferenceView clientId={ConsultationRoom.getCurrentClientId(consultationRoom)}/>}
+            <ConsultationRecordDuringConferenceView clientId={ConsultationRoom.getCurrentClientId(consultationRoom)}
+                                                    onClose={this.getModalCloseHandler("clientRecordModalStatus")}/>}
         </Box>;
     }
 
