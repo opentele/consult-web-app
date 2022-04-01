@@ -19,16 +19,8 @@ const styles = theme => ({
         display: "flex",
         flexDirection: "column"
     },
-    jcPatientControlButtons: {
-        alignSelf: "flex-end",
-        display: "flex",
-        flexDirection: "column"
-    },
-    jcClientControlButton: {
-        bottom: 135,
-        marginBottom: 10,
-        marginRight: 10
-    }
+    jcPatientControlButtons: {},
+    jcClientControlButton: {}
 });
 
 const config = {
@@ -51,19 +43,14 @@ const interfaceConfig = {
         "fullscreen",
         "fodeviceselection",
         "hangup",
-        "profile",
         "chat",
         "settings",
-        "videoquality",
-        "tileview",
         "download",
         "mute-everyone",
-        "raisehand",
-        "filmstrip"
-        // 'security'
+        "raisehand"
     ]
 };
-//explore - 'recording'
+//explore - 'recording', "videoquality", "tileview", profile
 
 //https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 class JitsiConference extends BaseView {
@@ -117,7 +104,7 @@ class JitsiConference extends BaseView {
         return <Box className={[classes.jcContainer, parentClassName]}>
             <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
             {placeholder ? <JitsiPlaceholder/> : <Jitsi
-                containerStyle={{height: "500px"}}
+                containerStyle={{width: "100%", height: "550px"}}
                 domain="meet.jit.si"
                 onAPILoad={this.handleAPI}
                 roomName={consultationRoom.activeTeleConferenceId}

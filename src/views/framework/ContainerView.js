@@ -13,6 +13,10 @@ import {Link, withRouter} from 'react-router-dom';
 import BackIcon from "@mui/icons-material/ArrowBack";
 
 const styles = theme => ({
+    cvContainer: {
+        display: "flex",
+        flexDirection: "column"
+    },
     backButton: {
         marginTop: 10,
         marginBottom: 10,
@@ -32,14 +36,14 @@ class ContainerView extends BaseView {
     }
 
     static propTypes = {
-        activeTab: PropTypes.oneOf(['home','client', 'users']),
+        activeTab: PropTypes.oneOf(['home', 'client', 'users']),
         showBackButton: PropTypes.bool,
         containerClassName: PropTypes.string
     }
 
     render() {
         const {classes, children, activeTab, showBackButton, containerClassName} = this.props;
-        return <Box className={containerClassName}>
+        return <Box className={[classes.cvContainer, containerClassName]}>
             <ConsultAppBar/>
             {showBackButton && <Button onClick={this.props.history.goBack} variant="text" color="secondary" startIcon={<BackIcon/>} className={classes.backButton}>
                 {i18n.t('back-button')}
@@ -49,7 +53,8 @@ class ContainerView extends BaseView {
                 <BottomNavigation
                     showLabels
                     value={tabIndexes[activeTab]}
-                    onChange={(event, newValue) => {}}>
+                    onChange={(event, newValue) => {
+                    }}>
                     <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon/>}/>
                     <BottomNavigationAction component={Link} to="/clients" label={i18n.t('client-navigation-icon')} icon={<PeopleIcon/>}/>
                     <BottomNavigationAction component={Link} to="/users" label={i18n.t('manage-users-menu-item')} icon={<SecurityIcon/>}/>

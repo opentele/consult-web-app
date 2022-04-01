@@ -12,18 +12,6 @@ import {withRouter} from "react-router-dom";
 import {Box} from "@material-ui/core";
 import _ from 'lodash';
 
-const styles = theme => ({
-    tcvMain: {
-        width: '100%'
-    },
-    tcvConsultationRoomQueue: {
-        marginLeft: 40
-    },
-    tcvJitsiConf: {
-        flexGrow: 1
-    }
-});
-
 class TeleConferenceView extends BaseView {
     constructor(props) {
         super(props);
@@ -64,13 +52,28 @@ class TeleConferenceView extends BaseView {
             return <WaitView/>;
 
         const data = ServerCall.getData(getTeleConferenceRoomCall);
-        return <ContainerView showBackButton={true} activeTab="home">
-            <Box style={{display: "flex", flexDirection: "row", padding: 30, width: '100%'}}>
+        return <ContainerView showBackButton={false} activeTab="home">
+            <Box className={classes.tcvContainer}>
                 <JitsiConference placeholder={false} consultationRoom={data} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
                 <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data} onDataChanged={() => this.refresh()}/>
             </Box>
         </ContainerView>;
     }
 }
+
+const styles = theme => ({
+    tcvContainer: {
+        flexGrow: 1,
+        display: "flex",
+        flexDirection: "row",
+        padding: 30
+    },
+    tcvConsultationRoomQueue: {
+        marginLeft: 40
+    },
+    tcvJitsiConf: {
+        flexGrow: 1
+    }
+});
 
 export default withStyles(styles)(withRouter(TeleConferenceView));
