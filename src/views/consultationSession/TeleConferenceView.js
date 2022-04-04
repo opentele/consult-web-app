@@ -66,13 +66,15 @@ const styles = theme => ({
         flexGrow: 1,
         display: "flex",
         flexDirection: "row",
-        padding: 30
+        padding: 30,
+        flex: 1
     },
     tcvConsultationRoomQueue: {
-        marginLeft: 40
+        marginLeft: 20,
+        flex: 0.3
     },
     tcvJitsiConf: {
-        flexGrow: 1
+        flex: 0.7
     }
 });
 

@@ -52,11 +52,11 @@ class JitsiConference extends BaseView {
     }
 
     getGoToNextClientHandler() {
-        return () => this.makeServerCall(ConsultationRoomService.moveToNextToken(this.props.consultationRoom), "moveTokenCall");
+        return () => this.makeServerCall(ConsultationRoomService.moveToNextAppointment(this.props.consultationRoom), "moveTokenCall");
     }
 
     getGoToPreviousClientHandler() {
-        return () => this.makeServerCall(ConsultationRoomService.moveToPreviousToken(this.props.consultationRoom), "moveTokenCall");
+        return () => this.makeServerCall(ConsultationRoomService.moveToPreviousAppointment(this.props.consultationRoom), "moveTokenCall");
     }
 
     onSuccessfulServerCall(serverCallName) {

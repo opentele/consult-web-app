@@ -28,11 +28,7 @@ const styles = theme => ({
         flexDirection: "column",
         justifyContent: "space-between",
         padding: 0
-    },
-    crqActivePatient: {
-        backgroundColor: "lightsteelblue"
-    },
-    crqPatient: {}
+    }
 });
 
 class ConsultationRoomQueue extends BaseView {
@@ -42,7 +38,8 @@ class ConsultationRoomQueue extends BaseView {
             clientMenuAnchor: null,
             selectedAppointment: null,
             addClientModalStatus: ModalStatus.NOT_OPENED,
-            moveClientCall: ServerCall.createInitial()
+            moveClientCall: ServerCall.createInitial(),
+            setAsCurrentCall: ServerCall.createInitial()
         }
     }
 
@@ -58,8 +55,12 @@ class ConsultationRoomQueue extends BaseView {
         }
     }
 
-    getMoveClientHandler(direction, appointmentToken) {
-        return () => this.makeServerCall(ConsultationRoomService.moveClientInQueue(direction, this.props.consultationRoom, appointmentToken), "moveClientCall");
+    getMoveClientHandler(direction, appointment) {
+        return () => this.makeServerCall(ConsultationRoomService.moveClientInQueue(direction, this.props.consultationRoom, appointment), "moveClientCall");
+    }
+
+    getSetAsCurrentClientHandler(appointment) {
+        return () => this.makeServerCall(ConsultationRoomService.setAsCurrentAppointment(this.props.consultationRoom, appointment), )
     }
 
     refresh() {
@@ -77,7 +78,7 @@ class ConsultationRoomQueue extends BaseView {
             containerClassName
         } = this.props;
 
-        const {clientMenuAnchor, selectedAppointment, addClientModalStatus, moveClientCall} = this.state;
+        const {clientMenuAnchor, selectedAppointment, addClientModalStatus, moveClientCall, setAsCurrentCall} = this.state;
 
         const movingClient = moveClientCall.callStatus === ServerCallStatus.WAITING;
 
@@ -89,14 +90,13 @@ class ConsultationRoomQueue extends BaseView {
                         <List dense={true}>
                             {
                                 consultationRoom.appointments.map((appointment, index, arr) => {
-                                    const className = appointment.current ? [classes.crqPatient, classes.crqActivePatient] : classes.crqPatient;
-                                    return <ListItem className={className}>
-                                        <ListItemButton style={{marginLeft: -15}}
+                                    return <ListItem>
+                                        <ListItemButton selected={appointment.current}
                                                         onClick={(e) => this.setState({clientMenuAnchor: e.currentTarget, selectedAppointment: appointment})}>
                                             <ListItemIcon>
                                                 <Person/>
                                             </ListItemIcon>
-                                            <ListItemText primary={appointment.clientName} style={{marginLeft: -25}}/>
+                                            <ListItemText primary={appointment.clientName}/>
                                         </ListItemButton>
                                         {appointment.active &&
                                         <ListItemIcon>
@@ -119,7 +119,7 @@ class ConsultationRoomQueue extends BaseView {
                                                                  vertical: 'top',
                                                                  horizontal: 'left',
                                                              }}>
-                            <MenuItem onClick={this.getCloseClientMenuHandler()}>{i18n.t('set-as-active-client')}</MenuItem>
+                            <MenuItem onClick={this.getSetAsCurrentClientHandler(selectedAppointment)}>{i18n.t('set-as-active-client')}</MenuItem>
                             <MenuItem component={Link} to={`/client?id=${selectedAppointment.clientId}`}>{i18n.t('open-client-record')}</MenuItem>
                         </Menu>}
                     </Box>
@@ -137,4 +137,9 @@ class ConsultationRoomQueue extends BaseView {
     }
 }
 
-export default withStyles(styles)(ConsultationRoomQueue);
+export default withStyles(styles)
+
+(
+    ConsultationRoomQueue
+)
+;

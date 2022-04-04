@@ -56,19 +56,23 @@ class ConsultationRoomService {
         return ServiceUtil.getJson(`consultationRoom/client/search?q=${q}&consultationRoomId=${consultationRoomId}`);
     }
 
-    static moveToNextToken(consultationRoom) {
-        return ServiceUtil.postJson(`consultationRoom/appointmentToken/next?consultationRoomId=${consultationRoom.id}`)
+    static moveToNextAppointment(consultationRoom) {
+        return ServiceUtil.postJson(`consultationRoom/appointment/next?consultationRoomId=${consultationRoom.id}`)
     }
 
-    static moveToPreviousToken(consultationRoom) {
-        return ServiceUtil.postJson(`consultationRoom/appointmentToken/previous?consultationRoomId=${consultationRoom.id}`)
+    static moveToPreviousAppointment(consultationRoom) {
+        return ServiceUtil.postJson(`consultationRoom/appointment/previous?consultationRoomId=${consultationRoom.id}`)
     }
 
-    static moveClientInQueue(direction, consultationRoom, appointmentToken) {
+    static moveClientInQueue(direction, consultationRoom, appointment) {
         if (direction === "previous")
-            return ServiceUtil.postJson(`consultationRoom/appointmentToken/moveUp?consultationRoomId=${consultationRoom.id}&appointmentTokenId=${appointmentToken.id}`);
+            return ServiceUtil.postJson(`consultationRoom/appointment/moveUp?consultationRoomId=${consultationRoom.id}&appointmentId=${appointment.id}`);
         else if (direction === "next")
-            return ServiceUtil.postJson(`consultationRoom/appointmentToken/moveDown?consultationRoomId=${consultationRoom.id}&appointmentTokenId=${appointmentToken.id}`);
+            return ServiceUtil.postJson(`consultationRoom/appointment/moveDown?consultationRoomId=${consultationRoom.id}&appointmentId=${appointment.id}`);
+    }
+
+    static setAsCurrentAppointment(consultationRoom, appointment) {
+        return ServiceUtil.postJson(`consultationRoom/appointment/setCurrent?consultationRoomId=${consultationRoom.id}&appointmentId=${appointment.id}`)
     }
 }
 
