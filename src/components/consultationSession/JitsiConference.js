@@ -1,7 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
 import {Box, CircularProgress, Fab} from "@material-ui/core";
 import ConsultationRoom from "../../domain/ConsultationRoom";
@@ -11,7 +10,6 @@ import BaseView from "../../views/framework/BaseView";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRecordDuringConferenceView from "../../views/consultation/ConsultationRecordDuringConferenceView";
 import ModalStatus from "../../views/framework/ModalStatus";
-import GlobalContext from '../../framework/GlobalContext';
 import JitsiWrapper from "./JitsiWrapper";
 
 const styles = theme => ({

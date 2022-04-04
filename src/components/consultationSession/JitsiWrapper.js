@@ -14,6 +14,13 @@ const interfaceConfig = {
     HIDE_INVITE_MORE_HEADER: true,
     MOBILE_APP_PROMO: false,
     SHOW_CHROME_EXTENSION_BANNER: false,
+    SHOW_JITSI_WATERMARK: false,
+    DISABLE_DOMINANT_SPEAKER_INDICATOR: true,
+    DISABLE_PRESENCE_STATUS: false,
+    DISABLE_TRANSCRIPTION_SUBTITLES: true,
+    HIDE_DEEP_LINKING_LOGO: true,
+    SHOW_BRAND_WATERMARK: false,
+
     TOOLBAR_BUTTONS: [
         "microphone",
         "camera",
@@ -30,7 +37,12 @@ const interfaceConfig = {
 
 const config = {
     defaultLanguage: "en",
-    prejoinPageEnabled: false
+    enableWelcomePage: false,
+    prejoinPageEnabled: false,
+    enableClosePage: false,
+    hideDominantSpeakerBadge: true,
+    readOnlyName: true,
+    dynamicBrandingUrl: "https://consultweb:6052/branding.json"
 };
 //https://jitsi.github.io/handbook/docs/user-guide/user-guide-advanced
 //explore - 'recording', "videoquality", "tileview", profile
