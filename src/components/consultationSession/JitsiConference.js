@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Jitsi from "react-jitsi";
 import JitsiPlaceholder from "./JitsiPlaceholder";
 import {Box, CircularProgress, Fab} from "@material-ui/core";
-import {NavigateBeforeRounded} from '@mui/icons-material';
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -13,46 +12,24 @@ import {ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRecordDuringConferenceView from "../../views/consultation/ConsultationRecordDuringConferenceView";
 import ModalStatus from "../../views/framework/ModalStatus";
 import GlobalContext from '../../framework/GlobalContext';
+import JitsiWrapper from "./JitsiWrapper";
 
 const styles = theme => ({
     jcContainer: {
         display: "flex",
         flexDirection: "column"
     },
-    jcPatientControlButtons: {},
-    jcClientControlButton: {}
+    jcPatientControlButtons: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end",
+        marginTop: 20
+    },
+    jcClientControlButton: {
+        marginLeft: 10
+    }
 });
 
-const config = {
-    defaultLanguage: "en",
-    prejoinPageEnabled: false
-};
-//https://jitsi.github.io/handbook/docs/user-guide/user-guide-advanced
-
-const interfaceConfig = {
-    LANG_DETECTION: false,
-    lang: "en",
-    APP_NAME: "OpenTele Consultation",
-    DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
-    HIDE_INVITE_MORE_HEADER: true,
-    MOBILE_APP_PROMO: false,
-    SHOW_CHROME_EXTENSION_BANNER: false,
-    TOOLBAR_BUTTONS: [
-        "microphone",
-        "camera",
-        "fullscreen",
-        "fodeviceselection",
-        "hangup",
-        "chat",
-        "settings",
-        "download",
-        "mute-everyone",
-        "raisehand"
-    ]
-};
-//explore - 'recording', "videoquality", "tileview", profile
-
-//https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 class JitsiConference extends BaseView {
     constructor(props) {
         super(props);
@@ -73,11 +50,6 @@ class JitsiConference extends BaseView {
     static defaultProp = {
         placeholder: false
     }
-
-    handleAPI(JitsiMeetAPI) {
-        JitsiMeetAPI.executeCommand("toggleVideo");
-        // setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
-    };
 
     getGoToNextClientHandler() {
         return () => this.makeServerCall(ConsultationRoomService.moveToNextToken(this.props.consultationRoom), "moveTokenCall");
@@ -103,23 +75,15 @@ class JitsiConference extends BaseView {
 
         return <Box className={[classes.jcContainer, parentClassName]}>
             <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
-            {placeholder ? <JitsiPlaceholder/> : <Jitsi
-                containerStyle={{width: "100%", height: "550px"}}
-                domain="meet.jit.si"
-                onAPILoad={this.handleAPI}
-                roomName={consultationRoom.activeTeleConferenceId}
-                displayName={GlobalContext.getUser().name}
-                interfaceConfig={interfaceConfig}
-                config={config}
-            />}
+            {placeholder ? <JitsiPlaceholder/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}/>}
             <Box className={classes.jcPatientControlButtons}>
+                {!ConsultationRoom.isFirstClientActive(consultationRoom) &&
+                this.getFab(classes, moveTokenCall, this.getGoToPreviousClientHandler(), "go-to-previous-client")}
+
                 {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}
                       onClick={this.getModalOpenHandler("clientRecordModalStatus")}>
                     {i18n.t("open-client-record")}
                 </Fab>}
-
-                {!ConsultationRoom.isFirstClientActive(consultationRoom) &&
-                this.getFab(classes, moveTokenCall, this.getGoToPreviousClientHandler(), "go-to-previous-client")}
 
                 {!ConsultationRoom.isLastClientActive(consultationRoom) &&
                 this.getFab(classes, moveTokenCall, this.getGoToNextClientHandler(), "go-to-next-client")}
@@ -133,8 +97,7 @@ class JitsiConference extends BaseView {
 
     getFab(classes, moveTokenCall, onClickHandler, labelKey) {
         return <Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton} onClick={onClickHandler}>
-            <>{moveTokenCall.callStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit"/> :
-                <NavigateBeforeRounded/>}{i18n.t(labelKey)}</>
+            <>{moveTokenCall.callStatus === ServerCallStatus.WAITING ? <CircularProgress color="inherit"/> : null}{i18n.t(labelKey)}</>
         </Fab>;
     }
 }

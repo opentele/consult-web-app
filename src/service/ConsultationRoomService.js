@@ -63,6 +63,13 @@ class ConsultationRoomService {
     static moveToPreviousToken(consultationRoom) {
         return ServiceUtil.postJson(`consultationRoom/appointmentToken/previous?consultationRoomId=${consultationRoom.id}`)
     }
+
+    static moveClientInQueue(direction, consultationRoom, appointmentToken) {
+        if (direction === "previous")
+            return ServiceUtil.postJson(`consultationRoom/appointmentToken/moveUp?consultationRoomId=${consultationRoom.id}&appointmentTokenId=${appointmentToken.id}`);
+        else if (direction === "next")
+            return ServiceUtil.postJson(`consultationRoom/appointmentToken/moveDown?consultationRoomId=${consultationRoom.id}&appointmentTokenId=${appointmentToken.id}`);
+    }
 }
 
 export default ConsultationRoomService;
