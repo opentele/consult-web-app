@@ -99,7 +99,7 @@ class BaseView extends Component {
     serverCallMade(serverCallName = "serverCall") {
         const newState = {};
         newState[serverCallName] = ServerCall.serverCallMade(this.state[serverCallName]);
-        this.setState(newState);
+        this.updateState(newState);
     }
 
     serverResponseReceived(response, serverCallName = "serverCall") {

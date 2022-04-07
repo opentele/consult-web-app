@@ -8,7 +8,7 @@ import {Box} from "@material-ui/core";
 
 const styles = theme => ({
     scbContainer: {
-        marginTop: 20,
+        marginTop: 30,
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end"

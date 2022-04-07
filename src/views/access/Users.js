@@ -38,7 +38,7 @@ class Users extends BaseView {
             <br/>
             {addUserModalStatus === ModalStatus.OPENED &&
             <AddUser messageClose={this.getModalCloseHandler("addUserModalStatus")} autocompletePlaceholderMessageKey="add-user-autocomplete-placeholder"/>}
-            {registerUserModalStatus === ModalStatus.OPENED && <RegisterUser/>}
+            {registerUserModalStatus === ModalStatus.OPENED && <RegisterUser messageClose={this.getModalCloseHandler("registerUserModalStatus")}/>}
             <TableContainer className={classes.usersContainer}>
                 <Table sx={{minWidth: 700}} aria-label="customized table">
                     <TableHead>

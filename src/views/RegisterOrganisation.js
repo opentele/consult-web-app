@@ -101,8 +101,12 @@ class RegisterOrganisation extends BaseView {
             let {orgName} = this.state;
             let {userName, userNameType, password, name} = this.state.editUserState;
             this.makeServerCall(UserService.registerOrg(name, orgName, userName, userNameType, password));
-            this.setState({submitFailure: false});
         }
+    }
+
+    updateState(newState) {
+        newState.submitFailure = false;
+        this.setState(newState);
     }
 
     render() {

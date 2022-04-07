@@ -1,113 +1,70 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import Formsy from 'formsy-react';
-import {Button, Card, Typography} from '@material-ui/core';
 import PropTypes from 'prop-types';
-
-import ValidatedTextField from '../components/loginSignup/ValidatedTextField';
 import {UserService} from "consult-app-common";
-import CommunicationMode from "../components/loginSignup/CommunicationMode";
-import AuthenticationMode from "../components/loginSignup/AuthenticationMode";
-import ServerErrorMessage from "../components/ServerErrorMessage";
 import ModalContainerView from "./framework/ModalContainerView";
+import EditUser from "../components/loginSignup/EditUser";
+import SaveCancelButtons from "../components/SaveCancelButtons";
+import ServerErrorMessage from "../components/ServerErrorMessage";
+import {ServerCall} from "react-app-common";
+import {Box} from "@material-ui/core";
+import BaseView from "./framework/BaseView";
 
 const styles = theme => ({
-    root: {},
-    form: {
-        display: 'flex',
-        flexDirection: 'column'
-    },
-    card: {
-        display: 'flex',
-        flexDirection: 'column',
-        marginTop: 20,
-        padding: 30
-    },
-    field: {
-        marginTop: theme.spacing.unit
-    },
-    actions: {
-        marginTop: theme.spacing.unit * 2
+    ruContainer: {
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingBottom: 20
     }
 });
 
-class RegisterUser extends Component {
+class RegisterUser extends BaseView {
     static propTypes = {
-        onRegister: PropTypes.func,
-        registerFailed: PropTypes.string
+        messageClose: PropTypes.func.isRequired
     };
 
     constructor(props) {
         super(props);
-
         this.state = {
-            canSubmit: false,
-            name: props.defaultName,
-            email: props.defaultEmail,
-            mobile: props.defaultMobile,
-            countryCode: props.defaultCountryCode
+            serverCall: ServerCall.createInitial(),
+            editUserState: {}
         };
+    }
 
-        this.setState = this.setState.bind(this);
+    getRegisterUserHandler() {
+        return (e) => {
+            if (!this.state.editUserState.valid) {
+                e.preventDefault();
+                let state = {submitFailure: true};
+                this.setState(state);
+                return;
+            }
+            let {userName, userNameType, password, name, providerType} = this.state.editUserState;
+            this.makeServerCall(UserService.registerUser(name, userName, userNameType, password, providerType)).then(this.getEntitySavedHandler());
+        }
+    }
+
+    updateState(newState) {
+        newState.submitFailure = false;
+        this.setState(newState);
     }
 
     render() {
         const {
             classes,
-            error
+            messageClose
         } = this.props;
-        const {canSubmit} = this.state;
+        const {serverCall, submitFailure} = this.state;
         return (
             <ModalContainerView titleKey="register-new-user">
-                <Formsy className={classes.form}
-                        onValid={this.enableSubmit} onInvalid={this.disableSubmit}
-                        onValidSubmit={this.submit}>
-
-                    <ValidatedTextField
-                        name="name"
-                        autoComplete="name"
-                        mandatory={true}
-                        className={classes.field}
-                        label="Your name"
-                        helperText="min 3 characters"
-                        textValue={this.state.name}
-                        handleChange={(event) => this.setState({name: event.target.value})}
-                    />
-
-                    <CommunicationMode countryCode={this.state.countryCode} email={this.state.email} mobile={this.state.mobile} onStateChange={this.setState}/>
-
-                    <Card className={classes.card}>
-                        <AuthenticationMode onAuthModeChange={this.setState} authMode={this.state.authMode}/>
-                    </Card>
-
-                    <ServerErrorMessage serverCall={null}/>
-
-                    <div className={classes.actions}>
-                        <Button type="submit"
-                                fullWidth
-                                variant="contained" color="primary"
-                                onSubmit={this.submit}
-                                disabled={!canSubmit}>Register User</Button>
-                    </div>
-                </Formsy>
+                <Box className={classes.ruContainer}>
+                    <EditUser displayError={submitFailure} notifyState={(editUserState) => this.setState({editUserState: editUserState})}/>
+                    <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={this.getRegisterUserHandler()} disabled={false}/>
+                    <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
+                </Box>
             </ModalContainerView>
         );
     }
-
-    submit = () => {
-        let {name, orgName, email, mobile, password} = this.state;
-        UserService.registerOrg(name, orgName, email, mobile, password).then(() => {
-        }, () => {
-        });
-    }
-
-    disableSubmit = () => {
-        this.setState({canSubmit: false});
-    };
-
-    enableSubmit = () => {
-        this.setState({canSubmit: true});
-    };
 }
 
 export default withStyles(styles)(RegisterUser);
