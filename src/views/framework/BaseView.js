@@ -22,8 +22,12 @@ class BaseView extends Component {
         return (e) => {
             const newState = {};
             newState[fieldName] = e.target.value;
-            this.setState(newState);
+            this.updateState(newState);
         }
+    }
+
+    updateState(newState) {
+        this.setState(newState);
     }
 
     getStateFieldValueChangedHandler(stateFieldName, subFieldName) {
@@ -31,7 +35,7 @@ class BaseView extends Component {
             const newState = {};
             newState[stateFieldName] = {...this.state[stateFieldName]};
             newState[stateFieldName][subFieldName] = e.target.value;
-            this.setState(newState);
+            this.updateState(newState);
         }
     }
 
@@ -39,8 +43,8 @@ class BaseView extends Component {
         return !_.isNil(this.state.errors[field]);
     }
 
-    getErrorText(field, errorMessageKey) {
-        return this.hasError(field) && i18n.t(errorMessageKey);
+    getErrorText(field) {
+        return this.hasError(field) && i18n.t(this.state.errors[field]);
     }
 
     renderForErrorOrWait(serverCall) {

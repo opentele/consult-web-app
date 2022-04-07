@@ -9,6 +9,7 @@ import {UserService} from "consult-app-common";
 import CommunicationMode from "../components/loginSignup/CommunicationMode";
 import AuthenticationMode from "../components/loginSignup/AuthenticationMode";
 import ServerErrorMessage from "../components/ServerErrorMessage";
+import ModalContainerView from "./framework/ModalContainerView";
 
 const styles = theme => ({
     root: {},
@@ -30,7 +31,7 @@ const styles = theme => ({
     }
 });
 
-class UserRegister extends Component {
+class RegisterUser extends Component {
     static propTypes = {
         onRegister: PropTypes.func,
         registerFailed: PropTypes.string
@@ -41,7 +42,6 @@ class UserRegister extends Component {
 
         this.state = {
             canSubmit: false,
-            authMode: "password",
             name: props.defaultName,
             email: props.defaultEmail,
             mobile: props.defaultMobile,
@@ -58,9 +58,7 @@ class UserRegister extends Component {
         } = this.props;
         const {canSubmit} = this.state;
         return (
-            <div className={classes.root}>
-                <br/>
-                <Typography variant="h5">Register user</Typography>
+            <ModalContainerView titleKey="register-new-user">
                 <Formsy className={classes.form}
                         onValid={this.enableSubmit} onInvalid={this.disableSubmit}
                         onValidSubmit={this.submit}>
@@ -92,7 +90,7 @@ class UserRegister extends Component {
                                 disabled={!canSubmit}>Register User</Button>
                     </div>
                 </Formsy>
-            </div>
+            </ModalContainerView>
         );
     }
 
@@ -112,4 +110,4 @@ class UserRegister extends Component {
     };
 }
 
-export default withStyles(styles)(UserRegister);
+export default withStyles(styles)(RegisterUser);

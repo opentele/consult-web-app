@@ -7,27 +7,15 @@ import {i18n, UserService, ProviderType} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
-
-const styles = theme => ({
-    usersContainer: {
-        padding: 30,
-        flexDirection: "column",
-        display: "flex"
-    },
-    addUserButton: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end"
-    }
-});
+import RegisterUser from "../RegisterUser";
 
 class Users extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
             getUsersServerCall: ServerCall.createInitial([]),
-            addUserModalStatus: ModalStatus.NOT_OPENED
+            addUserModalStatus: ModalStatus.NOT_OPENED,
+            registerUserModalStatus: ModalStatus.NOT_OPENED
         }
     }
 
@@ -45,11 +33,12 @@ class Users extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {getUsersServerCall, addUserModalStatus} = this.state;
+        const {getUsersServerCall, addUserModalStatus, registerUserModalStatus} = this.state;
         return <ContainerView activeTab="users">
             <br/>
             {addUserModalStatus === ModalStatus.OPENED &&
             <AddUser messageClose={this.getModalCloseHandler("addUserModalStatus")} autocompletePlaceholderMessageKey="add-user-autocomplete-placeholder"/>}
+            {registerUserModalStatus === ModalStatus.OPENED && <RegisterUser/>}
             <TableContainer className={classes.usersContainer}>
                 <Table sx={{minWidth: 700}} aria-label="customized table">
                     <TableHead>
@@ -75,12 +64,32 @@ class Users extends BaseView {
                         ))}
                     </TableBody>
                 </Table>
-                <Box className={classes.addUserButton}>
-                    <Button variant="contained" color="primary" onClick={this.getModalOpenHandler("addUserModalStatus")}>{i18n.t('add-user-button-label')}</Button>
+                <Box className={classes.usersButtons}>
+                    <Button className={classes.usersButton} variant="contained" color="primary"
+                            onClick={this.getModalOpenHandler("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
+                    <Button variant="contained" color="primary" className={classes.usersButton}
+                            onClick={this.getModalOpenHandler("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
                 </Box>
             </TableContainer>
         </ContainerView>;
     }
 }
+
+const styles = theme => ({
+    usersContainer: {
+        padding: 30,
+        flexDirection: "column",
+        display: "flex"
+    },
+    usersButtons: {
+        marginTop: 20,
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "flex-end"
+    },
+    usersButton: {
+        marginLeft: 10
+    }
+});
 
 export default withStyles(styles)(Users);

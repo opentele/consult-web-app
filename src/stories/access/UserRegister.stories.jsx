@@ -1,6 +1,6 @@
 import React from 'react';
 
-import About from "../../views/UserRegister";
+import About from "../../views/RegisterUser";
 
 //👇 This default export determines where your story goes in the story list
 export default {

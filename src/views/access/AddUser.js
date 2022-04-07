@@ -48,7 +48,7 @@ class AddUser extends BaseView {
 
     getAddUserHandler() {
         return (e) => {
-            let [valid, userIdType] = this.validate();
+            let [valid, userNameType] = this.validate();
             if (!valid) {
                 e.preventDefault();
                 return;
@@ -65,7 +65,7 @@ class AddUser extends BaseView {
             <Box className={classes.addUserMain}>
                 <TextField label={i18n.t('add-user-text-placeholder')} onChange={this.getValueChangedHandler("userName")}
                            error={this.hasError("userName")}
-                           helperText={this.getErrorText("userName", "username-invalid-error")}/>
+                           helperText={this.getErrorText("userName", "invalid-user-name")}/>
                 <Box className={classes.addUserButtons}>
                     <Button disabled={_.isEmpty(userName)} variant="contained" color="primary" onClick={this.getAddUserHandler()}
                             className={classes.addUserAddButton}>{i18n.t("add-button")}</Button>
@@ -78,11 +78,11 @@ class AddUser extends BaseView {
 
     validate() {
         const errors = {};
-        const [validUserName, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
+        const [validUserName, userNameType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
 
         if (!validUserName) errors["userName"] = "invalid-user-name";
         this.setState({errors: errors});
-        return [validUserName, userIdType];
+        return [validUserName, userNameType];
     }
 }
 

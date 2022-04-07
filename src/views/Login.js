@@ -17,7 +17,7 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column'
     },
-    userIdField: {
+    userNameField: {
         marginTop: theme.spacing.unit * 2
     },
     field: {
@@ -56,8 +56,8 @@ class Login extends BaseView {
         super(props);
 
         this.state = {
-            errors: {},
-            loginBy: "userId",
+            errors: [],
+            loginBy: "userName",
             loginServerCall: ServerCall.createInitial()
         }
     }
@@ -65,24 +65,24 @@ class Login extends BaseView {
     getSubmitHandler() {
         return (e) => {
             e.preventDefault();
-            const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
-            if (validUserId) {
-                UserService.login(this.state.userId, this.state.password, userIdType).then((response) => {
+            const [validUserName, userNameType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
+            if (validUserName) {
+                UserService.login(this.state.userName, this.state.password, userNameType).then((response) => {
                     const loginServerCall = ServerCall.responseReceived(this.state.loginServerCall, response);
                     this.setState({loginServerCall: loginServerCall});
                     this.props.onLogin(ServerCall.isSuccessful(loginServerCall));
                 });
                 this.setState({loginServerCall: ServerCall.serverCallMade(this.state.loginServerCall)});
             } else {
-                const errors = {};
-                errors["userId"] = "invalid-user-name";
+                const errors = [];
+                errors["userName"] = "invalid-user-name";
                 this.setState({errors: errors});
             }
         };
     }
 
     render() {
-        const {password, userId, loginBy, loginServerCall} = this.state;
+        const {password, userName, loginBy, loginServerCall} = this.state;
         const {
             classes
         } = this.props;
@@ -92,19 +92,19 @@ class Login extends BaseView {
 
         return (<div>
             <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
-                <Tab icon={<VerifiedUser/>} label="User ID" value="userId"/>
+                <Tab icon={<VerifiedUser/>} label="User ID" value="userName"/>
                 <Tab icon={<Google/>} label="Google" value="google"/>
             </Tabs>
-            {loginBy === "userId" && <Box component="form" className={classes.form}>
+            {loginBy === "userName" && <Box component="form" className={classes.form}>
                 <TextField
-                    name="userId"
+                    name="userName"
                     required
-                    className={classes.userIdField}
-                    label={i18n.t('userId-label')}
-                    onChange={this.getValueChangedHandler("userId")}
-                    error={this.hasError("userId")}
-                    helperText={this.getErrorText("userId", "username-invalid-error")}
-                    value={userId}
+                    className={classes.userNameField}
+                    label={i18n.t('userName-label')}
+                    onChange={this.getValueChangedHandler("userName")}
+                    error={this.hasError("userName")}
+                    helperText={this.getErrorText("userName")}
+                    value={userName}
                 />
                 <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
                 <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"

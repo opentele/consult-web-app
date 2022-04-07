@@ -48,7 +48,6 @@ class ChangePassword extends Component {
     render() {
         const {
             classes,
-            userId,
             currentPasswordRequired
         } = this.props;
 

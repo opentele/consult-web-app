@@ -16,7 +16,7 @@ const styles = theme => ({
         marginTop: 50,
         marginBottom: 30
     },
-    userId: {
+    userName: {
         alignSelf: 'center'
     },
     resetPasswordTitle: {
@@ -42,11 +42,11 @@ class ResetPassword extends Component {
     constructor(props) {
         super(props);
 
-        let [validUserId, userIdType] = this.validate(props.defaultUserId);
+        let [validUserName, userNameType] = this.validate(props.defaultUserName);
         this.state = {
-            userId: props.defaultUserId,
-            validUserId: validUserId,
-            userIdType: userIdType,
+            userName: props.defaultUserName,
+            validUserName: validUserName,
+            userNameType: userNameType,
             resetPasswordMessageSent: false
         }
     }
@@ -63,13 +63,13 @@ class ResetPassword extends Component {
                 <Grid item lg={4} xs={10}>
                     <TextField
                         fullWidth
-                        name="userId"
+                        name="userName"
                         autoComplete="email"
                         required
-                        className={classes.userId}
+                        className={classes.userName}
                         label="Email or mobile"
-                        onChange={this.getUserIdChangedHandler()}
-                        value={this.state.userId}
+                        onChange={this.getUserNameChangedHandler()}
+                        value={this.state.userName}
                         disabled={this.state.resetPasswordMessageSent}
                     />
                     <div className={classes.actions}>
@@ -77,28 +77,28 @@ class ResetPassword extends Component {
                                 name="resetPassword"
                                 fullWidth
                                 className={classes.resetPasswordButton}
-                                disabled={!this.state.validUserId || this.state.resetPasswordMessageSent}
+                                disabled={!this.state.validUserName || this.state.resetPasswordMessageSent}
                                 variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>Get Reset Password Link</Button>
                         {!this.state.resetPasswordMessageSent && <Button className={classes.resetPasswordButton}
                                 fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel-button")}</Button>}
                     </div>
                     {this.state.resetPasswordMessageSent && <Typography className={classes.resetPasswordSent}
-                                                                        variant="body1">{i18n.t(passwordResetSentMessages[this.state.userIdType])}</Typography>}
+                                                                        variant="body1">{i18n.t(passwordResetSentMessages[this.state.userNameType])}</Typography>}
                 </Grid>
             </Grid>
         </div>;
     }
 
-    getUserIdChangedHandler() {
+    getUserNameChangedHandler() {
         return (e) => {
-            let userId = e.target.value;
-            let [validUserId, userIdType] = this.validate(userId);
-            this.setState({validUserId: validUserId, userIdType: userIdType, userId: userId});
+            let userName = e.target.value;
+            let [validUserName, userNameType] = this.validate(userName);
+            this.setState({validUserName: validUserName, userNameType: userNameType, userName: userName});
         }
     }
 
-    validate(userId) {
-        return DataElementValidator.validateEmailOrMobileWithCountryCode(userId);
+    validate(userName) {
+        return DataElementValidator.validateEmailOrMobileWithCountryCode(userName);
     }
 
     getResetPasswordHandler() {

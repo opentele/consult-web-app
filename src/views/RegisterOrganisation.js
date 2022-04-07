@@ -1,16 +1,17 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Checkbox, Grid, Paper, TextField, Typography} from '@material-ui/core';
-import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
-import {i18n, UserService} from "consult-app-common";
+import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
+import {ServerCall, ServerCallStatus} from "react-app-common";
+import {i18n, UserService, UserValidator} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
-import PasswordField from "../components/loginSignup/PasswordField";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
+import EditUser from "../components/loginSignup/EditUser";
+import _ from 'lodash';
 
 const styles = theme => ({
     root: {
@@ -79,21 +80,28 @@ class RegisterOrganisation extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            errors: {},
+            editUserState: {valid: false, submitFailure: false},
             registerAs: 'org',
+            errors: {},
             serverCall: ServerCall.createInitial()
         };
     }
 
     getSubmitHandler() {
         return (e) => {
-            let [valid, userIdType] = this.validate();
-            if (!valid) {
+            const orgNameValid = !_.isEmpty(this.state.orgName);
+            if (!this.state.editUserState.valid || !orgNameValid) {
                 e.preventDefault();
+                let state = {submitFailure: true, errors: this.state.errors};
+                if (!orgNameValid)
+                    state.errors.orgName = "org-name-empty";
+                this.setState(state);
                 return;
             }
-            let {name, orgName, userId, password} = this.state;
-            this.makeServerCall(UserService.registerOrg(name, orgName, userId, userIdType, password));
+            let {orgName} = this.state;
+            let {userName, userNameType, password, name} = this.state.editUserState;
+            this.makeServerCall(UserService.registerOrg(name, orgName, userName, userNameType, password));
+            this.setState({submitFailure: false});
         }
     }
 
@@ -101,7 +109,7 @@ class RegisterOrganisation extends BaseView {
         const {
             classes
         } = this.props;
-        const {orgName, password, confirmPassword, name, userId, serverCall, registerAs} = this.state;
+        const {orgName, serverCall, registerAs, submitFailure} = this.state;
 
         if (serverCall.callStatus === ServerCallStatus.WAITING)
             return <WaitBackdrop/>;
@@ -113,7 +121,7 @@ class RegisterOrganisation extends BaseView {
                 <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.registrationCard} elevation={5} component="form">
-                            <Typography variant="h5" className={classes.registerText}>{i18n.t('userId-label')}</Typography>
+                            <Typography variant="h5" className={classes.registerText}>{i18n.t('userName-label')}</Typography>
 
                             <ToggleButtonGroup
                                 color="primary"
@@ -134,44 +142,14 @@ class RegisterOrganisation extends BaseView {
                                 className={classes.registerOrgField}
                                 label={i18n.t("register-org-name-label")}
                                 value={orgName}
+                                error={this.hasError("orgName")}
+                                helperText={this.getErrorText("orgName")}
                                 onChange={this.getValueChangedHandler("orgName")}
                             />}
 
-                            <TextField
-                                name="name"
-                                autoComplete="name"
-                                required
-                                className={classes.registerOrgField}
-                                label={i18n.t("register-org-person-name-label")}
-                                value={name}
-                                onChange={this.getValueChangedHandler("name")}
-                            />
-
-                            <TextField
-                                name="userId"
-                                autoComplete="userId"
-                                required
-                                className={classes.registerOrgField}
-                                label={i18n.t("userId-label")}
-                                value={userId}
-                                onChange={this.getValueChangedHandler("userId")}
-                                error={this.hasError("userId")}
-                                helperText={this.getErrorText("userId", "username-invalid-error")}
-                            />
-                            <PasswordField className={classes.registerOrgField}
-                                           labelKey="enter-password-label"
-                                           name="password"
-                                           value={password}
-                                           onChangeHandler={this.getValueChangedHandler("password")}
-                                           hasError={this.hasError("passwords")}
-                                           errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
-                            <PasswordField className={classes.registerOrgField}
-                                           labelKey="enter-password-again-label"
-                                           name="confirmPassword"
-                                           value={confirmPassword}
-                                           onChangeHandler={this.getValueChangedHandler("confirmPassword")}
-                                           hasError={this.hasError("passwords")}
-                                           errorText={this.getErrorText("passwords", "password-mismatch-error")}/>
+                            <EditUser fieldClassName={classes.registerOrgField}
+                                      notifyState={(editUserState) => this.setState({editUserState: editUserState})}
+                                      displayError={submitFailure}/>
                             <ServerErrorMessage serverCall={serverCall}/>
 
                             <Button type="submit" className={classes.registerButton}
@@ -206,19 +184,6 @@ class RegisterOrganisation extends BaseView {
                 </Grid>
             </Box>
         );
-    }
-
-    validate() {
-        const errors = {};
-        const [validUserId, userIdType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userId);
-        const passwordsValid = DataElementValidator.validatePasswords(this.state.password, this.state.confirmPassword);
-
-        if (passwordsValid && validUserId) return [true, userIdType];
-
-        if (!passwordsValid) errors["passwords"] = "password-not-matching";
-        if (!validUserId) errors["userId"] = "invalid-user-id";
-        this.setState({errors: errors});
-        return [false, userIdType];
     }
 }
 
