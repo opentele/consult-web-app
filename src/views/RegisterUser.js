@@ -58,7 +58,7 @@ class RegisterUser extends BaseView {
         return (
             <ModalContainerView titleKey="register-new-user">
                 <Box className={classes.ruContainer}>
-                    <EditUser displayError={submitFailure} notifyState={(editUserState) => this.setState({editUserState: editUserState})}/>
+                    <EditUser displayError={submitFailure} notifyState={(editUserState) => this.setState({editUserState: editUserState})} askForProviderType={true}/>
                     <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={this.getRegisterUserHandler()} disabled={false}/>
                     <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
                 </Box>

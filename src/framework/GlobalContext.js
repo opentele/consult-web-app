@@ -14,6 +14,10 @@ class GlobalContext {
     getUser() {
         return this.user;
     }
+
+    hasUser() {
+        return !_.isNil(this.user);
+    }
 }
 
 export default new GlobalContext();

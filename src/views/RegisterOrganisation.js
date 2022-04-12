@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
 import {ServerCall, ServerCallStatus} from "react-app-common";
-import {i18n, UserService, UserValidator} from "consult-app-common";
+import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
@@ -12,6 +12,7 @@ import BaseView from "./framework/BaseView";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import EditUser from "../components/loginSignup/EditUser";
 import _ from 'lodash';
+import GlobalContext from "../framework/GlobalContext";
 
 const styles = theme => ({
     root: {
@@ -89,7 +90,7 @@ class RegisterOrganisation extends BaseView {
 
     getSubmitHandler() {
         return (e) => {
-            const orgNameValid = !_.isEmpty(this.state.orgName);
+            const orgNameValid = !_.isEmpty(this.state.orgName) || this.state.registerAs === 'user';
             if (!this.state.editUserState.valid || !orgNameValid) {
                 e.preventDefault();
                 let state = {submitFailure: true, errors: this.state.errors};
@@ -153,13 +154,13 @@ class RegisterOrganisation extends BaseView {
 
                             <EditUser fieldClassName={classes.registerOrgField}
                                       notifyState={(editUserState) => this.setState({editUserState: editUserState})}
-                                      displayError={submitFailure}/>
+                                      displayError={submitFailure} askForProviderType={registerAs === 'org'}/>
                             <ServerErrorMessage serverCall={serverCall}/>
 
                             <Button type="submit" className={classes.registerButton}
                                     fullWidth
                                     variant="contained" color="primary"
-                                    onClick={this.getSubmitHandler()}>{i18n.t("register-org-submit-button")}</Button>
+                                    onClick={this.getSubmitHandler()}>{i18n.t(registerAs === 'org' ? "register-org-submit-button" : "self-register-user-button")}</Button>
                         </Paper>
                     </Grid>
                     <Grid item lg={4} xs={12}>

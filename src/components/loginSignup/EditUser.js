@@ -28,7 +28,8 @@ class EditUser extends BaseView {
 
     static propTypes = {
         notifyState: PropTypes.func.isRequired,
-        displayError: PropTypes.bool.isRequired
+        displayError: PropTypes.bool.isRequired,
+        askForProviderType: PropTypes.bool.isRequired
     };
 
     updateState(modifications) {
@@ -55,7 +56,7 @@ class EditUser extends BaseView {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, askForProviderType} = this.props;
         const {password, confirmPassword, name, userName, providerType} = this.state;
         return <Box className={classes.euContainer}>
             <TextField
@@ -69,7 +70,6 @@ class EditUser extends BaseView {
                 onChange={this.getValueChangedHandler("name")}
                 helperText={this.getErrorText("name")}
             />
-
             <TextField
                 name="userName"
                 autoComplete="userName"
@@ -95,7 +95,7 @@ class EditUser extends BaseView {
                            onChangeHandler={this.getValueChangedHandler("confirmPassword")}
                            hasError={this.hasError("passwords")}
                            errorText={this.getErrorText("passwords")}/>
-            <FormControl className={classes.euField}>
+            {askForProviderType && <FormControl className={classes.euField}>
                 <FormLabel error={this.hasError("providerType")}>{i18n.t('provider-type-label')}</FormLabel>
                 <RadioGroup value={providerType} row onChange={this.getValueChangedHandler("providerType")}>
                     <FormControlLabel value="Consultant" control={<Radio/>} label={i18n.t("consultant")}/>
@@ -103,7 +103,7 @@ class EditUser extends BaseView {
                     <FormControlLabel value="None" control={<Radio/>} label={i18n.t("none")}/>
                 </RadioGroup>
                 <FormHelperText error={this.hasError("providerType")}>{this.getErrorText("providerType")}</FormHelperText>
-            </FormControl>
+            </FormControl>}
         </Box>;
     }
 }
