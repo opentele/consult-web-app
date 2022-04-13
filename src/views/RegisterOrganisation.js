@@ -12,7 +12,7 @@ import BaseView from "./framework/BaseView";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import EditUser from "../components/loginSignup/EditUser";
 import _ from 'lodash';
-import GlobalContext from "../framework/GlobalContext";
+import RegisterState from "../state/RegisterState";
 
 const styles = theme => ({
     root: {
@@ -81,8 +81,8 @@ class RegisterOrganisation extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            editUserState: {valid: false, submitFailure: false},
-            registerAs: 'org',
+            editUserState: {valid: false},
+            registerState: RegisterState.newInstance(),
             errors: {},
             serverCall: ServerCall.createInitial()
         };
@@ -90,31 +90,25 @@ class RegisterOrganisation extends BaseView {
 
     getSubmitHandler() {
         return (e) => {
-            const orgNameValid = !_.isEmpty(this.state.orgName) || this.state.registerAs === 'user';
-            if (!this.state.editUserState.valid || !orgNameValid) {
+            let {registerState} = this.state;
+            const isValid = registerState.isOrgValid();
+            if (!this.state.editUserState.valid || !isValid) {
                 e.preventDefault();
-                let state = {submitFailure: true, errors: this.state.errors};
-                if (!orgNameValid)
-                    state.errors.orgName = "org-name-empty";
-                this.setState(state);
+                registerState.submissionAttempted = true;
+                this.setState({registerState: registerState.clone()});
                 return;
             }
-            let {orgName} = this.state;
-            let {userName, userNameType, password, name} = this.state.editUserState;
-            this.makeServerCall(UserService.registerOrg(name, orgName, userName, userNameType, password));
-        }
-    }
 
-    updateState(newState) {
-        newState.submitFailure = false;
-        this.setState(newState);
+            let {userName, userNameType, password, name} = this.state.editUserState;
+            this.makeServerCall(UserService.registerOrg(name, registerState.orgName, userName, userNameType, password));
+        }
     }
 
     render() {
         const {
             classes
         } = this.props;
-        const {orgName, serverCall, registerAs, submitFailure} = this.state;
+        const {serverCall, registerState} = this.state;
 
         if (serverCall.callStatus === ServerCallStatus.WAITING)
             return <WaitBackdrop/>;
@@ -130,37 +124,40 @@ class RegisterOrganisation extends BaseView {
 
                             <ToggleButtonGroup
                                 color="primary"
-                                value={registerAs}
+                                value={registerState.registerAs}
                                 exclusive
                                 className={classes.registerOrgField}
-                                onChange={(e) => this.setState({registerAs: e.target.value})}>
+                                onChange={(e) => {
+                                    registerState.registerAs = e.target.value;
+                                    this.setState({registerState: registerState.clone()})
+                                }}>
                                 <ToggleButton value="org">{i18n.t('organisation')}</ToggleButton>
                                 <ToggleButton value="user">{i18n.t('user')}</ToggleButton>
                             </ToggleButtonGroup>
 
-                            {registerAs === 'user' && <Typography className={classes.registerUserHelpText} variant="body2">{i18n.t('register-as-user-help')}</Typography>}
+                            {registerState.isRegisteringUser && <Typography className={classes.registerUserHelpText} variant="body2">{i18n.t('register-as-user-help')}</Typography>}
 
-                            {registerAs === 'org' && <TextField
+                            {!registerState.isRegisteringUser && <TextField
                                 name="organisationName"
                                 autoComplete="organisation"
                                 required
                                 className={classes.registerOrgField}
                                 label={i18n.t("register-org-name-label")}
-                                value={orgName}
-                                error={this.hasError("orgName")}
-                                helperText={this.getErrorText("orgName")}
-                                onChange={this.getValueChangedHandler("orgName")}
+                                value={registerState.orgName}
+                                error={!registerState.isOrgValid()}
+                                helperText={registerState.getOrgNameError(i18n)}
+                                onChange={this.getStateFieldValueChangedHandler("registerState", "orgName")}
                             />}
 
                             <EditUser fieldClassName={classes.registerOrgField}
                                       notifyState={(editUserState) => this.setState({editUserState: editUserState})}
-                                      displayError={submitFailure} askForProviderType={registerAs === 'org'}/>
+                                      displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
                             <ServerErrorMessage serverCall={serverCall}/>
 
                             <Button type="submit" className={classes.registerButton}
                                     fullWidth
                                     variant="contained" color="primary"
-                                    onClick={this.getSubmitHandler()}>{i18n.t(registerAs === 'org' ? "register-org-submit-button" : "self-register-user-button")}</Button>
+                                    onClick={this.getSubmitHandler()}>{i18n.t(!registerState.isRegisteringUser ? "register-org-submit-button" : "self-register-user-button")}</Button>
                         </Paper>
                     </Grid>
                     <Grid item lg={4} xs={12}>

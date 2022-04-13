@@ -35,6 +35,8 @@ class BaseView extends Component {
             const newState = {};
             newState[stateFieldName] = {...this.state[stateFieldName]};
             newState[stateFieldName][subFieldName] = e.target.value;
+            if (newState[stateFieldName].clone)
+                newState[stateFieldName] = newState[stateFieldName].clone();
             this.updateState(newState);
         }
     }
