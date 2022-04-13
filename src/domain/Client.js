@@ -8,6 +8,8 @@ export default class Client {
     registrationNumber;
     consultationSessionRecords;
     otherDetails;
+    createdBy;
+    lastModifiedBy;
 
     static displayName(client) {
         return `${client.name}; ${DateTimeUtil.getAgeDisplay(client.age)}; ${client.gender}`;

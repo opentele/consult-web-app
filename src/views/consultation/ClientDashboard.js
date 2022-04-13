@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box} from '@material-ui/core';
+import {Box, Paper} from '@material-ui/core';
 import BaseView from "../../views/framework/BaseView";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
@@ -9,6 +9,9 @@ import ClientService from "../../service/ClientService";
 import {ServerCall} from "react-app-common";
 import WaitBackdrop from "../../components/WaitBackdrop";
 import {withRouter} from "react-router-dom";
+import ModalStatus from "../framework/ModalStatus";
+import AddClient from "../client/AddClient";
+import PersonView from "./PersonView";
 
 const styles = theme => ({
     container: {},
@@ -25,8 +28,7 @@ class ClientDashboard extends BaseView {
         };
     }
 
-    static propTypes = {
-    }
+    static propTypes = {}
 
     componentDidMount() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
@@ -35,7 +37,7 @@ class ClientDashboard extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {serverCall} = this.state;
+        const {serverCall, editClientModalStatus} = this.state;
 
         if (ServerCall.noCallOrWait(serverCall))
             return <WaitBackdrop/>;
@@ -44,6 +46,7 @@ class ClientDashboard extends BaseView {
 
         return <ContainerView activeTab="client" showBackButton={true}>
             <Box className={classes.container}>
+                <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
                 <Box className={classes.section}>
                     <ClientDisplay client={client}/>
                 </Box>

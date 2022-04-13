@@ -17,7 +17,8 @@ const styles = theme => ({
         display: "flex",
         flexDirection: "column"
     },
-    backButton: {
+    cvBackButton: {
+        alignSelf: 'flex-start',
         marginTop: 10,
         marginBottom: 10,
         marginLeft: 5
@@ -45,7 +46,7 @@ class ContainerView extends BaseView {
         const {classes, children, activeTab, showBackButton, containerClassName} = this.props;
         return <Box className={[classes.cvContainer, containerClassName]}>
             <ConsultAppBar/>
-            {showBackButton && <Button onClick={this.props.history.goBack} variant="text" color="secondary" startIcon={<BackIcon/>} className={classes.backButton}>
+            {showBackButton && <Button onClick={this.props.history.goBack} variant="text" color="secondary" startIcon={<BackIcon/>} className={classes.cvBackButton}>
                 {i18n.t('back-button')}
             </Button>}
             {children}

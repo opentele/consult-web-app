@@ -9,6 +9,8 @@ export default class ConsultationSessionRecord {
     keyInference;
     recommendations;
     followUpIn;
+    createdBy;
+    lastModifiedBy;
 
     static getSummary(consultation) {
         return `${ConsultationSessionRecord.getCreatedOn(consultation)} by ${consultation.by}`;
