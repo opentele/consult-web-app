@@ -18,9 +18,7 @@ class RegisterState {
 
     clone() {
         const registerState = new RegisterState();
-        registerState.registerAs = this.registerAs;
-        registerState.orgName = this.orgName;
-        registerState.submissionAttempted = this.submissionAttempted;
+        Object.assign(registerState, this);
         return registerState;
     }
 

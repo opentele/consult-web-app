@@ -1,6 +1,7 @@
 import moment from "moment";
+import AbstractEntity from "./AbstractEntity";
 
-export default class ConsultationSessionRecord {
+export default class ConsultationSessionRecord extends AbstractEntity {
     createdOn;
     updatedOn;
     by;
@@ -9,8 +10,12 @@ export default class ConsultationSessionRecord {
     keyInference;
     recommendations;
     followUpIn;
-    createdBy;
-    lastModifiedBy;
+
+    static fromServerResource(resource) {
+        const csr = new ConsultationSessionRecord();
+        Object.assign(csr, resource);
+        return csr;
+    }
 
     static getSummary(consultation) {
         return `${ConsultationSessionRecord.getCreatedOn(consultation)} by ${consultation.by}`;

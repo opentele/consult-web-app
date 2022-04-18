@@ -16,7 +16,10 @@ const styles = theme => ({
         flexDirection: 'column'
     },
     client: {
-        padding: 15
+        paddingRight: 15,
+        paddingLeft: 15,
+        paddingTop: 0,
+        paddingBottom: 20
     }
 });
 
@@ -41,9 +44,9 @@ class ClientDisplay extends BaseView {
 
         return <Box className={classes.container}>
             {editClientModalStatus === ModalStatus.OPENED &&
-                <PersonView messageClose={this.getModalCloseHandler("editClientModalStatus")}/>}
+                <PersonView messageClose={this.getModalCloseHandler("editClientModalStatus")} clientId={client.id}/>}
             <Card className={classes.client}>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex"}}>
+                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 2}}>
                     <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editClientModalStatus")}>
                         <EditIcon/>
                     </Fab>
@@ -56,7 +59,7 @@ class ClientDisplay extends BaseView {
                     <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
                     <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
                     <FieldDisplay fieldName="created-by" fieldValue={client.createdBy}/>
-                    <FieldDisplay fieldName="last-modified-by" fieldValue={client.lastModifiedBy}/>
+                    {client.modifiedBySomeoneElse() && <FieldDisplay fieldName="last-update-by" fieldValue={client.lastModifiedBy}/>}
                 </Grid>
             </Card>
         </Box>;

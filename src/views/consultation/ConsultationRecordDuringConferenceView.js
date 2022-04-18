@@ -28,7 +28,7 @@ class ConsultationRecordDuringConferenceView extends BaseView {
     };
 
     componentDidMount() {
-        this.makeServerCall(ClientService.getClient(this.props.clientId), "viewClientCall");
+        this.makeServerCall(ClientService.getClientFull(this.props.clientId), "viewClientCall");
     }
 
     render() {

@@ -10,7 +10,10 @@ import EditIcon from '@mui/icons-material/Edit';
 const styles = theme => ({
     container: {},
     consultation: {
-        padding: 15
+        paddingRight: 15,
+        paddingLeft: 15,
+        paddingTop: 0,
+        paddingBottom: 30
     }
 });
 
@@ -33,7 +36,7 @@ class ConsultationDisplay extends Component {
         return <Card elevation={4}>
             <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
             <Box className={classes.consultation}>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex"}}>
+                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 5}}>
                     <Fab color="secondary" aria-label="edit" size="small">
                         <EditIcon/>
                     </Fab>
@@ -46,7 +49,8 @@ class ConsultationDisplay extends Component {
                     <FieldDisplay fieldName="recommendations" fieldValue={consultationSessionRecord.recommendations}/>
                     <FieldDisplay fieldName="follow-up-in" fieldValue={consultationSessionRecord.followUpIn}/>
                     <FieldDisplay fieldName="created-by" fieldValue={consultationSessionRecord.createdBy}/>
-                    <FieldDisplay fieldName="last-modified-by" fieldValue={consultationSessionRecord.lastModifiedBy}/>
+                    {consultationSessionRecord.modifiedBySomeoneElse() &&
+                    <FieldDisplay fieldName="last-modified-by" fieldValue={consultationSessionRecord.lastModifiedBy}/>}
                 </Grid>
             </Box>
         </Card>;

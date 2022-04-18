@@ -43,7 +43,8 @@ class ClientListView extends BaseView {
                     </AccordionSummary>
                     <AccordionDetails style={{display: "flex", flexDirection: "column"}}>
                         <Typography variant="h6">{Client.totalConsultationsDisplay(client)}</Typography>
-                        {client.consultations.map((consultation) => <Typography variant="body1">{ConsultationSessionRecord.getSummary(consultation)}</Typography>)}
+                        {client.consultationSessionRecords.map((consultation) => <Typography
+                            variant="body1">{ConsultationSessionRecord.getSummary(consultation)}</Typography>)}
                     </AccordionDetails>
                     <AccordionActions>
                         <Button color="primary">Client Dashboard</Button>

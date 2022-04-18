@@ -7,11 +7,9 @@ import ConsultationDisplay from "../../components/consultation/ConsultationDispl
 import ContainerView from "../framework/ContainerView";
 import ClientService from "../../service/ClientService";
 import {ServerCall} from "react-app-common";
-import WaitBackdrop from "../../components/WaitBackdrop";
 import {withRouter} from "react-router-dom";
-import ModalStatus from "../framework/ModalStatus";
-import AddClient from "../client/AddClient";
-import PersonView from "./PersonView";
+import WaitView from "../../components/WaitView";
+import Client from '../../domain/Client';
 
 const styles = theme => ({
     container: {},
@@ -32,17 +30,17 @@ class ClientDashboard extends BaseView {
 
     componentDidMount() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
-        this.makeServerCall(ClientService.getClient(clientId));
+        this.makeServerCall(ClientService.getClientFull(clientId));
     }
 
     render() {
         const {classes} = this.props;
-        const {serverCall, editClientModalStatus} = this.state;
+        const {serverCall} = this.state;
 
         if (ServerCall.noCallOrWait(serverCall))
-            return <WaitBackdrop/>;
+            return <WaitView/>;
 
-        const client = ServerCall.getData(serverCall);
+        const client = Client.fromServerResource(ServerCall.getData(serverCall));
 
         return <ContainerView activeTab="client" showBackButton={true}>
             <Box className={classes.container}>

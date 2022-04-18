@@ -25,6 +25,10 @@ class ClientService {
     static getClient(clientId) {
         return ServiceUtil.getJson(`client?id=${clientId}`)
     }
+
+    static getClientFull(clientId) {
+        return ServiceUtil.getJson(`client/full?id=${clientId}`)
+    }
 }
 
 export default ClientService;

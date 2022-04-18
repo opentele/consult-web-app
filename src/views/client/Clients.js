@@ -64,7 +64,7 @@ class Clients extends BaseView {
                     </Box>
                     <Fab className={classes.addClientButton} variant="extended" color="primary" aria-label="add"
                          onClick={this.getModalOpenHandler("addClientModalStatus")}>
-                        <AddIcon sx={{mr: 1}}/>{i18n.t('register-client')}
+                        <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
                     </Fab>
                 </Box>
                 <Typography variant="subtitle1" className={classes.totalClients}>{totalClientsMessage}</Typography>
