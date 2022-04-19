@@ -149,7 +149,7 @@ class PersonView extends BaseView {
                         </Box>
                         <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
                         <SaveCancelButtons className={classes.personViewFieldBox} disabled={false} onSaveHandler={this.getSaveHandler()} serverCall={saveClientCall}
-                                           onCancelHandler={() => messageClose(false)}/>
+                                           onCancelHandler={messageClose}/>
                     </Box>
                 </FormControl>}
         </ModalContainerView>;

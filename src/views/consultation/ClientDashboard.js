@@ -54,7 +54,7 @@ class ClientDashboard extends BaseView {
                 </Box>
                 {client.consultationSessionRecords.map((record) =>
                     <Box className={classes.section}>
-                        <ConsultationDisplay consultationSessionRecord={record}/>
+                        <ConsultationDisplay consultationSessionRecord={record} clientName={client.name}/>
                     </Box>
                 )}
             </Box>

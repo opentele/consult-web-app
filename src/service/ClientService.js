@@ -27,11 +27,11 @@ class ClientService {
     }
 
     static getClient(clientId) {
-        return ServiceUtil.getJson(`client?id=${clientId}`)
+        return ServiceUtil.getJson(`client/${clientId}`);
     }
 
     static getClientFull(clientId) {
-        return ServiceUtil.getJson(`client/full?id=${clientId}`)
+        return ServiceUtil.getJson(`client/${clientId}/full`)
     }
 }
 

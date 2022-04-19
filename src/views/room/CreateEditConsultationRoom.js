@@ -177,7 +177,7 @@ class CreateEditConsultationRoom extends BaseView {
                         </Select>
                     </Box>
                     <ServerErrorMessage serverCall={saveRoomServerCall}/>
-                    <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRoomServerCall} onCancelHandler={() => messageClose(false)}/>
+                    <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
                 </Box>
             </FormControl>
             {ServerCall.noCallOrWait(getProvidersServerCall, getRoomServerCall) && <WaitBackdrop/>}

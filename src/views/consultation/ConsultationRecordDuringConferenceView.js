@@ -9,7 +9,6 @@ import {Box} from "@material-ui/core";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 import ModalContainerView from "../framework/ModalContainerView";
 import WaitView from "../../components/WaitView";
-import SaveCancelButtons from "../../components/SaveCancelButtons";
 
 const styles = theme => ({});
 
@@ -17,8 +16,7 @@ class ConsultationRecordDuringConferenceView extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            viewClientCall: ServerCall.createInitial(),
-            saveRecordCall: ServerCall.createInitial()
+            viewClientCall: ServerCall.createInitial()
         }
     }
 
@@ -33,7 +31,7 @@ class ConsultationRecordDuringConferenceView extends BaseView {
 
     render() {
         const {classes, onClose} = this.props;
-        const {viewClientCall, saveRecordCall} = this.state;
+        const {viewClientCall} = this.state;
 
         if (ServerCall.noCallOrWait(viewClientCall))
             return <WaitView/>;
@@ -41,12 +39,11 @@ class ConsultationRecordDuringConferenceView extends BaseView {
         const client = ServerCall.getData(viewClientCall);
         return <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: ServerCall.getData(viewClientCall).name}}>
             <Box style={{width: "600px", padding: 20}}>
-                <ConsultationRecordView clientRecord={client}/>
-                <SaveCancelButtons onSaveHandler={this.getEntitySavedHandler("saveRecordCall")} serverCall={saveRecordCall} onCancelHandler={() => onClose(false)}/>
+                <ConsultationRecordView clientRecord={client} onCancelHandler={() => onClose(false)}/>
                 <Box style={{marginTop: 40}}>
                     {client.consultationSessionRecords.map((record) =>
                         <Box style={{marginBottom: 20}}>
-                            <ConsultationDisplay consultationSessionRecord={record}/>
+                            <ConsultationDisplay consultationSessionRecord={record} clientName={client.name}/>
                         </Box>
                     )}
                 </Box>

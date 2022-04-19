@@ -67,7 +67,7 @@ class AddUser extends BaseView {
                            error={this.hasError("userName")}
                            helperText={this.getErrorText("userName", "invalid-user-name")}/>
                 <Box className={classes.addUserButtons}>
-                    <CancelButton onClickHandler={() => messageClose(false)}/>
+                    <CancelButton onClickHandler={messageClose}/>
                     <Button disabled={_.isEmpty(userName)} variant="contained" color="primary" onClick={this.getAddUserHandler()}
                             className={classes.addUserAddButton}>{i18n.t("add-button")}</Button>
                 </Box>

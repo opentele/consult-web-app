@@ -18,7 +18,7 @@ class CancelButton extends React.Component {
 
     render() {
         const {onClickHandler, className} = this.props;
-        return <Button className={className} variant="contained" color="inherit" onClick={onClickHandler}>{i18n.t("cancel-button")}</Button>;
+        return <Button className={className} variant="contained" color="inherit" onClick={() => onClickHandler(false)}>{i18n.t("cancel-button")}</Button>;
     }
 }
 
