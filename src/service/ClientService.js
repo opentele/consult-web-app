@@ -10,8 +10,12 @@ class ClientService {
             registrationNumber: client.registrationNumber,
             mobile: client.mobile
         };
-        contractObj.dateOfBirth = moment().subtract(client.age, client.durationType).format('YYYY-MM-DD');
-        return ServiceUtil.putJson("client", contractObj);
+        contractObj.dateOfBirth = moment().subtract(client.age, client.ageDurationType).format('YYYY-MM-DD');
+        if (client.isNew())
+            return ServiceUtil.putJson("client", contractObj);
+
+        contractObj.id = client.id;
+        return ServiceUtil.postJson("client", contractObj);
     }
 
     static getClientsByNameAndRegistrationNumber(name, registrationNumber) {

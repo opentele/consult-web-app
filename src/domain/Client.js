@@ -1,11 +1,12 @@
 import {DateTimeUtil} from "react-app-common";
 import ConsultationSessionRecord from "./ConsultationSessionRecord";
 import AbstractEntity from "./AbstractEntity";
+import _ from 'lodash';
 
 export default class Client extends AbstractEntity {
     name;
     age;
-    durationType;
+    ageDurationType;
     gender;
     registrationNumber;
     consultationSessionRecords;
@@ -13,7 +14,7 @@ export default class Client extends AbstractEntity {
 
     static newInstance() {
         let client = new Client();
-        client.durationType = "years";
+        client.ageDurationType = DateTimeUtil.Years;
         client.gender = "Female";
         return client;
     }
@@ -21,6 +22,19 @@ export default class Client extends AbstractEntity {
     static fromServerResource(resource) {
         const client = new Client();
         Object.assign(client, resource);
+
+        const {years, months} = DateTimeUtil.parsePeriod(resource.age);
+        if (!_.isEmpty(years) && parseInt(years) > 0) {
+            client.age = years;
+            client.ageDurationType = DateTimeUtil.Years;
+        }
+        else if (!_.isEmpty(months) && parseInt(months) > 0) {
+            client.age = months;
+            client.ageDurationType = DateTimeUtil.Months;
+        } else {
+            client.age = "";
+            client.ageDurationType = DateTimeUtil.Months;
+        }
         client.consultationSessionRecords = resource.consultationSessionRecords.map((csr) => ConsultationSessionRecord.fromServerResource(csr));
         return client;
     }

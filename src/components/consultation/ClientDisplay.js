@@ -32,7 +32,12 @@ class ClientDisplay extends BaseView {
     }
 
     static propTypes = {
-        client: PropTypes.object.isRequired
+        client: PropTypes.object.isRequired,
+        onModification: PropTypes.func.isRequired
+    }
+
+    refresh() {
+        this.props.onModification();
     }
 
     render() {
@@ -54,7 +59,7 @@ class ClientDisplay extends BaseView {
                 <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
-                    <FieldDisplay fieldName="age" fieldValue={DateTimeUtil.getAgeDisplay(client.age)}/>
+                    <FieldDisplay fieldName="age" fieldValue={`${client.age} ${client.ageDurationType}`}/>
                     <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
                     <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
                     <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>

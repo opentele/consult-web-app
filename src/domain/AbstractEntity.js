@@ -8,6 +8,10 @@ class AbstractEntity {
     modifiedBySomeoneElse() {
         return this.lastModifiedBy !== this.createdBy;
     }
+
+    isNew() {
+        return _.isNil(this.id) || this.id === 0;
+    }
 }
 
 export default AbstractEntity;

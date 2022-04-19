@@ -1,16 +1,17 @@
 import React from "react";
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, CircularProgress, FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize, TextField} from "@material-ui/core";
+import {Box, FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize, TextField} from "@material-ui/core";
 import BaseView from "../framework/BaseView";
 import FormLabel from "../../components/FormLabel";
 import ModalContainerView from "../framework/ModalContainerView";
-import {ServerCall, ServerCallStatus} from "react-app-common";
+import {DateTimeUtil, ServerCall, ServerCallStatus} from "react-app-common";
 import ClientService from "../../service/ClientService";
-import CancelButton from "../../components/CancelButton";
 import _ from 'lodash';
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import Client from "../../domain/Client";
+import SaveCancelButtons from "../../components/SaveCancelButtons";
+import WaitView from "../../components/WaitView";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -73,8 +74,9 @@ class PersonView extends BaseView {
         const {classes, messageClose} = this.props;
         const {client, saveClientCall, missingFields, getClientCall} = this.state;
         const loading = saveClientCall.callStatus === ServerCallStatus.WAITING || (this.editingClient && ServerCall.noCallOrWait(getClientCall));
+
         return <ModalContainerView titleKey={this.editingClient ? "edit-client-title" : "add-client-title"}>
-            {loading ? <CircularProgress color="inherit"/> :
+            {loading ? <WaitView containerClassName={classes.pvContainer}/> :
                 <FormControl>
                     <Box className={classes.pvContainer}>
                         <Box className={classes.personViewFieldBox}>
@@ -96,11 +98,14 @@ class PersonView extends BaseView {
                                     value={client.age}
                                     style={{marginRight: 7}}/>
                                 <RadioGroup
-                                    defaultValue="years"
+                                    value={client.ageDurationType}
                                     name="durationType"
                                     className={classes.radioGroup}>
-                                    <FormControlLabel value="years" control={<Radio onChange={this.getClientFieldValueChangeHandler("durationType")}/>} label="Years"/>
-                                    <FormControlLabel value="months" control={<Radio onChange={this.getClientFieldValueChangeHandler("durationType")}/>} label="Months"/>
+                                    <FormControlLabel value={DateTimeUtil.Years}
+                                                      control={<Radio onChange={this.getClientFieldValueChangeHandler("ageDurationType")}/>} label="Years"/>
+                                    <FormControlLabel value={DateTimeUtil.Months}
+                                                      control={<Radio onChange={this.getClientFieldValueChangeHandler("ageDurationType")}/>}
+                                                      label="Months"/>
                                 </RadioGroup>
                             </Box>
                         </Box>
@@ -142,11 +147,9 @@ class PersonView extends BaseView {
                                 value={client.otherDetails}
                             />
                         </Box>
-                        <Box className={classes.personViewFieldBox}>
-                            <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
-                            <Button color="primary" variant="contained" onClick={this.getSaveHandler()}>SAVE</Button>
-                            <CancelButton onClickHandler={() => messageClose(false)} className={classes.personViewField}/>
-                        </Box>
+                        <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
+                        <SaveCancelButtons className={classes.personViewFieldBox} disabled={false} onSaveHandler={this.getSaveHandler()} serverCall={saveClientCall}
+                                           onCancelHandler={() => messageClose(false)}/>
                     </Box>
                 </FormControl>}
         </ModalContainerView>;

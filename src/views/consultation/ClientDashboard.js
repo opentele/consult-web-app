@@ -29,6 +29,10 @@ class ClientDashboard extends BaseView {
     static propTypes = {}
 
     componentDidMount() {
+        this.refresh();
+    }
+
+    refresh() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
         this.makeServerCall(ClientService.getClientFull(clientId));
     }
@@ -46,7 +50,7 @@ class ClientDashboard extends BaseView {
             <Box className={classes.container}>
                 <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
                 <Box className={classes.section}>
-                    <ClientDisplay client={client}/>
+                    <ClientDisplay client={client} onModification={() => this.refresh()}/>
                 </Box>
                 {client.consultationSessionRecords.map((record) =>
                     <Box className={classes.section}>

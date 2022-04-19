@@ -1,6 +1,7 @@
 import React from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import {Box, CircularProgress} from "@material-ui/core";
+import PropTypes from 'prop-types';
 
 const styles = theme => ({});
 
@@ -9,11 +10,13 @@ class WaitView extends React.Component {
         super(props, context);
     }
 
-    static propTypes = {};
+    static propTypes = {
+        containerClassName: PropTypes.string
+    };
 
     render() {
-        const {classes} = this.props;
-        return <Box style={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: 'center', marginTop: 300}}>
+        const {containerClassName} = this.props;
+        return <Box className={containerClassName}>
             <CircularProgress color="inherit"/>
         </Box>;
     }

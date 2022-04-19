@@ -32,10 +32,9 @@ class BaseView extends Component {
 
     getStateFieldValueChangedHandler(stateFieldName, subFieldName) {
         return (e) => {
-            const newState = {};
-            newState[stateFieldName] = {...this.state[stateFieldName]};
+            const newState = {...this.state};
             newState[stateFieldName][subFieldName] = e.target.value;
-            if (newState[stateFieldName].clone)
+            if (!_.isNil(newState[stateFieldName].clone))
                 newState[stateFieldName] = newState[stateFieldName].clone();
             this.updateState(newState);
         }
