@@ -31,31 +31,39 @@ class ConsultationDisplay extends BaseView {
 
     static propTypes = {
         consultationSessionRecord: PropTypes.object.isRequired,
-        clientName: PropTypes.string.isRequired
+        client: PropTypes.object.isRequired,
+        onModification: PropTypes.func
+    }
+
+    refresh() {
+        this.props.onModification();
     }
 
     render() {
         const {
             classes,
-            consultationSessionRecord
+            consultationSessionRecord,
+            client,
+            onModification
         } = this.props;
-        const {editModalStatus, clientName} = this.state;
+        const {editModalStatus} = this.state;
 
         return <Card elevation={4}>
             {editModalStatus === ModalStatus.OPENED &&
-            <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: clientName}}>
+            <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: client.name}}>
                 <Box style={{width: "600px", padding: 20}}>
-                    <ConsultationRecordView onCancelHandler={this.getModalCloseHandler("editModalStatus")}
-                                            consultationSessionRecordId={consultationSessionRecord.id}/>
+                    <ConsultationRecordView messageClose={this.getModalCloseHandler("editModalStatus")}
+                                            consultationSessionRecordId={consultationSessionRecord.id} client={client}/>
                 </Box>
             </ModalContainerView>}
+
             <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
             <Box className={classes.consultation}>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 5}}>
+                {onModification && <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 5}}>
                     <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editModalStatus")}>
                         <EditIcon/>
                     </Fab>
-                </Box>
+                </Box>}
                 <Grid container spacing={3}>
                     <FieldDisplay fieldName="date-of-consultation" fieldValue={ConsultationSessionRecord.getCreatedOn(consultationSessionRecord)}/>
                     <FieldDisplay fieldName="key-inference" fieldValue={consultationSessionRecord.keyInference}/>

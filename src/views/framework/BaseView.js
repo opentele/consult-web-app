@@ -114,6 +114,10 @@ class BaseView extends Component {
 
     onSuccessfulServerCall(serverCallName) {
     }
+
+    getEmptyFields(obj, fieldNames) {
+        return _.filter(fieldNames, (fieldName) => _.isEmpty(obj[fieldName])).map((fieldName) => fieldName);
+    }
 }
 
 export default BaseView;

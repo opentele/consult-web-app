@@ -10,6 +10,8 @@ import {ServerCall, ServerCallStatus} from "react-app-common";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import WaitView from "../../components/WaitView";
+import ClientService from "../../service/ClientService";
+import ServerErrorMessage from "../../components/ServerErrorMessage";
 
 const styles = theme => ({
     container: {
@@ -17,8 +19,13 @@ const styles = theme => ({
         display: "flex",
         justifyContent: "center"
     },
+    crvFieldBox: {
+        marginTop: 15,
+        flexDirection: "column",
+        display: "flex"
+    },
     crvField: {
-        marginTop: 25,
+        marginTop: 3,
         flexDirection: "column",
         display: "flex"
     }
@@ -28,7 +35,7 @@ class ConsultationRecordView extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            consultation: {},
+            consultation: ConsultationSessionRecord.forCreate(),
             saveRecordCall: ServerCall.createInitial(),
             getRecordCall: ServerCall.createInitial()
         };
@@ -36,7 +43,8 @@ class ConsultationRecordView extends BaseView {
 
     static propTypes = {
         consultationSessionRecordId: PropTypes.number,
-        onCancelHandler: PropTypes.func.isRequired
+        messageClose: PropTypes.func.isRequired,
+        client: PropTypes.object.isRequired
     }
 
     get editing() {
@@ -47,7 +55,7 @@ class ConsultationRecordView extends BaseView {
         return !this.editing;
     }
 
-    getConsultationFieldValueChangeHandler(fieldName) {
+    getConsultationChangeHandler(fieldName) {
         return this.getStateFieldValueChangedHandler("consultation", fieldName);
     }
 
@@ -61,59 +69,69 @@ class ConsultationRecordView extends BaseView {
             this.setState({consultation: ConsultationSessionRecord.fromServerResource(ServerCall.getData(this.state.getRecordCall))});
     }
 
+    getSaveHandler() {
+        return (e) => {
+            if (!this.validate()) {
+                return;
+            }
+            ConsultationSessionRecordService.save(this.state.consultation, this.props.client).then(this.getEntitySavedHandler("saveRecordCall"));
+        }
+    }
+
+    validate() {
+        const emptyFields = this.getEmptyFields(this.state.consultation, ["recommendations"]);
+        this.setState({missingFields: emptyFields});
+        return emptyFields.length === 0;
+    }
+
     render() {
-        const {
-            classes,
-            onCancelHandler
-        } = this.props;
-        const {
-            consultation,
-            saveRecordCall,
-            getRecordCall
-        } = this.state;
+        const {classes, messageClose} = this.props;
+        const {consultation, saveRecordCall, getRecordCall, missingFields} = this.state;
         const loading = saveRecordCall.callStatus === ServerCallStatus.WAITING || (this.editing && ServerCall.noCallOrWait(getRecordCall));
         if (loading)
             return <WaitView containerClassName={classes.container}/>;
 
         return <Box className={classes.container}>
-            <Box className={classes.crvField}>
+            <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="complaints" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
                     className={[classes.crvField]}
-                    onChange={this.getValueChangedHandler("complaints")}
+                    onChange={this.getConsultationChangeHandler("complaints")}
                     value={consultation.complaints}
                 />
             </Box>
-            <Box className={classes.crvField}>
+            <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="observations" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
                     className={[classes.crvField]}
-                    onChange={this.getValueChangedHandler("observations")}
+                    onChange={this.getConsultationChangeHandler("observations")}
                     value={consultation.observations}
                 />
             </Box>
-            <Box className={classes.crvField}>
+            <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="key-inference" mandatory={false}/>
                 <TextField
                     name="keyInference"
                     className={[]}
-                    onChange={this.getValueChangedHandler("registrationNumber")}
+                    onChange={this.getConsultationChangeHandler("keyInference")}
                     value={consultation.keyInference}
                 />
             </Box>
-            <Box className={classes.crvField}>
+            <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="recommendations"/>
                 <TextareaAutosize
                     minRows={3}
+                    style={_.includes(missingFields, "recommendations") && {borderColor: "red", borderWidth: 2}}
                     className={[classes.crvField]}
-                    onChange={this.getValueChangedHandler("recommendations")}
+                    onChange={this.getConsultationChangeHandler("recommendations")}
                     value={consultation.recommendations}
                 />
             </Box>
-            <SaveCancelButtons onSaveHandler={this.getEntitySavedHandler("saveRecordCall")} serverCall={saveRecordCall}
-                               onCancelHandler={onCancelHandler}/>
+            <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>
+            <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRecordCall}
+                               onCancelHandler={messageClose}/>
         </Box>;
     }
 }

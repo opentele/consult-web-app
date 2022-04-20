@@ -39,11 +39,11 @@ class ConsultationRecordDuringConferenceView extends BaseView {
         const client = ServerCall.getData(viewClientCall);
         return <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: ServerCall.getData(viewClientCall).name}}>
             <Box style={{width: "600px", padding: 20}}>
-                <ConsultationRecordView clientRecord={client} onCancelHandler={() => onClose(false)}/>
+                <ConsultationRecordView client={client} messageClose={onClose}/>
                 <Box style={{marginTop: 40}}>
                     {client.consultationSessionRecords.map((record) =>
                         <Box style={{marginBottom: 20}}>
-                            <ConsultationDisplay consultationSessionRecord={record} clientName={client.name}/>
+                            <ConsultationDisplay consultationSessionRecord={record} client={client} onModification={() => this.refresh()}/>
                         </Box>
                     )}
                 </Box>

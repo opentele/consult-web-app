@@ -61,13 +61,9 @@ class PersonView extends BaseView {
     }
 
     validate() {
-        const {name, age} = this.state.client;
-
-        const missingFields = [];
-        if (_.isEmpty(name)) missingFields.push("name");
-        if (_.isEmpty(age)) missingFields.push("age");
-        this.setState({missingFields: missingFields});
-        return missingFields.length === 0;
+        const emptyFields = this.getEmptyFields(this.state.client, ["name", "age"]);
+        this.setState({missingFields: emptyFields});
+        return emptyFields.length === 0;
     }
 
     render() {
