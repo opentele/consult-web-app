@@ -11,6 +11,7 @@ import {Paper} from "@mui/material";
 import {i18n} from "consult-app-common";
 import {Link, withRouter} from 'react-router-dom';
 import BackIcon from "@mui/icons-material/ArrowBack";
+import GlobalContext from "../../framework/GlobalContext";
 
 const styles = theme => ({
     cvContainer: {
@@ -58,7 +59,8 @@ class ContainerView extends BaseView {
                     }}>
                     <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon/>}/>
                     <BottomNavigationAction component={Link} to="/clients" label={i18n.t('client-navigation-icon')} icon={<PeopleIcon/>}/>
-                    <BottomNavigationAction component={Link} to="/users" label={i18n.t('manage-users-menu-item')} icon={<SecurityIcon/>}/>
+                    {GlobalContext.getUser().canManageUsers() &&
+                        <BottomNavigationAction component={Link} to="/users" label={i18n.t('manage-users-menu-item')} icon={<SecurityIcon/>}/>}
                 </BottomNavigation>
             </Paper>
         </Box>;

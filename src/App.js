@@ -16,6 +16,7 @@ import Users from "./views/access/Users";
 import Clients from "./views/client/Clients";
 import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
+import {User} from "consult-app-common";
 
 const theme = createTheme();
 
@@ -38,7 +39,7 @@ export default class App extends Component {
                 if (ServerCall.isSuccessful(isLoggedInServerCall)) {
                     UserService.getUser().then((response) => {
                         const getUserServerCall = ServerCall.responseReceived(this.state.getUserServerCall, response);
-                        GlobalContext.setUser(ServerCall.getData(getUserServerCall))
+                        GlobalContext.setUser(User.fromResource(ServerCall.getData(getUserServerCall)));
                         this.setState({getUserServerCall: getUserServerCall});
                     });
                 }

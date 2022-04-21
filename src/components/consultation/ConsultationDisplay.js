@@ -65,7 +65,7 @@ class ConsultationDisplay extends BaseView {
                     </Fab>
                 </Box>}
                 <Grid container spacing={3}>
-                    <FieldDisplay fieldName="date-of-consultation" fieldValue={ConsultationSessionRecord.getCreatedOn(consultationSessionRecord)}/>
+                    <FieldDisplay fieldName="date-of-consultation" fieldValue={consultationSessionRecord.createdOnForDisplay}/>
                     <FieldDisplay fieldName="key-inference" fieldValue={consultationSessionRecord.keyInference}/>
                     <FieldDisplay fieldName="complaints" fieldValue={consultationSessionRecord.complaints}/>
                     <FieldDisplay fieldName="observations" fieldValue={consultationSessionRecord.observations}/>

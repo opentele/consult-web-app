@@ -9,6 +9,7 @@ import {Box} from "@material-ui/core";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 import ModalContainerView from "../framework/ModalContainerView";
 import WaitView from "../../components/WaitView";
+import Client from '../../domain/Client';
 
 const styles = theme => ({});
 
@@ -22,7 +23,8 @@ class ConsultationRecordDuringConferenceView extends BaseView {
 
     static propTypes = {
         clientId: PropTypes.number.isRequired,
-        onClose: PropTypes.func.isRequired
+        onClose: PropTypes.func.isRequired,
+        consultationRoom: PropTypes.object.isRequired
     };
 
     componentDidMount() {
@@ -30,20 +32,20 @@ class ConsultationRecordDuringConferenceView extends BaseView {
     }
 
     render() {
-        const {classes, onClose} = this.props;
+        const {classes, onClose, consultationRoom} = this.props;
         const {viewClientCall} = this.state;
 
         if (ServerCall.noCallOrWait(viewClientCall))
             return <WaitView/>;
 
-        const client = ServerCall.getData(viewClientCall);
+        const client = Client.fromServerResource(ServerCall.getData(viewClientCall));
         return <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: ServerCall.getData(viewClientCall).name}}>
             <Box style={{width: "600px", padding: 20}}>
-                <ConsultationRecordView client={client} messageClose={onClose}/>
+                <ConsultationRecordView client={client} messageClose={onClose} consultationSessionRecordId={client.getCurrentSessionRecordId(consultationRoom)}/>
                 <Box style={{marginTop: 40}}>
-                    {client.consultationSessionRecords.map((record) =>
+                    {client.getConsultationSessionRecordsInOrder().map((record) =>
                         <Box style={{marginBottom: 20}}>
-                            <ConsultationDisplay consultationSessionRecord={record} client={client} onModification={() => this.refresh()}/>
+                            <ConsultationDisplay consultationSessionRecord={record} client={client}/>
                         </Box>
                     )}
                 </Box>

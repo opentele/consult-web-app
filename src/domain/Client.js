@@ -2,6 +2,7 @@ import {DateTimeUtil} from "react-app-common";
 import ConsultationSessionRecord from "./ConsultationSessionRecord";
 import AbstractEntity from "./AbstractEntity";
 import _ from 'lodash';
+import moment from "moment";
 
 export default class Client extends AbstractEntity {
     name;
@@ -53,5 +54,18 @@ export default class Client extends AbstractEntity {
         const client = new Client();
         Object.assign(client, this);
         return client;
+    }
+
+    getCurrentSessionRecord(consultationRoom) {
+        return _.find(this.consultationSessionRecords, (x) => x.consultationRoomId === consultationRoom.id);
+    }
+
+    getCurrentSessionRecordId(consultationRoom) {
+        const currentSessionRecord = this.getCurrentSessionRecord(consultationRoom);
+        return _.isNil(currentSessionRecord) ? null : currentSessionRecord.id;
+    }
+
+    getConsultationSessionRecordsInOrder() {
+        return _.orderBy(this.consultationSessionRecords, (x) => moment(x.createdOn, moment.ISO_8601), ["desc"]);
     }
 }

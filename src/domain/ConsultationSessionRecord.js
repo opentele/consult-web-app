@@ -6,6 +6,7 @@ export default class ConsultationSessionRecord extends AbstractEntity {
     keyInference;
     recommendations;
     followUpIn;
+    consultationRoomId;
 
     static forCreate() {
         return new ConsultationSessionRecord();
@@ -14,12 +15,7 @@ export default class ConsultationSessionRecord extends AbstractEntity {
     static fromServerResource(resource) {
         const csr = new ConsultationSessionRecord();
         Object.assign(csr, resource);
-        csr.populateAuditDates(resource);
         return csr;
-    }
-
-    static getSummary(consultation) {
-        return `${AbstractEntity.getCreatedOn(consultation)} by ${consultation.by}`;
     }
 
     clone() {

@@ -61,6 +61,9 @@ class JitsiConference extends BaseView {
         this.props.onDataChanged();
     }
 
+    refresh() {
+    }
+
     render() {
         const {
             classes,
@@ -89,7 +92,8 @@ class JitsiConference extends BaseView {
 
             {clientRecordModalStatus === ModalStatus.OPENED &&
             <ConsultationRecordDuringConferenceView clientId={ConsultationRoom.getCurrentClientId(consultationRoom)}
-                                                    onClose={this.getModalCloseHandler("clientRecordModalStatus")}/>}
+                                                    onClose={this.getModalCloseHandler("clientRecordModalStatus")}
+                                                    consultationRoom={consultationRoom}/>}
         </Box>;
     }
 
