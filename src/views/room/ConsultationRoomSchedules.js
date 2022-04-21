@@ -87,6 +87,7 @@ class ConsultationRoomSchedules extends BaseView {
                                     </Box>
                                     <TimeField value={consultationRoomSchedule.startTime} labelKey='consultation-room-start-time-label'/>
                                     <TimeField value={consultationRoomSchedule.endTime} labelKey='consultation-room-end-time-label'/>
+                                    <Typography variant="h6">{`Schedule: ${consultationRoomSchedule.getScheduleForDisplay()}`}</Typography>
                                 </Box>
                                 <Box>
                                     <Box>
