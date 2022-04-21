@@ -51,7 +51,7 @@ class ConsultationRoomQueue extends BaseView {
 
     getCloseClientMenuHandler() {
         return (e) => {
-            this.setState({clientMenuAnchor: null})
+            this.setState({clientMenuAnchor: null});
         }
     }
 
@@ -60,7 +60,10 @@ class ConsultationRoomQueue extends BaseView {
     }
 
     getSetAsCurrentClientHandler(appointment) {
-        return () => this.makeServerCall(ConsultationRoomService.setAsCurrentAppointment(this.props.consultationRoom, appointment), )
+        return () => {
+            this.makeServerCall(ConsultationRoomService.setAsCurrentAppointment(this.props.consultationRoom, appointment), "setAsCurrentCall");
+            this.setState({clientMenuAnchor: null});
+        }
     }
 
     refresh() {

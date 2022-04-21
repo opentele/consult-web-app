@@ -7,11 +7,9 @@ import {BeanContainer} from 'react-app-common';
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {i18n} from 'consult-app-common';
 import ConsultationRooms from "./ConsultationRooms";
-import ModalStatus from "../framework/ModalStatus";
-import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
-import WaitView from "../../components/WaitView";
+import ConsultationRoomSchedules from "./ConsultationRoomSchedules";
 
 const styles = theme => ({
     createRoom: {
@@ -30,10 +28,10 @@ class Home extends BaseView {
         this.setState = this.setState.bind(this);
         this.state = {consultationRooms: [], tabIndex: 1};
         this.tabComponents = {
-            0: () => <><ConsultationRooms type="past"/></>,
+            0: () => <ConsultationRooms type="past"/>,
             1: () => <ConsultationRooms type="today"/>,
-            2: () => <><ConsultationRooms type="future"/></>,
-            3: () => <></>
+            2: () => <ConsultationRooms type="future"/>,
+            3: () => <ConsultationRoomSchedules/>
         }
     }
 
