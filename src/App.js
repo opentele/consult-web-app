@@ -94,9 +94,6 @@ export default class App extends Component {
                     <Route path="/login">
                         {this.getPublicRoute(isLoggedIn, <Welcome onLogin={this.loginHandler}/>)}
                     </Route>
-                    <Route path="/consultationSchedule">
-                        {this.getPrivateRoute(isLoggedIn, <AddEditConsultationSchedule/>)}
-                    </Route>
                     <Route path="/users">
                         {this.getPrivateRoute(isLoggedIn, <Users/>)}
                     </Route>

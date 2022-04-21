@@ -20,6 +20,7 @@ import _ from 'lodash';
 import WaitView from "../../components/WaitView";
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
+import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 
 const styles = theme => ({
     crsRooms: {
@@ -51,8 +52,7 @@ class ConsultationRoomSchedules extends BaseView {
         };
     }
 
-    static props = {
-    };
+    static props = {};
 
     componentDidMount() {
         this.refresh();
@@ -62,46 +62,53 @@ class ConsultationRoomSchedules extends BaseView {
         this.makeServerCall(ConsultationRoomScheduleService.getSchedules(), "getSchedulesCall");
     }
 
+    getEditSchedulesOpenHandler(schedule) {
+        return () => {
+            this.setState({currentScheduleId: schedule.id, editScheduleStatus: ModalStatus.OPENED});
+        }
+    }
+
     render() {
-        const {getSchedulesCall, addScheduleStatus, editScheduleStatus, viewRoomsStatus} = this.state;
+        const {getSchedulesCall, addScheduleStatus, editScheduleStatus, viewRoomsStatus, currentScheduleId} = this.state;
         const {classes} = this.props;
 
         if (ServerCall.noCallOrWait(getSchedulesCall)) {
             return <WaitView/>;
         }
-
         const consultationRoomSchedules = ServerCall.getData(getSchedulesCall).map((x) => ConsultationRoomSchedule.fromServerResource(x));
 
         return <Box className={classes.crsRooms}>
-            {
-                consultationRoomSchedules.map((consultationRoomSchedule) => {
-                    return <Card raised={true} elevation={3} className={classes.crsConferenceBox} key={consultationRoomSchedule.id}>
-                        <CardContent>
-                            <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
-                                <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
-                                        <Typography variant="h4">{consultationRoomSchedule.title}</Typography>
-                                        <IconButton>
-                                            <Edit onClick={this.getModalOpenHandler("editScheduleStatus")}/>
-                                        </IconButton>
-                                    </Box>
-                                    <TimeField value={consultationRoomSchedule.startTime} labelKey='consultation-room-start-time-label'/>
-                                    <TimeField value={consultationRoomSchedule.endTime} labelKey='consultation-room-end-time-label'/>
-                                    <Typography variant="h6">{`Schedule: ${consultationRoomSchedule.getScheduleForDisplay()}`}</Typography>
+            {editScheduleStatus === ModalStatus.OPENED && <AddEditConsultationSchedule
+                consultationScheduleId={currentScheduleId} messageClose={this.getModalCloseHandler("editScheduleStatus")}/>}
+
+            {consultationRoomSchedules.map((consultationRoomSchedule) => {
+                return <Card raised={true} elevation={3} className={classes.crsConferenceBox} key={consultationRoomSchedule.id}>
+                    <CardContent>
+                        <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
+                            <Box sx={{display: "flex", flexDirection: "column"}}>
+                                <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
+                                    <Typography variant="h4">{consultationRoomSchedule.title}</Typography>
+                                    <IconButton>
+                                        <Edit onClick={this.getEditSchedulesOpenHandler(consultationRoomSchedule)}/>
+                                    </IconButton>
                                 </Box>
+                                <TimeField value={consultationRoomSchedule.startTime} labelKey='consultation-room-start-time-label'/>
+                                <TimeField value={consultationRoomSchedule.endTime} labelKey='consultation-room-end-time-label'/>
+                                <Typography variant="h6">{`Schedule: ${consultationRoomSchedule.getScheduleForDisplay()}`}</Typography>
+                            </Box>
+                            <Box>
                                 <Box>
-                                    <Box>
-                                        {consultationRoomSchedule.providers.map((provider) => <Chip label={provider.name} color="primary"/>)}
-                                    </Box>
+                                    {consultationRoomSchedule.providers.map((provider) => <Chip label={provider.name} color="primary"/>)}
                                 </Box>
                             </Box>
-                        </CardContent>
-                        <CardActions className={classes.crCardActions}>
-                        </CardActions>
+                        </Box>
+                    </CardContent>
+                    <CardActions className={classes.crCardActions}>
+                    </CardActions>
 
-                        {viewRoomsStatus === ModalStatus.OPENED && <div/>}
-                    </Card>
-                })
+                    {viewRoomsStatus === ModalStatus.OPENED && <div/>}
+                </Card>
+            })
             }
         </Box>;
     }

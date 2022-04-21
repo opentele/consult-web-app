@@ -33,7 +33,7 @@ class SaveCancelButtons extends React.Component {
 
     render() {
         const {classes, className, onSaveHandler, disabled, serverCall, onCancelHandler} = this.props;
-        return <Box className={classes.scbContainer}>
+        return <Box className={[className, classes.scbContainer]}>
             <SaveButton serverCall={serverCall} className={classes.scbSaveButton} disabled={disabled} onSaveHandler={onSaveHandler}/>
             <CancelButton onClickHandler={onCancelHandler}/>
         </Box>;
