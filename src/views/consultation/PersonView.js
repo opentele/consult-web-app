@@ -42,9 +42,11 @@ class PersonView extends BaseView {
             this.makeServerCall(ClientService.getClient(this.props.clientId), "getClientCall");
     }
 
-    onSuccessfulServerCall(serverCallName) {
-        if (serverCallName === "getClientCall")
-            this.setState({client: Client.fromServerResource(ServerCall.getData(this.state.getClientCall))});
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "getClientCall") {
+            newState.client = Client.fromServerResource(ServerCall.getData(newState.getClientCall));
+            this.setState(newState);
+        }
     }
 
     getClientFieldValueChangeHandler(fieldName) {

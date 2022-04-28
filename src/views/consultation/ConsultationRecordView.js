@@ -64,9 +64,11 @@ class ConsultationRecordView extends BaseView {
             this.makeServerCall(ConsultationSessionRecordService.getRecord(this.props.consultationSessionRecordId), "getRecordCall");
     }
 
-    onSuccessfulServerCall(serverCallName) {
-        if (serverCallName === "getRecordCall")
-            this.setState({consultation: ConsultationSessionRecord.fromServerResource(ServerCall.getData(this.state.getRecordCall))});
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "getRecordCall") {
+            newState.consultation = ConsultationSessionRecord.fromServerResource(ServerCall.getData(newState.getRecordCall));
+            this.setState(newState);
+        }
     }
 
     getSaveHandler() {

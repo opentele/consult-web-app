@@ -106,12 +106,17 @@ class BaseView extends Component {
     serverResponseReceived(response, serverCallName = "serverCall") {
         const newState = {};
         newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
-        this.setState(newState);
+        this.updateServerResponseState(newState, serverCallName);
         if (ServerCall.isSuccessful(newState[serverCallName])) {
             this.onSuccessfulServerCall(serverCallName);
         }
     }
 
+    updateServerResponseState(newState, serverCallName) {
+        this.setState(newState);
+    }
+
+    //Should be used only for making non state change calls
     onSuccessfulServerCall(serverCallName) {
     }
 

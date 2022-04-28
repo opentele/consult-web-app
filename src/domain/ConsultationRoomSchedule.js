@@ -1,4 +1,3 @@
-import _ from "lodash";
 import AbstractEntity from "./AbstractEntity";
 import {rrulestr} from "rrule";
 
@@ -17,6 +16,12 @@ class ConsultationRoomSchedule extends AbstractEntity {
     getScheduleForDisplay() {
         const rRule = rrulestr(this.recurrenceRule);
         return rRule.toText();
+    }
+
+    clone() {
+        const clone = Object.assign(new ConsultationRoomSchedule(), this);
+        clone.providers = [...clone.providers];
+        return clone;
     }
 }
 
