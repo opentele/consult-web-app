@@ -62,7 +62,7 @@ class AddEditConsultationSchedule extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            serverCall: ServerCall.createInitial(),
+            getScheduleCall: ServerCall.createInitial(),
             saveScheduleCall: ServerCall.createInitial()
         }
     }
@@ -70,20 +70,20 @@ class AddEditConsultationSchedule extends BaseView {
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         if (consultationScheduleId)
-            this.makeServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId));
+            this.makeServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall");
         else
-            this.setState({serverCall: ServerCall.createInitial(ConsultationSchedule.newSchedule())});
+            this.setState({getScheduleCall: ServerCall.null(ConsultationSchedule.newSchedule())});
     }
 
     getSaveHandler(schedule) {
         return () => {
-            ConsultationRoomScheduleService.save(schedule).then(this.getEntitySavedHandler("saveScheduleCall"));
+            this.makeServerCall(ConsultationRoomScheduleService.save(schedule), "saveScheduleCall").then(this.getEntitySavedHandler("saveScheduleCall"));
         }
     }
 
     updateServerResponseState(newState, serverCallName) {
-        if (serverCallName === "serverCall") {
-            newState.schedule = ConsultationRoomSchedule.fromServerResource(ServerCall.getData(newState.serverCall))
+        if (serverCallName === "getScheduleCall") {
+            newState.schedule = ConsultationRoomSchedule.fromServerResource(ServerCall.getData(newState.getScheduleCall))
             this.setState(newState);
         }
     }
@@ -96,9 +96,9 @@ class AddEditConsultationSchedule extends BaseView {
     }
 
     render() {
-        const {serverCall, saveScheduleCall, schedule} = this.state;
-        if (ServerCall.noCallOrWait(serverCall))
-            return this.renderForErrorOrWait(serverCall);
+        const {getScheduleCall, saveScheduleCall, schedule} = this.state;
+        if (ServerCall.noCallOrWait(getScheduleCall))
+            return this.renderForErrorOrWait(getScheduleCall);
 
         const {classes, messageClose} = this.props;
 
@@ -114,7 +114,7 @@ class AddEditConsultationSchedule extends BaseView {
                                    changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
                         <Box>
                             <TimeInput classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule","startTime")} label="Start Time"/>
+                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")} label="Start Time"/>
                             <TimeInput classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
                                        changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")} label="End Time"/>
                         </Box>

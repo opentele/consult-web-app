@@ -156,7 +156,8 @@ class CreateEditConsultationRoom extends BaseView {
                                    onChange={this.getRoomFieldValueChangeHandler("totalSlots")}
                         />
                     </Box>
-                    <EditProviders containerClassName={classes.cercProviders} providerIds={EntityCollection.getIds(room.providers)} onUpdate={this.getProviderUpdatedHandler()}/>
+                    <EditProviders containerClassName={classes.cercProviders} providers={room.providers}
+                                   onUpdate={this.getProviderUpdatedHandler()}/>
                     <ServerErrorMessage serverCall={saveRoomServerCall}/>
                     <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
                 </Box>
