@@ -3,8 +3,10 @@ import {Component} from "react";
 import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {CircularProgress} from "@material-ui/core";
-import {ServerCall, ServerCallStatus} from "react-app-common";
+import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ModalStatus from "./ModalStatus";
+import ConsultationRoomService from "../../service/ConsultationRoomService";
+import ConsultationSchedule from "../../domain/ConsultationSchedule";
 
 class BaseView extends Component {
     constructor(props) {
@@ -122,6 +124,16 @@ class BaseView extends Component {
 
     getEmptyFields(obj, fieldNames) {
         return _.filter(fieldNames, (fieldName) => _.isEmpty(obj[fieldName])).map((fieldName) => fieldName);
+    }
+
+    loadEntity(id, getPromiseFn, serverCallName, newObj) {
+        if (id)
+            this.makeServerCall(getPromiseFn(), serverCallName);
+        else {
+            const newState = {};
+            newState[serverCallName] = ServerCall.null(newObj);
+            this.setState(newState);
+        }
     }
 }
 

@@ -1,4 +1,4 @@
-import AbstractEntity from "./AbstractEntity";
+import {AbstractEntity} from "consult-app-common";
 import {rrulestr} from "rrule";
 
 class ConsultationRoomSchedule extends AbstractEntity {

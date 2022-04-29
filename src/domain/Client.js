@@ -1,8 +1,8 @@
 import {DateTimeUtil} from "react-app-common";
 import ConsultationSessionRecord from "./ConsultationSessionRecord";
-import AbstractEntity from "./AbstractEntity";
 import _ from 'lodash';
 import moment from "moment";
+import {AbstractEntity} from "consult-app-common";
 
 export default class Client extends AbstractEntity {
     name;

@@ -1,4 +1,4 @@
-import AbstractEntity from "./AbstractEntity";
+import {AbstractEntity} from "consult-app-common";
 
 export default class ConsultationSessionRecord extends AbstractEntity {
     complaints;

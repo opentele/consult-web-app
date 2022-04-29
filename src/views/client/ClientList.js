@@ -45,7 +45,7 @@ class ClientList extends BaseView {
                     </TableHead>
                     <TableBody>
                         {clientList.map((x) => (
-                            <TableRow key={x.name}>
+                            <TableRow key={x.name} hover={true}>
                                 <TableCell component="th" scope="row">
                                     {x.name}
                                 </TableCell>

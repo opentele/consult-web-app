@@ -69,10 +69,7 @@ class AddEditConsultationSchedule extends BaseView {
 
     componentDidMount() {
         const {consultationScheduleId} = this.props;
-        if (consultationScheduleId)
-            this.makeServerCall(BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall");
-        else
-            this.setState({getScheduleCall: ServerCall.null(ConsultationSchedule.newSchedule())});
+        this.loadEntity(consultationScheduleId, () => BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall", ConsultationSchedule.newSchedule());
     }
 
     getSaveHandler(schedule) {

@@ -4,10 +4,9 @@ import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
 import ModalContainerView from "../framework/ModalContainerView";
 import {i18n, UserService} from "consult-app-common";
-import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
+import {DataElementValidator, ServerCall} from "react-app-common";
 import {Box, Button, TextField} from "@material-ui/core";
 import _ from "lodash";
-import {Alert} from "@mui/material";
 import CancelButton from "../../components/CancelButton";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 

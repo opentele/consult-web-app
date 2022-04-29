@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
-import {UserService} from "consult-app-common";
+import {User, UserService} from "consult-app-common";
 import ModalContainerView from "./framework/ModalContainerView";
 import EditUser from "../components/loginSignup/EditUser";
 import SaveCancelButtons from "../components/SaveCancelButtons";
@@ -20,15 +20,28 @@ const styles = theme => ({
 
 class RegisterUser extends BaseView {
     static propTypes = {
-        messageClose: PropTypes.func.isRequired
+        messageClose: PropTypes.func.isRequired,
+        userId: PropTypes.number
     };
 
     constructor(props) {
         super(props);
         this.state = {
             serverCall: ServerCall.createInitial(),
+            getUserCall: ServerCall.createInitial(),
             editUserState: {}
         };
+    }
+
+    componentDidMount() {
+        this.loadEntity(this.props.userId, () => UserService.loadUser(this.props.userId), "getUserCall", User.newUser());
+    }
+
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "getUserCall") {
+            newState.user = User.fromServerResource(ServerCall.getData(newState.getUserCall));
+            this.setState(newState);
+        }
     }
 
     getRegisterUserHandler() {
@@ -50,11 +63,14 @@ class RegisterUser extends BaseView {
     }
 
     render() {
+        const {serverCall, submitFailure, user, getUserCall} = this.state;
+        if (ServerCall.noCallOrWait(getUserCall))
+            return this.renderForErrorOrWait(getUserCall);
+
         const {
             classes,
             messageClose
         } = this.props;
-        const {serverCall, submitFailure} = this.state;
         return (
             <ModalContainerView titleKey="register-new-user">
                 <Box className={classes.ruContainer}>
