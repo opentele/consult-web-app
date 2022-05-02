@@ -24,3 +24,7 @@ yarn-error.log*
 
 .idea
 consult-mobile/node_modules
+
+build
+.yarn
+.yarnrc

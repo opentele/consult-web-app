@@ -1,7 +1,7 @@
 import './App.css';
 import Welcome from "./views/Welcome";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {i18nPromise, UserService} from "consult-app-common";
+import {i18nPromise, User, UserService} from "consult-app-common";
 import {CircularProgress, CssBaseline} from "@material-ui/core";
 import RegisterOrganisation from "./views/RegisterOrganisation";
 import {createTheme, ThemeProvider} from '@mui/material/styles';
@@ -9,14 +9,12 @@ import ResetPassword from "./views/ResetPassword";
 import ChangePassword from "./views/ChangePassword";
 import Home from "./views/room/Home";
 import React, {Component} from "react";
-import AddEditConsultationSchedule from "./views/room/AddEditConsultationSchedule";
-import {ServerCall} from "react-app-common";
 import GlobalContext from './framework/GlobalContext';
 import Users from "./views/access/Users";
 import Clients from "./views/client/Clients";
 import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
-import {User} from "consult-app-common";
+import {ServerCall} from "react-app-common";
 
 const theme = createTheme();
 
