@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import PropTypes from 'prop-types';
 import {User, UserService} from "consult-app-common";
 import ModalContainerView from "./framework/ModalContainerView";
-import EditUser from "../components/loginSignup/EditUser";
+import EditUserFields from "../components/loginSignup/EditUserFields";
 import SaveCancelButtons from "../components/SaveCancelButtons";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import {ServerCall} from "react-app-common";
@@ -74,7 +74,7 @@ class RegisterUser extends BaseView {
         return (
             <ModalContainerView titleKey="register-new-user">
                 <Box className={classes.ruContainer}>
-                    <EditUser displayError={submitFailure} notifyState={(editUserState) => this.setState({editUserState: editUserState})} askForProviderType={true}/>
+                    <EditUserFields displayError={submitFailure} notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})} askForProviderType={true}/>
                     <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={this.getRegisterUserHandler()} disabled={false}/>
                     <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
                 </Box>

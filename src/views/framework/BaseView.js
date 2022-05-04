@@ -3,10 +3,8 @@ import {Component} from "react";
 import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
 import {CircularProgress} from "@material-ui/core";
-import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
+import {ServerCall, ServerCallStatus} from "react-app-common";
 import ModalStatus from "./ModalStatus";
-import ConsultationRoomService from "../../service/ConsultationRoomService";
-import ConsultationSchedule from "../../domain/ConsultationSchedule";
 
 class BaseView extends Component {
     constructor(props) {
@@ -115,7 +113,7 @@ class BaseView extends Component {
     }
 
     updateServerResponseState(newState, serverCallName) {
-        this.setState(newState);
+        this.updateState(newState);
     }
 
     //Should be used only for making non state change calls
@@ -132,7 +130,7 @@ class BaseView extends Component {
         else {
             const newState = {};
             newState[serverCallName] = ServerCall.null(newObj);
-            this.setState(newState);
+            this.updateState(newState);
         }
     }
 }

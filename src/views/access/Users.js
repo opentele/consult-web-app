@@ -8,6 +8,7 @@ import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
 import RegisterUser from "../RegisterUser";
+import EditUser from "./EditUser";
 
 class Users extends BaseView {
     constructor(props, context) {
@@ -15,7 +16,8 @@ class Users extends BaseView {
         this.state = {
             getUsersServerCall: ServerCall.createInitial([]),
             addUserModalStatus: ModalStatus.NOT_OPENED,
-            registerUserModalStatus: ModalStatus.NOT_OPENED
+            registerUserModalStatus: ModalStatus.NOT_OPENED,
+            editUserModalStatus: ModalStatus.NOT_OPENED
         }
     }
 
@@ -31,19 +33,19 @@ class Users extends BaseView {
         })
     }
 
-    getUserClickedHandler() {
-
+    getEditUserHandler(user) {
+        return () => this.setState({userId: user.id, editUserModalStatus: ModalStatus.OPENED});
     }
 
     render() {
         const {classes} = this.props;
-        const {getUsersServerCall, addUserModalStatus, registerUserModalStatus} = this.state;
+        const {getUsersServerCall} = this.state;
         return <ContainerView activeTab="users">
             <Box className={classes.usersContainer}>
                 <br/>
-                {addUserModalStatus === ModalStatus.OPENED &&
-                <AddUser messageClose={this.getModalCloseHandler("addUserModalStatus")} autocompletePlaceholderMessageKey="add-user-autocomplete-placeholder"/>}
-                {registerUserModalStatus === ModalStatus.OPENED && <RegisterUser messageClose={this.getModalCloseHandler("registerUserModalStatus")}/>}
+                {this.renderIfAddUser()}
+                {this.renderIfRegisterUser()}
+                {this.renderIfEditUser()}
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 700}} aria-label="customized table">
                         <TableHead>
@@ -56,7 +58,8 @@ class Users extends BaseView {
                         </TableHead>
                         <TableBody>
                             {ServerCall.getData(getUsersServerCall).map((x) => (
-                                <TableRow key={x.name} hover={true} className={classes.uTableRow} onClick={this.getUserClickedHandler()}>
+                                <TableRow key={x.name} hover={true} className={classes.uTableRow}
+                                          onClick={this.getEditUserHandler(x)}>
                                     <TableCell component="th" scope="row">
                                         {x.name}
                                     </TableCell>
@@ -78,6 +81,20 @@ class Users extends BaseView {
                 </TableContainer>
             </Box>
         </ContainerView>;
+    }
+
+    renderIfRegisterUser() {
+        return this.state.registerUserModalStatus === ModalStatus.OPENED &&
+            <RegisterUser messageClose={this.getModalCloseHandler("registerUserModalStatus")}/>;
+    }
+
+    renderIfAddUser() {
+        return this.state.addUserModalStatus === ModalStatus.OPENED &&
+            <AddUser messageClose={this.getModalCloseHandler("addUserModalStatus")} autocompletePlaceholderMessageKey="add-user-autocomplete-placeholder"/>;
+    }
+
+    renderIfEditUser() {
+        return this.state.editUserModalStatus === ModalStatus.OPENED && <EditUser userId={this.state.userId}/>;
     }
 }
 

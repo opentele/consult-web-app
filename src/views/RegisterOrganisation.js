@@ -10,7 +10,7 @@ import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
 import {ToggleButton, ToggleButtonGroup} from "@mui/material";
-import EditUser from "../components/loginSignup/EditUser";
+import EditUserFields from "../components/loginSignup/EditUserFields";
 import _ from 'lodash';
 import RegisterState from "../state/RegisterState";
 
@@ -149,9 +149,9 @@ class RegisterOrganisation extends BaseView {
                                 onChange={this.getStateFieldValueChangedHandler("registerState", "orgName")}
                             />}
 
-                            <EditUser fieldClassName={classes.registerOrgField}
-                                      notifyState={(editUserState) => this.setState({editUserState: editUserState})}
-                                      displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
+                            <EditUserFields fieldClassName={classes.registerOrgField}
+                                            notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}
+                                            displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
                             <ServerErrorMessage serverCall={serverCall}/>
 
                             <Button type="submit" className={classes.registerButton}
