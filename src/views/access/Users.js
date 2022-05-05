@@ -94,7 +94,8 @@ class Users extends BaseView {
     }
 
     renderIfEditUser() {
-        return this.state.editUserModalStatus === ModalStatus.OPENED && <EditUser userId={this.state.userId}/>;
+        return this.state.editUserModalStatus === ModalStatus.OPENED &&
+            <EditUser userId={this.state.userId} messageClose={this.getModalCloseHandler("editUserModalStatus")}/>;
     }
 }
 
