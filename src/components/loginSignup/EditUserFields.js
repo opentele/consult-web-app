@@ -38,12 +38,16 @@ class EditUserFields extends BaseView {
     };
 
     updateState(newState) {
-        const [valid, userNameType, errors] = UserValidator.validate(newState.user, newState.confirmPassword, this.allowSettingOfUserPersonalFields());
-        newState.userNameType = userNameType;
-        newState.errors = errors;
-        newState.valid = valid;
+        this.validate(newState);
         this.setState(newState);
         this.props.notifyStateChange(newState);
+    }
+
+    validate(state) {
+        const [valid, userNameType, errors] = UserValidator.validate(state.user, state.confirmPassword, this.allowSettingOfUserPersonalFields());
+        state.userNameType = userNameType;
+        state.errors = errors;
+        state.valid = valid;
     }
 
     hasError(field) {
@@ -75,6 +79,8 @@ class EditUserFields extends BaseView {
                 userType: "User"
             });
             this.state.confirmPassword = "x";
+            this.validate(this.state);
+            this.props.notifyStateChange(this.state);
         }
     }
 

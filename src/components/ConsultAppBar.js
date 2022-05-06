@@ -107,10 +107,10 @@ class ConsultAppBar extends BaseView {
                                   open={Boolean(this.state.anchorElUser)}
                                   onClose={this.handleCloseUserMenu()}>
                                 <MenuItem key='profile' onClick={this.handleCloseNavMenu()}>
-                                    <Typography textAlign="center">Profile</Typography>
+                                    <Typography>Profile</Typography>
                                 </MenuItem>
                                 <MenuItem key='logout' onClick={this.logoutHandler()}>
-                                    <Typography textAlign="center">Logout</Typography>
+                                    <Typography>Logout</Typography>
                                 </MenuItem>
                             </Menu>
                         </Box>

@@ -21,7 +21,7 @@ export default function ServerErrorMessage({serverCall, className, tryingLogin =
 }
 
 ServerErrorMessage.propTypes = {
-    error: PropTypes.string.isRequired,
+    error: PropTypes.string,
     tryingLogin: PropTypes.bool,
     className: PropTypes.string
 };

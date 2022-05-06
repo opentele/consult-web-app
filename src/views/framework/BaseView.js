@@ -41,7 +41,7 @@ class BaseView extends Component {
     }
 
     hasError(field) {
-        return !_.isNil(this.state.errors[field]);
+        return !_.isNil(this.state.errors) && !_.isNil(this.state.errors[field]);
     }
 
     getErrorText(field) {

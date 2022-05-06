@@ -4,8 +4,6 @@ import {withStyles} from '@material-ui/core/styles';
 import {Box, Button, Grid} from "@material-ui/core";
 import _ from "lodash";
 import {i18n} from "consult-app-common";
-import {ServerCallStatus} from "react-app-common";
-import ErrorAlert from "./ErrorAlert";
 import CancelButton from "./CancelButton";
 import ServerErrorMessage from "./ServerErrorMessage";
 
