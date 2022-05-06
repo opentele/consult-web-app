@@ -3,7 +3,7 @@ import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
 import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
-import {i18n, UserService} from "consult-app-common";
+import {i18n, User, UserService} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
@@ -40,6 +40,7 @@ class Users extends BaseView {
     render() {
         const {classes} = this.props;
         const {getUsersServerCall} = this.state;
+        const users = User.fromResources(ServerCall.getData(getUsersServerCall));
         return <ContainerView activeTab="users">
             <Box className={classes.usersContainer}>
                 <br/>
@@ -50,24 +51,24 @@ class Users extends BaseView {
                     <Table sx={{minWidth: 700}} aria-label="customized table">
                         <TableHead>
                             <TableRow className={classes.uTableHeader}>
-                                <TableCell className={classes.uTableHeaderCell}>{i18n.t('name')}</TableCell>
-                                <TableCell className={classes.uTableHeaderCell}>{i18n.t('role-column-text')}</TableCell>
-                                <TableCell className={classes.uTableHeaderCell}>{i18n.t('email')}</TableCell>
-                                <TableCell className={classes.uTableHeaderCell}>{i18n.t('mobile')}</TableCell>
+                                <TableCell key={1} className={classes.uTableHeaderCell}>{i18n.t('name')}</TableCell>
+                                <TableCell key={2} className={classes.uTableHeaderCell}>{i18n.t('role-column-text')}</TableCell>
+                                <TableCell key={3} className={classes.uTableHeaderCell}>{i18n.t('email-or-mobile')}</TableCell>
+                                <TableCell key={4} className={classes.uTableHeaderCell}>{i18n.t('provider-type')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {ServerCall.getData(getUsersServerCall).map((x) => (
-                                <TableRow key={x.name} hover={true} className={classes.uTableRow}
+                            {users.map((x) => (
+                                <TableRow key={x.userName} hover={true} className={classes.uTableRow}
                                           onClick={this.getEditUserHandler(x)}>
-                                    <TableCell component="th" scope="row">
+                                    <TableCell component="th" scope="row" key={1}>
                                         {x.name}
                                     </TableCell>
-                                    <TableCell component="th" scope="row">
+                                    <TableCell component="th" scope="row" key={2}>
                                         {x.userType}
                                     </TableCell>
-                                    <TableCell>{x.email}</TableCell>
-                                    <TableCell>{x.mobile}</TableCell>
+                                    <TableCell key={3}>{x.userName}</TableCell>
+                                    <TableCell key={4}>{x.providerType}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

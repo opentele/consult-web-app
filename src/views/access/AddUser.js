@@ -3,39 +3,54 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
 import BaseView from "../framework/BaseView";
 import ModalContainerView from "../framework/ModalContainerView";
-import {i18n, UserService} from "consult-app-common";
-import {DataElementValidator, ServerCall} from "react-app-common";
+import {i18n, User, UserService} from "consult-app-common";
+import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
 import {Box, Button, TextField} from "@material-ui/core";
 import _ from "lodash";
 import CancelButton from "../../components/CancelButton";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
+import EditUser from "./EditUser";
+import EditUserFields from "../../components/loginSignup/EditUserFields";
+import {Alert} from "@mui/material";
 
 const styles = theme => ({
-    addUserMain: {
+    auMain: {
         width: "500px",
         display: "flex",
         flexDirection: "column",
         padding: 20
     },
-    addUserServerError: {
+    auSearchUserBox: {
+        display: "flex",
+        flexDirection: "row"
+    },
+    auSearchTextField: {
+        width: "300px"
+    },
+    auCheckButton: {
+        marginLeft: 30,
         marginTop: 20
     },
-    addUserButtons: {
-        marginTop: 20,
+    auServerAlert: {
+        marginTop: 20
+    },
+    auButtons: {
+        marginTop: 30,
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end"
     },
-    addUserAddButton: {
+    auAddButton: {
         marginLeft: 10
-    },
+    }
 });
 
 class AddUser extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            serverCall: ServerCall.createInitial(),
+            saveServerCall: ServerCall.createInitial(),
+            findUserCall: ServerCall.createInitial(),
             errors: {}
         };
     }
@@ -46,31 +61,63 @@ class AddUser extends BaseView {
     };
 
     getAddUserHandler() {
-        return (e) => {
-            let [valid, userNameType] = this.validate();
-            if (!valid) {
-                e.preventDefault();
-                return;
+        return () => this.makeServerCall(UserService.addUser(this.state.userState.user)).then(this.getEntitySavedHandler("saveServerCall"));
+    }
+
+    getCheckUserHandler() {
+        return () => this.makeServerCall(UserService.findUser(this.state["searchUserName"]), "findUserCall");
+    }
+
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "findUserCall") {
+            const foundUser = ServerCall.getData(newState["findUserCall"]);
+            newState.foundUser = foundUser;
+            if (foundUser["found"] && !foundUser["alreadyPartOfOrganisation"]) {
+                const user = new User();
+                user.id = foundUser.userId;
+                user.name = foundUser.name;
+                user.userName = this.state["searchUserName"];
+                newState.user = user;
             }
-            this.makeServerCall(UserService.addUser(this.state["userName"]));
+            this.setState(newState);
         }
     }
 
     render() {
         const {messageClose, classes} = this.props;
-        const {serverCall, userName} = this.state;
+        const {saveServerCall, foundUser, findUserCall, user} = this.state;
+        const userSearchDone = findUserCall.callStatus === ServerCallStatus.SUCCESS;
 
+        let aUserToAddFound = userSearchDone && foundUser["found"] && !foundUser["alreadyPartOfOrganisation"];
         return <ModalContainerView titleKey="add-user-window-title">
-            <Box className={classes.addUserMain}>
-                <TextField label={i18n.t('add-user-text-placeholder')} onChange={this.getValueChangedHandler("userName")}
-                           error={this.hasError("userName")}
-                           helperText={this.getErrorText("userName", "invalid-user-name")}/>
-                <Box className={classes.addUserButtons}>
-                    <CancelButton onClickHandler={messageClose}/>
-                    <Button disabled={_.isEmpty(userName)} variant="contained" color="primary" onClick={this.getAddUserHandler()}
-                            className={classes.addUserAddButton}>{i18n.t("add-button")}</Button>
+            <Box className={classes.auMain}>
+                <Box className={classes.auSearchUserBox}>
+                    <TextField className={classes.auSearchTextField}
+                               label={i18n.t('add-user-text-placeholder')} onChange={this.getValueChangedHandler("searchUserName")}
+                               error={this.hasError("userName")}
+                               helperText={this.getErrorText("userName", "invalid-user-name")}/>
+                    <Button className={classes.auCheckButton} size="small"
+                            color="secondary" variant="text" onClick={this.getCheckUserHandler()}>
+                        {i18n.t("check-user")}
+                    </Button>
                 </Box>
-                <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
+                {userSearchDone && foundUser["alreadyPartOfOrganisation"] &&
+                <Alert severity="error" className={classes.auServerAlert}>{i18n.t("user-already-in-organisation")}</Alert>}
+                {userSearchDone && !foundUser["found"] && <Alert severity="error" className={classes.auServerAlert}>{i18n.t("no-such-user-found")}</Alert>}
+                {aUserToAddFound &&
+                <Alert severity="success" className={classes.auServerAlert}>{i18n.t("user-found", {name: user.name})}</Alert>}
+                {aUserToAddFound && <Box>
+                    <EditUserFields user={user} notifyStateChange={(userState) => this.setState({userState: userState})} displayError={true}/>
+                </Box>}
+                <Box>
+                    <Box className={classes.auButtons}>
+                        <CancelButton onClickHandler={messageClose}/>
+                        {aUserToAddFound &&
+                        <Button variant="contained" color="primary" onClick={this.getAddUserHandler()}
+                                className={classes.auAddButton}>{i18n.t("add-button")}</Button>}
+                    </Box>
+                    <ServerErrorMessage serverCall={saveServerCall} className={classes.auServerAlert}/>
+                </Box>
             </Box>
         </ModalContainerView>;
     }
