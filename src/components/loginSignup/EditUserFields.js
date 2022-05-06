@@ -70,7 +70,7 @@ class EditUserFields extends BaseView {
     }
 
     setDevModeData() {
-        if (process.env.NODE_ENV === "development") {
+        if (process.env.NODE_ENV === "development" && this.state.user.isNew()) {
             Object.assign(this.state.user, {
                 name: "Foo",
                 userName: "foo@gmail.com",

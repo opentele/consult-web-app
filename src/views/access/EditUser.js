@@ -28,8 +28,8 @@ class EditUser extends BaseView {
 
     getSaveHandler() {
         return (e) => {
-            if (this.state.valid)
-                UserService.save().then(this.getEntitySavedHandler("saveCall"));
+            if (this.state.editUserState.valid)
+                UserService.updateUser(this.state.editUserState.user).then(this.getEntitySavedHandler("saveCall"));
         }
     }
 
@@ -38,18 +38,18 @@ class EditUser extends BaseView {
     }
 
     getEditUserStateChangeHandler() {
-        return (newState, valid) => {
-            this.setState({valid: valid});
+        return (editUserState) => {
+            this.setState({editUserState: editUserState});
         };
     }
 
     updateServerResponseState(newState, serverCallName) {
-        newState.user = ServerCall.getData(newState.loadUserCall);
+        newState.user = User.fromResource(ServerCall.getData(newState.loadUserCall));
         this.setState(newState);
     }
 
     render() {
-        const {classes, userId, messageClose} = this.props;
+        const {classes, messageClose} = this.props;
         const {saveCall, user} = this.state;
 
         if (ServerCall.noCallOrWait(this.state.loadUserCall))
@@ -57,7 +57,7 @@ class EditUser extends BaseView {
 
         return <ModalContainerView titleKey="edit-user-title" titleObj={{userName: user.name}}>
             <Box style={{padding: 20}}>
-                <EditUserFields askForProviderType={true} user={user} notifyStateChange={this.getEditUserStateChangeHandler()}/>
+                <EditUserFields user={user} notifyStateChange={this.getEditUserStateChangeHandler()}/>
                 <SaveCancelButtons serverCall={saveCall} disabled={false} onSaveHandler={this.getSaveHandler()} onCancelHandler={messageClose}/>
             </Box>
         </ModalContainerView>;
