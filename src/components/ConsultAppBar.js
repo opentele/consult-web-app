@@ -89,7 +89,7 @@ class ConsultAppBar extends BaseView {
                         </Box>
 
                         <Box sx={{flexGrow: 0}}>
-                            {GlobalContext.getUser() && <Tooltip title="Open settings">
+                            {GlobalContext.hasUser() && <Tooltip title="Open settings">
                                 <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
                                     <Avatar alt={GlobalContext.getUser().name}/>
                                 </IconButton>

@@ -52,8 +52,8 @@ class RegisterUser extends BaseView {
                 this.setState(state);
                 return;
             }
-            let {userName, userNameType, password, name, providerType} = this.state.editUserState;
-            this.makeServerCall(UserService.registerUser(name, userName, userNameType, password, providerType)).then(this.getEntitySavedHandler());
+            const {user, userNameType} = this.state.editUserState;
+            this.makeServerCall(UserService.registerUser(user, userNameType)).then(this.getEntitySavedHandler());
         }
     }
 

@@ -28,6 +28,7 @@ class EditUserFields extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {user: User.clone(props.user)};
+        this.setDevModeData();
     }
 
     static propTypes = {
@@ -37,7 +38,7 @@ class EditUserFields extends BaseView {
     };
 
     updateState(newState) {
-        const [valid, userNameType, errors] = UserValidator.validate(newState.user);
+        const [valid, userNameType, errors] = UserValidator.validate(newState.user, newState.confirmPassword, this.allowSettingOfUserPersonalFields());
         newState.userNameType = userNameType;
         newState.errors = errors;
         newState.valid = valid;
@@ -57,15 +58,34 @@ class EditUserFields extends BaseView {
         return this.getStateFieldValueChangedHandler("user", fieldName);
     }
 
-    render() {
-        const {classes, userId} = this.props;
-        const {password, confirmPassword, name, userName, providerType, userType} = this.state.user;
+    allowSettingOfUserPersonalFields() {
         const loggedInUser = GlobalContext.getUser();
-        const selfEditing = _.isNil(loggedInUser) || loggedInUser.id === userId;
+        const selfEditing = loggedInUser.id === this.state.user.id;
         const isNew = this.state.user.isNew();
+        return selfEditing || isNew;
+    }
+
+    setDevModeData() {
+        if (process.env.NODE_ENV === "development") {
+            Object.assign(this.state.user, {
+                name: "Foo",
+                userName: "foo@gmail.com",
+                password: "x",
+                providerType: "Consultant",
+                userType: "User"
+            });
+            this.state.confirmPassword = "x";
+        }
+    }
+
+    render() {
+        const {classes} = this.props;
+        const {password, name, userName, providerType, userType} = this.state.user;
+        const allowSettingOfUserPersonalFields = this.allowSettingOfUserPersonalFields();
+        const canManageUsers = GlobalContext.getUser().canManageUsers();
 
         return <Box className={classes.eufContainer}>
-            {(selfEditing || isNew) && <TextField
+            {allowSettingOfUserPersonalFields && <TextField
                 name="name"
                 autoComplete="name"
                 required
@@ -76,7 +96,7 @@ class EditUserFields extends BaseView {
                 onChange={this.getUserFieldValueChangedHandler("name")}
                 helperText={this.getErrorText("name")}
             />}
-            {(selfEditing || isNew) && <TextField
+            {allowSettingOfUserPersonalFields && <TextField
                 name="userName"
                 autoComplete="userName"
                 required
@@ -87,21 +107,21 @@ class EditUserFields extends BaseView {
                 error={this.hasError("userName")}
                 helperText={this.getErrorText("userName")}
             />}
-            {selfEditing && <PasswordField className={classes.eufField}
-                                           labelKey="enter-password-label"
-                                           name="password"
-                                           value={password}
-                                           onChangeHandler={this.getUserFieldValueChangedHandler("password")}
-                                           hasError={this.hasError("passwords")}
-                                           errorText={this.getErrorText("passwords")}/>}
-            {selfEditing && <PasswordField className={classes.eufField}
-                                           labelKey="enter-password-again-label"
-                                           name="confirmPassword"
-                                           value={confirmPassword}
-                                           onChangeHandler={this.getUserFieldValueChangedHandler("confirmPassword")}
-                                           hasError={this.hasError("passwords")}
-                                           errorText={this.getErrorText("passwords")}/>}
-            {loggedInUser.canManageUsers() && <FormControl className={classes.eufRadioGroup}>
+            {allowSettingOfUserPersonalFields && <PasswordField className={classes.eufField}
+                                                                labelKey="enter-password-label"
+                                                                name="enterPassword"
+                                                                value={password}
+                                                                onChangeHandler={this.getUserFieldValueChangedHandler("password")}
+                                                                hasError={this.hasError("passwords")}
+                                                                errorText={this.getErrorText("passwords")}/>}
+            {allowSettingOfUserPersonalFields && <PasswordField className={classes.eufField}
+                                                                labelKey="enter-password-again-label"
+                                                                name="confirmPassword"
+                                                                value={this.state.confirmPassword}
+                                                                onChangeHandler={this.getValueChangedHandler("confirmPassword")}
+                                                                hasError={this.hasError("passwords")}
+                                                                errorText={this.getErrorText("passwords")}/>}
+            {canManageUsers && <FormControl className={classes.eufRadioGroup}>
                 <FormLabel error={this.hasError("providerType")}>{i18n.t('provider-type-label')}</FormLabel>
                 <RadioGroup value={providerType} row onChange={this.getUserFieldValueChangedHandler("providerType")}>
                     <FormControlLabel value="Consultant" control={<Radio/>} label={i18n.t("consultant")}/>
@@ -111,7 +131,7 @@ class EditUserFields extends BaseView {
                 <FormHelperText error={this.hasError("providerType")}>{this.getErrorText("providerType")}</FormHelperText>
             </FormControl>}
 
-            {loggedInUser.canManageUsers() && <FormControl className={classes.eufField}>
+            {canManageUsers && <FormControl className={classes.eufField}>
                 <FormLabel error={this.hasError("userType")}>{i18n.t('user-type-label')}</FormLabel>
                 <RadioGroup value={userType} row onChange={this.getUserFieldValueChangedHandler("userType")}>
                     <FormControlLabel value="OrgAdmin" control={<Radio/>} label={i18n.t("org-admin")}/>
