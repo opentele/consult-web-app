@@ -46,7 +46,7 @@ class ClientDashboard extends BaseView {
 
         const client = Client.fromServerResource(ServerCall.getData(serverCall));
 
-        return <ContainerView activeTab="client" showBackButton={true}>
+        return <ContainerView activeTab="client" showBackButton={true} onRefresh={() => this.refresh()}>
             <Box className={classes.container}>
                 <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
                 <Box className={classes.section}>

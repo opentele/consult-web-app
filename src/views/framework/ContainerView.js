@@ -40,13 +40,14 @@ class ContainerView extends BaseView {
     static propTypes = {
         activeTab: PropTypes.oneOf(['home', 'client', 'users']),
         showBackButton: PropTypes.bool,
-        containerClassName: PropTypes.string
+        containerClassName: PropTypes.string,
+        onRefresh: PropTypes.func
     }
 
     render() {
-        const {classes, children, activeTab, showBackButton, containerClassName} = this.props;
+        const {classes, children, activeTab, onRefresh, showBackButton, containerClassName} = this.props;
         return <Box className={[classes.cvContainer, containerClassName]}>
-            <ConsultAppBar/>
+            <ConsultAppBar onRefresh={onRefresh}/>
             {showBackButton && <Button onClick={this.props.history.goBack} variant="text" color="secondary" startIcon={<BackIcon/>} className={classes.cvBackButton}>
                 {i18n.t('back-button')}
             </Button>}

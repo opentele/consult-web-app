@@ -41,7 +41,7 @@ class Users extends BaseView {
         const {classes} = this.props;
         const {getUsersServerCall} = this.state;
         const users = User.fromResources(ServerCall.getData(getUsersServerCall));
-        return <ContainerView activeTab="users">
+        return <ContainerView activeTab="users" onRefresh={() => this.refresh()}>
             <Box className={classes.usersContainer}>
                 <br/>
                 {this.renderIfAddUser()}

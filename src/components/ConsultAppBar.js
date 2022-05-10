@@ -8,6 +8,8 @@ import {BeanContainer, ServerCall} from 'react-app-common';
 import {UserService} from "consult-app-common";
 import BaseView from "../views/framework/BaseView";
 import GlobalContext from '../framework/GlobalContext';
+import ModalStatus from "../views/framework/ModalStatus";
+import EditUser from "../views/access/EditUser";
 
 const styles = theme => ({
     toolbar: {
@@ -33,7 +35,7 @@ const pages = [];
 
 class ConsultAppBar extends BaseView {
     static propTypes = {
-        classes: PropTypes.object.isRequired
+        onRefresh: PropTypes.func
     };
 
     constructor(props, context) {
@@ -42,6 +44,7 @@ class ConsultAppBar extends BaseView {
         this.state = {
             anchorElNav: null,
             anchorElUser: null,
+            profileOpenStatus: ModalStatus.NOT_OPENED,
             serverCall: ServerCall.createInitial()
         };
     }
@@ -64,15 +67,31 @@ class ConsultAppBar extends BaseView {
         return (event) => this.setState({anchorElNav: null});
     }
 
+    getOpenProfileHandler() {
+        return () => {
+            let newState = {};
+            newState["profileOpenStatus"] = ModalStatus.OPENED;
+            newState["anchorElUser"] = null;
+            this.setState(newState);
+        };
+    }
+
     handleCloseUserMenu() {
         return (event) => this.setState({...this.state, anchorElUser: null});
     }
 
+    refresh() {
+        this.props.onRefresh();
+    }
+
     render() {
         const {classes} = this.props;
+        const {profileOpenStatus} = this.state;
         return <>
             <AppBar position="static">
                 <Container maxWidth="xl">
+                    {profileOpenStatus === ModalStatus.OPENED &&
+                    <EditUser messageClose={this.getModalCloseHandler("profileOpenStatus")} userId={GlobalContext.getUser().id}/>}
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
                             <IconButton component={Link} to="/">
@@ -106,7 +125,7 @@ class ConsultAppBar extends BaseView {
                                   }}
                                   open={Boolean(this.state.anchorElUser)}
                                   onClose={this.handleCloseUserMenu()}>
-                                <MenuItem key='profile' onClick={this.handleCloseNavMenu()}>
+                                <MenuItem key='profile' onClick={this.getOpenProfileHandler()}>
                                     <Typography>Profile</Typography>
                                 </MenuItem>
                                 <MenuItem key='logout' onClick={this.logoutHandler()}>

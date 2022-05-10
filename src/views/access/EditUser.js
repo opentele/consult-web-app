@@ -27,9 +27,9 @@ class EditUser extends BaseView {
     };
 
     getSaveHandler() {
-        return (e) => {
+        return () => {
             if (this.state.editUserState.valid)
-                UserService.updateUser(this.state.editUserState.user).then(this.getEntitySavedHandler("saveCall"));
+                UserService.updateProfile(this.state.editUserState.user).then(this.getEntitySavedHandler("saveCall"));
         }
     }
 

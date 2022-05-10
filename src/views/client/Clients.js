@@ -50,7 +50,7 @@ class Clients extends BaseView {
             displayCount: clientSearchResults.entities.length
         });
 
-        return <ContainerView activeTab="client">
+        return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
             <br/>
             {addClientModalStatus === ModalStatus.OPENED &&
             <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}

@@ -20,8 +20,16 @@ class BaseView extends Component {
 
     getValueChangedHandler(fieldName) {
         return (e) => {
-            const newState = {};
+            const newState = {...this.state};
             newState[fieldName] = e.target.value;
+            this.updateState(newState);
+        }
+    }
+
+    getCheckboxCheckedChangeHandler(fieldName) {
+        return (e) => {
+            const newState = {...this.state};
+            newState[fieldName] = e.target.checked;
             this.updateState(newState);
         }
     }
@@ -57,7 +65,7 @@ class BaseView extends Component {
 
     getModalCloseHandler(stateField) {
         return (saved) => {
-            let newState = {};
+            let newState = {...this.state};
             newState[stateField] = saved ? ModalStatus.CLOSED_WITH_SAVE : ModalStatus.CLOSED_WITHOUT_SAVE;
             this.setState(newState);
             if (saved)
@@ -71,7 +79,7 @@ class BaseView extends Component {
 
     getModalOpenHandler(stateField) {
         return () => {
-            let newState = {};
+            let newState = {...this.state};
             newState[stateField] = ModalStatus.OPENED;
             this.setState(newState);
         }
@@ -81,7 +89,7 @@ class BaseView extends Component {
         return (response) => {
             const serverCall = ServerCall.responseReceived(this.state[serverCallName], response);
             if (serverCall.callStatus === ServerCallStatus.FAILURE) {
-                let newState = {};
+                let newState = {...this.state};
                 newState[serverCallName] = serverCall;
                 this.setState(newState);
             } else
@@ -98,13 +106,13 @@ class BaseView extends Component {
     }
 
     serverCallMade(serverCallName = "serverCall") {
-        const newState = {};
+        const newState = {...this.state};
         newState[serverCallName] = ServerCall.serverCallMade(this.state[serverCallName]);
         this.updateState(newState);
     }
 
     serverResponseReceived(response, serverCallName = "serverCall") {
-        const newState = {};
+        const newState = {...this.state};
         newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
         this.updateServerResponseState(newState, serverCallName);
         if (ServerCall.isSuccessful(newState[serverCallName])) {
@@ -128,7 +136,7 @@ class BaseView extends Component {
         if (id)
             this.makeServerCall(getPromiseFn(), serverCallName);
         else {
-            const newState = {};
+            const newState = {...this.state};
             newState[serverCallName] = ServerCall.null(newObj);
             this.updateState(newState);
         }

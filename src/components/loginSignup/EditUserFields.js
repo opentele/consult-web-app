@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField} from "@material-ui/core";
+import {Box, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField} from "@material-ui/core";
 import {i18n, User, UserValidator} from "consult-app-common";
 import PasswordField from "./PasswordField";
 import BaseView from "../../views/framework/BaseView";
 import GlobalContext from "../../framework/GlobalContext";
 import _ from 'lodash';
+import {CheckBox} from "@mui/icons-material";
 
 const styles = theme => ({
     eufContainer: {
@@ -19,15 +20,21 @@ const styles = theme => ({
         alignItems: 'stretch'
     },
     eufRadioGroup: {
-        marginTop: theme.spacing.unit * 4,
+        marginTop: theme.spacing.unit * 3,
         alignItems: 'stretch'
+    },
+    eufPasswords: {
+        display: 'flex',
+        flexDirection: 'column',
+        margin: 0,
+        padding: 0
     }
 });
 
 class EditUserFields extends BaseView {
     constructor(props, context) {
         super(props, context);
-        this.state = {user: User.clone(props.user)};
+        this.state = {user: User.clone(props.user), changingPassword: false};
         this.setDevModeData();
     }
 
@@ -44,7 +51,7 @@ class EditUserFields extends BaseView {
     }
 
     validate(state) {
-        const [valid, userNameType, errors] = UserValidator.validate(state.user, state.confirmPassword, this.allowSettingOfUserPersonalFields());
+        const [valid, userNameType, errors] = UserValidator.validate(state.user, state.confirmPassword, this.askForPasswords());
         state.userNameType = userNameType;
         state.errors = errors;
         state.valid = valid;
@@ -62,11 +69,13 @@ class EditUserFields extends BaseView {
         return this.getStateFieldValueChangedHandler("user", fieldName);
     }
 
-    allowSettingOfUserPersonalFields() {
+    isNew() {
+        return this.state.user.isNew();
+    }
+
+    selfEditing() {
         const loggedInUser = GlobalContext.getUser();
-        const selfEditing = loggedInUser.id === this.state.user.id;
-        const isNew = this.state.user.isNew();
-        return selfEditing || isNew;
+        return loggedInUser.id === this.state.user.id;
     }
 
     setDevModeData() {
@@ -84,14 +93,23 @@ class EditUserFields extends BaseView {
         }
     }
 
+    askForPasswords() {
+        return (!GlobalContext.hasUser()) || (this.selfEditing() && this.state.changingPassword);
+    }
+
     render() {
         const {classes} = this.props;
+        const {changingPassword} = this.state;
         const {password, name, userName, providerType, userType} = this.state.user;
-        const allowSettingOfUserPersonalFields = this.allowSettingOfUserPersonalFields();
         const canManageUsers = GlobalContext.getUser().canManageUsers();
 
+        const allowChangingNameAndUserName = this.isNew() || this.selfEditing();
+        const allowPasswordUpdate = !this.isNew() && this.selfEditing();
+        const askForCurrentPassword = this.selfEditing() && changingPassword;
+        const askForPasswords = this.askForPasswords();
+
         return <Box className={classes.eufContainer}>
-            {allowSettingOfUserPersonalFields && <TextField
+            {allowChangingNameAndUserName && <TextField
                 name="name"
                 autoComplete="name"
                 required
@@ -102,7 +120,7 @@ class EditUserFields extends BaseView {
                 onChange={this.getUserFieldValueChangedHandler("name")}
                 helperText={this.getErrorText("name")}
             />}
-            {allowSettingOfUserPersonalFields && <TextField
+            {allowChangingNameAndUserName && <TextField
                 name="userName"
                 autoComplete="userName"
                 required
@@ -113,20 +131,32 @@ class EditUserFields extends BaseView {
                 error={this.hasError("userName")}
                 helperText={this.getErrorText("userName")}
             />}
-            {allowSettingOfUserPersonalFields && <PasswordField className={classes.eufField}
-                                                                labelKey="enter-password-label"
-                                                                name="enterPassword"
-                                                                value={password}
-                                                                onChangeHandler={this.getUserFieldValueChangedHandler("password")}
-                                                                hasError={this.hasError("passwords")}
-                                                                errorText={this.getErrorText("passwords")}/>}
-            {allowSettingOfUserPersonalFields && <PasswordField className={classes.eufField}
-                                                                labelKey="enter-password-again-label"
-                                                                name="confirmPassword"
-                                                                value={this.state.confirmPassword}
-                                                                onChangeHandler={this.getValueChangedHandler("confirmPassword")}
-                                                                hasError={this.hasError("passwords")}
-                                                                errorText={this.getErrorText("passwords")}/>}
+            {allowPasswordUpdate && <FormControlLabel className={classes.eufField}
+                              control={<Checkbox style={{marginTop: -10}} checked={changingPassword}
+                                                 onChange={this.getCheckboxCheckedChangeHandler("changingPassword")}/>}
+                              label={i18n.t("update-password")}/>}
+            {askForCurrentPassword && <PasswordField labelKey="enter-old-password-label"
+                           name="enterOldPassword"
+                           value={password}
+                           onChangeHandler={this.getUserFieldValueChangedHandler("password")}
+                           hasError={this.hasError("passwords")}
+                           errorText={this.getErrorText("passwords")}/>}
+            {askForPasswords && <Box className={classes.eufPasswords}>
+                <PasswordField className={classes.eufField}
+                               labelKey="enter-password-label"
+                               name="enterPassword"
+                               value={password}
+                               onChangeHandler={this.getUserFieldValueChangedHandler("password")}
+                               hasError={this.hasError("passwords")}
+                               errorText={this.getErrorText("passwords")}/>
+                <PasswordField className={classes.eufField}
+                               labelKey="enter-password-again-label"
+                               name="confirmPassword"
+                               value={this.state.confirmPassword}
+                               onChangeHandler={this.getValueChangedHandler("confirmPassword")}
+                               hasError={this.hasError("passwords")}
+                               errorText={this.getErrorText("passwords")}/>
+            </Box>}
             {canManageUsers && <FormControl className={classes.eufRadioGroup}>
                 <FormLabel error={this.hasError("providerType")}>{i18n.t('provider-type-label')}</FormLabel>
                 <RadioGroup value={providerType} row onChange={this.getUserFieldValueChangedHandler("providerType")}>
