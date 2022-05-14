@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField} from "@material-ui/core";
+import {Box, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField, Typography} from "@material-ui/core";
 import {i18n, User, UserValidator} from "consult-app-common";
 import PasswordField from "./PasswordField";
 import BaseView from "../../views/framework/BaseView";
@@ -15,8 +15,15 @@ const styles = theme => ({
         flexDirection: 'column',
         flexGrow: 1
     },
+    eufDoChangePassword: {
+        marginTop: theme.spacing.unit * 4
+    },
     eufField: {
         marginTop: theme.spacing.unit * 2,
+        alignItems: 'stretch'
+    },
+    eufProfessionalExplainer: {
+        marginTop: theme.spacing.unit * 4,
         alignItems: 'stretch'
     },
     eufRadioGroup: {
@@ -100,47 +107,67 @@ class EditUserFields extends BaseView {
     render() {
         const {classes} = this.props;
         const {changingPassword} = this.state;
-        const {password, name, userName, providerType, userType} = this.state.user;
+        const {password, name, userName, providerType, userType, identification, qualification} = this.state.user;
         const canManageUsers = GlobalContext.getUser().canManageUsers();
 
-        const allowChangingNameAndUserName = this.isNew() || this.selfEditing();
+        const allowChangingPersonalInfo = this.isNew() || this.selfEditing();
         const allowPasswordUpdate = !this.isNew() && this.selfEditing();
         const askForCurrentPassword = this.selfEditing() && changingPassword;
         const askForPasswords = this.askForPasswords();
 
         return <Box className={classes.eufContainer}>
-            {allowChangingNameAndUserName && <TextField
-                name="name"
-                autoComplete="name"
-                required
-                className={classes.eufField}
-                label={i18n.t("name")}
-                value={name}
-                error={this.hasError("name")}
-                onChange={this.getUserFieldValueChangedHandler("name")}
-                helperText={this.getErrorText("name")}
-            />}
-            {allowChangingNameAndUserName && <TextField
-                name="userName"
-                autoComplete="userName"
-                required
-                className={classes.eufField}
-                label={i18n.t("userName-label")}
-                value={userName}
-                onChange={this.getUserFieldValueChangedHandler("userName")}
-                error={this.hasError("userName")}
-                helperText={this.getErrorText("userName")}
-            />}
-            {allowPasswordUpdate && <FormControlLabel className={classes.eufField}
-                              control={<Checkbox style={{marginTop: -10}} checked={changingPassword}
-                                                 onChange={this.getCheckboxCheckedChangeHandler("changingPassword")}/>}
-                              label={i18n.t("update-password")}/>}
+            {allowChangingPersonalInfo && <>
+                <TextField
+                    name="name"
+                    autoComplete="name"
+                    required
+                    className={classes.eufField}
+                    label={i18n.t("name")}
+                    value={name}
+                    error={this.hasError("name")}
+                    onChange={this.getUserFieldValueChangedHandler("name")}
+                    helperText={this.getErrorText("name")}
+                />
+                <TextField
+                    name="userName"
+                    autoComplete="userName"
+                    required
+                    className={classes.eufField}
+                    label={i18n.t("userName-label")}
+                    value={userName}
+                    onChange={this.getUserFieldValueChangedHandler("userName")}
+                    error={this.hasError("userName")}
+                    helperText={this.getErrorText("userName")}
+                />
+                <Typography variant="button" className={classes.eufProfessionalExplainer}>{i18n.t("professional-details-explainer")}</Typography>
+                <TextField
+                    name="identification"
+                    label={i18n.t("professional-identification-label")}
+                    value={identification}
+                    error={this.hasError("identification")}
+                    onChange={this.getUserFieldValueChangedHandler("identification")}
+                    helperText={this.getErrorText("identification")}
+                />
+                <TextField
+                    name="qualification"
+                    className={classes.eufField}
+                    label={i18n.t("professional-qualification-label")}
+                    value={qualification}
+                    error={this.hasError("qualification")}
+                    onChange={this.getUserFieldValueChangedHandler("qualification")}
+                    helperText={this.getErrorText("qualification")}
+                />
+            </>}
+            {allowPasswordUpdate && <FormControlLabel className={classes.eufDoChangePassword}
+                                                      control={<Checkbox style={{marginTop: -10}} checked={changingPassword}
+                                                                         onChange={this.getCheckboxCheckedChangeHandler("changingPassword")}/>}
+                                                      label={i18n.t("update-password")}/>}
             {askForCurrentPassword && <PasswordField labelKey="enter-old-password-label"
-                           name="enterOldPassword"
-                           value={password}
-                           onChangeHandler={this.getUserFieldValueChangedHandler("password")}
-                           hasError={this.hasError("passwords")}
-                           errorText={this.getErrorText("passwords")}/>}
+                                                     name="enterOldPassword"
+                                                     value={password}
+                                                     onChangeHandler={this.getUserFieldValueChangedHandler("password")}
+                                                     hasError={this.hasError("passwords")}
+                                                     errorText={this.getErrorText("passwords")}/>}
             {askForPasswords && <Box className={classes.eufPasswords}>
                 <PasswordField className={classes.eufField}
                                labelKey="enter-password-label"

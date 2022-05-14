@@ -80,7 +80,7 @@ class ClientDashboard extends BaseView {
                     <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={this.getClientPrintHandler()}/>
                 </Box>
                 {client.consultationSessionRecords.map((record) => {
-                        return <Box className={classes.section}>
+                        return <Box className={classes.section} key={record.id}>
                             <ConsultationDisplay consultationSessionRecord={record} client={client}
                                                  onModification={() => this.refresh()}
                                                  onPrint={this.getConsultationRecordPrintHandler()}/>

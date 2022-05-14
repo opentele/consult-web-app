@@ -10,6 +10,14 @@ import PrintIcon from "@mui/icons-material/Print";
 import {Box} from "@material-ui/core";
 import GlobalContext from "../../framework/GlobalContext";
 
+const pageStyle = `
+  @media print {
+    .pagebreak {
+      page-break-before: always;
+    }
+  }
+`;
+
 class PrintView extends BaseView {
     componentRef = null;
 
@@ -64,6 +72,7 @@ class PrintView extends BaseView {
                         onBeforePrint={this.handleBeforePrint}
                         removeAfterPrint
                         trigger={this.reactToPrintTrigger}
+                        pageStyle={""}
                     />
                 </Box>
                 <ConsultationRecordPrintView consultationSessionRecordId={consultationSessionRecordId} client={client} ref={this.setComponentRef}/>
