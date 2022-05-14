@@ -9,6 +9,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import ModalStatus from "../../views/framework/ModalStatus";
 import PersonView from "../../views/consultation/PersonView";
 import BaseView from "../../views/framework/BaseView";
+import PrintIcon from "@mui/icons-material/Print";
 
 const styles = theme => ({
     container: {
@@ -42,7 +43,7 @@ class ClientDisplay extends BaseView {
     }
 
     render() {
-        const {classes, client, onModification} = this.props;
+        const {classes, client, onPrint} = this.props;
         const {editClientModalStatus} = this.state;
 
         return <Box className={classes.container}>
@@ -55,7 +56,7 @@ class ClientDisplay extends BaseView {
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
                     <FieldDisplay fieldName="age" fieldValue={`${client.age} ${client.ageDurationType}`}/>
                     <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
-                    <FieldDisplay fieldName="mobile-number" fieldValue={client.mobile}/>
+                    <FieldDisplay fieldName="mobile" fieldValue={client.mobile}/>
                     <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
                     <FieldDisplay fieldName="created-by" fieldValue={client.createdBy}/>
                     {client.modifiedBySomeoneElse() && <FieldDisplay fieldName="last-update-by" fieldValue={client.lastModifiedBy}/>}
@@ -67,6 +68,10 @@ class ClientDisplay extends BaseView {
     renderAction() {
         if (this.props.onModification)
             return <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 2}}>
+                <Fab color="secondary" aria-label="print" size="small"
+                     onClick={() => this.props.onPrint(this.props.client.id)} style={{marginLeft: 4}}>
+                    <PrintIcon/>
+                </Fab>
                 <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editClientModalStatus")}>
                     <EditIcon/>
                 </Fab>

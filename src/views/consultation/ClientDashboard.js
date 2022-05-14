@@ -11,7 +11,6 @@ import {withRouter} from "react-router-dom";
 import WaitView from "../../components/WaitView";
 import Client from '../../domain/Client';
 import ModalStatus from "../framework/ModalStatus";
-import ConsultationRecordPrintView from "./ConsultationRecordPrintView";
 import _ from 'lodash';
 import PrintView from "../framework/PrintView";
 
@@ -43,10 +42,10 @@ class ClientDashboard extends BaseView {
     }
 
     getConsultationRecordPrintHandler() {
-        return (consultationRecordId) => {
+        return (consultationSessionRecordId) => {
             let newState = {...this.state};
             newState.printModalStatus = ModalStatus.OPENED;
-            newState.consultationRecordId = consultationRecordId;
+            newState.consultationSessionRecordId = consultationSessionRecordId;
             newState.clientId = null;
             this.setState(newState);
         }
@@ -56,7 +55,7 @@ class ClientDashboard extends BaseView {
         return (clientId) => {
             let newState = {...this.state};
             newState.printModalStatus = ModalStatus.OPENED;
-            newState.consultationRecordId = null;
+            newState.consultationSessionRecordId = null;
             newState.clientId = clientId;
             this.setState(newState);
         }
@@ -64,7 +63,7 @@ class ClientDashboard extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {serverCall, printModalStatus, consultationRecordId, clientId} = this.state;
+        const {serverCall, printModalStatus, consultationSessionRecordId, clientId} = this.state;
 
         if (ServerCall.noCallOrWait(serverCall))
             return <WaitView/>;
@@ -72,19 +71,21 @@ class ClientDashboard extends BaseView {
         const client = Client.fromServerResource(ServerCall.getData(serverCall));
 
         return <ContainerView activeTab="client" showBackButton={true} onRefresh={() => this.refresh()}>
-            {printModalStatus === ModalStatus.OPENED && !_.isNil(consultationRecordId) &&
-                <PrintView client={client} consultationSessionRecordId={consultationRecordId}/>}
+            {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
+            <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
+                       messageClose={this.getModalCloseHandler("printModalStatus")}/>}
             <Box className={classes.container}>
                 <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
                 <Box className={classes.section}>
-                    <ClientDisplay client={client} onModification={() => this.refresh()}/>
+                    <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={this.getClientPrintHandler()}/>
                 </Box>
-                {client.consultationSessionRecords.map((record) =>
-                    <Box className={classes.section}>
-                        <ConsultationDisplay consultationSessionRecord={record} client={client}
-                                             onModification={() => this.refresh()}
-                                             onPrint={this.getConsultationRecordPrintHandler()}/>
-                    </Box>
+                {client.consultationSessionRecords.map((record) => {
+                        return <Box className={classes.section}>
+                            <ConsultationDisplay consultationSessionRecord={record} client={client}
+                                                 onModification={() => this.refresh()}
+                                                 onPrint={this.getConsultationRecordPrintHandler()}/>
+                        </Box>;
+                    }
                 )}
             </Box>
         </ContainerView>;
