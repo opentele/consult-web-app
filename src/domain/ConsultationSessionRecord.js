@@ -18,6 +18,10 @@ export default class ConsultationSessionRecord extends AbstractEntity {
         return csr;
     }
 
+    static fromServerResources(resources) {
+        return resources.map(ConsultationSessionRecord.fromServerResource);
+    }
+
     clone() {
         const clone = new ConsultationSessionRecord();
         Object.assign(clone, this);

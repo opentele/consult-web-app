@@ -33,7 +33,8 @@ class ClientDisplay extends BaseView {
 
     static propTypes = {
         client: PropTypes.object.isRequired,
-        onModification: PropTypes.func.isRequired
+        onModification: PropTypes.func.isRequired,
+        onPrint: PropTypes.func.isRequired
     }
 
     refresh() {
@@ -41,21 +42,14 @@ class ClientDisplay extends BaseView {
     }
 
     render() {
-        const {
-            classes,
-            client
-        } = this.props;
+        const {classes, client, onModification} = this.props;
         const {editClientModalStatus} = this.state;
 
         return <Box className={classes.container}>
             {editClientModalStatus === ModalStatus.OPENED &&
-                <PersonView messageClose={this.getModalCloseHandler("editClientModalStatus")} clientId={client.id}/>}
+            <PersonView messageClose={this.getModalCloseHandler("editClientModalStatus")} clientId={client.id}/>}
             <Card className={classes.client}>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 2}}>
-                    <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editClientModalStatus")}>
-                        <EditIcon/>
-                    </Fab>
-                </Box>
+                {this.renderAction()}
                 <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
@@ -68,6 +62,17 @@ class ClientDisplay extends BaseView {
                 </Grid>
             </Card>
         </Box>;
+    }
+
+    renderAction() {
+        if (this.props.onModification)
+            return <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 2}}>
+                <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editClientModalStatus")}>
+                    <EditIcon/>
+                </Fab>
+            </Box>;
+        else
+            return <Box style={{marginTop: 20}}/>;
     }
 }
 

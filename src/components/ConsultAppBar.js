@@ -81,7 +81,8 @@ class ConsultAppBar extends BaseView {
     }
 
     refresh() {
-        this.props.onRefresh();
+        if (this.props.onRefresh)
+            this.props.onRefresh();
     }
 
     render() {

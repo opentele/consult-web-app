@@ -37,7 +37,9 @@ export default class App extends Component {
                 if (ServerCall.isSuccessful(isLoggedInServerCall)) {
                     UserService.getUser().then((response) => {
                         const getUserServerCall = ServerCall.responseReceived(this.state.getUserServerCall, response);
-                        GlobalContext.setUser(User.fromResource(ServerCall.getData(getUserServerCall)));
+                        const data = ServerCall.getData(getUserServerCall);
+                        GlobalContext.setUser(User.fromResource(data));
+                        GlobalContext.setOrganisation(data.organisationName);
                         this.setState({getUserServerCall: getUserServerCall});
                     });
                 }
@@ -51,10 +53,7 @@ export default class App extends Component {
         if (ServerCall.noCallOrWait(isLoggedInServerCall))
             return true;
 
-        if (ServerCall.isSuccessful(isLoggedInServerCall) && !ServerCall.isCallComplete(getUserServerCall))
-            return true;
-
-        return false;
+        return ServerCall.isSuccessful(isLoggedInServerCall) && !ServerCall.isCallComplete(getUserServerCall);
     }
 
     render() {
@@ -65,10 +64,8 @@ export default class App extends Component {
 
         const isLoggedIn = ServerCall.isSuccessful(getUserServerCall);
         if (isLoggedIn && nonLoginPaths.includes(pathname)) {
-            console.log("Redirecting to /");
             window.location.replace("/");
         } else if (!isLoggedIn && !nonLoginPaths.includes(pathname)) {
-            console.log("Redirecting to /login");
             window.location.replace("/login");
         }
 

@@ -5,6 +5,10 @@ class ConsultationSessionRecordService {
         return ServiceUtil.getJson(`consultationSessionRecord/${id}`);
     }
 
+    static getRecords(clientId) {
+        return ServiceUtil.getJson(`consultationSessionRecord?clientId=${clientId}`);
+    }
+
     static save(consultationSessionRecord, client) {
         if (consultationSessionRecord.isNew()) {
             consultationSessionRecord.clientId = client.id;

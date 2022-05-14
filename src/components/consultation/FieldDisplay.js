@@ -26,8 +26,8 @@ class FieldDisplay extends Component {
 
         return <Grid item xs={6}>
             <Box sx={{display: "flex", flexDirection: "column"}}>
-                <Typography variant="button">{i18n.t(fieldName)}</Typography>
-                <Typography variant="subtitle2">{fieldValue}</Typography>
+                <Typography variant="button" style={{fontWeight: 600}}>{i18n.t(fieldName)}</Typography>
+                <Typography variant="subtitle1">{fieldValue}</Typography>
             </Box>
         </Grid>;
     }

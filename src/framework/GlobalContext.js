@@ -18,6 +18,14 @@ class GlobalContext {
     hasUser() {
         return !_.isNil(this.user);
     }
+
+    setOrganisation(organisation) {
+        this.organisation = organisation;
+    }
+
+    getOrganisation() {
+        return this.organisation;
+    }
 }
 
 export default new GlobalContext();
