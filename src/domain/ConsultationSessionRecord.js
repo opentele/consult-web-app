@@ -14,7 +14,8 @@ export default class ConsultationSessionRecord extends AbstractEntity {
 
     static fromServerResource(resource) {
         const csr = new ConsultationSessionRecord();
-        Object.assign(csr, resource);
+        AbstractEntity.fromOther(resource, csr);
+        AbstractEntity.copyFields(resource, csr, ["complaints", "observations", "keyInference", "recommendations", "consultationRoomId"]);
         return csr;
     }
 

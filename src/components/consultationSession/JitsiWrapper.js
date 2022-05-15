@@ -49,13 +49,14 @@ const config = {
 //https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 
 class JitsiWrapper extends React.Component {
-    handleAPI(JitsiMeetAPI) {
-        JitsiMeetAPI.executeCommand("toggleVideo");
+    handleAPI(api) {
+        api.executeCommand("toggleVideo");
         // setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
     };
 
     static propTypes = {
-        roomName: PropTypes.string
+        roomName: PropTypes.string.isRequired,
+        providerDisplayForClient: PropTypes.string.isRequired
     };
 
     componentDidUpdate(prevProps, prevState, snapshot) {
@@ -63,13 +64,13 @@ class JitsiWrapper extends React.Component {
     }
 
     render() {
-        const {classes, roomName} = this.props;
+        const {classes, roomName, providerDisplayForClient} = this.props;
         return <Jitsi
             containerStyle={{width: "100%", height: "525px"}}
             domain="meet.jit.si"
             onAPILoad={this.handleAPI}
             roomName={roomName}
-            displayName={GlobalContext.getUser().name}
+            displayName={providerDisplayForClient}
             interfaceConfig={interfaceConfig}
             config={config}/>;
     }

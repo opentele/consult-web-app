@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from '@material-ui/core/styles';
-import {Box, Chip, FormControl, OutlinedInput, TextField} from '@material-ui/core';
+import {Box, FormControl, TextField} from '@material-ui/core';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
 import moment from "moment";
@@ -8,17 +8,11 @@ import ModalContainerView from "../framework/ModalContainerView";
 import PropTypes from "prop-types";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
-import CancelButton from "../../components/CancelButton";
-import SaveButton from "../../components/SaveButton";
 import ConsultationRoom from "../../domain/ConsultationRoom";
-import {UserService} from "consult-app-common";
 import WaitBackdrop from "../../components/WaitBackdrop";
-import _ from 'lodash';
-import {MenuItem, Select} from "@mui/material";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import EditProviders from "../../components/consultation/EditProviders";
-import EntityCollection from "../../domain/EntityCollection";
 
 const styles = theme => ({
     cecrContainer: {
@@ -61,11 +55,10 @@ const styles = theme => ({
 class CreateEditConsultationRoom extends BaseView {
     constructor(props) {
         super(props);
-        let room = {providers: []};
         this.state = {
-            getRoomServerCall: ServerCall.createInitial(room),
+            getRoomServerCall: ServerCall.createInitial(),
             saveRoomServerCall: ServerCall.createInitial(),
-            room: room
+            room: ConsultationRoom.emptyInstance()
         };
     }
 
@@ -78,11 +71,9 @@ class CreateEditConsultationRoom extends BaseView {
         this.makeServerCall(ConsultationRoomService.getRoom(this.props.roomId), "getRoomServerCall");
     }
 
-    serverResponseReceived(response, serverCallName) {
-        const newState = {};
-        newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
+    updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getRoomServerCall")
-            newState.room = ServerCall.getData(newState[serverCallName])
+            newState.room = ConsultationRoom.fromServerResource(ServerCall.getData(newState[serverCallName]));
         this.setState(newState);
     }
 
@@ -113,7 +104,7 @@ class CreateEditConsultationRoom extends BaseView {
             return null;
         }
 
-        return <ModalContainerView titleKey={ConsultationRoom.isNew(room) ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
+        return <ModalContainerView titleKey={room.isNew() ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
             <FormControl>
                 <Box className={classes.cecrContainer}>
                     <Box className={classes.cercFirstField}>

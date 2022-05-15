@@ -11,12 +11,14 @@ import WaitView from "../../components/WaitView";
 import {withRouter} from "react-router-dom";
 import {Box} from "@material-ui/core";
 import _ from 'lodash';
+import ConsultationRoom from "../../domain/ConsultationRoom";
 
 class TeleConferenceView extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            getTeleConferenceRoomCall: ServerCall.createInitial()
+            getTeleConferenceRoomCall: ServerCall.createInitial(),
+            consultationRoom: ConsultationRoom.emptyInstance()
         };
     }
 
@@ -38,6 +40,12 @@ class TeleConferenceView extends BaseView {
         this.makeServerCall(confService.getRoomForTeleConference(consultationRoomId), "getTeleConferenceRoomCall");
     }
 
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "getTeleConferenceRoomCall")
+            newState.consultationRoom = ConsultationRoom.fromServerResource(ServerCall.getData(newState.getTeleConferenceRoomCall));
+        this.setState(newState);
+    }
+
     render() {
         const {
             classes,
@@ -45,16 +53,16 @@ class TeleConferenceView extends BaseView {
         } = this.props;
 
         const {
-            getTeleConferenceRoomCall
+            getTeleConferenceRoomCall,
+            consultationRoom
         } = this.state;
 
         if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(ServerCall.getData(getTeleConferenceRoomCall)))
             return <WaitView/>;
 
-        const data = ServerCall.getData(getTeleConferenceRoomCall);
         return <ContainerView showBackButton={false} activeTab="home">
             <Box className={classes.tcvContainer}>
-                <JitsiConference placeholder={true} consultationRoom={data} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
+                <JitsiConference placeholder={false} consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
                 <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data} onDataChanged={() => this.refresh()}/>
             </Box>
         </ContainerView>;

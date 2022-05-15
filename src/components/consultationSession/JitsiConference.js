@@ -75,10 +75,13 @@ class JitsiConference extends BaseView {
         const {moveTokenCall, clientRecordModalStatus} = this.state;
 
         return <Box className={[classes.jcContainer, parentClassName]}>
-            <h2>{`${consultationRoom.title} - ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</h2>
-            {placeholder ? <JitsiPlaceholder/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}/>}
+            <h4>{`${consultationRoom.title} - ${consultationRoom.getCurrentClientName()}`}</h4>
+            {consultationRoom}
+            <h6>{`${consultationRoom.providerClientDisplay}`}</h6>
+            {placeholder ? <JitsiPlaceholder/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}
+                                                               providerDisplayForClient={consultationRoom.providerClientDisplay}/>}
             <Box className={classes.jcPatientControlButtons}>
-                {!ConsultationRoom.isFirstClientActive(consultationRoom) &&
+                {!consultationRoom.isFirstClientActive() &&
                 this.getFab(classes, moveTokenCall, this.getGoToPreviousClientHandler(), "go-to-previous-client")}
 
                 {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}
@@ -86,7 +89,7 @@ class JitsiConference extends BaseView {
                     {i18n.t("open-client-record")}
                 </Fab>}
 
-                {!ConsultationRoom.isLastClientActive(consultationRoom) &&
+                {!consultationRoom.isLastClientActive() &&
                 this.getFab(classes, moveTokenCall, this.getGoToNextClientHandler(), "go-to-next-client")}
             </Box>
 

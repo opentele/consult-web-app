@@ -1,12 +1,13 @@
 import _ from "lodash";
 import Alert from "./Alert";
-import {i18n} from "consult-app-common";
+import {AbstractEntity, i18n} from "consult-app-common";
 import GlobalContext from "../framework/GlobalContext";
 import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
+import Provider from "./Provider";
+import Appointment from "./Appointment";
 
-class ConsultationRoom {
-    id;
+class ConsultationRoom extends AbstractEntity {
     title;
     scheduledStartTime;
     scheduledEndTime;
@@ -20,83 +21,98 @@ class ConsultationRoom {
     appointments;
     activeTeleConferenceId;
 
-    static isNew(room) {
-        return !(room.id > 0);
+    static emptyInstance() {
+        const consultationRoom = new ConsultationRoom();
+        consultationRoom.providers = [];
+        consultationRoom.appointments = [];
+        return consultationRoom;
     }
 
-    static getAlerts(room) {
+    static fromServerResource(resource) {
+        const consultationRoom = new ConsultationRoom();
+        AbstractEntity.fromOther(resource, consultationRoom);
+        AbstractEntity.copyFields(resource, consultationRoom,
+            ["title", "scheduledStartTime", "scheduledEndTime", "scheduledOn", "totalSlots", "numberOfClients", "numberOfUserClients", "numberOfClientsPending", "numberOfUserClientsPending", "activeTeleConferenceId"]);
+        consultationRoom.providers = Provider.fromResources(resource.providers);
+        consultationRoom.appointments = Appointment.fromResources(resource.appointments);
+        return consultationRoom;
+    }
+
+    static fromServerResources(resources) {
+        if (_.isNil(resources)) return [];
+        return resources.map(ConsultationRoom.fromServerResource);
+    }
+
+    getAlerts() {
         const user = GlobalContext.getUser();
         const alerts = [];
-        if (this.hasMoreClients(room) && user["providerType"] === ProviderType.Usher)
-            alerts.push(Alert.info(i18n.t("conference-client-next", {client: ConsultationRoom.getCurrentClientName(room)})));
+        if (this.hasMoreClients() && user["providerType"] === ProviderType.Usher)
+            alerts.push(Alert.info(i18n.t("conference-client-next", {client: this.getCurrentClientName()})));
 
-        if (room.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Usher)
+        if (this.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
-                numberOfClientsCompleted: this.numberOfUserClientCompleted(room),
-                numberOfClientsPending: room.numberOfUserClientsPending
+                numberOfClientsCompleted: this.numberOfUserClientCompleted(),
+                numberOfClientsPending: this.numberOfUserClientsPending
             })));
-        if (!this.hasVacancy(room) && user["providerType"] === ProviderType.Usher)
+        if (!this.hasVacancy() && user["providerType"] === ProviderType.Usher)
             alerts.push(Alert.error(i18n.t("conference-no-vacancy")));
 
         return alerts;
     }
 
-    static numberOfUserClientCompleted(room) {
-        return room.numberOfUserClients - room.numberOfUserClientsPending;
+    numberOfUserClientCompleted() {
+        return this.numberOfUserClients - this.numberOfUserClientsPending;
     }
 
-    static hasMoreClients(room) {
-        const currentAppointment = this.getCurrentAppointment(room);
-        return _.some(room.appointments, (app) => app.queueNumber > currentAppointment.queueNumber);
+    hasMoreClients() {
+        const currentAppointment = this.getCurrentAppointment();
+        return _.some(this.appointments, (app) => app.queueNumber > currentAppointment.queueNumber);
     }
 
-    static isInPast(room) {
-        return moment(room.scheduledOn).startOf('day').isBefore(moment().startOf('day'));
+    isInPast() {
+        return moment(this.scheduledOn).startOf('day').isBefore(moment().startOf('day'));
     }
 
-    static hasVacancy(room) {
-        return !this.isInPast(room) && (room.totalSlots - room.numberOfClients > 0);
+    hasVacancy() {
+        return !this.isInPast() && (this.totalSlots - this.numberOfClients > 0);
     }
 
-    static canAddClient(room) {
-        return this.hasVacancy(room);
+    canAddClient() {
+        return this.hasVacancy();
     }
 
-    static canViewClients(room) {
-        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClients > 0) : (room.numberOfUserClients > 0);
+    canViewClients() {
+        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (this.numberOfClients > 0) : (this.numberOfUserClients > 0);
     }
 
-    static canJoinConference(room) {
-        return (!this.isInPast(room)) && (GlobalContext.getUser().providerType === ProviderType.Consultant ? (room.numberOfClientsPending > 0) : (room.numberOfUserClientsPending > 0));
+    canJoinConference() {
+        return (!this.isInPast()) && (GlobalContext.getUser().providerType === ProviderType.Consultant ?
+            (this.numberOfClientsPending > 0) : (this.numberOfUserClientsPending > 0));
     }
 
-    static getDisplayTitle(room) {
-        return `${room.title} - ${moment(room.scheduledOn).format("DD MMM")}`
+    getDisplayTitle() {
+        return `${this.title} - ${moment(this.scheduledOn).format("DD MMM")}`
     }
 
-    static getProvider(room, providerId) {
-        return _.find(room.providers, (x) => x.id === providerId);
+    isFirstClientActive() {
+        return _.first(this.appointments).current;
     }
 
-    static isFirstClientActive(room) {
-        return _.first(room.appointments).current;
+    isLastClientActive() {
+        return _.last(this.appointments).current;
     }
 
-    static isLastClientActive(room) {
-        return _.last(room.appointments).current;
+    getCurrentAppointment() {
+        return _.find(this.appointments, (app) => app.current);
     }
 
-    static getCurrentAppointment(room) {
-        return _.find(room.appointments, (app) => app.current);
-    }
-
-    static getCurrentClientName(room) {
-        const currentAppointment = this.getCurrentAppointment(room);
+    getCurrentClientName() {
+        const currentAppointment = this.getCurrentAppointment();
         return _.isNil(currentAppointment) ? i18n.t('no-active-client') : currentAppointment.clientName;
     }
 
-    static getCurrentClientId(room) {
-        const currentAppointment = this.getCurrentAppointment(room);
+    getCurrentClientId(room) {
+        const currentAppointment = this.getCurrentAppointment();
         return currentAppointment.clientId;
     }
 }

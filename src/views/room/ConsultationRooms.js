@@ -9,6 +9,7 @@ import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
 import ConsultationRoom from "../../domain/ConsultationRoom";
+import Client from "../../domain/Client";
 import AddClient from "../client/AddClient";
 import {i18n, ProviderType} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
@@ -51,7 +52,8 @@ class ConsultationRooms extends BaseView {
             setupTeleConferenceCall: ServerCall.createInitial(),
             addClientModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED,
-            editConsultationRoomStatus: ModalStatus.NOT_OPENED
+            editConsultationRoomStatus: ModalStatus.NOT_OPENED,
+            consultationRooms: []
         };
         this.serviceMethod = BeanContainer.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
@@ -61,31 +63,32 @@ class ConsultationRooms extends BaseView {
     };
 
     componentDidMount() {
-        this.serviceMethod().then((response) => {
-            this.setState({getRoomsCall: ServerCall.responseReceived(this.state.getRoomsCall, response)});
-        });
+        this.makeServerCall(this.serviceMethod(), "getRoomsCall");
     }
 
     refresh() {
-        this.serviceMethod().then((response) => {
-            this.setState({getRoomsCall: ServerCall.responseReceived(this.state.getRoomsCall, response), addClientModalStatus: ModalStatus.NOT_OPENED});
-        });
+        this.makeServerCall(this.serviceMethod(), "getRoomsCall");
+    }
+
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "getRoomsCall") {
+            newState.addClientModalStatus = ModalStatus.NOT_OPENED;
+            newState.consultationRooms = ConsultationRoom.fromServerResources(ServerCall.getData(newState.getRoomsCall));
+        } else if (serverCallName === "clientListCall") {
+            newState.viewClientsModalStatus = ModalStatus.OPENED;
+            newState.clientList = Client.fromServerResources(ServerCall.getData(newState.clientListCall));
+        }
+        this.setState(newState);
     }
 
     getClientListHandler(consultationRoom) {
-        return () => {
-            return BeanContainer.get(ConsultationRoomService).getClientsByConsultationRoom(consultationRoom.id).then((response) => {
-                this.setState({clientListCall: ServerCall.responseReceived(this.state.clientListCall, response), viewClientsModalStatus: ModalStatus.OPENED})
-            });
-        };
+        return () => this.makeServerCall(BeanContainer.get(ConsultationRoomService).getClientsByConsultationRoom(consultationRoom.id),
+            "clientListCall");
     }
 
     render() {
-        const {getRoomsCall, clientListCall, addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall} = this.state;
-
+        const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList} = this.state;
         const {classes} = this.props;
-        const consultationRooms = ServerCall.getData(getRoomsCall);
-        const clientList = ServerCall.getData(clientListCall);
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
 
@@ -96,42 +99,43 @@ class ConsultationRooms extends BaseView {
         return <Box className={classes.rooms}>
             {
                 consultationRooms.map((consultationRoom) => {
-                    const alerts = ConsultationRoom.getAlerts(consultationRoom);
+                    const alerts = consultationRoom.getAlerts();
                     return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
-                                        <Typography variant="h4">{ConsultationRoom.getDisplayTitle(consultationRoom)}</Typography>
-                                        <IconButton>
-                                            <Edit onClick={this.getModalOpenHandler("editConsultationRoomStatus")}/>
+                                        <Typography variant="h4">{consultationRoom.getDisplayTitle()}</Typography>
+                                        <IconButton onClick={this.getModalOpenHandler("editConsultationRoomStatus")}>
+                                            <Edit/>
                                         </IconButton>
                                     </Box>
                                     <TimeField value={consultationRoom.scheduledStartTime} labelKey='consultation-room-start-time-label'/>
                                     <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
                                     {isConsultant &&
                                     <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
-                                    {!_.isNil(ConsultationRoom.getCurrentAppointment(consultationRoom)) && isConsultant &&
-                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${ConsultationRoom.getCurrentClientName(consultationRoom)}`}</Typography>}
+                                    {!_.isNil(consultationRoom.getCurrentAppointment()) && isConsultant &&
+                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.getCurrentClientName()}`}</Typography>}
                                 </Box>
                                 <Box>
                                     <Box>
-                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary"/>)}
+                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary" key={provider.id}/>)}
                                     </Box>
                                     <Box sx={{display: "flex", flexDirection: "column"}}>
-                                        {alerts.map((alert) => <Alert sx={{alignSelf: "flex-start", m: 0.25}} severity={alert.type}>{alert.message}</Alert>)}
+                                        {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
+                                                                             severity={alert.type}>{alert.message}</Alert>)}
                                     </Box>
                                 </Box>
                             </Box>
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
-                            {ConsultationRoom.canAddClient(consultationRoom) &&
+                            {consultationRoom.canAddClient() &&
                             <Button variant="contained" color="inherit" className={classes.crButton}
                                     onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
-                            {ConsultationRoom.canViewClients(consultationRoom) &&
+                            {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t("view-clients")}</Button>}
-                            {ConsultationRoom.canJoinConference(consultationRoom) &&
+                            {consultationRoom.canJoinConference() &&
                             <Button variant="contained" color="primary" className={classes.crButton}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
                         </CardActions>

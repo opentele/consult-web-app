@@ -1,5 +1,6 @@
 import {AbstractEntity} from "consult-app-common";
 import {rrulestr} from "rrule";
+import Provider from "./Provider";
 
 class ConsultationRoomSchedule extends AbstractEntity {
     title;
@@ -10,7 +11,11 @@ class ConsultationRoomSchedule extends AbstractEntity {
     providers;
 
     static fromServerResource(resource) {
-        return Object.assign(new ConsultationRoomSchedule(), resource);
+        const consultationRoomSchedule = new ConsultationRoomSchedule();
+        AbstractEntity.fromOther(resource, consultationRoomSchedule);
+        AbstractEntity.copyFields(resource, consultationRoomSchedule, ["title", "startDate", "startTime", "endTime", "recurrenceRule"]);
+        consultationRoomSchedule.providers = Provider.fromResources(resource.providers);
+        return consultationRoomSchedule;
     }
 
     getScheduleForDisplay() {

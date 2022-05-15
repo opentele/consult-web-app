@@ -20,9 +20,14 @@ export default class Client extends AbstractEntity {
         return client;
     }
 
+    static fromServerResources(resources) {
+        return resources.map(Client.fromServerResource);
+    }
+
     static fromServerResource(resource) {
         const client = new Client();
-        Object.assign(client, resource);
+        AbstractEntity.fromOther(resource, client);
+        AbstractEntity.copyFields(resource, client, ["name", "gender", "registrationNumber", "otherDetails"]);
 
         const {years, months} = DateTimeUtil.parsePeriod(resource.age);
         if (!_.isEmpty(years) && parseInt(years) > 0) {
