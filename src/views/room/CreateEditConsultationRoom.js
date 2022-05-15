@@ -73,7 +73,7 @@ class CreateEditConsultationRoom extends BaseView {
 
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getRoomServerCall")
-            newState.room = ConsultationRoom.fromServerResource(ServerCall.getData(newState[serverCallName]));
+            newState.room = ConsultationRoom.entityFromServerCall(newState.getRoomServerCall);
         this.setState(newState);
     }
 

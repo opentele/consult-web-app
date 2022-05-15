@@ -42,7 +42,7 @@ class TeleConferenceView extends BaseView {
 
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getTeleConferenceRoomCall")
-            newState.consultationRoom = ConsultationRoom.fromServerResource(ServerCall.getData(newState.getTeleConferenceRoomCall));
+            newState.consultationRoom = ConsultationRoom.entityFromServerCall(newState.getTeleConferenceRoomCall);
         this.setState(newState);
     }
 
@@ -57,13 +57,13 @@ class TeleConferenceView extends BaseView {
             consultationRoom
         } = this.state;
 
-        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(ServerCall.getData(getTeleConferenceRoomCall)))
+        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall))
             return <WaitView/>;
 
         return <ContainerView showBackButton={false} activeTab="home">
             <Box className={classes.tcvContainer}>
-                <JitsiConference placeholder={false} consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
-                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={data} onDataChanged={() => this.refresh()}/>
+                <JitsiConference placeholder={true} consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
+                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={consultationRoom} onDataChanged={() => this.refresh()}/>
             </Box>
         </ContainerView>;
     }

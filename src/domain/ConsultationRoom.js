@@ -6,6 +6,7 @@ import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
 import Provider from "./Provider";
 import Appointment from "./Appointment";
+import {ServerCall} from "react-app-common";
 
 class ConsultationRoom extends AbstractEntity {
     title;
@@ -26,6 +27,10 @@ class ConsultationRoom extends AbstractEntity {
         consultationRoom.providers = [];
         consultationRoom.appointments = [];
         return consultationRoom;
+    }
+
+    static entityFromServerCall(serverCall) {
+        return this.fromServerResource(ServerCall.getData(serverCall));
     }
 
     static fromServerResource(resource) {
@@ -111,9 +116,13 @@ class ConsultationRoom extends AbstractEntity {
         return _.isNil(currentAppointment) ? i18n.t('no-active-client') : currentAppointment.clientName;
     }
 
-    getCurrentClientId(room) {
+    getCurrentClientId() {
         const currentAppointment = this.getCurrentAppointment();
         return currentAppointment.clientId;
+    }
+
+    getProvidersDisplayForClient() {
+        return this.providers.map((x) => x.providerClientDisplay).join(". ");
     }
 }
 

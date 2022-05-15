@@ -76,8 +76,7 @@ class JitsiConference extends BaseView {
 
         return <Box className={[classes.jcContainer, parentClassName]}>
             <h4>{`${consultationRoom.title} - ${consultationRoom.getCurrentClientName()}`}</h4>
-            {consultationRoom}
-            <h6>{`${consultationRoom.providerClientDisplay}`}</h6>
+            <h6>{`${consultationRoom.getProvidersDisplayForClient()}`}</h6>
             {placeholder ? <JitsiPlaceholder/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}
                                                                providerDisplayForClient={consultationRoom.providerClientDisplay}/>}
             <Box className={classes.jcPatientControlButtons}>
