@@ -39,7 +39,8 @@ class ConsultationRecordDuringConferenceView extends BaseView {
             return <WaitView/>;
 
         const client = Client.fromServerResource(ServerCall.getData(viewClientCall));
-        return <ModalContainerView titleKey="consultation-record-create-edit-title" titleObj={{client: ServerCall.getData(viewClientCall).name}}>
+        return <ModalContainerView titleKey="consultation-record-create-edit-title"
+                                   titleObj={{client: ServerCall.getData(viewClientCall).name}}>
             <Box style={{width: "600px", padding: 20}}>
                 <ConsultationRecordView client={client} messageClose={onClose} consultationSessionRecordId={client.getCurrentSessionRecordId(consultationRoom)}/>
                 <Box style={{marginTop: 40}}>

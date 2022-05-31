@@ -30,12 +30,18 @@ class ModalContainerView extends React.Component {
 
     static propTypes = {
         titleKey: PropTypes.string.isRequired,
-        titleObj: PropTypes.object
+        titleObj: PropTypes.object,
+        onClose: PropTypes.func
     };
+
+    handleClose = (event, reason) => {
+        if (reason && reason === "backdropClick")
+            this.props.onClose(false);
+    }
 
     render() {
         const {children, titleKey, classes, titleObj} = this.props;
-        return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title">
+        return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title" onClose={this.handleClose}>
             <Box className={classes.mvcMain}>
                 <DialogTitle style={{cursor: 'move', backgroundColor: "springgreen"}} id="draggable-dialog-title">
                     {i18n.t(titleKey, titleObj)}
