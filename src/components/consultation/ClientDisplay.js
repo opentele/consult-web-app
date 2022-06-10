@@ -72,7 +72,7 @@ class ClientDisplay extends BaseView {
                      onClick={() => this.props.onPrint(this.props.client.id)} style={{marginLeft: 4}}>
                     <PrintIcon/>
                 </Fab>
-                <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editClientModalStatus")}>
+                <Fab color="secondary" aria-label="edit" size="small" onClick={() => this.onModalOpen("editClientModalStatus")}>
                     <EditIcon/>
                 </Fab>
             </Box>;

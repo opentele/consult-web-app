@@ -14,6 +14,6 @@ export default class ServiceUtil {
     }
 
     static delete(relativeApiUrl) {
-        return RC.delete(relativeApiUrl);
+        return RC.delete(`api/${relativeApiUrl}`);
     }
 }

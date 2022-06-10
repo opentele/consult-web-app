@@ -106,7 +106,7 @@ class ConsultationRooms extends BaseView {
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
                                         <Typography variant="h4">{consultationRoom.getDisplayTitle()}</Typography>
-                                        <IconButton onClick={this.getModalOpenHandler("editConsultationRoomStatus")}>
+                                        <IconButton onClick={() => this.onModalOpen("editConsultationRoomStatus")}>
                                             <Edit/>
                                         </IconButton>
                                     </Box>
@@ -131,7 +131,7 @@ class ConsultationRooms extends BaseView {
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
                             <Button variant="contained" color="inherit" className={classes.crButton}
-                                    onClick={this.getModalOpenHandler("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
+                                    onClick={() => this.onModalOpen("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
                             {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="inherit">{i18n.t("view-clients")}</Button>}

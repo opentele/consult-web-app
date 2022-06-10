@@ -84,7 +84,7 @@ class JitsiConference extends BaseView {
                 this.getFab(classes, moveTokenCall, this.getGoToPreviousClientHandler(), "go-to-previous-client")}
 
                 {<Fab variant="extended" size="small" color="inherit" className={classes.jcClientControlButton}
-                      onClick={this.getModalOpenHandler("clientRecordModalStatus")}>
+                      onClick={() => this.onModalOpen("clientRecordModalStatus")}>
                     {i18n.t("open-client-record")}
                 </Fab>}
 

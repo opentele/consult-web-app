@@ -67,7 +67,7 @@ class ConsultationDisplay extends BaseView {
                                      onClick={() => onPrint(consultationSessionRecord.id)} style={{marginLeft: 4}}>
                         <PrintIcon/>
                     </Fab>}
-                    {onModification && <Fab color="secondary" aria-label="edit" size="small" onClick={this.getModalOpenHandler("editModalStatus")}>
+                    {onModification && <Fab color="secondary" aria-label="edit" size="small" onClick={() => this.onModalOpen("editModalStatus")}>
                         <EditIcon/>
                     </Fab>}
                 </Box>

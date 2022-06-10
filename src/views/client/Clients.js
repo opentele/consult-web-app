@@ -63,7 +63,7 @@ class Clients extends BaseView {
                         <Button variant="contained" color="secondary" onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
                     </Box>
                     <Fab className={classes.addClientButton} variant="extended" color="primary" aria-label="add"
-                         onClick={this.getModalOpenHandler("addClientModalStatus")}>
+                         onClick={() => this.onModalOpen("addClientModalStatus")}>
                         <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
                     </Fab>
                 </Box>

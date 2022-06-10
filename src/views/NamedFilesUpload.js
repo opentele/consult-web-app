@@ -10,9 +10,10 @@ import PropTypes from 'prop-types';
 import BaseView from "./framework/BaseView";
 import ConsultationSessionRecordFileService from "../service/ConsultationSessionRecordFileService";
 import {ServerCall} from "react-app-common";
-import _ from 'lodash';
-import ConsultationSessionRecordFile from "../domain/ConsultationSessionRecordFile";
-import {retryEnhancer, RetryMethod} from "@rpldy/retry-hooks";
+import {retryEnhancer} from "@rpldy/retry-hooks";
+import ConfirmationBox from "./framework/ConfirmationBox";
+import ModalStatus from "./framework/ModalStatus";
+import FileManager from "../domain/FileManager";
 
 const styles = theme => ({
     nfuUploadContainer: {
@@ -38,18 +39,19 @@ class NamedFilesUpload extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
+            fileDeleteModalStatus: ModalStatus.NOT_OPENED,
             getFilesCall: ServerCall.createInitial(),
             removeFileCall: ServerCall.createInitial(),
+            fileManager: new FileManager(),
             progress: 0,
-            uploadedFiles: [],
-            currentFile: null,
-            uploadSuccessful: null
+            uploadSuccessful: null,
         };
     }
 
     static props = {
         consultationSessionRecordId: PropTypes.number,
-        retry: PropTypes.func
+        retry: PropTypes.func,
+        filesChanged: PropTypes.func.isRequired
     }
 
     componentDidMount() {
@@ -58,20 +60,31 @@ class NamedFilesUpload extends BaseView {
     }
 
     updateServerResponseState(newState, serverCallName) {
+        const fileManager = this.state.fileManager;
+        const stateChange = {};
         if (serverCallName === "getFilesCall") {
-            newState.files = ServerCall.getData(newState.getFilesCall);
+            fileManager.filesOnServer(ServerCall.getData(newState.getFilesCall));
+        } else if (serverCallName === "removeFileCall") {
+            fileManager.currentFileRemovedFromServer();
+            stateChange.fileDeleteModalStatus = ModalStatus.NOT_OPENED;
         }
-        this.setState(newState);
+        stateChange.fileManager = fileManager.clone();
+        this.setState(stateChange);
     }
 
-    removeFile(file) {
-        this.makeServerCall(ConsultationSessionRecordFileService.removeFile(file), "removeFileCall");
+    removeFile() {
+        this.makeServerCall(ConsultationSessionRecordFileService.removeFile(this.state.fileManager.currentFile), "removeFileCall");
     }
 
     fileUpload(batchItems, foo, sendOptions, onProgress) {
-        const setState = this.setState.bind(this);
+        const parent = this;
+        const fileManager = this.state.fileManager;
+        fileManager.fileUploadStarting(batchItems[0].file.name);
+        this.setState({fileManager: fileManager.clone()});
+
         return send(batchItems, foo, sendOptions, (progressEvent, objs) => {
-            setState({currentFile: batchItems[0].file.name, progress: progressEvent.loaded / progressEvent.total});
+            parent.state.fileManager.fileUploadProgressed(progressEvent.loaded / progressEvent.total);
+            parent.setState({fileManager: parent.state.fileManager.clone()});
             return onProgress(progressEvent, objs);
         });
     }
@@ -87,13 +100,29 @@ class NamedFilesUpload extends BaseView {
         };
     }
 
+    onFileDeleteAction(file) {
+        const fileManager = this.state.fileManager;
+        fileManager.fileSelectedForDelete(file);
+        this.setState({fileDeleteModalStatus: ModalStatus.OPENED, fileManager: fileManager.clone()});
+    }
+
+    onFileDeleteCancelled() {
+        const fileManager = this.state.fileManager;
+        fileManager.deleteCancelled();
+        this.setState({fileDeleteModalStatus: ModalStatus.NOT_OPENED, fileManager: fileManager.clone()});
+    }
+
     render() {
         const {classes} = this.props;
-        const {uploadedFiles, currentFile, progress} = this.state;
+        const {fileManager, fileDeleteModalStatus} = this.state;
         return <Box>
-            {uploadedFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
+            {fileDeleteModalStatus === ModalStatus.OPENED &&
+            <ConfirmationBox titleKey="file-delete-title" detailedMessageKey="file-delete-message"
+                             onConfirmed={() => this.removeFile()}
+                             onCancelled={() => this.onFileDeleteCancelled()}/>}
+            {fileManager.localFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
                 <Typography>{file.name}</Typography>
-                <IconButton onClick={() => this.removeFile(file)}><CloseIcon/></IconButton>
+                <IconButton onClick={() => this.onFileDeleteAction(file)} style={{marginTop: -10}}><CloseIcon/></IconButton>
             </Box>)}
             <Box className={classes.nfuUploadContainer}>
                 <Uploady enhancer={retryEnhancer}
@@ -101,28 +130,24 @@ class NamedFilesUpload extends BaseView {
                          send={(batchItems, foo, sendOptions, onProgress) => this.fileUpload(batchItems, foo, sendOptions, onProgress)}
                          listeners={this.getUploadListeners()}
                          formatServerResponse={(response, status, headers) => this.processUploadResponse(response, status)}>
-                    {_.isNil(currentFile) && <UploadButton className={classes.nfuUploadButton} text={i18n.t("choose-file")}/>}
-                    {!_.isNil(currentFile) && <Typography>{currentFile}</Typography>}
+                    {fileManager.isNoFileUploading && <UploadButton className={classes.nfuUploadButton} text={i18n.t("choose-file")}/>}
+                    {fileManager.isFileUploading && <Typography>{fileManager.uploadingFileName}</Typography>}
                     <TextField label={i18n.t("give-a-different-name-optional")} className={classes.nfuNameField}/>
                 </Uploady>
-                <LinearProgress variant="determinate" value={progress}/>
+                <LinearProgress variant="determinate" value={fileManager.uploadProgress}/>
             </Box>
         </Box>;
     }
 
     processUploadResponse(response, status) {
-        const stateChange = {
-            progress: 0
-        };
-
+        const fileManager = this.state.fileManager;
         if (status === 200) {
-            this.state.uploadedFiles.push(ConsultationSessionRecordFile.newFile(this.state.currentFile, response));
-            stateChange.serverErrorMessage = null;
-            stateChange.currentFile = null;
-            stateChange.uploadSuccessful = true;
-        } else
-            stateChange.serverErrorMessage = response;
-        this.setState(stateChange);
+            fileManager.successfullyUploaded(response);
+            this.props.filesChanged(fileManager.serverFiles);
+        } else {
+            fileManager.uploadFailed(response);
+        }
+        this.setState({fileManager: fileManager.clone()});
     }
 }
 

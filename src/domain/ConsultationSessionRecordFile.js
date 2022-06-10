@@ -10,6 +10,13 @@ class ConsultationSessionRecordFile extends AbstractEntity {
         consultationSessionRecordFile.fileName = fileName;
         return consultationSessionRecordFile;
     }
+
+    clone() {
+        const consultationSessionRecordFile = new ConsultationSessionRecordFile();
+        consultationSessionRecordFile.name = this.name;
+        consultationSessionRecordFile.fileName = this.fileName;
+        return consultationSessionRecordFile;
+    }
 }
 
 export default ConsultationSessionRecordFile;

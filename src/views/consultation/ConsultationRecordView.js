@@ -86,6 +86,11 @@ class ConsultationRecordView extends BaseView {
         return emptyFields.length === 0;
     }
 
+    filesChanged(files) {
+        this.state.consultation.files = files;
+        this.setState({consultation: this.state.consultation.clone()});
+    }
+
     render() {
         const {classes, messageClose, consultationSessionRecordId} = this.props;
         const {consultation, saveRecordCall, getRecordCall, missingFields} = this.state;
@@ -133,7 +138,7 @@ class ConsultationRecordView extends BaseView {
             </Box>
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="upload-files" mandatory={false}/>
-                <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId}/>
+                <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId} filesChanged={(files) => this.filesChanged(files)}/>
             </Box>
             <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>
             <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRecordCall}

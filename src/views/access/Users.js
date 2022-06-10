@@ -75,9 +75,9 @@ class Users extends BaseView {
                     </Table>
                     <Box className={classes.usersButtons}>
                         <Button className={classes.usersButton} variant="contained" color="primary"
-                                onClick={this.getModalOpenHandler("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
+                                onClick={() => this.onModalOpen("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
                         <Button variant="contained" color="primary" className={classes.usersButton}
-                                onClick={this.getModalOpenHandler("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
+                                onClick={() => this.onModalOpen("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
                     </Box>
                 </TableContainer>
             </Box>

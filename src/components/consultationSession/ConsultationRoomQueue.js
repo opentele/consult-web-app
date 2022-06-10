@@ -127,7 +127,7 @@ class ConsultationRoomQueue extends BaseView {
                         </Menu>}
                     </Box>
                     <Box className={classes.addClient}>
-                        <Button variant="text" color="primary" onClick={this.getModalOpenHandler("addClientModalStatus")}>
+                        <Button variant="text" color="primary" onClick={() => this.onModalOpen("addClientModalStatus")}>
                             {`${i18n.t('add-client')}`}
                         </Button>
                     </Box>

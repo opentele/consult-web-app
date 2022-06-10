@@ -7,6 +7,7 @@ export default class ConsultationSessionRecord extends AbstractEntity {
     recommendations;
     followUpIn;
     consultationRoomId;
+    files;
 
     static forCreate() {
         return new ConsultationSessionRecord();
