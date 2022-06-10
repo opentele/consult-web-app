@@ -2072,6 +2072,97 @@
     estree-walker "^1.0.1"
     picomatch "^2.2.2"
 
+"@rpldy/life-events@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/life-events/-/life-events-1.0.0.tgz#71bc3a552103377401e8cbc24ad28558fff6c559"
+  integrity sha512-8m9tR83Igi0IvAXyiSOvV3D7lfo6VbI1s7z5NekZyX9dk7IgPgL0Le3LiUQ1MQyK437O4HhC54s1oscxsM6+lA==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+
+"@rpldy/retry-hooks@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/retry-hooks/-/retry-hooks-1.0.0.tgz#e1bb8986f283cabeefccc48eb779de0f2d845ef1"
+  integrity sha512-a32X6cliYvFW6NbguPgS43DkiQ0oQhJZr62andkzlYcnEW/+ZPzEpD+XSFArWvfogY1dDx5Smk0W0kPfZ+BIog==
+  dependencies:
+    "@rpldy/retry" "^1.0.0"
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/shared-ui" "^1.0.0"
+    "@rpldy/uploader" "^1.0.0"
+
+"@rpldy/retry@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/retry/-/retry-1.0.0.tgz#11ff44174833a59f18c5b4b437c39013f9b75994"
+  integrity sha512-0gSMoB6fKJ5uQu4a1sKq+6xB40le3Ow3NwOfnSThnNXnzMwQBfR7yifgLq39yf16swlsQhhA8C6KCYLlLLL/xw==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/simple-state" "^1.0.0"
+    "@rpldy/uploader" "^1.0.0"
+
+"@rpldy/sender@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/sender/-/sender-1.0.0.tgz#e93955a5f480a189bada0fedd84d581c26c5faa2"
+  integrity sha512-T/f+SN7hUqfhvbLk9zBl+puayynM8PWF07F1FtOY6H18kBFpwHLbWUX6GSqsR6I6q/9CFeKqJwK19nEUI8n1NQ==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+
+"@rpldy/shared-ui@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/shared-ui/-/shared-ui-1.0.0.tgz#fbe7fd9bf9976c28d880b1869e7ad7735898aa13"
+  integrity sha512-fm66TNqvfNkBs9UjuY3WvZQ79EMrZ07emXtQwXPwQGc4ze/cxv7WtN6m3KwVAIu5IT0J9tWC6h1qyMov+IERvg==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/uploader" "^1.0.0"
+
+"@rpldy/shared@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/shared/-/shared-1.0.0.tgz#945d8a1280285ae309bfde46a82e70d27e9a2673"
+  integrity sha512-pJaffzPswlR7GbMNp7RvPrLzkkblUtu16Smw/5bPkuv7RRnDWAeZfIRq5UTHfTlBhGk94mKV/eQlqQzjGk1qyQ==
+  dependencies:
+    invariant "^2.2.4"
+    just-throttle "^1.1.0"
+
+"@rpldy/simple-state@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/simple-state/-/simple-state-1.0.0.tgz#d61eb6987aa07e93177250a099ce4096efa09382"
+  integrity sha512-HS//0vxHvU22CnuXTnlPlt/5Jp2QJjwbFZ2g33ORQ4tSkHQvmkU7VMvsgZBHS44O5UsoyNlg/O/QL0FvKfP8fg==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+
+"@rpldy/upload-button@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/upload-button/-/upload-button-1.0.0.tgz#b178320b1932855517a5a6056d573a7f2e6ef500"
+  integrity sha512-My20OHmxjB86omzLx4YWeuXrtXF5R1NW6qg4liD8iP7E0uIAKtL1Z4QQIsvk5foH46OAakNg0gIzycRbdEcD1g==
+  dependencies:
+    "@rpldy/shared-ui" "^1.0.0"
+
+"@rpldy/upload-preview@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/upload-preview/-/upload-preview-1.0.0.tgz#6355157f7aaa5dbb07bd0ee04c3f24f5b938b267"
+  integrity sha512-dj7VnckcDidjJzPyYV22/UsYCm4h3LwC9wRm27EsS+lJRHM09VHkslAiUqDrVlL+B7bfGQUZbEIJja/S0JbQPw==
+  dependencies:
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/shared-ui" "^1.0.0"
+
+"@rpldy/uploader@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/uploader/-/uploader-1.0.0.tgz#2b06890a35f7ee65e1d9edca63b10351b7c69854"
+  integrity sha512-dw3UNXBoUEnM8MF2ttIiTmCgoBNWaNoRPiQNCBwrh9KWTINgbl+nmwI2bCGbaBfWCHrSsjfvt9QHqWd/VUYm7g==
+  dependencies:
+    "@rpldy/life-events" "^1.0.0"
+    "@rpldy/sender" "^1.0.0"
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/simple-state" "^1.0.0"
+
+"@rpldy/uploady@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@rpldy/uploady/-/uploady-1.0.0.tgz#595353c1ef4605f68fbda20bbe79e9dc5a974261"
+  integrity sha512-EQdrdB1gvlXeUsUdLkhWS1Q7Cit7FBpK3WwBCrtODTIgmab1l+/6opHREv7/l8zfxnAf7DI/97fcFUCHt0D/8w==
+  dependencies:
+    "@rpldy/life-events" "^1.0.0"
+    "@rpldy/shared" "^1.0.0"
+    "@rpldy/shared-ui" "^1.0.0"
+    "@rpldy/uploader" "^1.0.0"
+
 "@rushstack/eslint-patch@^1.1.0":
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.1.3.tgz#6801033be7ff87a6b7cadaf5b337c9f366a3c4b0"
@@ -9583,6 +9674,11 @@ junk@^3.1.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/junk/-/junk-3.1.0.tgz#31499098d902b7e98c5d9b9c80f43457a88abfa1"
   integrity sha512-pBxcB3LFc8QVgdggvZWyeys+hnrNWg4OcZIU/1X59k5jQdLBlCsYGRQaz234SqoRLTCgMH00fY0xRJH+F9METQ==
+
+just-throttle@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/just-throttle/-/just-throttle-1.1.0.tgz#178d305ece9876a8a0759abd8d403aafcc6e4849"
+  integrity sha512-iePC/13XYX1Tyn9C6jY+DG3UEejkDvrKsw5xxgGhtGUwYWmoJm4CoKexscBKELOu3FTyCDzjr21ZJ67AXnz+bg==
 
 kind-of@^3.0.2, kind-of@^3.0.3, kind-of@^3.2.0:
   version "3.2.2"

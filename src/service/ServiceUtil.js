@@ -12,4 +12,8 @@ export default class ServiceUtil {
     static putJson(relativeApiUrl, obj) {
         return RC.put(`api/${relativeApiUrl}`, obj);
     }
+
+    static delete(relativeApiUrl) {
+        return RC.delete(relativeApiUrl);
+    }
 }

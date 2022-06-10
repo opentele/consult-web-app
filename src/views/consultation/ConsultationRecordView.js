@@ -10,8 +10,8 @@ import {ServerCall, ServerCallStatus} from "react-app-common";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import WaitView from "../../components/WaitView";
-import ClientService from "../../service/ClientService";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
+import NamedFilesUpload from "../NamedFilesUpload";
 
 const styles = theme => ({
     container: {
@@ -87,7 +87,7 @@ class ConsultationRecordView extends BaseView {
     }
 
     render() {
-        const {classes, messageClose} = this.props;
+        const {classes, messageClose, consultationSessionRecordId} = this.props;
         const {consultation, saveRecordCall, getRecordCall, missingFields} = this.state;
         const loading = saveRecordCall.callStatus === ServerCallStatus.WAITING || (this.editing && ServerCall.noCallOrWait(getRecordCall));
         if (loading)
@@ -130,6 +130,10 @@ class ConsultationRecordView extends BaseView {
                     onChange={this.getConsultationChangeHandler("recommendations")}
                     value={consultation.recommendations}
                 />
+            </Box>
+            <Box className={classes.crvFieldBox}>
+                <FormLabel textKey="upload-files" mandatory={false}/>
+                <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId}/>
             </Box>
             <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>
             <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRecordCall}
