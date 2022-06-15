@@ -1,8 +1,8 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n, User, UserService} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";

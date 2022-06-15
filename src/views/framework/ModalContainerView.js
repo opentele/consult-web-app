@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Box, Dialog, Toolbar, Typography} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {AppBar, Box, Dialog, Toolbar, Typography} from "@mui/material";
 import Paper from '@mui/material/Paper';
 import {i18n} from "consult-app-common";
 import Draggable from 'react-draggable';

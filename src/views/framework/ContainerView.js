@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import BaseView from "./BaseView";
 import ConsultAppBar from "../../components/ConsultAppBar";
-import {BottomNavigation, BottomNavigationAction, Box, Button} from "@material-ui/core";
+import {BottomNavigation, BottomNavigationAction, Box, Button} from "@mui/material";
 import SecurityIcon from '@mui/icons-material/Security';
 import PeopleIcon from '@mui/icons-material/People';
 import HomeIcon from '@mui/icons-material/Home';

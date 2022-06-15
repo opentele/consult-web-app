@@ -1,8 +1,8 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import JitsiPlaceholder from "./JitsiPlaceholder";
-import {Box, CircularProgress, Fab} from "@material-ui/core";
+import {Box, CircularProgress, Fab} from "@mui/material";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";

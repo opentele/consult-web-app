@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import ModalContainerView from "../framework/ModalContainerView";
 import {i18n, User, UserService} from "consult-app-common";
 import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
-import {Box, Button, TextField} from "@material-ui/core";
+import {Box, Button, TextField} from "@mui/material";
 import _ from "lodash";
 import CancelButton from "../../components/CancelButton";
 import ServerErrorMessage from "../../components/ServerErrorMessage";

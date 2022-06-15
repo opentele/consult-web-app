@@ -2,7 +2,7 @@ import _ from 'lodash';
 import {Component} from "react";
 import {i18n} from "consult-app-common";
 import ErrorAlert from "../../components/ErrorAlert";
-import {CircularProgress} from "@material-ui/core";
+import {CircularProgress} from "@mui/material";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import ModalStatus from "./ModalStatus";
 

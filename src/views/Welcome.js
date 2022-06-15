@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
-import {Box, Button, Grid, Paper, Typography} from "@material-ui/core";
+import {Box, Button, Grid, Paper, Typography} from "@mui/material";
 import {Link} from 'react-router-dom';
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";

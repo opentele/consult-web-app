@@ -1,6 +1,6 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {Box, CircularProgress} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {Box, CircularProgress} from "@mui/material";
 import PropTypes from 'prop-types';
 
 const styles = theme => ({});

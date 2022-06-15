@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {Box, Divider, Drawer, List, ListItem, ListItemIcon, ListItemText} from "@mui/material";
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
 import {i18n} from "consult-app-common";

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField, Typography} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {Box, Checkbox, FormControl, FormControlLabel, FormHelperText, FormLabel, Radio, RadioGroup, TextField, Typography} from "@mui/material";
 import {i18n, User, UserValidator} from "consult-app-common";
 import PasswordField from "./PasswordField";
 import BaseView from "../../views/framework/BaseView";

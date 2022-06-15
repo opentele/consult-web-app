@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import ModalContainerView from "../framework/ModalContainerView";
 import EditUserFields from "../../components/loginSignup/EditUserFields";
 import BaseView from "../framework/BaseView";
@@ -8,7 +8,7 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import {ServerCall} from "react-app-common";
 import {User, UserService} from "consult-app-common";
 import WaitView from "../../components/WaitView";
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 
 const styles = theme => ({});
 

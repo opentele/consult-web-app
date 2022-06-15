@@ -1,6 +1,6 @@
 import React from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Accordion, AccordionDetails, AccordionSummary, Button, Card, List, TextField, Typography} from "@material-ui/core";
+import {makeStyles} from '@mui/material';
+import {Accordion, AccordionDetails, AccordionSummary, Button, Card, List, TextField, Typography} from "@mui/material";
 import {ExpandMore, HourglassFull} from "@mui/icons-material";
 import patientRecord from '../testdata/patient-record.json';
 import {Event} from '@mui/icons-material';

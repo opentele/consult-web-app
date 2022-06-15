@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import {i18n} from "consult-app-common";
-import {Button} from "@material-ui/core";
+import {Button} from "@mui/material";
 
 const styles = theme => ({});
 

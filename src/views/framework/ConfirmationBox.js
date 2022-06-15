@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import ModalContainerView from "./ModalContainerView";
 import {i18n} from "consult-app-common";
-import {Box, Button, Typography} from "@material-ui/core";
+import {Box, Button, Typography} from "@mui/material";
 
 const styles = theme => ({});
 

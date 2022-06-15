@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {CircularProgress, Grid, TextField} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {CircularProgress, Grid, TextField} from "@mui/material";
 import {Autocomplete} from "@mui/material";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n} from "consult-app-common";

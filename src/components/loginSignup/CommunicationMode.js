@@ -1,8 +1,8 @@
 import _ from "lodash";
-import {Card, FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import {Card, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
 import ValidatedTextField from "./ValidatedTextField";
 import React, {Component} from "react";
-import {withStyles} from "@material-ui/core/styles";
+import {withStyles} from '@mui/styles';
 import PropTypes from "prop-types";
 import {i18n} from 'consult-app-common';
 

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Card, Grid} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Card, Grid} from '@mui/material';
 import PropTypes from 'prop-types';
 import FieldDisplay from "./FieldDisplay";
 import {DateTimeUtil} from "react-app-common";

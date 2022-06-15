@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ReactDOM from 'react-dom';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import SaveButton from "./SaveButton";
 import CancelButton from "./CancelButton";
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 
 const styles = theme => ({
     scbContainer: {

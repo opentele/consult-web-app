@@ -1,6 +1,6 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, FormControl, TextField} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, FormControl, TextField} from '@mui/material';
 import FormLabel from "../../components/FormLabel";
 import BaseView from "../framework/BaseView";
 import moment from "moment";

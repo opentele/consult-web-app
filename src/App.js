@@ -2,9 +2,9 @@ import './App.css';
 import Welcome from "./views/Welcome";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {i18nPromise, User, UserService} from "consult-app-common";
-import {CircularProgress, CssBaseline} from "@material-ui/core";
+import {CircularProgress, CssBaseline, ThemeProvider} from "@mui/material";
 import RegisterOrganisation from "./views/RegisterOrganisation";
-import {createTheme, ThemeProvider} from '@mui/material/styles';
+import {createTheme} from '@mui/material';
 import ResetPassword from "./views/ResetPassword";
 import ChangePassword from "./views/ChangePassword";
 import Home from "./views/room/Home";
@@ -16,7 +16,21 @@ import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 import {ServerCall} from "react-app-common";
 
-const theme = createTheme();
+// const theme = createTheme();
+const theme = createTheme({
+    palette: {
+        mode: 'light',
+    },
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    color: "white"
+                }
+            }
+        },
+    },
+});
 
 const nonLoginPaths = ["/login", "/register", "/resetPassword"];
 

@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Dialog, DialogTitle, List, ListItem, ListItemText} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Dialog, DialogTitle, List, ListItem, ListItemText} from '@mui/material';
 import PropTypes from 'prop-types';
 import {i18n} from "consult-app-common";
 

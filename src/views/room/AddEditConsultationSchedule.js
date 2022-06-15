@@ -1,7 +1,7 @@
 import BaseView from "../framework/BaseView";
-import {Box, Grid, TextField} from "@material-ui/core";
+import {Box, Grid, TextField} from "@mui/material";
 import RRuleGenerator from 'react-rrule-generator';
-import {withStyles} from "@material-ui/core/styles";
+import {withStyles} from "@mui/styles";
 import {i18n} from "consult-app-common";
 import React from "react";
 import DateInput from "../../components/DateInput";

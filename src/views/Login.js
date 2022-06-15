@@ -1,7 +1,7 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
-import {Box, Button, Tab, Tabs, TextField} from "@material-ui/core";
+import {Box, Button, Tab, Tabs, TextField} from "@mui/material";
 import {Link, Redirect} from 'react-router-dom';
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import {Google, VerifiedUser} from "@mui/icons-material";

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import {i18n} from "consult-app-common";
-import {IconButton, InputAdornment, TextField} from "@material-ui/core";
+import {IconButton, InputAdornment, TextField} from "@mui/material";
 import {Visibility, VisibilityOff} from "@mui/icons-material";
 
 const styles = theme => ({});

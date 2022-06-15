@@ -7,7 +7,7 @@ import ModalContainerView from "./ModalContainerView";
 import {Fab} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PrintIcon from "@mui/icons-material/Print";
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 import GlobalContext from "../../framework/GlobalContext";
 
 const pageStyle = `

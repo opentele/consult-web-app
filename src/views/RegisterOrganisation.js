@@ -1,6 +1,6 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Grid, Paper, TextField, Typography} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Button, Grid, Paper, TextField, Typography} from '@mui/material';
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";

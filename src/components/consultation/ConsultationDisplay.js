@@ -1,6 +1,6 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Card, Grid, Paper} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Card, Grid, Paper} from '@mui/material';
 import PropTypes from 'prop-types';
 import FieldDisplay from "./FieldDisplay";
 import {Fab} from "@mui/material";

@@ -1,5 +1,5 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import ConsultationRoomQueue from "../../components/consultationSession/ConsultationRoomQueue";
 import JitsiConference from "../../components/consultationSession/JitsiConference";
@@ -9,7 +9,7 @@ import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
 import WaitView from "../../components/WaitView";
 import {withRouter} from "react-router-dom";
-import {Box} from "@material-ui/core";
+import {Box} from "@mui/material";
 import _ from 'lodash';
 import ConsultationRoom from "../../domain/ConsultationRoom";
 

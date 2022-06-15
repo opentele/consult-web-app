@@ -1,9 +1,9 @@
 import React from 'react';
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import Uploady from "@rpldy/uploady";
 import {send} from "@rpldy/sender";
 import UploadButton from "@rpldy/upload-button";
-import {Box, IconButton, LinearProgress, TextField, Typography} from "@material-ui/core";
+import {Box, IconButton, LinearProgress, TextField, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';

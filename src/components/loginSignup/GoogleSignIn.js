@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {withStyles} from '@material-ui/core/styles';
+import {withStyles} from '@mui/styles';
 import {GoogleLogin} from "react-google-login";
 import PropTypes from 'prop-types';
 

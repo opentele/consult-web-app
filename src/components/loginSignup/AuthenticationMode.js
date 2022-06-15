@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {FormControlLabel, FormLabel, Radio, RadioGroup} from "@material-ui/core";
+import {FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
 import PropTypes from "prop-types";
-import {withStyles} from "@material-ui/core/styles";
+import {withStyles} from '@mui/styles';
 
 const styles = () => ({
     radioGroup: {

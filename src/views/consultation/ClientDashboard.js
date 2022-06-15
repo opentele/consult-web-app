@@ -1,6 +1,6 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Paper} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Paper} from '@mui/material';
 import BaseView from "../../views/framework/BaseView";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";

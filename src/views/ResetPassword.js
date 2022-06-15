@@ -1,6 +1,6 @@
 import React, {Component} from "react";
-import {Button, Grid, TextField, Typography} from "@material-ui/core";
-import {withStyles} from '@material-ui/core/styles';
+import {Button, Grid, TextField, Typography} from "@mui/material";
+import {withStyles} from '@mui/styles';
 import {DataElementValidator} from "react-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";

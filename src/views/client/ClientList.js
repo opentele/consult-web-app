@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Box, withStyles, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@material-ui/core";
+import {withStyles} from "@mui/styles";
+import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
 import {DateTimeUtil} from "react-app-common";

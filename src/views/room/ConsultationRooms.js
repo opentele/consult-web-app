@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@mui/material";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";

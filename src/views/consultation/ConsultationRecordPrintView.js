@@ -1,6 +1,6 @@
 import React from "react";
-import {withStyles} from '@material-ui/core/styles';
-import {Box, Paper, Typography} from '@material-ui/core';
+import {withStyles} from '@mui/styles';
+import {Box, Paper, Typography} from '@mui/material';
 import BaseView from "../framework/BaseView";
 import PropTypes from 'prop-types';
 import ConsultationSessionRecordService from "../../service/ConsultationSessionRecordService";

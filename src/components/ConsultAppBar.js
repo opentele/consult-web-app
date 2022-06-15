@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withStyles} from '@material-ui/core/styles';
-import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@material-ui/core";
+import {withStyles} from '@mui/styles';
+import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
 import {Home} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
@@ -25,9 +25,6 @@ const styles = theme => ({
     },
     brandLabel: {
         marginLeft: 20
-    },
-    menuItem: {
-        color: "#ffffff"
     }
 });
 
@@ -96,7 +93,7 @@ class ConsultAppBar extends BaseView {
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
                             <IconButton component={Link} to="/">
-                                <Home fontSize="large" style={{color: "#fff"}}/>
+                                <Home fontSize="large"/>
                             </IconButton>
                             <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
                         </Box>
