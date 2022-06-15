@@ -16,7 +16,6 @@ import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 import {ServerCall} from "react-app-common";
 
-// const theme = createTheme();
 const theme = createTheme({
     palette: {
         mode: 'light',
@@ -29,7 +28,14 @@ const theme = createTheme({
                 }
             }
         },
-    },
+        MuiTableHead: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: "lightgrey"
+                }
+            }
+        }
+    }
 });
 
 const nonLoginPaths = ["/login", "/register", "/resetPassword"];

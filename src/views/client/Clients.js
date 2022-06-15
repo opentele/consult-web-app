@@ -62,12 +62,12 @@ class Clients extends BaseView {
                                    className={classes.clientSearchSectionItem}/>
                         <Button variant="contained" color="secondary" onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
                     </Box>
-                    <Fab className={classes.addClientButton} variant="extended" color="primary" aria-label="add"
+                    <Fab variant="extended" aria-label="add"
                          onClick={() => this.onModalOpen("addClientModalStatus")}>
                         <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
                     </Fab>
                 </Box>
-                <Typography variant="subtitle1" className={classes.totalClients}>{totalClientsMessage}</Typography>
+                <Typography variant="h6" className={classes.totalClients}>{totalClientsMessage}</Typography>
                 <ClientList clientList={clientSearchResults.entities} displayQueueNumber={false} displayNumberOfSessions={true}/>
             </Box>
         </ContainerView>;
@@ -75,7 +75,6 @@ class Clients extends BaseView {
 }
 
 const styles = theme => ({
-    addClientButton: {},
     clientsWrapperSection: {
         padding: 20,
         flexDirection: "column",

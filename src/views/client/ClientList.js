@@ -7,12 +7,6 @@ import BaseView from "../framework/BaseView";
 import {DateTimeUtil} from "react-app-common";
 
 const styles = theme => ({
-    viewClientsTableHeader: {
-        backgroundColor: 'darkgrey'
-    },
-    viewClientsTableHeaderCell: {
-        color: theme.palette.common.white
-    },
     clientListMainBox: {
         padding: 20
     }
@@ -33,15 +27,15 @@ class ClientList extends BaseView {
         const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
-                <Table sx={{minWidth: 700}} aria-label="customized table">
+                <Table sx={{minWidth: 700}} aria-label="customized table" size="small">
                     <TableHead>
-                        <TableRow className={classes.viewClientsTableHeader}>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('name')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('gender')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('age')}</TableCell>
-                            <TableCell className={classes.viewClientsTableHeaderCell}>{i18n.t('registration-number')}</TableCell>
-                            {displayQueueNumber && <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('queue-number')}</TableCell>}
-                            {displayNumberOfSessions && <TableCell className={classes.viewClientsTableHeaderCell} align="right">{i18n.t('number-of-sessions')}</TableCell>}
+                        <TableRow>
+                            <TableCell>{i18n.t('name')}</TableCell>
+                            <TableCell>{i18n.t('gender')}</TableCell>
+                            <TableCell>{i18n.t('age')}</TableCell>
+                            <TableCell>{i18n.t('registration-number')}</TableCell>
+                            {displayQueueNumber && <TableCell align="right">{i18n.t('queue-number')}</TableCell>}
+                            {displayNumberOfSessions && <TableCell align="right">{i18n.t('number-of-sessions')}</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>

@@ -50,11 +50,11 @@ class Users extends BaseView {
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 700}} aria-label="customized table">
                         <TableHead>
-                            <TableRow className={classes.uTableHeader}>
-                                <TableCell key={1} className={classes.uTableHeaderCell}>{i18n.t('name')}</TableCell>
-                                <TableCell key={2} className={classes.uTableHeaderCell}>{i18n.t('role-column-text')}</TableCell>
-                                <TableCell key={3} className={classes.uTableHeaderCell}>{i18n.t('email-or-mobile')}</TableCell>
-                                <TableCell key={4} className={classes.uTableHeaderCell}>{i18n.t('provider-type')}</TableCell>
+                            <TableRow>
+                                <TableCell key={1}>{i18n.t('name')}</TableCell>
+                                <TableCell key={2}>{i18n.t('role-column-text')}</TableCell>
+                                <TableCell key={3}>{i18n.t('email-or-mobile')}</TableCell>
+                                <TableCell key={4}>{i18n.t('provider-type')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -117,16 +117,10 @@ const styles = theme => ({
     usersButton: {
         marginLeft: 10
     },
-    uTableHeader: {
-        backgroundColor: 'darkgrey'
-    },
     uTableRow: {
         "&:hover": {
             cursor: "pointer"
         }
-    },
-    uTableHeaderCell: {
-        color: theme.palette.common.white
     },
     uListMainBox: {
         padding: 20
