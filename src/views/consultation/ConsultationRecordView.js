@@ -12,24 +12,33 @@ import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import WaitView from "../../components/WaitView";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import NamedFilesUpload from "../NamedFilesUpload";
+import {rebuildYear} from "rrule/dist/esm/src/iterinfo/yearinfo";
 
-const styles = theme => ({
-    container: {
-        flexDirection: "column",
-        display: "flex",
-        justifyContent: "center"
-    },
-    crvFieldBox: {
-        marginTop: 15,
-        flexDirection: "column",
-        display: "flex"
-    },
-    crvField: {
-        marginTop: 3,
-        flexDirection: "column",
-        display: "flex"
-    }
-});
+function createStyleOptions(theme) {
+    const styleOptions = {
+        container: {
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center"
+        },
+        crvFieldBox: {
+            marginTop: 15,
+            flexDirection: "column",
+            display: "flex"
+        },
+        crvField: {
+            marginTop: 3,
+            flexDirection: "column",
+            display: "flex"
+        }
+    };
+    styleOptions.textAreaField = Object.assign({
+        backgroundColor: theme.customPalette.textboxBackgroundColor
+    }, styleOptions.crvField);
+    return styleOptions;
+}
+
+const styles = theme => createStyleOptions(theme);
 
 class ConsultationRecordView extends BaseView {
     constructor(props) {
@@ -103,7 +112,7 @@ class ConsultationRecordView extends BaseView {
                 <FormLabel textKey="complaints" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
-                    className={[classes.crvField]}
+                    className={classes.textAreaField}
                     onChange={this.getConsultationChangeHandler("complaints")}
                     value={consultation.complaints}
                 />
@@ -112,26 +121,23 @@ class ConsultationRecordView extends BaseView {
                 <FormLabel textKey="observations" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
-                    className={[classes.crvField]}
+                    className={classes.textAreaField}
                     onChange={this.getConsultationChangeHandler("observations")}
                     value={consultation.observations}
                 />
             </Box>
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="key-inference" mandatory={false}/>
-                <TextField
-                    name="keyInference"
-                    className={[]}
+                <TextField name="keyInference"
                     onChange={this.getConsultationChangeHandler("keyInference")}
-                    value={consultation.keyInference}
-                />
+                    value={consultation.keyInference}/>
             </Box>
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="recommendations"/>
                 <TextareaAutosize
                     minRows={3}
                     style={_.includes(missingFields, "recommendations") && {borderColor: "red", borderWidth: 2}}
-                    className={[classes.crvField]}
+                    className={classes.textAreaField}
                     onChange={this.getConsultationChangeHandler("recommendations")}
                     value={consultation.recommendations}
                 />
@@ -147,4 +153,4 @@ class ConsultationRecordView extends BaseView {
     }
 }
 
-export default withStyles(styles)(ConsultationRecordView);
+export default withStyles(createStyleOptions)(ConsultationRecordView);

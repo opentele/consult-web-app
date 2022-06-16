@@ -8,9 +8,6 @@ import Draggable from 'react-draggable';
 import {DialogTitle} from "@mui/material";
 
 const styles = theme => ({
-    mvcMain: {
-        backgroundColor: 'white'
-    }
 });
 
 function PaperComponent(props) {
@@ -42,8 +39,8 @@ class ModalContainerView extends React.Component {
     render() {
         const {children, titleKey, classes, titleObj} = this.props;
         return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title" onClose={this.handleClose}>
-            <Box className={classes.mvcMain}>
-                <DialogTitle style={{cursor: 'move', backgroundColor: "springgreen"}} id="draggable-dialog-title">
+            <Box>
+                <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
                     {i18n.t(titleKey, titleObj)}
                 </DialogTitle>
                 {children}

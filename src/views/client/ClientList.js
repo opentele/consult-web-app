@@ -27,7 +27,7 @@ class ClientList extends BaseView {
         const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
-                <Table sx={{minWidth: 700}} aria-label="customized table" size="small">
+                <Table sx={{minWidth: 700}} aria-label="customized table">
                     <TableHead>
                         <TableRow>
                             <TableCell>{i18n.t('name')}</TableCell>

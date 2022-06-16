@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Box, Typography} from "@mui/material";
+import {Box, Typography, FormLabel as MuiFormLabel} from "@mui/material";
 import {i18n} from "consult-app-common";
 
 class FormLabel extends Component {
@@ -19,10 +19,7 @@ class FormLabel extends Component {
 
     render() {
         const {textKey, mandatory} = this.props;
-        return (<Box sx={{display: "flex", flexDirection: "row"}}>
-            <Typography variant="overline" display="block" gutterBottom style={{marginBottom: -6}}>{i18n.t(textKey)}</Typography>
-            {mandatory && <Typography variant="h6" style={{marginLeft: 3}}>*</Typography>}
-        </Box>);
+        return <MuiFormLabel required={mandatory}>{i18n.t(textKey)}</MuiFormLabel>;
     }
 }
 

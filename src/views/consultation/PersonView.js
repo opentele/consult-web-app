@@ -139,14 +139,15 @@ class PersonView extends BaseView {
                         <Box className={classes.personViewFieldBox}>
                             <FormLabel textKey="other-details" mandatory={false}/>
                             <TextareaAutosize
+                                variant="filled"
                                 minRows={3}
-                                className={[classes.personViewField]}
+                                className={classes.personViewTextAreaBox}
                                 onChange={this.getClientFieldValueChangeHandler("otherDetails")}
                                 value={client.otherDetails}
                             />
                         </Box>
                         <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
-                        <SaveCancelButtons className={classes.personViewFieldBox} disabled={false} onSaveHandler={this.getSaveHandler()} serverCall={saveClientCall}
+                        <SaveCancelButtons className={classes.pvSaveCancelButtons} disabled={false} onSaveHandler={this.getSaveHandler()} serverCall={saveClientCall}
                                            onCancelHandler={messageClose}/>
                     </Box>
                 </FormControl>}
@@ -154,30 +155,39 @@ class PersonView extends BaseView {
     }
 }
 
-const styles = theme => ({
-    personViewFieldBox: {
-        marginBottom: 30,
-        flexDirection: "column",
-        display: "flex"
-    },
-    personViewField: {
-        marginTop: 10
-    },
-    personViewAlert: {
-        marginBottom: 10
-    },
-    pvContainer: {
-        flexDirection: "column",
-        display: "flex",
-        justifyContent: "center",
-        padding: 30,
-        width: 600
-    },
-    radioGroup: {
-        display: "flex",
-        flexDirection: 'row',
-        alignContent: 'flex-end'
-    }
-});
+function createStyleOptions(theme) {
+    const styleOptions = {
+        pvSaveCancelButtons: {
+            marginBottom: 30
+        },
+        personViewFieldBox: {
+            marginBottom: 30,
+            flexDirection: "column",
+            display: "flex"
+        },
+        personViewField: {
+            marginTop: 10
+        },
+        personViewAlert: {
+            marginBottom: 10
+        },
+        pvContainer: {
+            flexDirection: "column",
+            display: "flex",
+            justifyContent: "center",
+            padding: 30,
+            width: 600
+        },
+        radioGroup: {
+            display: "flex",
+            flexDirection: 'row',
+            alignContent: 'flex-end'
+        }
+    };
+    styleOptions.personViewTextAreaBox = Object.assign({
+        backgroundColor: theme.customPalette.textboxBackgroundColor
+    }, styleOptions.personViewFieldBox);
+    return styleOptions;
+}
 
-export default withStyles(styles)(PersonView);
+export default withStyles(createStyleOptions)(PersonView);
