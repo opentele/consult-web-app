@@ -30,6 +30,10 @@ export default class DarkTheme {
             customPalette: {
                 textboxBackgroundColor: "#383838"
             },
+            customProps: {
+                paperDividerHeight: "15px",
+                paperDividerElevation: 7
+            },
             unsupportedComponents: {
                 TextareaAutosize: {
                     styleOverrides: {

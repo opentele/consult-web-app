@@ -48,7 +48,8 @@ class ConsultationDisplay extends BaseView {
             client,
             onPrint,
             onModification,
-            printMode
+            printMode,
+            theme
         } = this.props;
         const {editModalStatus} = this.state;
 
@@ -60,7 +61,7 @@ class ConsultationDisplay extends BaseView {
                                             consultationSessionRecordId={consultationSessionRecord.id} client={client}/>
                 </Box>
             </ModalContainerView>}
-            <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
+            <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0}} elevation={theme.customProps.paperDividerElevation}/>
             <Box className={classes.consultation}>
                 <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 5}}>
                     {onPrint && <Fab color="secondary" aria-label="print" size="small"
@@ -87,4 +88,4 @@ class ConsultationDisplay extends BaseView {
     }
 }
 
-export default withStyles(styles)(ConsultationDisplay);
+export default withStyles(styles, { withTheme: true })(ConsultationDisplay);

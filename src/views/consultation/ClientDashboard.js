@@ -62,7 +62,7 @@ class ClientDashboard extends BaseView {
     }
 
     render() {
-        const {classes} = this.props;
+        const {classes, theme} = this.props;
         const {serverCall, printModalStatus, consultationSessionRecordId, clientId} = this.state;
 
         if (ServerCall.noCallOrWait(serverCall))
@@ -75,7 +75,7 @@ class ClientDashboard extends BaseView {
             <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
                        messageClose={this.getModalCloseHandler("printModalStatus")}/>}
             <Box className={classes.container}>
-                <Paper style={{height: "15px", backgroundColor: "springgreen", borderRadius: 0}} elevation={0}/>
+                <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0}} elevation={theme.customProps.paperDividerElevation}/>
                 <Box className={classes.section}>
                     <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={this.getClientPrintHandler()}/>
                 </Box>
@@ -92,4 +92,4 @@ class ClientDashboard extends BaseView {
     }
 }
 
-export default withStyles(styles)(withRouter(ClientDashboard));
+export default withStyles(styles, {withTheme: true})(withRouter(ClientDashboard));

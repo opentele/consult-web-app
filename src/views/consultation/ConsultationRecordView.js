@@ -12,7 +12,7 @@ import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import WaitView from "../../components/WaitView";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import NamedFilesUpload from "../NamedFilesUpload";
-import {rebuildYear} from "rrule/dist/esm/src/iterinfo/yearinfo";
+import ThemeHelper from "../../theming/ThemeHelper";
 
 function createStyleOptions(theme) {
     const styleOptions = {
@@ -32,13 +32,8 @@ function createStyleOptions(theme) {
             display: "flex"
         }
     };
-    styleOptions.textAreaField = Object.assign({
-        backgroundColor: theme.customPalette.textboxBackgroundColor
-    }, styleOptions.crvField);
-    return styleOptions;
+    return ThemeHelper.mergeTextAreaStyle(styleOptions, theme,"textAreaField");
 }
-
-const styles = theme => createStyleOptions(theme);
 
 class ConsultationRecordView extends BaseView {
     constructor(props) {
@@ -107,12 +102,13 @@ class ConsultationRecordView extends BaseView {
         if (loading)
             return <WaitView containerClassName={classes.container}/>;
 
+        let textAreaClassName = classes["textAreaField"];
         return <Box className={classes.container}>
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="complaints" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
-                    className={classes.textAreaField}
+                    className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("complaints")}
                     value={consultation.complaints}
                 />
@@ -121,7 +117,7 @@ class ConsultationRecordView extends BaseView {
                 <FormLabel textKey="observations" mandatory={false}/>
                 <TextareaAutosize
                     minRows={3}
-                    className={classes.textAreaField}
+                    className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("observations")}
                     value={consultation.observations}
                 />
@@ -137,7 +133,7 @@ class ConsultationRecordView extends BaseView {
                 <TextareaAutosize
                     minRows={3}
                     style={_.includes(missingFields, "recommendations") && {borderColor: "red", borderWidth: 2}}
-                    className={classes.textAreaField}
+                    className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("recommendations")}
                     value={consultation.recommendations}
                 />

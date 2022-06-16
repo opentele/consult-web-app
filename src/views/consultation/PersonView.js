@@ -12,6 +12,7 @@ import ServerErrorMessage from "../../components/ServerErrorMessage";
 import Client from "../../domain/Client";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import WaitView from "../../components/WaitView";
+import ThemeHelper from "../../theming/ThemeHelper";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -184,10 +185,7 @@ function createStyleOptions(theme) {
             alignContent: 'flex-end'
         }
     };
-    styleOptions.personViewTextAreaBox = Object.assign({
-        backgroundColor: theme.customPalette.textboxBackgroundColor
-    }, styleOptions.personViewFieldBox);
-    return styleOptions;
+    return ThemeHelper.mergeTextAreaStyle(styleOptions, theme,"personViewTextAreaBox");
 }
 
 export default withStyles(createStyleOptions)(PersonView);
