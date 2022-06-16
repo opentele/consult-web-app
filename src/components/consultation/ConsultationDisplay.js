@@ -17,7 +17,8 @@ const styles = theme => ({
         paddingRight: 15,
         paddingLeft: 15,
         paddingTop: 0,
-        paddingBottom: 30
+        paddingBottom: 30,
+        marginBottom: 20
     }
 });
 
@@ -61,7 +62,7 @@ class ConsultationDisplay extends BaseView {
                                             consultationSessionRecordId={consultationSessionRecord.id} client={client}/>
                 </Box>
             </ModalContainerView>}
-            <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0}} elevation={theme.customProps.paperDividerElevation}/>
+            <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light}}/>
             <Box className={classes.consultation}>
                 <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: 5}}>
                     {onPrint && <Fab color="secondary" aria-label="print" size="small"

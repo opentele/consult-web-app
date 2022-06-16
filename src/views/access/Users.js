@@ -51,10 +51,10 @@ class Users extends BaseView {
                     <Table sx={{minWidth: 700}} aria-label="customized table">
                         <TableHead>
                             <TableRow>
-                                <TableCell key={1}>{i18n.t('name')}</TableCell>
-                                <TableCell key={2}>{i18n.t('role-column-text')}</TableCell>
-                                <TableCell key={3}>{i18n.t('email-or-mobile')}</TableCell>
-                                <TableCell key={4}>{i18n.t('provider-type')}</TableCell>
+                                <TableCell key={1}>{i18n.T('name')}</TableCell>
+                                <TableCell key={2}>{i18n.T('role-column-text')}</TableCell>
+                                <TableCell key={3}>{i18n.T('email-or-mobile')}</TableCell>
+                                <TableCell key={4}>{i18n.T('provider-type')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

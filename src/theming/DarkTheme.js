@@ -22,7 +22,7 @@ export default class DarkTheme {
                 MuiDialogTitle: {
                     styleOverrides: {
                         root: {
-                            backgroundColor: defaultTheme.palette.secondary.main
+                            backgroundColor: defaultTheme.palette.secondary.dark
                         }
                     }
                 }
@@ -32,7 +32,7 @@ export default class DarkTheme {
             },
             customProps: {
                 paperDividerHeight: "15px",
-                paperDividerElevation: 7
+                paperDividerElevation: 30
             },
             unsupportedComponents: {
                 TextareaAutosize: {

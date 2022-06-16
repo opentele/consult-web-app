@@ -30,12 +30,12 @@ class ClientList extends BaseView {
                 <Table sx={{minWidth: 700}} aria-label="customized table">
                     <TableHead>
                         <TableRow>
-                            <TableCell>{i18n.t('name')}</TableCell>
-                            <TableCell>{i18n.t('gender')}</TableCell>
-                            <TableCell>{i18n.t('age')}</TableCell>
-                            <TableCell>{i18n.t('registration-number')}</TableCell>
-                            {displayQueueNumber && <TableCell align="right">{i18n.t('queue-number')}</TableCell>}
-                            {displayNumberOfSessions && <TableCell align="right">{i18n.t('number-of-sessions')}</TableCell>}
+                            <TableCell>{i18n.T('name')}</TableCell>
+                            <TableCell>{i18n.T('gender')}</TableCell>
+                            <TableCell>{i18n.T('age')}</TableCell>
+                            <TableCell>{i18n.T('registration-number')}</TableCell>
+                            {displayQueueNumber && <TableCell align="right">{i18n.T('queue-number')}</TableCell>}
+                            {displayNumberOfSessions && <TableCell align="right">{i18n.T('number-of-sessions')}</TableCell>}
                         </TableRow>
                     </TableHead>
                     <TableBody>
