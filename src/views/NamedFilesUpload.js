@@ -101,15 +101,11 @@ class NamedFilesUpload extends BaseView {
     }
 
     onFileDeleteAction(file) {
-        const fileManager = this.state.fileManager;
-        fileManager.fileSelectedForDelete(file);
-        this.setState({fileDeleteModalStatus: ModalStatus.OPENED, fileManager: fileManager.clone()});
+        this.setState({fileDeleteModalStatus: ModalStatus.OPENED, fileManager: this.state.fileManager.fileSelectedForDelete(file).clone()});
     }
 
     onFileDeleteCancelled() {
-        const fileManager = this.state.fileManager;
-        fileManager.deleteCancelled();
-        this.setState({fileDeleteModalStatus: ModalStatus.NOT_OPENED, fileManager: fileManager.clone()});
+        this.setState({fileDeleteModalStatus: ModalStatus.NOT_OPENED, fileManager: this.state.fileManager.deleteCancelled().clone()});
     }
 
     render() {
@@ -135,7 +131,7 @@ class NamedFilesUpload extends BaseView {
                          formatServerResponse={(response, status, headers) => this.processUploadResponse(response, status)}>
                     {fileManager.isNoFileUploading && <UploadButton className={classes.nfuUploadButton} text={i18n.t("choose-file")}/>}
                     {fileManager.isFileUploading && <Typography>{fileManager.uploadingFileName}</Typography>}
-                    <TextField label={i18n.t("give-a-different-name-optional")} className={classes.nfuNameField}/>
+                    {/*<TextField label={i18n.t("give-a-different-name-optional")} className={classes.nfuNameField} onChange={(x) => this.fileNameChanged(x)}/>*/}
                 </Uploady>
                 {fileManager.isFileUploading && <LinearProgress variant="determinate" value={fileManager.uploadProgress}/>}
             </Box>

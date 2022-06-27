@@ -49,11 +49,13 @@ class FileManager {
     fileSelectedForDelete(file) {
         this.currentFile = file;
         this.currentAction = FileManager.fileActions.Delete;
+        return this;
     }
 
     deleteCancelled() {
         this.currentFile = null;
         this.currentAction = null;
+        return this;
     }
 
     successfullyUploaded(fileName) {
@@ -80,6 +82,7 @@ class FileManager {
 
     fileUploadProgressed(progress) {
         this.uploadProgress = progress;
+        return this;
     }
 
     get isNoFileUploading() {

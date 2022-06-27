@@ -9,6 +9,11 @@ class ConsultationSessionRecordFileService {
     static removeFile(file) {
         return ServiceUtil.delete(`consultationSessionRecordFile/${file.id}`);
     }
+
+    static downloadFile() {
+        // ServiceUtil.getJson()
+        // /api/consultationSessionRecordFile/{id}/contents
+    }
 }
 
 export default ConsultationSessionRecordFileService;
