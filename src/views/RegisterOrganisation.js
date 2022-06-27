@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import {Box, Button, Grid, Paper, TextField, Typography} from '@mui/material';
 import {ServerCall, ServerCallStatus} from "react-app-common";
-import {i18n, UserService} from "consult-app-common";
+import {i18n, User, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
@@ -31,7 +31,7 @@ const styles = theme => ({
         marginTop: 20
     },
     registerUserHelpText: {
-        marginTop: 10,
+        marginTop: theme.distance.unit * 4,
         marginLeft: 5
     },
     registrationCard: {
@@ -53,15 +53,15 @@ const styles = theme => ({
         alignItems: 'stretch'
     },
     registerOrgField: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.distance.unit * 3,
         alignItems: 'stretch'
     },
     googleSignInBox: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.distance.unit * 3,
         alignItems: 'stretch'
     },
     registerButton: {
-        marginTop: theme.spacing.unit * 4
+        marginTop: theme.distance.unit * 4
     },
     otherActionsCard: {
         display: 'flex',
@@ -135,7 +135,7 @@ class RegisterOrganisation extends BaseView {
                                 <ToggleButton value="user">{i18n.t('user')}</ToggleButton>
                             </ToggleButtonGroup>
 
-                            {registerState.isRegisteringUser && <Typography className={classes.registerUserHelpText} variant="body2">{i18n.t('register-as-user-help')}</Typography>}
+                            {registerState.isRegisteringUser && <Typography className={classes.registerUserHelpText} variant="subtitle1">{i18n.t('register-as-user-help')}</Typography>}
 
                             {!registerState.isRegisteringUser && <TextField
                                 name="organisationName"
@@ -150,6 +150,7 @@ class RegisterOrganisation extends BaseView {
                             />}
 
                             <EditUserFields fieldClassName={classes.registerOrgField}
+                                            user={User.newUser()}
                                             notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}
                                             displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
                             <ServerErrorMessage serverCall={serverCall}/>
@@ -160,23 +161,23 @@ class RegisterOrganisation extends BaseView {
                                     onClick={this.getSubmitHandler()}>{i18n.t(!registerState.isRegisteringUser ? "register-org-submit-button" : "self-register-user-button")}</Button>
                         </Paper>
                     </Grid>
-                    <Grid item lg={4} xs={12}>
-                        <Paper className={classes.googleRegistrationCard} elevation={5}>
-                            <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>
-                            <TextField
-                                name="googleSignUpOrgName"
-                                autoComplete="organisation"
-                                required
-                                className={classes.registerOrgField}
-                                label="Organisation name"
-                                textValue={this.state.googleSignUpOrgName}
-                                onClick={this.getValueChangedHandler("googleSignUpOrgName")}
-                            />
-                            <Box className={classes.googleSignInBox}>
-                                <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>
-                            </Box>
-                        </Paper>
-                    </Grid>
+                    {/*<Grid item lg={4} xs={12}>*/}
+                    {/*    <Paper className={classes.googleRegistrationCard} elevation={5}>*/}
+                    {/*        <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>*/}
+                    {/*        <TextField*/}
+                    {/*            name="googleSignUpOrgName"*/}
+                    {/*            autoComplete="organisation"*/}
+                    {/*            required*/}
+                    {/*            className={classes.registerOrgField}*/}
+                    {/*            label="Organisation name"*/}
+                    {/*            textValue={this.state.googleSignUpOrgName}*/}
+                    {/*            onClick={this.getValueChangedHandler("googleSignUpOrgName")}*/}
+                    {/*        />*/}
+                    {/*        <Box className={classes.googleSignInBox}>*/}
+                    {/*            <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>*/}
+                    {/*        </Box>*/}
+                    {/*    </Paper>*/}
+                    {/*</Grid>*/}
                     <Grid item lg={4} xs={12}>
                         <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
                             <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>

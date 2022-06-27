@@ -17,11 +17,8 @@ const styles = theme => ({
         display: 'flex',
         flexDirection: 'column'
     },
-    userNameField: {
-        marginTop: theme.spacing.unit * 2
-    },
-    field: {
-        marginTop: theme.spacing.unit * 2
+    loginField: {
+        marginTop: theme.distance.unit * 3
     },
     mobileGroup: {
         display: 'flex',
@@ -91,23 +88,22 @@ class Login extends BaseView {
             return <Redirect to="/"/>;
 
         return (<div>
-            <Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>
-                <Tab icon={<VerifiedUser/>} label="User ID" value="userName"/>
-                <Tab icon={<Google/>} label="Google" value="google"/>
-            </Tabs>
+            {/*<Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>*/}
+            {/*    <Tab icon={<VerifiedUser/>} label="User ID" value="userName"/>*/}
+            {/*    <Tab icon={<Google/>} label="Google" value="google"/>*/}
+            {/*</Tabs>*/}
             {loginBy === "userName" && <Box component="form" className={classes.form}>
                 <TextField
                     name="userName"
                     required
-                    className={classes.userNameField}
                     label={i18n.t('userName-label')}
                     onChange={this.getValueChangedHandler("userName")}
                     error={this.hasError("userName")}
                     helperText={this.getErrorText("userName")}
                     value={userName}
                 />
-                <PasswordField className={classes.field} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
-                <Button className={[classes.forgotPassword, classes.field]} component={Link} variant="text" color="primary"
+                <PasswordField className={classes.loginField} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
+                <Button className={[classes.forgotPassword, classes.loginField]} component={Link} variant="text" color="primary"
                         to="/resetPassword">{i18n.t("forgot-password")}</Button>
                 <ServerErrorMessage serverCall={loginServerCall} tryingLogin={true}/>
                 <div className={classes.actions}>

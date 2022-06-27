@@ -27,6 +27,9 @@ export default class DarkTheme {
                     }
                 }
             },
+            distance: {
+                unit: 5
+            },
             customPalette: {
                 textboxBackgroundColor: "#383838"
             },

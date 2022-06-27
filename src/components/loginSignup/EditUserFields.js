@@ -16,18 +16,18 @@ const styles = theme => ({
         flexGrow: 1
     },
     eufDoChangePassword: {
-        marginTop: theme.spacing.unit * 4
+        marginTop: theme.distance.unit * 4
     },
     eufField: {
-        marginTop: theme.spacing.unit * 2,
+        marginTop: theme.distance.unit * 3,
         alignItems: 'stretch'
     },
     eufProfessionalExplainer: {
-        marginTop: theme.spacing.unit * 4,
+        marginTop: theme.distance.unit * 6,
         alignItems: 'stretch'
     },
     eufRadioGroup: {
-        marginTop: theme.spacing.unit * 3,
+        marginTop: theme.distance.unit * 3,
         alignItems: 'stretch'
     },
     eufPasswords: {
@@ -82,7 +82,7 @@ class EditUserFields extends BaseView {
 
     selfEditing() {
         const loggedInUser = GlobalContext.getUser();
-        return loggedInUser.id === this.state.user.id;
+        return !GlobalContext.hasUser() || loggedInUser.id === this.state.user.id;
     }
 
     setDevModeData() {
@@ -108,7 +108,7 @@ class EditUserFields extends BaseView {
         const {classes} = this.props;
         const {changingPassword} = this.state;
         const {password, name, userName, providerType, userType, identification, qualification} = this.state.user;
-        const canManageUsers = GlobalContext.getUser().canManageUsers();
+        const canManageUsers = GlobalContext.hasUser() && GlobalContext.getUser().canManageUsers();
 
         const allowChangingPersonalInfo = this.isNew() || this.selfEditing();
         const allowPasswordUpdate = !this.isNew() && this.selfEditing();
@@ -139,8 +139,9 @@ class EditUserFields extends BaseView {
                     error={this.hasError("userName")}
                     helperText={this.getErrorText("userName")}
                 />
-                <Typography variant="button" className={classes.eufProfessionalExplainer}>{i18n.t("professional-details-explainer")}</Typography>
+                <Typography variant={"subtitle1"} className={classes.eufProfessionalExplainer}>{i18n.t("professional-details-explainer")}</Typography>
                 <TextField
+                    className={classes.eufField}
                     name="identification"
                     label={i18n.t("professional-identification-label")}
                     value={identification}
