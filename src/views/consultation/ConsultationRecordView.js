@@ -139,7 +139,7 @@ class ConsultationRecordView extends BaseView {
                 />
             </Box>
             <Box className={classes.crvFieldBox}>
-                <FormLabel textKey="upload-files" mandatory={false}/>
+                <FormLabel textKey="file-attachments" mandatory={false}/>
                 <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId} filesChanged={(files) => this.filesChanged(files)}/>
             </Box>
             <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>

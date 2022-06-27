@@ -19,12 +19,12 @@ const styles = theme => ({
     nfuUploadContainer: {
         display: "flex",
         flexDirection: "row",
-        marginTop: 20
+        marginTop: theme.distance.unit
     },
     nfuUploadedContainer: {
         display: "flex",
         flexDirection: "row",
-        marginTop: 20
+        marginTop: theme.distance.unit
     },
     nfuUploadButton: {
         width: 100
@@ -116,14 +116,17 @@ class NamedFilesUpload extends BaseView {
         const {classes} = this.props;
         const {fileManager, fileDeleteModalStatus} = this.state;
         return <Box>
+
             {fileDeleteModalStatus === ModalStatus.OPENED &&
-            <ConfirmationBox titleKey="file-delete-title" detailedMessageKey="file-delete-message"
+            <ConfirmationBox titleKey="file-delete-title" detailedMessageKey="file-delete-message" messageObj={{fileName: fileManager.currentFile.name}}
                              onConfirmed={() => this.removeFile()}
                              onCancelled={() => this.onFileDeleteCancelled()}/>}
+
             {fileManager.localFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
                 <Typography>{file.name}</Typography>
-                <IconButton onClick={() => this.onFileDeleteAction(file)} style={{marginTop: -10}}><CloseIcon/></IconButton>
+                <IconButton onClick={() => this.onFileDeleteAction(file)} style={{marginTop: -7}}><CloseIcon/></IconButton>
             </Box>)}
+
             <Box className={classes.nfuUploadContainer}>
                 <Uploady enhancer={retryEnhancer}
                          destination={{url: "/api/consultationSessionRecordFile"}}
@@ -134,7 +137,7 @@ class NamedFilesUpload extends BaseView {
                     {fileManager.isFileUploading && <Typography>{fileManager.uploadingFileName}</Typography>}
                     <TextField label={i18n.t("give-a-different-name-optional")} className={classes.nfuNameField}/>
                 </Uploady>
-                <LinearProgress variant="determinate" value={fileManager.uploadProgress}/>
+                {fileManager.isFileUploading && <LinearProgress variant="determinate" value={fileManager.uploadProgress}/>}
             </Box>
         </Box>;
     }

@@ -8,18 +8,25 @@ class FileManager {
     fileUploadErrorMessage;
     uploadProgress;
 
+    static fileActions = {
+        Delete: "delete",
+        Upload: "upload"
+    }
+
     constructor() {
         this.serverFiles = [];
         this.localFiles = [];
+        this.currentAction = null;
     }
 
     clone() {
         const fileManager = new FileManager();
         fileManager.serverFiles = [...this.serverFiles];
         fileManager.localFiles = [...this.localFiles];
-        fileManager.currentFile = this.currentFile && this.currentFile.clone();
+        fileManager.currentFile = this.currentFile && Object.assign({}, this.currentFile);
         fileManager.fileUploadErrorMessage = this.fileUploadErrorMessage;
         fileManager.uploadProgress = this.uploadProgress;
+        fileManager.currentAction = this.currentAction;
         return fileManager;
     }
 
@@ -33,17 +40,20 @@ class FileManager {
     }
 
     currentFileRemovedFromServer() {
-        this.serverFiles = _.remove(this.serverFiles, (x) => x.fileName === this.currentFile.fileName);
+        _.remove(this.serverFiles, (x) => x.fileName === this.currentFile.fileName);
         this._syncLocalFiles();
         this.currentFile = null;
+        this.currentAction = null;
     }
 
     fileSelectedForDelete(file) {
         this.currentFile = file;
+        this.currentAction = FileManager.fileActions.Delete;
     }
 
     deleteCancelled() {
         this.currentFile = null;
+        this.currentAction = null;
     }
 
     successfullyUploaded(fileName) {
@@ -51,6 +61,7 @@ class FileManager {
         this.serverFiles.push(this.currentFile);
         this._syncLocalFiles();
         this.currentFile = null;
+        this.currentAction = null;
         this.fileUploadErrorMessage = null;
         this.uploadProgress = 0;
     }
@@ -72,11 +83,11 @@ class FileManager {
     }
 
     get isNoFileUploading() {
-        return _.isNil(this.currentFile);
+        return this.currentAction !== FileManager.fileActions.Upload;
     }
 
     get isFileUploading() {
-        return !_.isNil(this.currentFile);
+        return this.currentAction === FileManager.fileActions.Upload;
     }
 
     get uploadingFileName() {
