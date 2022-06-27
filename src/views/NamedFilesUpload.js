@@ -14,6 +14,9 @@ import {retryEnhancer} from "@rpldy/retry-hooks";
 import ConfirmationBox from "./framework/ConfirmationBox";
 import ModalStatus from "./framework/ModalStatus";
 import FileManager from "../domain/FileManager";
+import Button from "@mui/material/Button";
+import FileViewer from "./consultation/ConsultFileViewer";
+import ConsultFileViewer from "./consultation/ConsultFileViewer";
 
 const styles = theme => ({
     nfuUploadContainer: {
@@ -40,6 +43,7 @@ class NamedFilesUpload extends BaseView {
         super(props, context);
         this.state = {
             fileDeleteModalStatus: ModalStatus.NOT_OPENED,
+            fileOpenModalStatus: ModalStatus.NOT_OPENED,
             getFilesCall: ServerCall.createInitial(),
             removeFileCall: ServerCall.createInitial(),
             fileManager: new FileManager(),
@@ -108,10 +112,19 @@ class NamedFilesUpload extends BaseView {
         this.setState({fileDeleteModalStatus: ModalStatus.NOT_OPENED, fileManager: this.state.fileManager.deleteCancelled().clone()});
     }
 
+    onFileOpen(file) {
+        this.setState({fileOpenModalStatus: ModalStatus.OPENED, fileManager: this.state.fileManager.setFileToOpen(file).clone()})
+    }
+
     render() {
         const {classes} = this.props;
-        const {fileManager, fileDeleteModalStatus} = this.state;
+        const {fileManager, fileDeleteModalStatus, fileOpenModalStatus} = this.state;
+        const currentFile = fileManager.currentFile;
         return <Box>
+            {fileOpenModalStatus === ModalStatus.OPENED &&
+            <ConsultFileViewer filePath={currentFile.getCurrentFilePath()}
+                               fileName={currentFile.fileName} fileType={currentFile.mimeType}
+                               onCloseHandler={() => this.setState({fileOpenModalStatus: ModalStatus.NOT_OPENED})}/>}
 
             {fileDeleteModalStatus === ModalStatus.OPENED &&
             <ConfirmationBox titleKey="file-delete-title" detailedMessageKey="file-delete-message" messageObj={{fileName: fileManager.currentFile.name}}
@@ -119,7 +132,7 @@ class NamedFilesUpload extends BaseView {
                              onCancelled={() => this.onFileDeleteCancelled()}/>}
 
             {fileManager.localFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
-                <Typography>{file.name}</Typography>
+                <Button variant={"text"} color={"secondary"} onClick={() => this.onFileOpen(file)}>{file.name}</Button>
                 <IconButton onClick={() => this.onFileDeleteAction(file)} style={{marginTop: -7}}><CloseIcon/></IconButton>
             </Box>)}
 

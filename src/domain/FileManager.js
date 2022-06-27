@@ -1,5 +1,5 @@
 import _ from "lodash";
-import ConsultationSessionRecordFile from "./ConsultationSessionRecordFile";
+import ConsultFile from "./ConsultFile";
 
 class FileManager {
     serverFiles;
@@ -10,7 +10,8 @@ class FileManager {
 
     static fileActions = {
         Delete: "delete",
-        Upload: "upload"
+        Upload: "upload",
+        Open: "open"
     }
 
     constructor() {
@@ -23,7 +24,7 @@ class FileManager {
         const fileManager = new FileManager();
         fileManager.serverFiles = [...this.serverFiles];
         fileManager.localFiles = [...this.localFiles];
-        fileManager.currentFile = this.currentFile && Object.assign({}, this.currentFile);
+        fileManager.currentFile = this.currentFile && this.currentFile.clone();
         fileManager.fileUploadErrorMessage = this.fileUploadErrorMessage;
         fileManager.uploadProgress = this.uploadProgress;
         fileManager.currentAction = this.currentAction;
@@ -31,12 +32,18 @@ class FileManager {
     }
 
     filesOnServer(files) {
-        this.serverFiles = [...files];
+        this.serverFiles = files.map(ConsultFile.fromResource);
         this._syncLocalFiles();
     }
 
     _syncLocalFiles() {
         this.localFiles = [...this.serverFiles];
+    }
+
+    setFileToOpen(file) {
+        this.currentFile = file;
+        this.currentAction = FileManager.fileActions.Open;
+        return this;
     }
 
     currentFileRemovedFromServer() {
@@ -74,10 +81,10 @@ class FileManager {
     }
 
     fileUploadStarting(name) {
-        const consultationSessionRecordFile = new ConsultationSessionRecordFile();
-        consultationSessionRecordFile.name = name;
-        this.currentFile = consultationSessionRecordFile;
-        this.localFiles.push(consultationSessionRecordFile);
+        const consultFile = new ConsultFile();
+        consultFile.name = name;
+        this.currentFile = consultFile;
+        this.localFiles.push(consultFile);
     }
 
     fileUploadProgressed(progress) {
