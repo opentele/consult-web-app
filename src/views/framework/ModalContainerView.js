@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {AppBar, Box, Dialog, Toolbar, Typography} from "@mui/material";
+import {AppBar, Box, Dialog, Fab, Toolbar, Typography} from "@mui/material";
 import Paper from '@mui/material/Paper';
 import {i18n} from "consult-app-common";
 import Draggable from 'react-draggable';
 import {DialogTitle} from "@mui/material";
+import CloseIcon from "@mui/icons-material/CloseRounded";
 
 const styles = theme => ({
 });
@@ -28,7 +29,8 @@ class ModalContainerView extends React.Component {
     static propTypes = {
         titleKey: PropTypes.string.isRequired,
         titleObj: PropTypes.object,
-        onClose: PropTypes.func
+        onClose: PropTypes.func,
+        showCloseButton: PropTypes.bool
     };
 
     handleClose = (event, reason) => {
@@ -37,12 +39,16 @@ class ModalContainerView extends React.Component {
     }
 
     render() {
-        const {children, titleKey, classes, titleObj} = this.props;
+        const {children, titleKey, classes, titleObj, showCloseButton} = this.props;
         return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title" onClose={this.handleClose}>
-            <Box>
+            <Box style={{display: "flex", flexDirection: "column"}}>
                 <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
                     {i18n.t(titleKey, titleObj)}
                 </DialogTitle>
+                {showCloseButton && <Fab color="secondary" aria-label="print" size="small"
+                     onClick={() => this.props.onClose(false)} style={{marginTop: -52, marginRight: 10, alignSelf: "flex-end"}}>
+                    <CloseIcon/>
+                </Fab>}
                 {children}
             </Box>
         </Dialog>;

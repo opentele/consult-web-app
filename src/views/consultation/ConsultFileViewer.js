@@ -2,14 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import FileViewer from 'react-file-viewer';
 import {withStyles} from '@mui/styles';
-import {Box, Button} from "@mui/material";
+import {Box, Fab} from "@mui/material";
 import ModalContainerView from "../framework/ModalContainerView";
-import {i18n} from "consult-app-common";
+import DownloadIcon from "@mui/icons-material/Download";
 
 const styles = theme => ({
     cfvContainer: {
+        marginTop: 16,
+        display: "flex",
+        flexDirection: "row"
+    },
+    cfvFileViewerBox: {
         width: "800px",
-        height: "600px"
+        height: "700px",
     }
 });
 
@@ -30,14 +35,23 @@ class ConsultFileViewer extends React.Component {
     }
 
     render() {
-        const type = 'pdf';
         const {classes, filePath, fileType, fileName, onCloseHandler} = this.props;
-        return <ModalContainerView titleKey="" titleObj={{fileName: fileName}}>
+        return <ModalContainerView titleKey="display-file-title" titleObj={{fileName: fileName}} showCloseButton={true} onClose={onCloseHandler}>
             <Box className={classes.cfvContainer}>
-                <FileViewer fileType={type} filePath={filePath} onError={this.onError}/>
-                <Button variant="contained" color={"secondary"} onClick={onCloseHandler}>{i18n.t("close-button")}</Button>
+                <Box className={classes.cfvFileViewerBox}>
+                    <FileViewer fileType={fileType} filePath={filePath} onError={this.onError}/>
+                </Box>
+                <Fab color="primary" aria-label="download" size={"medium"}
+                     onClick={() => this.downloadFile()}
+                     style={{marginRight: 20, marginLeft: 20, marginTop: 100}}>
+                    <DownloadIcon/>
+                </Fab>
             </Box>
         </ModalContainerView>;
+    }
+
+    downloadFile() {
+        window.open(this.props.filePath, '_blank', 'noopener,noreferrer');
     }
 }
 

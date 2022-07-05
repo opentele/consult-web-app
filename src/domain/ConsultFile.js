@@ -20,6 +20,13 @@ class ConsultFile extends AbstractEntity {
     getCurrentFilePath() {
         return `/api/consultationSessionRecordFile/${this.id}/contents`;
     }
+
+    getFileType() {
+        const split = this.mimeType.split("/");
+        if (split.length === 2)
+            return split[1];
+        return null;
+    }
 }
 
 export default ConsultFile;

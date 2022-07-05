@@ -123,7 +123,7 @@ class NamedFilesUpload extends BaseView {
         return <Box>
             {fileOpenModalStatus === ModalStatus.OPENED &&
             <ConsultFileViewer filePath={currentFile.getCurrentFilePath()}
-                               fileName={currentFile.fileName} fileType={currentFile.mimeType}
+                               fileName={currentFile.name} fileType={currentFile.getFileType()}
                                onCloseHandler={() => this.setState({fileOpenModalStatus: ModalStatus.NOT_OPENED})}/>}
 
             {fileDeleteModalStatus === ModalStatus.OPENED &&
