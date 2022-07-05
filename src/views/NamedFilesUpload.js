@@ -3,7 +3,7 @@ import {withStyles} from '@mui/styles';
 import Uploady from "@rpldy/uploady";
 import {send} from "@rpldy/sender";
 import UploadButton from "@rpldy/upload-button";
-import {Box, IconButton, LinearProgress, TextField, Typography} from "@mui/material";
+import {Box, IconButton, LinearProgress, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import CloseIcon from '@mui/icons-material/Close';
 import PropTypes from 'prop-types';
@@ -15,7 +15,6 @@ import ConfirmationBox from "./framework/ConfirmationBox";
 import ModalStatus from "./framework/ModalStatus";
 import FileManager from "../domain/FileManager";
 import Button from "@mui/material/Button";
-import FileViewer from "./consultation/ConsultFileViewer";
 import ConsultFileViewer from "./consultation/ConsultFileViewer";
 
 const styles = theme => ({
@@ -55,7 +54,8 @@ class NamedFilesUpload extends BaseView {
     static props = {
         consultationSessionRecordId: PropTypes.number,
         retry: PropTypes.func,
-        filesChanged: PropTypes.func.isRequired
+        filesChanged: PropTypes.func.isRequired,
+        onUploadInProgress: PropTypes.func.isRequired
     }
 
     componentDidMount() {
@@ -86,11 +86,13 @@ class NamedFilesUpload extends BaseView {
         fileManager.fileUploadStarting(batchItems[0].file.name);
         this.setState({fileManager: fileManager.clone()});
 
-        return send(batchItems, foo, sendOptions, (progressEvent, objs) => {
-            parent.state.fileManager.fileUploadProgressed(progressEvent.loaded / progressEvent.total);
+        const sendResult = send(batchItems, foo, sendOptions, (progressEvent, objs) => {
+            parent.state.fileManager.fileUploadProgressed(progressEvent.loaded * 100 / progressEvent.total);
             parent.setState({fileManager: parent.state.fileManager.clone()});
             return onProgress(progressEvent, objs);
         });
+        this.props.onUploadInProgress();
+        return sendResult;
     }
 
     getUploadListeners() {
@@ -131,7 +133,7 @@ class NamedFilesUpload extends BaseView {
                              onConfirmed={() => this.removeFile()}
                              onCancelled={() => this.onFileDeleteCancelled()}/>}
 
-            {fileManager.localFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
+            {fileManager.serverFiles.map((file) => <Box className={classes.nfuUploadedContainer}>
                 <Button variant={"text"} color={"secondary"} onClick={() => this.onFileOpen(file)}>{file.name}</Button>
                 <IconButton onClick={() => this.onFileDeleteAction(file)} style={{marginTop: -7}}><CloseIcon/></IconButton>
             </Box>)}
@@ -144,10 +146,9 @@ class NamedFilesUpload extends BaseView {
                          formatServerResponse={(response, status, headers) => this.processUploadResponse(response, status)}>
                     {fileManager.isNoFileUploading && <UploadButton className={classes.nfuUploadButton} text={i18n.t("choose-file")}/>}
                     {fileManager.isFileUploading && <Typography>{fileManager.uploadingFileName}</Typography>}
-                    {/*<TextField label={i18n.t("give-a-different-name-optional")} className={classes.nfuNameField} onChange={(x) => this.fileNameChanged(x)}/>*/}
                 </Uploady>
-                {fileManager.isFileUploading && <LinearProgress variant="determinate" value={fileManager.uploadProgress}/>}
             </Box>
+            {fileManager.isFileUploading && <LinearProgress variant="determinate" value={fileManager.uploadProgress} style={{height: "8px"}}/>}
         </Box>;
     }
 

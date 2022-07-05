@@ -13,6 +13,7 @@ import WaitView from "../../components/WaitView";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import NamedFilesUpload from "../NamedFilesUpload";
 import ThemeHelper from "../../theming/ThemeHelper";
+import ConfirmationBox from "../framework/ConfirmationBox";
 
 function createStyleOptions(theme) {
     const styleOptions = {
@@ -41,7 +42,9 @@ class ConsultationRecordView extends BaseView {
         this.state = {
             consultation: ConsultationSessionRecord.forCreate(),
             saveRecordCall: ServerCall.createInitial(),
-            getRecordCall: ServerCall.createInitial()
+            getRecordCall: ServerCall.createInitial(),
+            uploadInProgress: false,
+            askCancelConfirmation: false
         };
     }
 
@@ -92,18 +95,22 @@ class ConsultationRecordView extends BaseView {
 
     filesChanged(files) {
         this.state.consultation.files = files;
-        this.setState({consultation: this.state.consultation.clone()});
+        this.setState({consultation: this.state.consultation.clone(), uploadInProgress: false});
     }
 
     render() {
         const {classes, messageClose, consultationSessionRecordId} = this.props;
-        const {consultation, saveRecordCall, getRecordCall, missingFields} = this.state;
+        const {consultation, saveRecordCall, getRecordCall, missingFields, askCancelConfirmation} = this.state;
         const loading = saveRecordCall.callStatus === ServerCallStatus.WAITING || (this.editing && ServerCall.noCallOrWait(getRecordCall));
         if (loading)
             return <WaitView containerClassName={classes.container}/>;
 
         let textAreaClassName = classes["textAreaField"];
         return <Box className={classes.container}>
+            {askCancelConfirmation && <ConfirmationBox titleKey="file-upload-in-progress-title"
+                                                       onCancelled={() => this.setState({askCancelConfirmation: false})}
+                                                       onConfirmed={() => messageClose(false)}
+                                                       detailedMessageKey="file-upload-in-progress-detail"/>}
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="complaints" mandatory={false}/>
                 <TextareaAutosize
@@ -140,12 +147,19 @@ class ConsultationRecordView extends BaseView {
             </Box>
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="file-attachments" mandatory={false}/>
-                <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId} filesChanged={(files) => this.filesChanged(files)}/>
+                <NamedFilesUpload consultationSessionRecordId={consultationSessionRecordId}
+                                  filesChanged={(files) => this.filesChanged(files)}
+                                  onUploadInProgress={() => this.setState({uploadInProgress: true})}/>
             </Box>
             <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>
             <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRecordCall}
-                               onCancelHandler={messageClose}/>
+                               onCancelHandler={() => this.onCancel()}/>
         </Box>;
+    }
+
+    onCancel() {
+        if (this.state.uploadInProgress)
+            this.setState({askCancelConfirmation: true});
     }
 }
 

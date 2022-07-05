@@ -18,6 +18,7 @@ class FileManager {
         this.serverFiles = [];
         this.localFiles = [];
         this.currentAction = null;
+        this.uploadProgress = 0;
     }
 
     clone() {
@@ -85,6 +86,8 @@ class FileManager {
         consultFile.name = name;
         this.currentFile = consultFile;
         this.localFiles.push(consultFile);
+        this.currentAction = FileManager.fileActions.Upload;
+        return this;
     }
 
     fileUploadProgressed(progress) {
