@@ -16,10 +16,11 @@ import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 import {ServerCall} from "react-app-common";
 import ThemeCreator from './theming/DarkTheme';
+import ErrorView from "./views/ErrorView";
 
 const theme = createTheme(ThemeCreator.getThemeOptions());
 
-const nonLoginPaths = ["/login", "/register", "/resetPassword"];
+const nonLoginPaths = ["/login", "/register", "/resetPassword", "/error"];
 
 export default class App extends Component {
     constructor(props) {
@@ -63,6 +64,9 @@ export default class App extends Component {
         if (this.isWaiting(isLoggedInServerCall, getUserServerCall))
             return <CircularProgress/>;
 
+        if (ServerCall.hasFailed(isLoggedInServerCall) && window.location.pathname !== "/error")
+            return window.location.replace("/error");
+
         const isLoggedIn = ServerCall.isSuccessful(getUserServerCall);
         if (isLoggedIn && nonLoginPaths.includes(pathname)) {
             window.location.replace("/");
@@ -89,6 +93,9 @@ export default class App extends Component {
                     </Route>
                     <Route path="/login">
                         {this.getPublicRoute(isLoggedIn, <Welcome onLogin={this.loginHandler}/>)}
+                    </Route>
+                    <Route path="/error">
+                        {this.getPublicRoute(isLoggedIn, <ErrorView/>)}
                     </Route>
                     <Route path="/users">
                         {this.getPrivateRoute(isLoggedIn, <Users/>)}

@@ -59,23 +59,23 @@ class Login extends BaseView {
         }
     }
 
-    getSubmitHandler() {
-        return (e) => {
-            e.preventDefault();
-            const [validUserName, userNameType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
-            if (validUserName) {
-                UserService.login(this.state.userName, this.state.password, userNameType).then((response) => {
-                    const loginServerCall = ServerCall.responseReceived(this.state.loginServerCall, response);
-                    this.setState({loginServerCall: loginServerCall});
-                    this.props.onLogin(ServerCall.isSuccessful(loginServerCall));
-                });
-                this.setState({loginServerCall: ServerCall.serverCallMade(this.state.loginServerCall)});
-            } else {
-                const errors = [];
-                errors["userName"] = "invalid-user-name";
-                this.setState({errors: errors});
-            }
-        };
+    onSubmit(e) {
+        e.preventDefault();
+        const [validUserName, userNameType] = DataElementValidator.validateEmailOrMobileWithCountryCode(this.state.userName);
+        if (validUserName) {
+            this.makeServerCall(UserService.login(this.state.userName, this.state.password, userNameType), "loginServerCall");
+        } else {
+            const errors = [];
+            errors["userName"] = "invalid-user-name";
+            this.setState({errors: errors});
+        }
+    }
+
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "loginServerCall") {
+            this.setState(newState);
+            this.props.onLogin(ServerCall.isSuccessful(newState[serverCallName]));
+        }
     }
 
     render() {
@@ -109,7 +109,7 @@ class Login extends BaseView {
                 <div className={classes.actions}>
                     <Button type="submit"
                             fullWidth
-                            variant="contained" color="primary" onClick={this.getSubmitHandler()}>{i18n.t("login")}</Button>
+                            variant="contained" color="primary" onClick={(e) => this.onSubmit(e)}>{i18n.t("login")}</Button>
                 </div>
             </Box>}
             {loginBy === "google" && <GoogleSignIn/>}
