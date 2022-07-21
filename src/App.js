@@ -39,9 +39,7 @@ export default class App extends Component {
                 if (ServerCall.isSuccessful(isLoggedInServerCall)) {
                     UserService.getUser().then((response) => {
                         const getUserServerCall = ServerCall.responseReceived(this.state.getUserServerCall, response);
-                        const data = ServerCall.getData(getUserServerCall);
-                        GlobalContext.setUser(User.fromResource(data));
-                        GlobalContext.setOrganisation(data.organisationName);
+                        GlobalContext.updateContext(getUserServerCall);
                         this.setState({getUserServerCall: getUserServerCall});
                     });
                 }

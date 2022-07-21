@@ -67,7 +67,7 @@ class Home extends BaseView {
         const {classes} = this.props;
         const {tabIndex} = this.state;
         return _.isEmpty(GlobalContext.getOrganisation()) ?
-            <NoOrganisationView onOrgRegistered={() => this.setState(...this.state)}/>
+            <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
             (<ContainerView activeTab="home">
                 <br/>

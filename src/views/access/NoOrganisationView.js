@@ -9,6 +9,7 @@ import {ServerCall} from "react-app-common";
 import PropTypes from 'prop-types';
 import GlobalContext from "../../framework/GlobalContext";
 import _ from 'lodash';
+import ServerErrorMessage from "../../components/ServerErrorMessage";
 
 const styles = theme => ({
     novMain: {
@@ -57,7 +58,8 @@ class NoOrganisationView extends BaseView {
         super(props, context);
         this.state = {
             orgName: "",
-            registerOrgServerCall: ServerCall.createInitial()
+            registerOrgServerCall: ServerCall.createInitial(),
+            getUserServerCall: ServerCall.createInitial()
         };
     }
 
@@ -68,7 +70,10 @@ class NoOrganisationView extends BaseView {
     }
 
     onSuccessfulServerCall(serverCallName) {
-        GlobalContext.setOrganisation(this.state.orgName);
+        if (serverCallName === "registerOrgServerCall")
+            this.makeServerCall(UserService.getUser(), "getUserServerCall");
+        else if (serverCallName === "getUserServerCall")
+            GlobalContext.updateContext(this.state.getUserServerCall);
         this.props.onOrgRegistered();
     }
 
@@ -78,8 +83,11 @@ class NoOrganisationView extends BaseView {
 
     render() {
         const {classes} = this.props;
+        const {registerOrgServerCall, getUserServerCall} = this.state;
         return <Box className={classes.novMain}>
             <ConsultAppBar/>
+            <ServerErrorMessage serverCall={registerOrgServerCall}/>
+            <ServerErrorMessage serverCall={getUserServerCall}/>
             <Typography variant="h4" className={classes.novTitle}>{i18n.t('not-part-of-organisation')}</Typography>
             <Grid container className={classes.novContent} direction="row" justifyContent="center" alignItems="stretch">
                 <Grid item lg={4} xs={12}>

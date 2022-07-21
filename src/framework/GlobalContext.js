@@ -1,4 +1,6 @@
 import _ from "lodash";
+import {ServerCall} from "react-app-common";
+import {User} from "consult-app-common";
 
 class GlobalContext {
     setLogoutHandler(logoutHandler) {
@@ -25,6 +27,12 @@ class GlobalContext {
 
     getOrganisation() {
         return this.organisation;
+    }
+
+    updateContext(getUserCall) {
+        const data = ServerCall.getData(getUserCall);
+        this.setUser(User.fromResource(data));
+        this.setOrganisation(data.organisationName);
     }
 }
 
