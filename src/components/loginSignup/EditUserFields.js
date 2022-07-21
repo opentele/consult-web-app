@@ -24,7 +24,8 @@ const styles = theme => ({
     },
     eufProfessionalExplainer: {
         marginTop: theme.distance.unit * 6,
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        color: theme.textColor.assistive
     },
     eufRadioGroup: {
         marginTop: theme.distance.unit * 3,

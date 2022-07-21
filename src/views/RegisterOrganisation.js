@@ -1,17 +1,14 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
-import {Box, Button, Grid, Paper, TextField, Typography} from '@mui/material';
+import {Box, Button, Grid, Paper, TextField, ToggleButton, ToggleButtonGroup, Typography} from '@mui/material';
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import {i18n, User, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
-import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link} from "react-router-dom";
 import BaseView from "./framework/BaseView";
-import {ToggleButton, ToggleButtonGroup} from "@mui/material";
 import EditUserFields from "../components/loginSignup/EditUserFields";
-import _ from 'lodash';
 import RegisterState from "../state/RegisterState";
 
 const styles = theme => ({
@@ -32,7 +29,8 @@ const styles = theme => ({
     },
     registerUserHelpText: {
         marginTop: theme.distance.unit * 4,
-        marginLeft: 5
+        marginLeft: 5,
+        color: theme.textColor.assistive
     },
     registrationCard: {
         margin: 10,
@@ -55,6 +53,9 @@ const styles = theme => ({
     registerOrgField: {
         marginTop: theme.distance.unit * 3,
         alignItems: 'stretch'
+    },
+    registerOrgOrUserButtons: {
+        marginBottom: theme.distance.unit * 3
     },
     googleSignInBox: {
         marginTop: theme.distance.unit * 3,
@@ -120,13 +121,11 @@ class RegisterOrganisation extends BaseView {
                 <Grid container className={classes.registerOrganisationContent} direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.registrationCard} elevation={5} component="form">
-                            <Typography variant="h5" className={classes.registerText}>{i18n.t('userName-label')}</Typography>
-
                             <ToggleButtonGroup
                                 color="primary"
                                 value={registerState.registerAs}
                                 exclusive
-                                className={classes.registerOrgField}
+                                className={[classes.registerOrgField, classes.registerOrgOrUserButtons]}
                                 onChange={(e) => {
                                     registerState.registerAs = e.target.value;
                                     this.setState({registerState: registerState.clone()})
@@ -135,7 +134,9 @@ class RegisterOrganisation extends BaseView {
                                 <ToggleButton value="user">{i18n.t('user')}</ToggleButton>
                             </ToggleButtonGroup>
 
-                            {registerState.isRegisteringUser && <Typography className={classes.registerUserHelpText} variant="subtitle1">{i18n.t('register-as-user-help')}</Typography>}
+                            {registerState.isRegisteringUser &&
+                                <Typography className={classes.registerUserHelpText}
+                                            variant="subtitle1">{i18n.t('register-as-user-help')}</Typography>}
 
                             {!registerState.isRegisteringUser && <TextField
                                 name="organisationName"
@@ -153,7 +154,7 @@ class RegisterOrganisation extends BaseView {
                                             user={User.newUser()}
                                             notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}
                                             displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
-                            <ServerErrorMessage serverCall={serverCall}/>
+                            <ServerErrorMessage serverCall={serverCall} className={classes.registerOrgField}/>
 
                             <Button type="submit" className={classes.registerButton}
                                     fullWidth
@@ -180,7 +181,7 @@ class RegisterOrganisation extends BaseView {
                     {/*</Grid>*/}
                     <Grid item lg={4} xs={12}>
                         <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
-                            <Typography className={classes.loginHelp} variant="h6">{i18n.t("login-help")}</Typography>
+                            <Typography className={classes.loginHelp} variant="h5">{i18n.t("login-help")}</Typography>
                             <Button component={Link} variant="text" color="primary" to="/login">{i18n.t("login-to-your-organisation")}</Button>
                         </Paper>
                     </Grid>

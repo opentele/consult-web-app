@@ -10,9 +10,10 @@ export default function ServerErrorMessage({serverCall, className, tryingLogin =
         return null;
 
     let userMessage;
-    if (serverCall.callStatus === 401 && tryingLogin)
+    const authorised = ServerCall.isAuthorised(serverCall);
+    if (authorised && tryingLogin)
         userMessage = i18n.t("invalid-login-credentials");
-    else if (serverCall.callStatus === 401)
+    else if (authorised)
         userMessage = i18n.t("server-session-expired");
     else
         userMessage = ServerCall.getErrorMessage(serverCall, i18n.t);

@@ -11,6 +11,9 @@ export default class DarkTheme {
             palette: {
                 mode: 'dark',
             },
+            textColor: {
+                assistive: "#BB86FC"
+            },
             components: {
                 MuiIconButton: {
                     styleOverrides: {

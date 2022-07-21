@@ -32,8 +32,8 @@ const styles = theme => ({
         flex: 0.85,
         marginLeft: 10
     },
-    actions: {
-        marginTop: theme.spacing.unit * 2
+    lActions: {
+        marginTop: theme.distance.unit * 3
     },
     actionOption: {
         alignSelf: 'center'
@@ -105,12 +105,12 @@ class Login extends BaseView {
                 <PasswordField className={classes.loginField} value={password} hasError={false} onChangeHandler={this.getValueChangedHandler("password")}/>
                 <Button className={[classes.forgotPassword, classes.loginField]} component={Link} variant="text" color="primary"
                         to="/resetPassword">{i18n.t("forgot-password")}</Button>
-                <ServerErrorMessage serverCall={loginServerCall} tryingLogin={true}/>
-                <div className={classes.actions}>
+                <ServerErrorMessage serverCall={loginServerCall} tryingLogin={true} className={classes.loginField}/>
+                <Box className={classes.lActions}>
                     <Button type="submit"
                             fullWidth
                             variant="contained" color="primary" onClick={(e) => this.onSubmit(e)}>{i18n.t("login")}</Button>
-                </div>
+                </Box>
             </Box>}
             {loginBy === "google" && <GoogleSignIn/>}
         </div>);

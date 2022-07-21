@@ -64,7 +64,7 @@ export default class App extends Component {
         if (this.isWaiting(isLoggedInServerCall, getUserServerCall))
             return <CircularProgress/>;
 
-        if (ServerCall.hasFailed(isLoggedInServerCall) && window.location.pathname !== "/error")
+        if (ServerCall.hasFailed(isLoggedInServerCall) && window.location.pathname !== "/error" && !ServerCall.isForbidden(isLoggedInServerCall))
             return window.location.replace("/error");
 
         const isLoggedIn = ServerCall.isSuccessful(getUserServerCall);

@@ -10,6 +10,9 @@ import ConsultationRooms from "./ConsultationRooms";
 import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
 import ConsultationRoomSchedules from "./ConsultationRoomSchedules";
+import GlobalContext from "../../framework/GlobalContext";
+import NoOrganisationView from "../access/NoOrganisationView";
+import _ from 'lodash';
 
 const styles = theme => ({
     createRoom: {
@@ -63,20 +66,23 @@ class Home extends BaseView {
     render() {
         const {classes} = this.props;
         const {tabIndex} = this.state;
-        return <ContainerView activeTab="home">
-            <br/>
-            <Tabs value={tabIndex} onChange={this.onTabChange()}>
-                <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
-                <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
-                <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
-                <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-rooms')}/>
-                {<Fab variant="extended" size="medium" className={classes.createRoom} onClick={() => this.onModalOpen("oneTimeConsultationRoomStatus")}>
-                    <AddCircle className={classes.createRoomIcon}/>
-                    {i18n.t('create-one-time-room')}
-                </Fab>}
-            </Tabs>
-            {this.tabComponents[tabIndex]()}
-        </ContainerView>;
+        return _.isEmpty(GlobalContext.getOrganisation()) ?
+            <NoOrganisationView onOrgRegistered={() => this.setState(...this.state)}/>
+            :
+            (<ContainerView activeTab="home">
+                <br/>
+                <Tabs value={tabIndex} onChange={this.onTabChange()}>
+                    <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
+                    <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
+                    <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
+                    <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-rooms')}/>
+                    {<Fab variant="extended" size="medium" className={classes.createRoom} onClick={() => this.onModalOpen("oneTimeConsultationRoomStatus")}>
+                        <AddCircle className={classes.createRoomIcon}/>
+                        {i18n.t('create-one-time-room')}
+                    </Fab>}
+                </Tabs>
+                {this.tabComponents[tabIndex]()}
+            </ContainerView>)
     }
 }
 
