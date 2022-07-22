@@ -7,8 +7,10 @@ import {Box, Chip, OutlinedInput} from "@mui/material";
 import {ServerCall} from "react-app-common";
 import WaitView from "../WaitView";
 import EntityCollection from "../../domain/EntityCollection";
-import {UserService} from "consult-app-common";
+import {i18n, UserService} from "consult-app-common";
 import BaseView from "../../views/framework/BaseView";
+import Provider from "../../domain/Provider";
+import _ from 'lodash';
 
 const styles = theme => ({
     epContainer: {
@@ -36,12 +38,10 @@ class EditProviders extends BaseView {
         this.makeServerCall(UserService.getUsers(), "getProvidersCall");
     }
 
-    getProvidersChangedHandler() {
-        return (e) => {
-            const providerIds = e.target.value;
-            const allProviders = ServerCall.getData(this.state.getProvidersCall);
-            this.props.onUpdate(EntityCollection.getEntities(allProviders, providerIds));
-        }
+    onProvidersChanged(e) {
+        const providerIds = e.target.value;
+        const allProviders = ServerCall.getData(this.state.getProvidersCall);
+        this.props.onUpdate(EntityCollection.getEntities(allProviders, providerIds));
     }
 
     render() {
@@ -51,17 +51,21 @@ class EditProviders extends BaseView {
             return <WaitView/>;
 
         const allProviders = ServerCall.getData(getProvidersCall);
+        const providerIds = EntityCollection.getIds(providers);
 
         return (<Box className={[containerClassName, classes.epContainer]}>
             <FormLabel textKey="providers"/>
-            <Select multiple value={EntityCollection.getIds(providers)}
-                    onChange={this.getProvidersChangedHandler(allProviders)}
+            <Select multiple value={_.isEmpty(providerIds) ? [-1] : providerIds}
+                    onChange={(e) => this.onProvidersChanged(e)}
                     input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
                     renderValue={(providerIds) => (
                         <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                            {providerIds.map((providerId) => (
-                                <Chip key={providerId} label={EntityCollection.getEntity(providers, providerId).name}/>
-                            ))}
+                            {
+                                providerIds.map((providerId) => {
+                                    return <Chip key={providerId}
+                                                 label={providerId === -1 ? i18n.t("select-provider") : EntityCollection.getEntity(providers, providerId).name}/>
+                                })
+                            }
                         </Box>
                     )}>
                 {allProviders.map((provider) => (

@@ -119,7 +119,7 @@ class BaseView extends Component {
     }
 
     updateServerResponseState(newState, serverCallName) {
-        this.updateState(newState);
+        this.updateState(newState, serverCallName);
     }
 
     //Should be used only for making non state change calls
@@ -136,7 +136,7 @@ class BaseView extends Component {
         else {
             const newState = {...this.state};
             newState[serverCallName] = ServerCall.null(newObj);
-            this.updateState(newState);
+            this.updateServerResponseState(newState, serverCallName);
         }
     }
 }

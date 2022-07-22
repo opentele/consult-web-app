@@ -3,7 +3,6 @@ import {withStyles} from '@mui/styles';
 import ConsultAppBar from "../../components/ConsultAppBar";
 import {Box, Button, Grid, Paper, TextField, Typography} from "@mui/material";
 import {i18n, UserService} from "consult-app-common";
-import {Link, Redirect} from "react-router-dom";
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
 import PropTypes from 'prop-types';

@@ -8,7 +8,6 @@ import DateInput from "../../components/DateInput";
 import PropTypes from 'prop-types';
 import {BeanContainer, ServerCall} from 'react-app-common';
 import ConsultationRoomService from "../../service/ConsultationRoomService";
-import ConsultationSchedule from "../../domain/ConsultationSchedule";
 import TimeInput from "../../components/TimeInput";
 import ModalContainerView from "../framework/ModalContainerView";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
@@ -69,7 +68,7 @@ class AddEditConsultationSchedule extends BaseView {
 
     componentDidMount() {
         const {consultationScheduleId} = this.props;
-        this.loadEntity(consultationScheduleId, () => BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall", ConsultationSchedule.newSchedule());
+        this.loadEntity(consultationScheduleId, () => BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall", ConsultationRoomSchedule.newSchedule());
     }
 
     getSaveHandler(schedule) {
@@ -80,7 +79,8 @@ class AddEditConsultationSchedule extends BaseView {
 
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getScheduleCall") {
-            newState.schedule = ConsultationRoomSchedule.fromServerResource(ServerCall.getData(newState.getScheduleCall))
+            const data = ServerCall.getData(newState.getScheduleCall);
+            newState.schedule = ServerCall.isWasNotNeeded(newState.getScheduleCall) ? data : ConsultationRoomSchedule.fromServerResource(data);
             this.setState(newState);
         }
     }

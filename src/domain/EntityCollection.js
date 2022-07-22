@@ -10,7 +10,7 @@ class EntityCollection {
     }
 
     static getEntities(collection, ids) {
-        return ids.map((id) => this.getEntity(collection, id));
+        return _.filter(ids, (id) => id !== -1).map((id) => this.getEntity(collection, id));
     }
 }
 

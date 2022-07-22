@@ -10,6 +10,12 @@ class ConsultationRoomSchedule extends AbstractEntity {
     recurrenceRule;
     providers;
 
+    static newSchedule() {
+        const schedule = new ConsultationRoomSchedule();
+        schedule.providers = [];
+        return schedule;
+    }
+
     static fromServerResource(resource) {
         const consultationRoomSchedule = new ConsultationRoomSchedule();
         AbstractEntity.fromOther(resource, consultationRoomSchedule);
