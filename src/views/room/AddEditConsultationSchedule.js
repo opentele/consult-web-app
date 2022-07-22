@@ -15,7 +15,7 @@ import ConsultationRoomScheduleService from "../../service/ConsultationRoomSched
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import EditProviders from "../../components/consultation/EditProviders";
 
-const styles = () => ({
+const styles = (theme) => ({
     rruleBox: {
         marginTop: 20
     },
@@ -32,7 +32,8 @@ const styles = () => ({
         alignItems: 'flex-start'
     },
     addConsultationScheduleTitleField: {
-        width: 400
+        width: 300,
+        marginRight: theme.distance.unit * 4
     },
     rRuleContainer: {
         padding: 20,
@@ -71,12 +72,6 @@ class AddEditConsultationSchedule extends BaseView {
         this.loadEntity(consultationScheduleId, () => BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall", ConsultationRoomSchedule.newSchedule());
     }
 
-    getSaveHandler(schedule) {
-        return () => {
-            this.makeServerCall(ConsultationRoomScheduleService.save(schedule), "saveScheduleCall").then(this.getEntitySavedHandler("saveScheduleCall"));
-        }
-    }
-
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getScheduleCall") {
             const data = ServerCall.getData(newState.getScheduleCall);
@@ -85,11 +80,19 @@ class AddEditConsultationSchedule extends BaseView {
         }
     }
 
-    getProvidersUpdateHandler() {
-        return (providers) => {
-            this.state.schedule.providers = providers;
-            this.setState({schedule: this.state.schedule.clone()});
-        }
+    onProvidersUpdate(providers) {
+        this.state.schedule.providers = providers;
+        this.setState({schedule: this.state.schedule.clone()});
+    }
+
+    onScheduleRuleUpdate(rrule) {
+        this.state.schedule.recurrenceRule = rrule;
+        this.setState({schedule: this.state.schedule.clone()});
+    }
+
+    onSave() {
+        this.makeServerCall(ConsultationRoomScheduleService.save(this.state.schedule), "saveScheduleCall")
+            .then(this.getEntitySavedHandler("saveScheduleCall"));
     }
 
     render() {
@@ -99,23 +102,30 @@ class AddEditConsultationSchedule extends BaseView {
 
         const {classes, messageClose} = this.props;
 
-        return <ModalContainerView titleKey="edit-schedule-title">
+        return <ModalContainerView titleKey={schedule.isNew() ? "create-new-schedule" : "edit-schedule-title"}>
             <Box>
                 <Grid container>
-                    <Grid item lg={6} xs={11} className={classes.addConsultationScheduleForm}>
-                        <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
-                                   label={i18n.t("schedule-title")} value={schedule.title}
-                                   onChange={this.getStateFieldValueChangedHandler("schedule", "title")}
-                        />
+                    <Grid item contaienr lg={6} xs={11} className={classes.addConsultationScheduleForm}>
+                        <Box style={{flexDirection: "row", display: "flex"}}>
+                            <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
+                                       label={i18n.t("schedule-title")} value={schedule.title}
+                                       onChange={this.getStateFieldValueChangedHandler("schedule", "title")}/>
+
+                            <TextField name="totalSlots" required className={`${classes.addConsultationScheduleField}`}
+                                       label={i18n.t("total-slots")} value={schedule.totalSlots}
+                                       type="number"
+                                       onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>
+                        </Box>
+
                         <DateInput classNames={classes.addConsultationScheduleField} value={schedule.startDate}
                                    changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
+
                         <Box>
                             <TimeInput classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
                                        changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")} label="Start Time"/>
                             <TimeInput classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
                                        changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")} label="End Time"/>
                         </Box>
-
                     </Grid>
                 </Grid>
                 <Grid container>
@@ -123,16 +133,16 @@ class AddEditConsultationSchedule extends BaseView {
                         <Box className={classes.rRuleContainer}>
                             <RRuleGenerator
                                 config={{frequency: ['Yearly', 'Monthly', 'Weekly', 'Daily']}}
-                                onChange={() => {
-                                }}
-                                value={"FREQ=WEEKLY;INTERVAL=1"}
+                                onChange={(rrule) => this.onScheduleRuleUpdate(rrule)}
+                                value={schedule.recurrenceRule}
                             />
                         </Box>
                     </Grid>
                 </Grid>
-                <EditProviders containerClassName={classes.aecsProviders} providers={schedule.providers} onUpdate={this.getProvidersUpdateHandler()}/>
+                <EditProviders containerClassName={classes.aecsProviders} providers={schedule.providers}
+                               onUpdate={(providers) => this.onProvidersUpdate(providers)}/>
                 <SaveCancelButtons className={classes.scheduleButtonsBox} serverCall={saveScheduleCall} onCancelHandler={messageClose}
-                                   onSaveHandler={this.getSaveHandler(schedule)} disabled={false}/>
+                                   onSaveHandler={() => this.onSave()} disabled={false}/>
             </Box>
         </ModalContainerView>;
     }

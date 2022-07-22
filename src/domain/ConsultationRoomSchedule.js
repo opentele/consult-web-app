@@ -1,6 +1,7 @@
 import {AbstractEntity} from "consult-app-common";
 import {rrulestr} from "rrule";
 import Provider from "./Provider";
+import {DateTimeUtil} from "react-app-common";
 
 class ConsultationRoomSchedule extends AbstractEntity {
     title;
@@ -9,10 +10,15 @@ class ConsultationRoomSchedule extends AbstractEntity {
     endTime;
     recurrenceRule;
     providers;
+    totalSlots;
 
     static newSchedule() {
         const schedule = new ConsultationRoomSchedule();
+        schedule.startDate = DateTimeUtil.today();
+        schedule.startTime = "09:30";
+        schedule.endTime = "14:30";
         schedule.providers = [];
+        schedule.recurrenceRule = "RRULE:FREQ=WEEKLY;INTERVAL=1;BYDAY=MO,TU,WE,TH,FR";
         return schedule;
     }
 
