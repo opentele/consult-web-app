@@ -14,6 +14,7 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import EditProviders from "../../components/consultation/EditProviders";
+import ModalStatus from "../framework/ModalStatus";
 
 const styles = (theme) => ({
     rruleBox: {
@@ -56,7 +57,8 @@ const styles = (theme) => ({
 class AddEditConsultationSchedule extends BaseView {
     static propTypes = {
         consultationScheduleId: PropTypes.number,
-        messageClose: PropTypes.func.isRequired
+        messageClose: PropTypes.func.isRequired,
+        modalStatus: PropTypes.func.isRequired
     }
 
     constructor(props) {
@@ -96,11 +98,12 @@ class AddEditConsultationSchedule extends BaseView {
     }
 
     render() {
+        const {classes, messageClose, modalStatus} = this.props;
+        if (modalStatus !== ModalStatus.OPENED) return null;
+
         const {getScheduleCall, saveScheduleCall, schedule} = this.state;
         if (ServerCall.noCallOrWait(getScheduleCall))
             return this.renderForErrorOrWait(getScheduleCall);
-
-        const {classes, messageClose} = this.props;
 
         return <ModalContainerView titleKey={schedule.isNew() ? "create-new-schedule" : "edit-schedule-title"}>
             <Box>
@@ -111,7 +114,7 @@ class AddEditConsultationSchedule extends BaseView {
                                        label={i18n.t("schedule-title")} value={schedule.title}
                                        onChange={this.getStateFieldValueChangedHandler("schedule", "title")}/>
 
-                            <TextField name="totalSlots" required className={`${classes.addConsultationScheduleField}`}
+                            <TextField name="totalSlots" className={`${classes.addConsultationScheduleField}`}
                                        label={i18n.t("total-slots")} value={schedule.totalSlots}
                                        type="number"
                                        onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>

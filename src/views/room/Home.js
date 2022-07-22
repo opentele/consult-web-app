@@ -25,7 +25,7 @@ const styles = theme => ({
     createRoomSchedule: {
         position: 'absolute',
         width: 160,
-        right: 220
+        right: 225
     },
     createRoomIcon: {
         marginRight: 10
@@ -77,8 +77,8 @@ class Home extends BaseView {
             <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
             <ContainerView activeTab="home">
-                {scheduleConsultationRoom === ModalStatus.OPENED && <AddEditConsultationSchedule
-                    messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>}
+                <AddEditConsultationSchedule modalStatus={scheduleConsultationRoom}
+                    messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>
                 <br/>
                 <Tabs value={tabIndex} onChange={this.onTabChange()}>
                     <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>

@@ -19,19 +19,21 @@ class BaseView extends Component {
     }
 
     getValueChangedHandler(fieldName) {
-        return (e) => {
-            const newState = {...this.state};
-            newState[fieldName] = e.target.value;
-            this.updateState(newState);
-        }
+        return (e) => this.onValueChange(fieldName, e);
+    }
+    onValueChange(fieldName, e) {
+        const newState = {...this.state};
+        newState[fieldName] = e.target.value;
+        this.updateState(newState);
     }
 
     getCheckboxCheckedChangeHandler(fieldName) {
-        return (e) => {
-            const newState = {...this.state};
-            newState[fieldName] = e.target.checked;
-            this.updateState(newState);
-        }
+        return (e) => this.onCheckboxCheckChange(fieldName, e);
+    }
+    onCheckboxCheckChange(fieldName, e) {
+        const newState = {...this.state};
+        newState[fieldName] = e.target.checked;
+        this.updateState(newState);
     }
 
     updateState(newState) {
@@ -39,11 +41,8 @@ class BaseView extends Component {
     }
 
     getStateFieldValueChangedHandler(stateFieldName, subFieldName) {
-        return (e) => {
-            this.onStateFieldValueChange(stateFieldName, subFieldName, e);
-        }
+        return (e) => this.onStateFieldValueChange(stateFieldName, subFieldName, e);
     }
-
     onStateFieldValueChange(stateFieldName, subFieldName, e) {
         const newState = {...this.state};
         newState[stateFieldName][subFieldName] = e.target.value;
@@ -68,13 +67,14 @@ class BaseView extends Component {
     }
 
     getModalCloseHandler(stateField) {
-        return (saved) => {
-            let newState = {...this.state};
-            newState[stateField] = saved ? ModalStatus.CLOSED_WITH_SAVE : ModalStatus.CLOSED_WITHOUT_SAVE;
-            this.setState(newState);
-            if (saved)
-                this.refresh();
-        }
+        return (saved) => this.onModalClose(stateField, saved);
+    }
+    onModalClose(stateField, saved) {
+        let newState = {...this.state};
+        newState[stateField] = saved ? ModalStatus.CLOSED_WITH_SAVE : ModalStatus.CLOSED_WITHOUT_SAVE;
+        this.setState(newState);
+        if (saved)
+            this.refresh();
     }
 
     refresh() {
@@ -88,15 +88,16 @@ class BaseView extends Component {
     }
 
     getEntitySavedHandler(serverCallName = "serverCall") {
-        return (response) => {
-            const serverCall = ServerCall.responseReceived(this.state[serverCallName], response);
-            if (serverCall.callStatus === ServerCallStatus.FAILURE) {
-                let newState = {...this.state};
-                newState[serverCallName] = serverCall;
-                this.setState(newState);
-            } else
-                this.props.messageClose(true);
-        }
+        return (response) => this.onEntitySave(serverCallName, response);
+    }
+    onEntitySave(serverCallName, response) {
+        const serverCall = ServerCall.responseReceived(this.state[serverCallName], response);
+        if (serverCall.callStatus === ServerCallStatus.FAILURE) {
+            let newState = {...this.state};
+            newState[serverCallName] = serverCall;
+            this.setState(newState);
+        } else
+            this.props.messageClose(true);
     }
 
     makeServerCall(promise, serverCallName = "serverCall") {

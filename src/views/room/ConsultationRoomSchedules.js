@@ -68,8 +68,9 @@ class ConsultationRoomSchedules extends BaseView {
         const consultationRoomSchedules = ServerCall.getData(getSchedulesCall).map((x) => ConsultationRoomSchedule.fromServerResource(x));
 
         return <Box className={classes.crsRooms}>
-            {editScheduleStatus === ModalStatus.OPENED && <AddEditConsultationSchedule
-                consultationScheduleId={currentScheduleId} messageClose={this.getModalCloseHandler("editScheduleStatus")}/>}
+            <AddEditConsultationSchedule modalStatus={editScheduleStatus}
+                                         consultationScheduleId={currentScheduleId}
+                                         messageClose={this.getModalCloseHandler("editScheduleStatus")}/>
 
             {consultationRoomSchedules.map((consultationRoomSchedule) => {
                 return <Card raised={true} elevation={3} className={classes.crsConferenceBox} key={consultationRoomSchedule.id}>
