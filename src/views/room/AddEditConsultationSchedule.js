@@ -58,7 +58,7 @@ class AddEditConsultationSchedule extends BaseView {
     static propTypes = {
         consultationScheduleId: PropTypes.number,
         messageClose: PropTypes.func.isRequired,
-        modalStatus: PropTypes.func.isRequired
+        modalStatus: PropTypes.symbol.isRequired
     }
 
     constructor(props) {

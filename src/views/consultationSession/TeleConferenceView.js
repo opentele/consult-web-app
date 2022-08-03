@@ -18,7 +18,7 @@ class TeleConferenceView extends BaseView {
         super(props);
         this.state = {
             getTeleConferenceRoomCall: ServerCall.createInitial(),
-            consultationRoom: ConsultationRoom.emptyInstance()
+            consultationRoom: ConsultationRoom.newRoom()
         };
     }
 

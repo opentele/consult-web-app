@@ -6,7 +6,7 @@ import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
 import Provider from "./Provider";
 import Appointment from "./Appointment";
-import {ServerCall} from "react-app-common";
+import {DateTimeUtil, ServerCall} from "react-app-common";
 
 class ConsultationRoom extends AbstractEntity {
     title;
@@ -22,10 +22,13 @@ class ConsultationRoom extends AbstractEntity {
     appointments;
     activeTeleConferenceId;
 
-    static emptyInstance() {
+    static newRoom() {
         const consultationRoom = new ConsultationRoom();
         consultationRoom.providers = [];
         consultationRoom.appointments = [];
+        consultationRoom.scheduledOn = DateTimeUtil.today();
+        consultationRoom.scheduledStartTime = DateTimeUtil.time();
+        consultationRoom.scheduledEndTime = DateTimeUtil.time(moment().add(2, "hours"));
         return consultationRoom;
     }
 

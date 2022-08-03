@@ -1,4 +1,5 @@
 import ServiceUtil from "./ServiceUtil";
+import EntityCollection from "../domain/EntityCollection";
 
 class ConsultationRoomService {
     static getTodayRooms() {
@@ -30,10 +31,12 @@ class ConsultationRoomService {
     }
 
     static createUpdateRoom(consultationRoom) {
+        const roomRequest = {...consultationRoom};
+        roomRequest.providers = EntityCollection.getIds(consultationRoom.providers);
         if (consultationRoom.id !== 0)
-            return ServiceUtil.postJson("consultationRoom", consultationRoom);
+            return ServiceUtil.postJson("consultationRoom", roomRequest);
 
-        return ServiceUtil.putJson("consultationRoom", consultationRoom);
+        return ServiceUtil.putJson("consultationRoom", roomRequest);
     }
 
     static getClientsByConsultationRoom(consultationRoomId) {

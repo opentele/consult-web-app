@@ -74,10 +74,10 @@ class BaseView extends Component {
         newState[stateField] = saved ? ModalStatus.CLOSED_WITH_SAVE : ModalStatus.CLOSED_WITHOUT_SAVE;
         this.setState(newState);
         if (saved)
-            this.refresh();
+            this.refresh(stateField);
     }
 
-    refresh() {
+    refresh(stateFieldChanged) {
         throw new Error("Must be implemented");
     }
 

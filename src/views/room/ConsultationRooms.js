@@ -59,7 +59,8 @@ class ConsultationRooms extends BaseView {
     }
 
     static props = {
-        type: PropTypes.string.isRequired
+        type: PropTypes.string.isRequired,
+        updateIndex: PropTypes.number.isRequired
     };
 
     componentDidMount() {
@@ -88,7 +89,7 @@ class ConsultationRooms extends BaseView {
 
     render() {
         const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList} = this.state;
-        const {classes} = this.props;
+        const {classes, updateIndex} = this.props;
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
 
@@ -96,7 +97,7 @@ class ConsultationRooms extends BaseView {
             return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
         }
 
-        return <Box className={classes.rooms}>
+        return <Box className={classes.rooms} key={updateIndex}>
             {
                 consultationRooms.map((consultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
@@ -145,8 +146,8 @@ class ConsultationRooms extends BaseView {
                                    autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                         {viewClientsModalStatus === ModalStatus.OPENED &&
                         <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
-                        {editConsultationRoomStatus === ModalStatus.OPENED &&
-                        <CreateEditConsultationRoom roomId={consultationRoom.id} messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
+                        <CreateEditConsultationRoom modalStatus={editConsultationRoomStatus} roomId={consultationRoom.id}
+                                                    messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>
                     </Card>
                 })
             }

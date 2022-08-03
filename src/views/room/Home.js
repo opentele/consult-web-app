@@ -15,6 +15,8 @@ import NoOrganisationView from "../access/NoOrganisationView";
 import _ from 'lodash';
 import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 import ModalStatus from "../framework/ModalStatus";
+import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
+import TabState from "../../state/TabState";
 
 const styles = theme => ({
     createRoom: {
@@ -36,27 +38,13 @@ class Home extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
-        this.state = {consultationRooms: [], tabIndex: 1, scheduleConsultationRoom: ModalStatus.NOT_OPENED};
+        this.state = {tabState: TabState.initialState(1, ["past", "today", "future", "schedules"]), scheduleConsultationRoom: ModalStatus.NOT_OPENED, createConsultationRoom: ModalStatus.NOT_OPENED};
         this.tabComponents = {
-            0: () => <ConsultationRooms type="past"/>,
-            1: () => <ConsultationRooms type="today"/>,
-            2: () => <ConsultationRooms type="future"/>,
-            3: () => <ConsultationRoomSchedules/>
+            0: (updateIndex) => <ConsultationRooms type="past" updateIndex={updateIndex}/>,
+            1: (updateIndex) => <ConsultationRooms type="today" updateIndex={updateIndex}/>,
+            2: (updateIndex) => <ConsultationRooms type="future" updateIndex={updateIndex}/>,
+            3: (updateIndex) => <ConsultationRoomSchedules updateIndex={updateIndex}/>
         }
-    }
-
-    componentDidMount() {
-        this.getActiveRooms();
-    }
-
-    getActiveRooms() {
-
-    }
-
-    getAllConsultationSchedules() {
-        return BeanContainer.get(ConsultationRoomService).getConsultationSchedules().then((response) => {
-            this.setState({consultationSchedules: response.data});
-        });
     }
 
     static propTypes = {
@@ -64,29 +52,35 @@ class Home extends BaseView {
         user: PropTypes.object.isRequired
     };
 
-    onTabChange() {
-        return (event, tabId) => {
-            this.setState({tabIndex: tabId, busy: true});
-        }
+    onTabChange(tabId) {
+        this.state.tabState.tabIndex = tabId;
+        this.setState({tabState: this.state.tabState.clone(), busy: true});
+    }
+
+    refresh(stateFieldChanged) {
+        this.state.tabState.tabDataChanged();
+        this.setState({tabState: this.state.tabState.clone()});
     }
 
     render() {
         const {classes} = this.props;
-        const {tabIndex, scheduleConsultationRoom} = this.state;
+        const {tabState, scheduleConsultationRoom, createConsultationRoom} = this.state;
         return _.isEmpty(GlobalContext.getOrganisation()) ?
             <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
             <ContainerView activeTab="home">
                 <AddEditConsultationSchedule modalStatus={scheduleConsultationRoom}
                     messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>
+                <CreateEditConsultationRoom modalStatus={createConsultationRoom}
+                                            messageClose={this.getModalCloseHandler("createConsultationRoom")}/>
                 <br/>
-                <Tabs value={tabIndex} onChange={this.onTabChange()}>
+                <Tabs value={tabState.tabIndex} onChange={(event, tabId) => this.onTabChange(tabId)}>
                     <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
                     <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
                     <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
                     <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-rooms')}/>
                     <Fab variant="extended" size="medium" className={classes.createRoom}
-                         onClick={() => this.onModalOpen("oneTimeConsultationRoomStatus")}>
+                         onClick={() => this.onModalOpen("createConsultationRoom")}>
                         <AddCircle className={classes.createRoomIcon}/>
                         {i18n.t('start-new-room')}
                     </Fab>
@@ -96,7 +90,7 @@ class Home extends BaseView {
                         {i18n.t('schedule')}
                     </Fab>
                 </Tabs>
-                {this.tabComponents[tabIndex]()}
+                {this.tabComponents[tabState.tabIndex](tabState.getCurrentUpdateIndex())}
             </ContainerView>;
     }
 }

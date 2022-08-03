@@ -13,6 +13,8 @@ import WaitBackdrop from "../../components/WaitBackdrop";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import EditProviders from "../../components/consultation/EditProviders";
+import ModalStatus from "../framework/ModalStatus";
+import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 
 const styles = theme => ({
     cecrContainer: {
@@ -57,23 +59,28 @@ class CreateEditConsultationRoom extends BaseView {
         super(props);
         this.state = {
             getRoomServerCall: ServerCall.createInitial(),
-            saveRoomServerCall: ServerCall.createInitial(),
-            room: ConsultationRoom.emptyInstance()
+            saveRoomServerCall: ServerCall.createInitial()
         };
     }
 
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
-        roomId: PropTypes.number.isRequired
+        roomId: PropTypes.number,
+        modalStatus: PropTypes.symbol.isRequired
     }
 
     componentDidMount() {
-        this.makeServerCall(ConsultationRoomService.getRoom(this.props.roomId), "getRoomServerCall");
+        const {roomId} = this.props;
+        this.loadEntity(roomId,
+            () => ConsultationRoomService.getRoom(this.props.roomId),
+            "getRoomServerCall", ConsultationRoom.newRoom());
     }
 
     updateServerResponseState(newState, serverCallName) {
-        if (serverCallName === "getRoomServerCall")
-            newState.room = ConsultationRoom.entityFromServerCall(newState.getRoomServerCall);
+        if (serverCallName === "getRoomServerCall") {
+            const data = ServerCall.getData(newState.getRoomServerCall);
+            newState.room = ServerCall.isWasNotNeeded(newState.getRoomServerCall) ? data : ConsultationRoom.fromServerResource(data);
+        }
         this.setState(newState);
     }
 
@@ -88,11 +95,20 @@ class CreateEditConsultationRoom extends BaseView {
         }
     }
 
+    onSave() {
+        const service = BeanContainer.get(ConsultationRoomService);
+        return this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall")
+            .then(this.getEntitySavedHandler("saveRoomServerCall"));
+    }
+
     render() {
         const {
             classes,
-            messageClose
+            messageClose,
+            modalStatus
         } = this.props;
+        if (modalStatus !== ModalStatus.OPENED) return null;
+
         const {
             saveRoomServerCall,
             getRoomServerCall,
@@ -150,16 +166,11 @@ class CreateEditConsultationRoom extends BaseView {
                     <EditProviders containerClassName={classes.cercProviders} providers={room.providers}
                                    onUpdate={this.getProviderUpdatedHandler()}/>
                     <ServerErrorMessage serverCall={saveRoomServerCall}/>
-                    <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
+                    <SaveCancelButtons onSaveHandler={() => this.onSave()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
                 </Box>
             </FormControl>
             {ServerCall.noCallOrWait(getRoomServerCall) && <WaitBackdrop/>}
         </ModalContainerView>;
-    }
-
-    getSaveHandler() {
-        let service = BeanContainer.get(ConsultationRoomService);
-        return () => this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall");
     }
 }
 
