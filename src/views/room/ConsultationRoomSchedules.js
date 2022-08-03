@@ -77,7 +77,7 @@ class ConsultationRoomSchedules extends BaseView {
                     <CardContent>
                         <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                             <Box sx={{display: "flex", flexDirection: "column"}}>
-                                <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
+                                <Box sx={{display: "flex", flexDirection: "row", marginBottom: 5}}>
                                     <Typography variant="h4">{consultationRoomSchedule.title}</Typography>
                                     <IconButton>
                                         <Edit onClick={this.getEditSchedulesOpenHandler(consultationRoomSchedule)}/>
@@ -89,7 +89,7 @@ class ConsultationRoomSchedules extends BaseView {
                             </Box>
                             <Box>
                                 <Box>
-                                    {consultationRoomSchedule.providers.map((provider) => <Chip label={provider.name} color="primary"/>)}
+                                    {consultationRoomSchedule.providers.map((provider) => <Chip label={provider.name} color="primary" style={{marginRight: 8}}/>)}
                                 </Box>
                             </Box>
                         </Box>

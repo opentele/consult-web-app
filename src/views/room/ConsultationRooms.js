@@ -105,7 +105,7 @@ class ConsultationRooms extends BaseView {
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
-                                    <Box sx={{display: "flex", flexDirection: "row", marginBottom: 15}}>
+                                    <Box sx={{display: "flex", flexDirection: "row"}}>
                                         <Typography variant="h4">{consultationRoom.getDisplayTitle()}</Typography>
                                         <IconButton onClick={() => this.onModalOpen("editConsultationRoomStatus")}>
                                             <Edit/>
@@ -120,7 +120,8 @@ class ConsultationRooms extends BaseView {
                                 </Box>
                                 <Box>
                                     <Box>
-                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary" key={provider.id}/>)}
+                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary"
+                                                                                            key={provider.id} style={{marginRight: 8}}/>)}
                                     </Box>
                                     <Box sx={{display: "flex", flexDirection: "column"}}>
                                         {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
@@ -131,11 +132,11 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
-                            <Button variant="contained" color="inherit" className={classes.crButton}
+                            <Button variant="contained" color={"secondary"} className={classes.crButton}
                                     onClick={() => this.onModalOpen("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
                             {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
-                                    color="inherit">{i18n.t("view-clients")}</Button>}
+                                    color="secondary">{i18n.t("view-clients")}</Button>}
                             {consultationRoom.canJoinConference() &&
                             <Button variant="contained" color="primary" className={classes.crButton}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
