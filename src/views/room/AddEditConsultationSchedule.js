@@ -94,7 +94,7 @@ class AddEditConsultationSchedule extends BaseView {
 
     onSave() {
         this.makeServerCall(ConsultationRoomScheduleService.save(this.state.schedule), "saveScheduleCall")
-            .then(this.getEntitySavedHandler("saveScheduleCall"));
+            .then(this.onEntitySave("saveScheduleCall"));
     }
 
     render() {

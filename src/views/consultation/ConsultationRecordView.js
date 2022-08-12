@@ -78,13 +78,12 @@ class ConsultationRecordView extends BaseView {
         }
     }
 
-    getSaveHandler() {
-        return (e) => {
-            if (!this.validate()) {
-                return;
-            }
-            ConsultationSessionRecordService.save(this.state.consultation, this.props.client).then(this.getEntitySavedHandler("saveRecordCall"));
+    onSave() {
+        if (!this.validate()) {
+            return;
         }
+        this.makeServerCall(ConsultationSessionRecordService.save(this.state.consultation, this.props.client), "saveRecordCall")
+            .then(this.onEntitySave("saveRecordCall"));
     }
 
     validate() {
@@ -152,7 +151,7 @@ class ConsultationRecordView extends BaseView {
                                   onUploadInProgress={() => this.setState({uploadInProgress: true})}/>
             </Box>
             <ServerErrorMessage serverCall={saveRecordCall} className={classes.crvFieldBox}/>
-            <SaveCancelButtons onSaveHandler={this.getSaveHandler()} serverCall={saveRecordCall}
+            <SaveCancelButtons onSaveHandler={() => this.onSave()} serverCall={saveRecordCall}
                                onCancelHandler={() => this.onCancel()}/>
         </Box>;
     }

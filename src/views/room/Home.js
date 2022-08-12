@@ -78,7 +78,7 @@ class Home extends BaseView {
                     <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
                     <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
                     <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
-                    <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-rooms')}/>
+                    <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-scheduled-rooms')}/>
                     <Fab variant="extended" size="medium" className={classes.createRoom}
                          onClick={() => this.onModalOpen("createConsultationRoom")}>
                         <AddCircle className={classes.createRoomIcon}/>

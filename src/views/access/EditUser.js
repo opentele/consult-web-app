@@ -26,11 +26,10 @@ class EditUser extends BaseView {
         messageClose: PropTypes.func.isRequired
     };
 
-    getSaveHandler() {
-        return () => {
-            if (this.state.editUserState.valid)
-                UserService.updateProfile(this.state.editUserState.user).then(this.getEntitySavedHandler("saveCall"));
-        }
+    onSave() {
+        if (this.state.editUserState.valid)
+            this.makeServerCall(UserService.updateProfile(this.state.editUserState.user), "saveCall")
+                .then(this.onEntitySave("saveCall"));
     }
 
     componentDidMount() {
@@ -58,7 +57,7 @@ class EditUser extends BaseView {
         return <ModalContainerView titleKey="edit-user-title" titleObj={{userName: user.name}}>
             <Box style={{padding: 20}}>
                 <EditUserFields user={user} notifyStateChange={this.getEditUserStateChangeHandler()}/>
-                <SaveCancelButtons serverCall={saveCall} disabled={false} onSaveHandler={this.getSaveHandler()} onCancelHandler={messageClose}/>
+                <SaveCancelButtons serverCall={saveCall} disabled={false} onSaveHandler={() => this.onSave()} onCancelHandler={messageClose}/>
             </Box>
         </ModalContainerView>;
     }

@@ -87,17 +87,11 @@ class BaseView extends Component {
         this.setState(newState);
     }
 
-    getEntitySavedHandler(serverCallName = "serverCall") {
-        return (response) => this.onEntitySave(serverCallName, response);
-    }
-    onEntitySave(serverCallName, response) {
-        const serverCall = ServerCall.responseReceived(this.state[serverCallName], response);
-        if (serverCall.callStatus === ServerCallStatus.FAILURE) {
-            let newState = {...this.state};
-            newState[serverCallName] = serverCall;
-            this.setState(newState);
-        } else
+    onEntitySave(serverCallName) {
+        const serverCall = ServerCall.responseReceived(this.state[serverCallName]);
+        if (serverCall.callStatus !== ServerCallStatus.FAILURE) {
             this.props.messageClose(true);
+        }
     }
 
     makeServerCall(promise, serverCallName = "serverCall") {

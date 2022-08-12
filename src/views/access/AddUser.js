@@ -60,8 +60,9 @@ class AddUser extends BaseView {
         autocompletePlaceholderMessageKey: PropTypes.string.isRequired
     };
 
-    getAddUserHandler() {
-        return () => this.makeServerCall(UserService.addUser(this.state.userState.user)).then(this.getEntitySavedHandler("saveServerCall"));
+    onAddUser() {
+        return this.makeServerCall(UserService.addUser(this.state.userState.user, "saveServerCall"))
+            .then(this.onEntitySave("saveServerCall"));
     }
 
     getCheckUserHandler() {
@@ -113,7 +114,7 @@ class AddUser extends BaseView {
                     <Box className={classes.auButtons}>
                         <CancelButton onClickHandler={messageClose}/>
                         {aUserToAddFound &&
-                        <Button variant="contained" color="primary" onClick={this.getAddUserHandler()}
+                        <Button variant="contained" color="primary" onClick={() => this.onAddUser()}
                                 className={classes.auAddButton}>{i18n.t("add-button")}</Button>}
                     </Box>
                     <ServerErrorMessage serverCall={saveServerCall} className={classes.auServerAlert}/>

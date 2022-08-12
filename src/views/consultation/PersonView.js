@@ -54,13 +54,12 @@ class PersonView extends BaseView {
         return this.getStateFieldValueChangedHandler("client", fieldName);
     }
 
-    getSaveHandler() {
-        return (e) => {
-            if (!this.validate()) {
-                return;
-            }
-            ClientService.save(this.state.client).then(this.getEntitySavedHandler("saveClientCall"));
+    onSave() {
+        if (!this.validate()) {
+            return;
         }
+        this.makeServerCall(ClientService.save(this.state.client), "saveClientCall")
+            .then(this.onEntitySave("saveClientCall"));
     }
 
     validate() {
@@ -148,7 +147,7 @@ class PersonView extends BaseView {
                             />
                         </Box>
                         <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
-                        <SaveCancelButtons className={classes.pvSaveCancelButtons} disabled={false} onSaveHandler={this.getSaveHandler()} serverCall={saveClientCall}
+                        <SaveCancelButtons className={classes.pvSaveCancelButtons} disabled={false} onSaveHandler={() => this.onSave()} serverCall={saveClientCall}
                                            onCancelHandler={messageClose}/>
                     </Box>
                 </FormControl>}

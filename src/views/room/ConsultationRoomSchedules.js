@@ -36,7 +36,6 @@ class ConsultationRoomSchedules extends BaseView {
         this.state = {
             getSchedulesCall: ServerCall.createInitial([]),
             viewRooms: ServerCall.createInitial([]),
-            addScheduleStatus: ModalStatus.NOT_OPENED,
             editScheduleStatus: ModalStatus.NOT_OPENED,
             viewRoomsStatus: ModalStatus.NOT_OPENED
         };
@@ -59,7 +58,7 @@ class ConsultationRoomSchedules extends BaseView {
     }
 
     render() {
-        const {getSchedulesCall, addScheduleStatus, editScheduleStatus, viewRoomsStatus, currentScheduleId} = this.state;
+        const {getSchedulesCall, editScheduleStatus, viewRoomsStatus, currentScheduleId} = this.state;
         const {classes} = this.props;
 
         if (ServerCall.noCallOrWait(getSchedulesCall)) {

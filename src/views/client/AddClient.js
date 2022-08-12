@@ -25,8 +25,9 @@ class AddClient extends BaseView {
         autocompletePlaceholderMessageKey: PropTypes.string.isRequired
     };
 
-    getAddClientHandler() {
-        return () => BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client.id).then(this.getEntitySavedHandler());
+    onAddClient() {
+        return this.makeServerCall(BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client.id))
+            .then(this.onEntitySave());
     }
 
     selectClientHandler = (client) => {
@@ -41,7 +42,7 @@ class AddClient extends BaseView {
             <SearchEntities entitySelected={this.selectClientHandler} searchFn={(q) => ConsultationRoomService.searchClients(q, consultationRoom.id)}
                             displayFn={Client.displayName}
                             autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
-            <AddEntity messageClose={messageClose} addEntityHandler={this.getAddClientHandler()} entity={client} serverCall={serverCall}/>
+            <AddEntity messageClose={messageClose} addEntityHandler={() => this.onAddClient()} entity={client} serverCall={serverCall}/>
         </ModalContainerView>;
     }
 }

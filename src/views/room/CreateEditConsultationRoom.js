@@ -98,7 +98,7 @@ class CreateEditConsultationRoom extends BaseView {
     onSave() {
         const service = BeanContainer.get(ConsultationRoomService);
         return this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall")
-            .then(this.getEntitySavedHandler("saveRoomServerCall"));
+            .then(this.onEntitySave("saveRoomServerCall"));
     }
 
     render() {
@@ -114,11 +114,6 @@ class CreateEditConsultationRoom extends BaseView {
             getRoomServerCall,
             room
         } = this.state;
-
-        if (saveRoomServerCall.callStatus === ServerCallStatus.SUCCESS) {
-            messageClose(true);
-            return null;
-        }
 
         return <ModalContainerView titleKey={room.isNew() ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
             <FormControl>
