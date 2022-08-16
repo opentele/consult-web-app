@@ -38,12 +38,16 @@ class Home extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.setState = this.setState.bind(this);
-        this.state = {tabState: TabState.initialState(1, ["past", "today", "future", "schedules"]), scheduleConsultationRoom: ModalStatus.NOT_OPENED, createConsultationRoom: ModalStatus.NOT_OPENED};
+        this.state = {
+            tabState: TabState.initialState(1, ["past", "today", "future", "schedules"]),
+            scheduleConsultationRoom: ModalStatus.NOT_OPENED,
+            createConsultationRoom: ModalStatus.NOT_OPENED
+        };
         this.tabComponents = {
-            0: (updateIndex) => <ConsultationRooms type="past" updateIndex={updateIndex}/>,
-            1: (updateIndex) => <ConsultationRooms type="today" updateIndex={updateIndex}/>,
-            2: (updateIndex) => <ConsultationRooms type="future" updateIndex={updateIndex}/>,
-            3: (updateIndex) => <ConsultationRoomSchedules updateIndex={updateIndex}/>
+            0: (updateIndex) => <ConsultationRooms type="past" key={updateIndex}/>,
+            1: (updateIndex) => <ConsultationRooms type="today" key={updateIndex}/>,
+            2: (updateIndex) => <ConsultationRooms type="future" key={updateIndex}/>,
+            3: (updateIndex) => <ConsultationRoomSchedules key={updateIndex}/>
         }
     }
 
@@ -53,7 +57,7 @@ class Home extends BaseView {
     };
 
     onTabChange(tabId) {
-        this.state.tabState.tabIndex = tabId;
+        this.state.tabState.tabChanged(tabId);
         this.setState({tabState: this.state.tabState.clone(), busy: true});
     }
 
@@ -65,14 +69,20 @@ class Home extends BaseView {
     render() {
         const {classes} = this.props;
         const {tabState, scheduleConsultationRoom, createConsultationRoom} = this.state;
+        const getTabComponent = this.tabComponents[tabState.tabIndex];
+        const key = tabState.getCurrentUpdateIndex();
+
+        console.log("Home", createConsultationRoom.toString());
+
         return _.isEmpty(GlobalContext.getOrganisation()) ?
             <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
             <ContainerView activeTab="home">
-                <AddEditConsultationSchedule modalStatus={scheduleConsultationRoom}
-                    messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>
-                <CreateEditConsultationRoom modalStatus={createConsultationRoom}
-                                            messageClose={this.getModalCloseHandler("createConsultationRoom")}/>
+                {scheduleConsultationRoom === ModalStatus.OPENED &&
+                <AddEditConsultationSchedule messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>}
+
+                {createConsultationRoom === ModalStatus.OPENED && <CreateEditConsultationRoom
+                    messageClose={this.getModalCloseHandler("createConsultationRoom")}/>}
                 <br/>
                 <Tabs value={tabState.tabIndex} onChange={(event, tabId) => this.onTabChange(tabId)}>
                     <Tab icon={<IconButton><History/></IconButton>} label={i18n.t('past-consultations')}/>
@@ -90,7 +100,7 @@ class Home extends BaseView {
                         {i18n.t('schedule')}
                     </Fab>
                 </Tabs>
-                {this.tabComponents[tabState.tabIndex](tabState.getCurrentUpdateIndex())}
+                {getTabComponent(key)}
             </ContainerView>;
     }
 }

@@ -59,12 +59,11 @@ class ConsultationRooms extends BaseView {
     }
 
     static props = {
-        type: PropTypes.string.isRequired,
-        updateIndex: PropTypes.number.isRequired
+        type: PropTypes.string.isRequired
     };
 
     componentDidMount() {
-        this.makeServerCall(this.serviceMethod(), "getRoomsCall");
+        this.refresh();
     }
 
     refresh() {
@@ -89,15 +88,17 @@ class ConsultationRooms extends BaseView {
 
     render() {
         const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList} = this.state;
-        const {classes, updateIndex} = this.props;
+        const {classes} = this.props;
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
+
+        console.log("ConsultationRooms", editConsultationRoomStatus.toString());
 
         if (setupTeleConferenceCall.callStatus === ServerCallStatus.SUCCESS) {
             return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
         }
 
-        return <Box className={classes.rooms} key={updateIndex}>
+        return <Box className={classes.rooms}>
             {
                 consultationRooms.map((consultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
@@ -145,13 +146,17 @@ class ConsultationRooms extends BaseView {
                         {addClientModalStatus === ModalStatus.OPENED &&
                         <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
                                    autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
-                        {viewClientsModalStatus === ModalStatus.OPENED &&
-                        <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
-                        <CreateEditConsultationRoom modalStatus={editConsultationRoomStatus} roomId={consultationRoom.id}
-                                                    messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>
+
+                        {viewClientsModalStatus === ModalStatus.OPENED && <ConsultationRoomClientsView
+                            messageClose={this.getModalCloseHandler("viewClientsModalStatus")}
+                            clientList={clientList}/>}
+                        {editConsultationRoomStatus === ModalStatus.OPENED &&
+                        <CreateEditConsultationRoom roomId={consultationRoom.id}
+                                                    messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
                     </Card>
                 })
             }
+            <br/>
         </Box>;
     }
 

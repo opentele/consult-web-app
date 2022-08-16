@@ -1,4 +1,5 @@
 import React from "react";
+import _ from 'lodash';
 import {withStyles} from '@mui/styles';
 import {Box, FormControl, TextField} from '@mui/material';
 import FormLabel from "../../components/FormLabel";
@@ -6,15 +7,13 @@ import BaseView from "../framework/BaseView";
 import moment from "moment";
 import ModalContainerView from "../framework/ModalContainerView";
 import PropTypes from "prop-types";
-import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
+import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import WaitBackdrop from "../../components/WaitBackdrop";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import EditProviders from "../../components/consultation/EditProviders";
-import ModalStatus from "../framework/ModalStatus";
-import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 
 const styles = theme => ({
     cecrContainer: {
@@ -65,8 +64,7 @@ class CreateEditConsultationRoom extends BaseView {
 
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
-        roomId: PropTypes.number,
-        modalStatus: PropTypes.symbol.isRequired
+        roomId: PropTypes.number
     }
 
     componentDidMount() {
@@ -104,10 +102,8 @@ class CreateEditConsultationRoom extends BaseView {
     render() {
         const {
             classes,
-            messageClose,
-            modalStatus
+            messageClose
         } = this.props;
-        if (modalStatus !== ModalStatus.OPENED) return null;
 
         const {
             saveRoomServerCall,
@@ -115,9 +111,12 @@ class CreateEditConsultationRoom extends BaseView {
             room
         } = this.state;
 
+        if (_.isNil(room)) return null;
+
         return <ModalContainerView titleKey={room.isNew() ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
-            <FormControl>
-                <Box className={classes.cecrContainer}>
+
+            <Box className={classes.cecrContainer}>
+                <FormControl>
                     <Box className={classes.cercFirstField}>
                         <FormLabel textKey="room-name"/>
                         <TextField
@@ -162,8 +161,9 @@ class CreateEditConsultationRoom extends BaseView {
                                    onUpdate={this.getProviderUpdatedHandler()}/>
                     <ServerErrorMessage serverCall={saveRoomServerCall}/>
                     <SaveCancelButtons onSaveHandler={() => this.onSave()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
-                </Box>
-            </FormControl>
+                </FormControl>
+            </Box>
+
             {ServerCall.noCallOrWait(getRoomServerCall) && <WaitBackdrop/>}
         </ModalContainerView>;
     }

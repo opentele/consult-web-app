@@ -94,6 +94,9 @@ class BaseView extends Component {
         }
     }
 
+    resetModalState() {
+    }
+
     makeServerCall(promise, serverCallName = "serverCall") {
         const x = promise.then((response) => {
             this.serverResponseReceived(response, serverCallName);

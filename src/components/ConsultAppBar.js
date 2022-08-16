@@ -64,13 +64,11 @@ class ConsultAppBar extends BaseView {
         return (event) => this.setState({anchorElNav: null});
     }
 
-    getOpenProfileHandler() {
-        return () => {
-            let newState = {};
-            newState["profileOpenStatus"] = ModalStatus.OPENED;
-            newState["anchorElUser"] = null;
-            this.setState(newState);
-        };
+    onOpenProfile() {
+        let newState = {};
+        newState["profileOpenStatus"] = ModalStatus.OPENED;
+        newState["anchorElUser"] = null;
+        this.setState(newState);
     }
 
     handleCloseUserMenu() {
@@ -123,7 +121,7 @@ class ConsultAppBar extends BaseView {
                                   }}
                                   open={Boolean(this.state.anchorElUser)}
                                   onClose={this.handleCloseUserMenu()}>
-                                <MenuItem key='profile' onClick={this.getOpenProfileHandler()}>
+                                <MenuItem key='profile' onClick={() => this.onOpenProfile()}>
                                     <Typography>Profile</Typography>
                                 </MenuItem>
                                 <MenuItem key='logout' onClick={this.logoutHandler()}>

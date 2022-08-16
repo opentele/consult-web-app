@@ -57,8 +57,7 @@ const styles = (theme) => ({
 class AddEditConsultationSchedule extends BaseView {
     static propTypes = {
         consultationScheduleId: PropTypes.number,
-        messageClose: PropTypes.func.isRequired,
-        modalStatus: PropTypes.symbol.isRequired
+        messageClose: PropTypes.func.isRequired
     }
 
     constructor(props) {
@@ -98,8 +97,7 @@ class AddEditConsultationSchedule extends BaseView {
     }
 
     render() {
-        const {classes, messageClose, modalStatus} = this.props;
-        if (modalStatus !== ModalStatus.OPENED) return null;
+        const {classes, messageClose} = this.props;
 
         const {getScheduleCall, saveScheduleCall, schedule} = this.state;
         if (ServerCall.noCallOrWait(getScheduleCall))

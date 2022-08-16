@@ -6,6 +6,7 @@ import {Box, Button} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ModalContainerView from "../framework/ModalContainerView";
 import BaseView from "../framework/BaseView";
+import ModalStatus from "../framework/ModalStatus";
 
 const styles = theme => ({
     viewClientsButtons: {
@@ -30,6 +31,7 @@ class ConsultationRoomClientsView extends BaseView {
 
     render() {
         const {classes, clientList, messageClose} = this.props;
+
         return <ModalContainerView titleKey="view-clients-title">
             <ClientList clientList={clientList} displayQueueNumber={true} displayNumberOfSessions={false}/>
             <Box className={classes.viewClientsButtons}>
