@@ -11,7 +11,7 @@ class Provider extends AbstractEntity {
     }
 
     static fromResource(resource) {
-        return AbstractEntity.copyFields(resource, new Provider(), ["name", "providerClientDisplay"]);
+        return AbstractEntity.copyFields(resource, new Provider(), ["id", "name", "providerClientDisplay"]);
     }
 }
 
