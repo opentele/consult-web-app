@@ -1,7 +1,7 @@
 import './App.css';
 import Welcome from "./views/Welcome";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {i18nPromise, User, UserService} from "consult-app-common";
+import {i18n, i18nPromise, User, UserService} from "consult-app-common";
 import {CircularProgress, CssBaseline, ThemeProvider} from "@mui/material";
 import RegisterOrganisation from "./views/RegisterOrganisation";
 import {createTheme} from '@mui/material';
@@ -27,13 +27,14 @@ export default class App extends Component {
         super(props);
         this.state = {
             isLoggedInServerCall: ServerCall.createInitial(),
-            getUserServerCall: ServerCall.createInitial(null)
+            getUserServerCall: ServerCall.createInitial(null),
+            i18nLoading: true
         }
         GlobalContext.setLogoutHandler(this.logoutHandler);
     }
 
     componentDidMount() {
-        i18nPromise.then(() => {
+        i18nPromise('en').then(() => {
             UserService.isLoggedIn().then((response) => {
                 const isLoggedInServerCall = ServerCall.responseReceived(this.state.isLoggedInServerCall, response);
                 if (ServerCall.isSuccessful(isLoggedInServerCall)) {
@@ -41,6 +42,12 @@ export default class App extends Component {
                         const getUserServerCall = ServerCall.responseReceived(this.state.getUserServerCall, response);
                         GlobalContext.updateContext(getUserServerCall);
                         this.setState({getUserServerCall: getUserServerCall});
+                    }).then(() => {
+                        const user = GlobalContext.getUser();
+                        if (user.language !== 'en')
+                            return i18n.changeLanguage(user.language);
+                    }).then(() => {
+                        this.setState({i18nLoading: false});
                     });
                 }
                 this.setState({isLoggedInServerCall: isLoggedInServerCall});
@@ -58,8 +65,8 @@ export default class App extends Component {
 
     render() {
         let pathname = window.location.pathname;
-        const {isLoggedInServerCall, getUserServerCall} = this.state;
-        if (this.isWaiting(isLoggedInServerCall, getUserServerCall))
+        const {isLoggedInServerCall, getUserServerCall, i18nLoading} = this.state;
+        if (this.isWaiting(isLoggedInServerCall, getUserServerCall) || i18nLoading)
             return <CircularProgress/>;
 
         if (ServerCall.hasFailed(isLoggedInServerCall) && window.location.pathname !== "/error" && !ServerCall.isForbidden(isLoggedInServerCall))

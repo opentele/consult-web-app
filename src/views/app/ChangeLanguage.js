@@ -38,6 +38,7 @@ class ChangeLanguage extends BaseView {
 
     saveLanguagePreference() {
         this.makeServerCall(UserService.saveLanguagePreference(this.state.user), "saveLanguagePreferenceServerCall")
+            .then(i18n.changeLanguage(this.state.user.language))
             .then(this.onEntitySave("saveLanguagePreferenceServerCall"));
     }
 
