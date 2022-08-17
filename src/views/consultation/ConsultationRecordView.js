@@ -159,6 +159,8 @@ class ConsultationRecordView extends BaseView {
     onCancel() {
         if (this.state.uploadInProgress)
             this.setState({askCancelConfirmation: true});
+        else
+            this.props.messageClose(false);
     }
 }
 

@@ -5,11 +5,12 @@ import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Tool
 import {Home} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
-import {UserService} from "consult-app-common";
+import {i18n, UserService} from "consult-app-common";
 import BaseView from "../views/framework/BaseView";
 import GlobalContext from '../framework/GlobalContext';
 import ModalStatus from "../views/framework/ModalStatus";
 import EditUser from "../views/access/EditUser";
+import ChangeLanguage from "../views/app/ChangeLanguage";
 
 const styles = theme => ({
     toolbar: {
@@ -42,6 +43,7 @@ class ConsultAppBar extends BaseView {
             anchorElNav: null,
             anchorElUser: null,
             profileOpenStatus: ModalStatus.NOT_OPENED,
+            changeLanguageStatus: ModalStatus.NOT_OPENED,
             serverCall: ServerCall.createInitial()
         };
     }
@@ -64,9 +66,9 @@ class ConsultAppBar extends BaseView {
         return (event) => this.setState({anchorElNav: null});
     }
 
-    onOpenProfile() {
-        let newState = {};
-        newState["profileOpenStatus"] = ModalStatus.OPENED;
+    onOpenMenuModal(modalStatusField) {
+        const newState = {};
+        newState[modalStatusField] = ModalStatus.OPENED;
         newState["anchorElUser"] = null;
         this.setState(newState);
     }
@@ -82,12 +84,15 @@ class ConsultAppBar extends BaseView {
 
     render() {
         const {classes} = this.props;
-        const {profileOpenStatus} = this.state;
+        const {profileOpenStatus, changeLanguageStatus} = this.state;
         return <>
             <AppBar position="static">
                 <Container maxWidth="xl">
                     {profileOpenStatus === ModalStatus.OPENED &&
                     <EditUser messageClose={this.getModalCloseHandler("profileOpenStatus")} userId={GlobalContext.getUser().id}/>}
+
+                    {changeLanguageStatus === ModalStatus.OPENED && <ChangeLanguage messageClose={this.getModalCloseHandler("changeLanguageStatus")}/>}
+
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
                             <IconButton component={Link} to="/">
@@ -121,11 +126,14 @@ class ConsultAppBar extends BaseView {
                                   }}
                                   open={Boolean(this.state.anchorElUser)}
                                   onClose={this.handleCloseUserMenu()}>
-                                <MenuItem key='profile' onClick={() => this.onOpenProfile()}>
-                                    <Typography>Profile</Typography>
+                                <MenuItem key='profile' onClick={() => this.onOpenMenuModal("profileOpenStatus")}>
+                                    <Typography>{i18n.t('profile-menu-item')}</Typography>
+                                </MenuItem>
+                                <MenuItem key='changeLanguage' onClick={() => this.onOpenMenuModal("changeLanguageStatus")}>
+                                    <Typography>{i18n.t('change-language-menu-item')}</Typography>
                                 </MenuItem>
                                 <MenuItem key='logout' onClick={this.logoutHandler()}>
-                                    <Typography>Logout</Typography>
+                                    <Typography>{i18n.t('logout-menu-item')}</Typography>
                                 </MenuItem>
                             </Menu>
                         </Box>
