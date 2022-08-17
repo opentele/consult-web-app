@@ -10,6 +10,7 @@ import ClientService from "../../service/ClientService";
 import ClientList from "../client/ClientList";
 import AddIcon from '@mui/icons-material/Add';
 import PersonView from "../consultation/PersonView";
+import Client from "../../domain/Client";
 
 class Clients extends BaseView {
     constructor(props, context) {
@@ -44,10 +45,11 @@ class Clients extends BaseView {
     render() {
         const {classes} = this.props;
         const {getClientsServerCall, addClientModalStatus} = this.state;
-        const clientSearchResults = ServerCall.getData(getClientsServerCall);
+        const data = ServerCall.getData(getClientsServerCall);
+        const clientSearchResults = Client.fromServerResources(data.entities);
         const totalClientsMessage = i18n.t("total-number-of-clients", {
-            totalCount: clientSearchResults.totalCount,
-            displayCount: clientSearchResults.entities.length
+            totalCount: data.totalCount,
+            displayCount: data.entities.length
         });
 
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
@@ -68,7 +70,7 @@ class Clients extends BaseView {
                     </Fab>
                 </Box>
                 <Typography variant="h6" className={classes.totalClients}>{totalClientsMessage}</Typography>
-                <ClientList clientList={clientSearchResults.entities} displayQueueNumber={false} displayNumberOfSessions={true}/>
+                <ClientList clientList={clientSearchResults} displayQueueNumber={false} displayNumberOfSessions={true}/>
             </Box>
         </ContainerView>;
     }

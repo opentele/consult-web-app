@@ -124,7 +124,7 @@ class ConsultationRooms extends BaseView {
                                         {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary"
                                                                                             key={provider.id} style={{marginRight: 8}}/>)}
                                     </Box>
-                                    <Box sx={{display: "flex", flexDirection: "column"}}>
+                                    <Box sx={{display: "flex", flexDirection: "column", marginTop: 2}}>
                                         {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
                                                                              severity={alert.type}>{alert.message}</Alert>)}
                                     </Box>

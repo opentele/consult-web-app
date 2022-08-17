@@ -41,12 +41,18 @@ export default class Client extends AbstractEntity {
             client.age = "";
             client.ageDurationType = DateTimeUtil.Months;
         }
-        client.consultationSessionRecords = resource.consultationSessionRecords.map((csr) => ConsultationSessionRecord.fromServerResource(csr));
+
+        if (!_.isNil(resource.consultationSessionRecords))
+            client.consultationSessionRecords = resource.consultationSessionRecords.map((csr) => ConsultationSessionRecord.fromServerResource(csr));
         return client;
     }
 
     static displayName(client) {
         return `${client.name}; ${DateTimeUtil.getAgeDisplay(client.age)}; ${client.gender}`;
+    }
+
+    displayAge() {
+        return `${this.age} ${this.ageDurationType}`;
     }
 
     static totalConsultationsDisplay(client) {

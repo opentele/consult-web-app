@@ -4,7 +4,6 @@ import {withStyles} from "@mui/styles";
 import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
-import {DateTimeUtil} from "react-app-common";
 
 const styles = theme => ({
     clientListMainBox: {
@@ -45,7 +44,7 @@ class ClientList extends BaseView {
                                     {x.name}
                                 </TableCell>
                                 <TableCell>{i18n.t(x.gender)}</TableCell>
-                                <TableCell>{DateTimeUtil.getAgeDisplay(x.age)}</TableCell>
+                                <TableCell>{x.displayAge()}</TableCell>
                                 <TableCell>{x.registrationNumber}</TableCell>
                                 {displayQueueNumber && <TableCell align="right">{x["queueNumber"]}</TableCell>}
                                 {displayNumberOfSessions && <TableCell align="right"><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
