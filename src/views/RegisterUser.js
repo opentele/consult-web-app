@@ -39,23 +39,21 @@ class RegisterUser extends BaseView {
 
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getUserCall") {
-            newState.user = User.fromServerResource(ServerCall.getData(newState.getUserCall));
+            newState.user = User.fromResource(ServerCall.getData(newState.getUserCall));
             this.setState(newState);
         }
     }
 
-    getRegisterUserHandler() {
-        return (e) => {
-            if (!this.state.editUserState.valid) {
-                e.preventDefault();
-                let state = {submitFailure: true};
-                this.setState(state);
-                return;
-            }
-            const {user, userNameType} = this.state.editUserState;
-            this.makeServerCall(UserService.registerUser(user, userNameType))
-                .then(this.onEntitySave());
+    onRegisterUser(e) {
+        if (!this.state.editUserState.valid) {
+            e.preventDefault();
+            let state = {submitFailure: true};
+            this.setState(state);
+            return;
         }
+        const {user, userNameType} = this.state.editUserState;
+        this.makeServerCall(UserService.registerUser(user, userNameType))
+            .then(this.onEntitySave());
     }
 
     updateState(newState) {
@@ -77,8 +75,8 @@ class RegisterUser extends BaseView {
                 <Box className={classes.ruContainer}>
                     <EditUserFields displayError={submitFailure} user={User.newUser()}
                                     notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}/>
-                    <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={this.getRegisterUserHandler()} disabled={false}/>
-                    <ServerErrorMessage serverCall={serverCall} className={classes.addUserServerError}/>
+                    <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={(e) => this.onRegisterUser(e)} disabled={false}/>
+                    <ServerErrorMessage serverCall={serverCall}/>
                 </Box>
             </ModalContainerView>
         );

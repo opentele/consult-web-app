@@ -16,7 +16,8 @@ class ChangeLanguage extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
-            loadUserCallToChangeLanguage: ServerCall.createInitial()
+            loadUserCallToChangeLanguage: ServerCall.createInitial(),
+            saveLanguagePreferenceServerCall: ServerCall.createInitial()
         };
     }
 
@@ -30,28 +31,33 @@ class ChangeLanguage extends BaseView {
     }
 
     updateServerResponseState(newState, serverCallName) {
-        newState.user = User.fromOther(ServerCall.getData(newState.loadUserCallToChangeLanguage), new User());
+        const data = ServerCall.getData(newState.loadUserCallToChangeLanguage);
+        newState.user = User.copyFields(new User(), data);
         this.setState(newState);
     }
 
     saveLanguagePreference() {
+        this.makeServerCall(UserService.saveLanguagePreference(this.state.user), "saveLanguagePreferenceServerCall")
+            .then(this.onEntitySave("saveLanguagePreferenceServerCall"));
+    }
 
+    onLanguageChange(e) {
+        this.state.user.language = e.target.value;
+        this.setState({user: this.state.user.clone()});
     }
 
     render() {
         const {classes, messageClose} = this.props;
-        const loadUserCallToChangeLanguage = this.state;
+        const {loadUserCallToChangeLanguage, user} = this.state;
 
         if (ServerCall.noCallOrWait(this.state.loadUserCallToChangeLanguage))
             return <WaitView/>;
 
         return <ModalContainerView titleKey="change-language-title">
             <Box style={{padding: 20}}>
-                <RadioGroup
-                    row
-                    aria-labelledby="demo-row-radio-buttons-group-label"
-                    name="languages">
-                    {Languages.map((l) => <FormControlLabel value={l} control={<Radio/>} label={i18n.t(l)}/>)}
+                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="languages" value={user.language}
+                            onChange={(e) => this.onLanguageChange(e)}>
+                    {Languages.map((l) => <FormControlLabel value={l.code} control={<Radio/>} label={i18n.t(l.displayKey)}/>)}
                 </RadioGroup>
                 <SaveCancelButtons serverCall={loadUserCallToChangeLanguage} onCancelHandler={messageClose} onSaveHandler={() => this.saveLanguagePreference()}/>
             </Box>

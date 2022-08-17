@@ -43,7 +43,7 @@ class EditUser extends BaseView {
     }
 
     updateServerResponseState(newState, serverCallName) {
-        newState.user = User.fromOther(ServerCall.getData(newState.loadUserCall), new User());
+        newState.user = User.copyFields(new User(), ServerCall.getData(newState.loadUserCall));
         this.setState(newState);
     }
 

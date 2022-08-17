@@ -90,7 +90,7 @@ class EditUserFields extends BaseView {
         if (process.env.NODE_ENV === "development" && this.state.user.isNew()) {
             Object.assign(this.state.user, {
                 name: "Foo",
-                userName: "foo@gmail.com",
+                userName: "foo@dueToDevMode.com",
                 password: "x",
                 providerType: "Consultant",
                 userType: "User"
