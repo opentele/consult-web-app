@@ -50,7 +50,7 @@ export default class App extends Component {
                         this.setState({i18nLoading: false});
                     });
                 }
-                this.setState({isLoggedInServerCall: isLoggedInServerCall});
+                this.setState({isLoggedInServerCall: isLoggedInServerCall, i18nLoading: false});
             });
             this.setState({isLoggedInServerCall: ServerCall.serverCallMade(this.state.isLoggedInServerCall)});
         });

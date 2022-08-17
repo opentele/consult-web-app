@@ -23,11 +23,16 @@ class RegisterState {
     }
 
     isOrgValid() {
-        return !this.submissionAttempted || !_.isEmpty(this.orgName) || this.isRegisteringUser;
+        return !this.submissionAttempted || ((!_.isEmpty(this.orgName) && this.orgName.length <= 100) || this.isRegisteringUser);
     }
 
     getOrgNameError(i18n) {
-        return !this.isOrgValid() && i18n.t("org-name-empty");
+        return !this.isOrgValid() && i18n.t("org-name-size-invalid");
+    }
+
+    registerAsChanged(registerAs) {
+        this.registerAs = registerAs;
+        this.submissionAttempted = false;
     }
 }
 

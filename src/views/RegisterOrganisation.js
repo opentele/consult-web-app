@@ -89,20 +89,24 @@ class RegisterOrganisation extends BaseView {
         };
     }
 
-    getSubmitHandler() {
-        return (e) => {
-            let {registerState} = this.state;
-            const isValid = registerState.isOrgValid();
-            if (!this.state.editUserState.valid || !isValid) {
-                e.preventDefault();
-                registerState.submissionAttempted = true;
-                this.setState({registerState: registerState.clone()});
-                return;
-            }
-
-            let {userName, userNameType, password, name} = this.state.editUserState;
-            this.makeServerCall(UserService.registerOrg(name, registerState.orgName, userName, userNameType, password));
+    onSubmit(e) {
+        let {registerState} = this.state;
+        const isValid = registerState.isOrgValid();
+        if (!this.state.editUserState.valid || !isValid) {
+            e.preventDefault();
+            registerState.submissionAttempted = true;
+            this.setState({registerState: registerState.clone()});
+            return;
         }
+
+        let {userName, userNameType, password, name} = this.state.editUserState;
+        this.makeServerCall(UserService.registerOrg(name, registerState.orgName, userName, userNameType, password));
+    }
+
+    onRegistrationTypeChange(e) {
+        const {registerState} = this.state;
+        registerState.registerAsChanged(e.target.value);
+        this.setState({registerState: registerState.clone()})
     }
 
     render() {
@@ -126,17 +130,14 @@ class RegisterOrganisation extends BaseView {
                                 value={registerState.registerAs}
                                 exclusive
                                 className={[classes.registerOrgField, classes.registerOrgOrUserButtons]}
-                                onChange={(e) => {
-                                    registerState.registerAs = e.target.value;
-                                    this.setState({registerState: registerState.clone()})
-                                }}>
+                                onChange={(e) => this.onRegistrationTypeChange(e)}>
                                 <ToggleButton value="org">{i18n.t('organisation')}</ToggleButton>
                                 <ToggleButton value="user">{i18n.t('user')}</ToggleButton>
                             </ToggleButtonGroup>
 
                             {registerState.isRegisteringUser &&
-                                <Typography className={classes.registerUserHelpText}
-                                            variant="subtitle1">{i18n.t('register-as-user-help')}</Typography>}
+                            <Typography className={classes.registerUserHelpText}
+                                        variant="subtitle1">{i18n.t('register-as-user-help')}</Typography>}
 
                             {!registerState.isRegisteringUser && <TextField
                                 name="organisationName"
@@ -159,7 +160,7 @@ class RegisterOrganisation extends BaseView {
                             <Button type="submit" className={classes.registerButton}
                                     fullWidth
                                     variant="contained" color="primary"
-                                    onClick={this.getSubmitHandler()}>{i18n.t(!registerState.isRegisteringUser ? "register-org-submit-button" : "self-register-user-button")}</Button>
+                                    onClick={(e) => this.onSubmit(e)}>{i18n.t(!registerState.isRegisteringUser ? "register-org-submit-button" : "self-register-user-button")}</Button>
                         </Paper>
                     </Grid>
                     {/*<Grid item lg={4} xs={12}>*/}
