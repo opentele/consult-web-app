@@ -29,7 +29,7 @@ class EditUser extends BaseView {
     onSave() {
         if (this.state.editUserState.valid)
             this.makeServerCall(UserService.updateProfile(this.state.editUserState.user), "saveCall")
-                .then(this.onEntitySave("saveCall"));
+                .then(this.getEntitySaveHandler("saveCall"));
     }
 
     componentDidMount() {

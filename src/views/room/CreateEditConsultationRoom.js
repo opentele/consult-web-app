@@ -96,7 +96,7 @@ class CreateEditConsultationRoom extends BaseView {
     onSave() {
         const service = BeanContainer.get(ConsultationRoomService);
         return this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall")
-            .then(this.onEntitySave("saveRoomServerCall"));
+            .then(this.getEntitySaveHandler("saveRoomServerCall"));
     }
 
     render() {

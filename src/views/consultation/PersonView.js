@@ -59,7 +59,7 @@ class PersonView extends BaseView {
             return;
         }
         this.makeServerCall(ClientService.save(this.state.client), "saveClientCall")
-            .then(this.onEntitySave("saveClientCall"));
+            .then(this.getEntitySaveHandler("saveClientCall"));
     }
 
     validate() {

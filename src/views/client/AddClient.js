@@ -27,7 +27,7 @@ class AddClient extends BaseView {
 
     onAddClient() {
         return this.makeServerCall(BeanContainer.get(ConsultationRoomService).addClient(this.props.consultationRoom, this.state.client.id))
-            .then(this.onEntitySave());
+            .then(this.getEntitySaveHandler());
     }
 
     selectClientHandler = (client) => {

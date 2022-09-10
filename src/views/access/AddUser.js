@@ -62,7 +62,7 @@ class AddUser extends BaseView {
 
     onAddUser() {
         return this.makeServerCall(UserService.addUser(this.state.userState.user, "saveServerCall"))
-            .then(this.onEntitySave("saveServerCall"));
+            .then(this.getEntitySaveHandler("saveServerCall"));
     }
 
     getCheckUserHandler() {

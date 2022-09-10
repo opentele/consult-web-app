@@ -83,7 +83,7 @@ class ConsultationRecordView extends BaseView {
             return;
         }
         this.makeServerCall(ConsultationSessionRecordService.save(this.state.consultation, this.props.client), "saveRecordCall")
-            .then(this.onEntitySave("saveRecordCall"));
+            .then(this.getEntitySaveHandler("saveRecordCall"));
     }
 
     validate() {
