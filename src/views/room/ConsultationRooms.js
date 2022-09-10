@@ -92,8 +92,6 @@ class ConsultationRooms extends BaseView {
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
 
-        console.log("ConsultationRooms", editConsultationRoomStatus.toString());
-
         if (setupTeleConferenceCall.callStatus === ServerCallStatus.SUCCESS) {
             return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
         }

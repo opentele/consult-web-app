@@ -30,7 +30,7 @@ class Users extends BaseView {
     refresh() {
         UserService.getUsers().then((response) => {
             this.setState({getUsersServerCall: ServerCall.responseReceived(this.state.getUsersServerCall, response), addUserModalStatus: ModalStatus.NOT_OPENED});
-        })
+        });
     }
 
     getEditUserHandler(user) {

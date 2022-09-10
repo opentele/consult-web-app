@@ -38,7 +38,6 @@ class PrintView extends BaseView {
     };
 
     handleOnBeforeGetContent = () => {
-        console.log("`onBeforeGetContent` called");
     };
 
     setComponentRef = (ref) => {

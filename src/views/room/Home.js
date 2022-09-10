@@ -72,12 +72,10 @@ class Home extends BaseView {
         const getTabComponent = this.tabComponents[tabState.tabIndex];
         const key = tabState.getCurrentUpdateIndex();
 
-        console.log("Home", createConsultationRoom.toString());
-
         return _.isEmpty(GlobalContext.getOrganisation()) ?
             <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
-            <ContainerView activeTab="home">
+            <ContainerView activeTab="home" onRefresh={() => this.refresh()}>
                 {scheduleConsultationRoom === ModalStatus.OPENED &&
                 <AddEditConsultationSchedule messageClose={this.getModalCloseHandler("scheduleConsultationRoom")}/>}
 

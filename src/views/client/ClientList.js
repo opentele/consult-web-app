@@ -1,9 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from "@mui/styles";
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {BottomNavigationAction, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
+import {Edit} from "@mui/icons-material";
+import ModalStatus from "../framework/ModalStatus";
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     clientListMainBox: {
@@ -24,6 +27,7 @@ class ClientList extends BaseView {
 
     render() {
         const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
+        const {clientDashboardOpenStatus} = this.state;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
                 <Table sx={{minWidth: 700}} aria-label="customized table">
@@ -33,8 +37,9 @@ class ClientList extends BaseView {
                             <TableCell>{i18n.T('gender')}</TableCell>
                             <TableCell>{i18n.T('age')}</TableCell>
                             <TableCell>{i18n.T('registration-number')}</TableCell>
-                            {displayQueueNumber && <TableCell align="right">{i18n.T('queue-number')}</TableCell>}
-                            {displayNumberOfSessions && <TableCell align="right">{i18n.T('number-of-sessions')}</TableCell>}
+                            {displayQueueNumber && <TableCell>{i18n.T('queue-number')}</TableCell>}
+                            {displayNumberOfSessions && <TableCell>{i18n.T('number-of-sessions')}</TableCell>}
+                            <TableCell/>
                         </TableRow>
                     </TableHead>
                     <TableBody>
@@ -46,8 +51,9 @@ class ClientList extends BaseView {
                                 <TableCell>{i18n.t(x.gender)}</TableCell>
                                 <TableCell>{x.displayAge()}</TableCell>
                                 <TableCell>{x.registrationNumber}</TableCell>
-                                {displayQueueNumber && <TableCell align="right">{x["queueNumber"]}</TableCell>}
-                                {displayNumberOfSessions && <TableCell align="right"><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
+                                {displayQueueNumber && <TableCell>{x["queueNumber"]}</TableCell>}
+                                {displayNumberOfSessions && <TableCell><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
+                                <TableCell component={Link} to={`/client?id=${x.id}`}><Edit/></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>
