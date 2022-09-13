@@ -59,7 +59,7 @@ class PrintView extends BaseView {
 
         return (
             <ModalContainerView>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: -25, paddingRight: 20, backgroundColor: "springgreen"}}>
+                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: -25, paddingRight: 20, backgroundColor: "darkgreen"}}>
                     <Fab color="secondary" size="small" onClick={() => messageClose(false)}>
                         <CloseIcon/>
                     </Fab>

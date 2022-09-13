@@ -61,7 +61,7 @@ class ConsultationRecordPrintView extends BaseView {
         const consultations = this.consultationDisplayMode === "single" ? [ConsultationSessionRecord.fromServerResource(data)] : ConsultationSessionRecord.fromServerResources(data.consultationSessionRecords);
 
         return <Box className={classes.crpvContainer}>
-                <Paper style={{height: "55px", backgroundColor: "springgreen", borderRadius: 0, alignItems: "center"}} elevation={0}>
+                <Paper style={{height: "55px", backgroundColor: "darkgreen", borderRadius: 0, alignItems: "center"}} elevation={0}>
                     <Typography variant="h4" style={{marginLeft: 20}}>{GlobalContext.getOrganisation()}</Typography>
                 </Paper>
                 <ClientDisplay client={client}/>

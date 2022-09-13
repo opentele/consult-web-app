@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@mui/material";
+import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Snackbar, Typography} from "@mui/material";
 import {Edit} from "@mui/icons-material";
 import {Alert} from "@mui/material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
@@ -53,7 +53,8 @@ class ConsultationRooms extends BaseView {
             addClientModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED,
             editConsultationRoomStatus: ModalStatus.NOT_OPENED,
-            consultationRooms: []
+            consultationRooms: [],
+            clientAdded: false
         };
         this.serviceMethod = BeanContainer.get(ConsultationRoomService)[functionNames[this.props.type]];
     }
@@ -66,8 +67,10 @@ class ConsultationRooms extends BaseView {
         this.refresh();
     }
 
-    refresh() {
+    refresh(stateField) {
         this.makeServerCall(this.serviceMethod(), "getRoomsCall");
+        if (stateField === "addClientModalStatus")
+            this.setState({clientAdded: true});
     }
 
     updateServerResponseState(newState, serverCallName) {
@@ -87,7 +90,7 @@ class ConsultationRooms extends BaseView {
     }
 
     render() {
-        const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList} = this.state;
+        const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList, clientAdded} = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
@@ -155,6 +158,11 @@ class ConsultationRooms extends BaseView {
                 })
             }
             <br/>
+            <Snackbar open={clientAdded}
+                autoHideDuration={5000}
+                onClose={() => this.setState({clientAdded: false})}
+                message={i18n.t("client-added-to-room")}
+            />
         </Box>;
     }
 

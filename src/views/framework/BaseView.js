@@ -90,7 +90,7 @@ class BaseView extends Component {
         this.setState(newState);
     }
 
-    getEntitySaveHandler(serverCallName) {
+    getEntitySaveHandler(serverCallName = "serverCall") {
         return () => this.onEntitySave(serverCallName);
     }
     onEntitySave(serverCallName) {
