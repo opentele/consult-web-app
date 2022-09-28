@@ -1,52 +1,51 @@
-import {createTheme} from "@mui/material";
+import {createTheme} from "@mui/material/styles";
 
-export default class DarkTheme {
-    static getThemeOptions() {
-        const defaultTheme = createTheme({
-            palette: {
-                mode: 'dark',
-            }
-        });
-        return {
-            palette: {
-                mode: 'dark',
-            },
-            textColor: {
-                assistive: "#BB86FC"
-            },
-            components: {
-                MuiIconButton: {
-                    styleOverrides: {
-                        root: {
-                            color: defaultTheme.palette.primary.light
-                        }
-                    }
-                },
-                MuiDialogTitle: {
-                    styleOverrides: {
-                        root: {
-                            backgroundColor: defaultTheme.palette.secondary.dark
-                        }
-                    }
-                }
-            },
-            distance: {
-                unit: 5
-            },
-            customPalette: {
-                textboxBackgroundColor: "#383838"
-            },
-            customProps: {
-                paperDividerHeight: "15px",
-                paperDividerElevation: 30
-            },
-            unsupportedComponents: {
-                TextareaAutosize: {
-                    styleOverrides: {
-                        backgroundColor: defaultTheme.palette.background.default
-                    }
-                }
-            }
-        };
+const defaultDarkTheme = createTheme({
+    palette: {
+        mode: 'dark',
     }
-}
+});
+
+const themeOptions = Object.assign({}, defaultDarkTheme, {
+    palette: {
+        mode: 'dark',
+    },
+    textColor: {
+        assistive: "#BB86FC"
+    },
+    components: {
+        MuiIconButton: {
+            styleOverrides: {
+                root: {
+                    color: defaultDarkTheme.palette.primary.light
+                }
+            }
+        },
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: defaultDarkTheme.palette.secondary.dark
+                }
+            }
+        }
+    },
+    distance: {
+        unit: 5
+    },
+    customProps: {
+        paperDividerHeight: "15px",
+            paperDividerElevation: 30
+    },
+    customPalette: {
+        textboxBackgroundColor: "#383838"
+    },
+    unsupportedComponents: {
+        TextareaAutosize: {
+            styleOverrides: {
+                backgroundColor: defaultDarkTheme.palette.background.default
+            }
+        }
+    }
+});
+
+export default themeOptions;

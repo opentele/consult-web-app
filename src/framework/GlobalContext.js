@@ -2,7 +2,15 @@ import _ from "lodash";
 import {ServerCall} from "react-app-common";
 import {User} from "consult-app-common";
 
+const themeModeKey = "themeMode";
+const lightMode = "light";
+const darkMode = "dark";
+
 class GlobalContext {
+    setThemeChangeHandler(themeChangeHandler) {
+        this.themeChangeHandler = themeChangeHandler;
+    }
+
     setLogoutHandler(logoutHandler) {
         this.logoutHandler = logoutHandler;
     }
@@ -33,6 +41,36 @@ class GlobalContext {
         const data = ServerCall.getData(getUserCall);
         this.setUser(User.fromResource(data));
         this.setOrganisation(data.organisationName);
+    }
+
+    _getThemeMode() {
+        return localStorage.getItem(themeModeKey);
+    }
+
+    _setThemeMode(themeMode) {
+        localStorage.setItem(themeModeKey, themeMode);
+    }
+
+    toggleThemeMode() {
+        const themeMode = this._getThemeMode() === darkMode ? lightMode : darkMode;
+        this._setThemeMode(themeMode);
+        if (!_.isNil(this.themeChangeHandler)) {
+            this.themeChangeHandler();
+        }
+    }
+
+    isLightTheme() {
+        return this.getThemeMode() === lightMode;
+    }
+
+    isDarkTheme() {
+        return this.getThemeMode() === darkMode;
+    }
+
+    getThemeMode() {
+        if (_.isEmpty(this._getThemeMode()))
+            this._setThemeMode(lightMode);
+        return this._getThemeMode();
     }
 }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
-import {Home} from "@mui/icons-material";
+import {Translate, Home, DarkMode, LightMode} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
 import {i18n, UserService} from "consult-app-common";
@@ -66,6 +66,9 @@ class ConsultAppBar extends BaseView {
         return (event) => this.setState({anchorElNav: null});
     }
 
+    getOpenLanguageModalHandler() {
+        return () => this.onOpenMenuModal("changeLanguageStatus");
+    }
     onOpenMenuModal(modalStatusField) {
         const newState = {};
         newState[modalStatusField] = ModalStatus.OPENED;
@@ -80,6 +83,10 @@ class ConsultAppBar extends BaseView {
     refresh() {
         if (this.props.onRefresh)
             this.props.onRefresh();
+    }
+
+    switchToMode() {
+        GlobalContext.toggleThemeMode();
     }
 
     render() {
@@ -109,6 +116,8 @@ class ConsultAppBar extends BaseView {
                         </Box>
 
                         <Box sx={{flexGrow: 0}}>
+                            <IconButton onClick={() => this.switchToMode()}>{GlobalContext.isDarkTheme() ? <LightMode/> : <DarkMode/>}</IconButton>
+                            <IconButton style={{marginRight: 10}} onClick={this.getOpenLanguageModalHandler()}><Translate/></IconButton>
                             {GlobalContext.hasUser() && <Tooltip title="Open settings">
                                 <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
                                     <Avatar alt={GlobalContext.getUser().name}/>
@@ -129,7 +138,7 @@ class ConsultAppBar extends BaseView {
                                 <MenuItem key='profile' onClick={() => this.onOpenMenuModal("profileOpenStatus")}>
                                     <Typography>{i18n.t('profile-menu-item')}</Typography>
                                 </MenuItem>
-                                <MenuItem key='changeLanguage' onClick={() => this.onOpenMenuModal("changeLanguageStatus")}>
+                                <MenuItem key='changeLanguage' onClick={this.getOpenLanguageModalHandler()}>
                                     <Typography>{i18n.t('change-language-menu-item')}</Typography>
                                 </MenuItem>
                                 <MenuItem key='logout' onClick={this.logoutHandler()}>

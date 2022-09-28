@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {AddCircle, AllInclusive, History, Schedule, Today} from '@mui/icons-material';
 import {Fab, IconButton, Tab, Tabs} from "@mui/material";
-import {BeanContainer} from 'react-app-common';
-import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {i18n} from 'consult-app-common';
 import ConsultationRooms from "./ConsultationRooms";
 import BaseView from "../framework/BaseView";

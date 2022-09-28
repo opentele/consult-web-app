@@ -1,7 +1,7 @@
 import './App.css';
 import Welcome from "./views/Welcome";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import {i18n, i18nPromise, User, UserService} from "consult-app-common";
+import {i18n, i18nPromise, UserService} from "consult-app-common";
 import {CircularProgress, CssBaseline, ThemeProvider} from "@mui/material";
 import RegisterOrganisation from "./views/RegisterOrganisation";
 import {createTheme} from '@mui/material';
@@ -15,10 +15,8 @@ import Clients from "./views/client/Clients";
 import ClientDashboard from "./views/consultation/ClientDashboard";
 import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 import {ServerCall} from "react-app-common";
-import ThemeCreator from './theming/DarkTheme';
 import ErrorView from "./views/ErrorView";
-
-const theme = createTheme(ThemeCreator.getThemeOptions());
+import ThemeHelper from "./theming/ThemeHelper";
 
 const nonLoginPaths = ["/login", "/register", "/resetPassword", "/error"];
 
@@ -28,9 +26,11 @@ export default class App extends Component {
         this.state = {
             isLoggedInServerCall: ServerCall.createInitial(),
             getUserServerCall: ServerCall.createInitial(null),
+            theme: createTheme(ThemeHelper.getTheme()),
             i18nLoading: true
         }
-        GlobalContext.setLogoutHandler(this.logoutHandler);
+        GlobalContext.setLogoutHandler(this.refreshWindow);
+        GlobalContext.setThemeChangeHandler(() => this.setState({theme: createTheme(ThemeHelper.getTheme())}));
     }
 
     componentDidMount() {
@@ -65,7 +65,7 @@ export default class App extends Component {
 
     render() {
         let pathname = window.location.pathname;
-        const {isLoggedInServerCall, getUserServerCall, i18nLoading} = this.state;
+        const {isLoggedInServerCall, getUserServerCall, i18nLoading, theme} = this.state;
         if (this.isWaiting(isLoggedInServerCall, getUserServerCall) || i18nLoading)
             return <CircularProgress/>;
 
@@ -124,7 +124,7 @@ export default class App extends Component {
             window.location.reload();
     }
 
-    logoutHandler = () => {
+    refreshWindow() {
         window.location.reload();
     }
 

@@ -1,21 +1,32 @@
-export default {
+import {createTheme} from "@mui/material/styles";
+
+const defaultLightTheme = createTheme({
     palette: {
         mode: 'light',
+    }
+});
+
+const themeOptions = Object.assign({}, defaultLightTheme, {
+    textColor: {
+        assistive: "#BB86FC"
     },
-    components: {
-        MuiIconButton: {
+    distance: {
+        unit: 5
+    },
+    customProps: {
+        paperDividerHeight: "15px",
+        paperDividerElevation: 30
+    },
+    customPalette: {
+        textboxBackgroundColor: "white"
+    },
+    unsupportedComponents: {
+        TextareaAutosize: {
             styleOverrides: {
-                root: {
-                    color: "white"
-                }
-            }
-        },
-        MuiTableHead: {
-            styleOverrides: {
-                root: {
-                    backgroundColor: "lightgrey"
-                }
+                backgroundColor: defaultLightTheme.palette.background.default
             }
         }
     }
-};
+});
+
+export default themeOptions;
