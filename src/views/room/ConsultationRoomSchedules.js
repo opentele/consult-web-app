@@ -11,6 +11,7 @@ import WaitView from "../../components/WaitView";
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
 import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     crsRooms: {
@@ -84,7 +85,7 @@ class ConsultationRoomSchedules extends BaseView {
                                 </Box>
                                 <TimeField value={consultationRoomSchedule.startTime} labelKey='consultation-room-start-time-label'/>
                                 <TimeField value={consultationRoomSchedule.endTime} labelKey='consultation-room-end-time-label'/>
-                                <Typography variant="h6">{`Schedule: ${consultationRoomSchedule.getScheduleForDisplay()}`}</Typography>
+                                <Typography variant="h6">{`${i18n.t("schedule")}: ${i18n.t(consultationRoomSchedule.getScheduleForDisplay())}`}</Typography>
                             </Box>
                             <Box>
                                 <Box>

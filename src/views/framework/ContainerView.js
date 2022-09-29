@@ -58,7 +58,7 @@ class ContainerView extends BaseView {
                     value={tabIndexes[activeTab]}
                     onChange={(event, newValue) => {
                     }}>
-                    <BottomNavigationAction component={Link} to="/" label="Home" icon={<HomeIcon/>}/>
+                    <BottomNavigationAction component={Link} to="/" label={i18n.t("home")} icon={<HomeIcon/>}/>
                     <BottomNavigationAction component={Link} to="/clients" label={i18n.t('client-navigation-icon')} icon={<PeopleIcon/>}/>
                     {GlobalContext.getUser().canManageUsers() &&
                         <BottomNavigationAction component={Link} to="/users" label={i18n.t('manage-users-menu-item')} icon={<SecurityIcon/>}/>}

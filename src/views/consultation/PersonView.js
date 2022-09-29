@@ -13,6 +13,7 @@ import Client from "../../domain/Client";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import WaitView from "../../components/WaitView";
 import ThemeHelper from "../../theming/ThemeHelper";
+import {i18n} from "consult-app-common";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -100,10 +101,11 @@ class PersonView extends BaseView {
                                     name="durationType"
                                     className={classes.radioGroup}>
                                     <FormControlLabel value={DateTimeUtil.Years}
-                                                      control={<Radio onChange={this.getClientFieldValueChangeHandler("ageDurationType")}/>} label="Years"/>
+                                                      control={<Radio onChange={this.getClientFieldValueChangeHandler("ageDurationType")}/>}
+                                                      label={i18n.t("years")}/>
                                     <FormControlLabel value={DateTimeUtil.Months}
                                                       control={<Radio onChange={this.getClientFieldValueChangeHandler("ageDurationType")}/>}
-                                                      label="Months"/>
+                                                      label={i18n.t("months")}/>
                                 </RadioGroup>
                             </Box>
                         </Box>
@@ -113,9 +115,12 @@ class PersonView extends BaseView {
                                 defaultValue="Female"
                                 name="gender"
                                 className={classes.radioGroup}>
-                                <FormControlLabel value="Male" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Male"/>
-                                <FormControlLabel value="Female" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Female"/>
-                                <FormControlLabel value="Other" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>} label="Other"/>
+                                <FormControlLabel value="Male" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                  label={i18n.t("male")}/>
+                                <FormControlLabel value="Female" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                  label={i18n.t("female")}/>
+                                <FormControlLabel value="Other" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                  label={i18n.t("other")}/>
                             </RadioGroup>
                         </Box>
                         <Box className={[classes.personViewFieldBox]}>

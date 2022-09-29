@@ -2,7 +2,7 @@ import BaseView from "../framework/BaseView";
 import {Box, Grid, TextField} from "@mui/material";
 import RRuleGenerator from 'react-rrule-generator';
 import {withStyles} from "@mui/styles";
-import {i18n} from "consult-app-common";
+import {i18n, RRuleTranslations} from "consult-app-common";
 import React from "react";
 import DateInput from "../../components/DateInput";
 import PropTypes from 'prop-types';
@@ -14,7 +14,7 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import EditProviders from "../../components/consultation/EditProviders";
-import ModalStatus from "../framework/ModalStatus";
+import GlobalContext from "../../framework/GlobalContext";
 
 const styles = (theme) => ({
     rruleBox: {
@@ -68,6 +68,11 @@ class AddEditConsultationSchedule extends BaseView {
         }
     }
 
+    getTranslation() {
+        const user = GlobalContext.getUser();
+        return (user.language === 'hi') ? RRuleTranslations.hindi : undefined;
+    }
+
     componentDidMount() {
         const {consultationScheduleId} = this.props;
         this.loadEntity(consultationScheduleId, () => BeanContainer.get(ConsultationRoomService).getSchedule(consultationScheduleId), "getScheduleCall", ConsultationRoomSchedule.newSchedule());
@@ -106,7 +111,7 @@ class AddEditConsultationSchedule extends BaseView {
         return <ModalContainerView titleKey={schedule.isNew() ? "create-new-schedule" : "edit-schedule-title"}>
             <Box>
                 <Grid container>
-                    <Grid item contaienr lg={6} xs={11} className={classes.addConsultationScheduleForm}>
+                    <Grid item container lg={6} xs={11} className={classes.addConsultationScheduleForm}>
                         <Box style={{flexDirection: "row", display: "flex"}}>
                             <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
                                        label={i18n.t("schedule-title")} value={schedule.title}
@@ -123,9 +128,11 @@ class AddEditConsultationSchedule extends BaseView {
 
                         <Box>
                             <TimeInput classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")} label="Start Time"/>
+                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")}
+                                       label={i18n.t("start-time")}/>
                             <TimeInput classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")} label="End Time"/>
+                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")}
+                                       label={i18n.t("end-time")}/>
                         </Box>
                     </Grid>
                 </Grid>
@@ -136,6 +143,7 @@ class AddEditConsultationSchedule extends BaseView {
                                 config={{frequency: ['Yearly', 'Monthly', 'Weekly', 'Daily']}}
                                 onChange={(rrule) => this.onScheduleRuleUpdate(rrule)}
                                 value={schedule.recurrenceRule}
+                                translations={this.getTranslation()}
                             />
                         </Box>
                     </Grid>
