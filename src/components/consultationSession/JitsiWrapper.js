@@ -9,7 +9,7 @@ const styles = theme => ({});
 const interfaceConfig = {
     LANG_DETECTION: false,
     lang: "en",
-    APP_NAME: "OpenTele Consultation",
+    APP_NAME: "Tele Immerse",
     DISABLE_JOIN_LEAVE_NOTIFICATIONS: false,
     HIDE_INVITE_MORE_HEADER: true,
     MOBILE_APP_PROMO: false,

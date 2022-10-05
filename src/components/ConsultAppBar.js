@@ -105,7 +105,7 @@ class ConsultAppBar extends BaseView {
                             <IconButton component={Link} to="/">
                                 <Home fontSize="large"/>
                             </IconButton>
-                            <Typography variant="h6" className={classes.brandLabel}>OpenTele Consult App</Typography>
+                            <Typography variant="h6" className={classes.brandLabel}>Tele Immerse</Typography>
                         </Box>
                         <Box>
                             {pages.map((page) => (
