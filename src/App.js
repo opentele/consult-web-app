@@ -17,8 +17,7 @@ import TeleConferenceView from "./views/consultationSession/TeleConferenceView";
 import {ServerCall} from "react-app-common";
 import ErrorView from "./views/ErrorView";
 import ThemeHelper from "./theming/ThemeHelper";
-
-const nonLoginPaths = ["/login", "/register", "/resetPassword", "/error"];
+import RouteManager, {errorPath, loginPath} from "./framework/RouteManager";
 
 export default class App extends Component {
     constructor(props) {
@@ -69,15 +68,12 @@ export default class App extends Component {
         if (this.isWaiting(isLoggedInServerCall, getUserServerCall) || i18nLoading)
             return <CircularProgress/>;
 
-        if (ServerCall.hasFailed(isLoggedInServerCall) && window.location.pathname !== "/error" && !ServerCall.isForbidden(isLoggedInServerCall))
-            return window.location.replace("/error");
-
-        const isLoggedIn = ServerCall.isSuccessful(getUserServerCall);
-        if (isLoggedIn && nonLoginPaths.includes(pathname)) {
-            window.location.replace("/");
-        } else if (!isLoggedIn && !nonLoginPaths.includes(pathname)) {
-            window.location.replace("/login");
-        }
+        let isLoggedIn;
+        if (!ServerCall.errored(isLoggedInServerCall))
+            isLoggedIn = ServerCall.isSuccessful(getUserServerCall);
+        const redirectInfo = RouteManager.getRedirectInfo(pathname, isLoggedIn);
+        if (redirectInfo.redirect)
+            window.location.replace(redirectInfo.path);
 
         return <ThemeProvider theme={theme}>
             <CssBaseline/>
@@ -96,10 +92,10 @@ export default class App extends Component {
                     <Route path="/changePassword">
                         {this.getPrivateRoute(isLoggedIn, <ChangePassword/>)}
                     </Route>
-                    <Route path="/login">
+                    <Route path={loginPath}>
                         {this.getPublicRoute(isLoggedIn, <Welcome onLogin={this.loginHandler}/>)}
                     </Route>
-                    <Route path="/error">
+                    <Route path={errorPath}>
                         {this.getPublicRoute(isLoggedIn, <ErrorView/>)}
                     </Route>
                     <Route path="/users">

@@ -12,9 +12,7 @@ export async function onRequest(context) {
         } = context;
         const url = new URL(request.url);
         url.hostname = "server.yyyz.link";
-        return new Response(url.toString());
-        // return await fetch(url.toString(), request);
-        // const res = await fetch(`https://server.yyyz.link/api/test/open/ping`);
+        return await fetch(url.toString(), request);
     } catch (e) {
         return new Response(`Fail ${e.message}`);
     }

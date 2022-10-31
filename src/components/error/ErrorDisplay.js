@@ -1,9 +1,10 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
-import {Box, Container, Typography} from "@mui/material";
+import {Box, Button, Container, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../ConsultAppBar";
 import PropTypes from 'prop-types';
+import {Link} from "react-router-dom";
 
 const styles = theme => ({
     edRoot: {
@@ -43,6 +44,8 @@ class ErrorDisplay extends React.Component {
                         <Typography align="center" color="textPrimary" variant="h4">
                             {i18n.t(messageKey)}
                         </Typography>
+                        <br/>
+                        <Button variant={"contained"} onClick={() => window.location.replace("/")}>{i18n.t("go-to-home")}</Button>
                     </Box>
                 </Container>
             </Box>

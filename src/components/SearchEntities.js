@@ -78,7 +78,7 @@ class SearchEntities extends BaseView {
                     onClose={this.searchCloseHandler}
                     isOptionEqualToValue={(option, value) => option.id === value.id}
                     getOptionLabel={(option) => `${displayFn(option)}`}
-                    options={ServerCall.hasFailed(serverCall) ? [] : ServerCall.getData(serverCall).entities}
+                    options={ServerCall.isNotSuccessful(serverCall) ? [] : ServerCall.getData(serverCall).entities}
                     loading={serverCall.callStatus === ServerCallStatus.WAITING}
                     onChange={(event, value) => entitySelected(value)}
                     renderInput={(params) => (

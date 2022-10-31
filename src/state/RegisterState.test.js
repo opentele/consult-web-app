@@ -23,9 +23,3 @@ test('isOrgValid', function () {
     longOrgName.orgName = "dsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjddsfsdfdsfdsdsdjfjdsfjdskfjdsklfjdsjfdfjd";
     expect(longOrgName.isOrgValid()).toBe(false);
 });
-
-test('should foo', function () {
-    return fetch("https://server.yyyz.link/api/test/open/ping").then((x) => x.text()).then((x) => {
-        console.log(x);
-    });
-});

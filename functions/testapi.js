@@ -10,7 +10,9 @@ export async function onRequest(context) {
             next, // used for middleware or to fetch assets
             data, // arbitrary space for passing data between middlewares
         } = context;
-        return await fetch(`https://server.yyyz.link/api/test/open/ping`);
+        const url = new URL(request.url);
+        url.hostname = "server.yyyz.link";
+        return new Response(url.toString());
     } catch (e) {
         return new Response(`Fail ${e.message}`);
     }
