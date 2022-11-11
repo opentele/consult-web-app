@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Box, Button, Card, CardActions, CardContent, Chip, IconButton, Snackbar, Typography} from "@mui/material";
+import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar} from "@mui/material";
 import {Edit} from "@mui/icons-material";
-import {Alert} from "@mui/material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
-import TimeField from "../../components/TimeField";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import Client from "../../domain/Client";
 import AddClient from "../client/AddClient";
@@ -18,6 +16,8 @@ import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import {Redirect} from "react-router-dom";
 import _ from 'lodash';
+import TimeScheduleField from "../../components/DurationField";
+import {Person} from "@mui/icons-material";
 
 const styles = theme => ({
     rooms: {
@@ -90,7 +90,15 @@ class ConsultationRooms extends BaseView {
     }
 
     render() {
-        const {addClientModalStatus, viewClientsModalStatus, editConsultationRoomStatus, setupTeleConferenceCall, consultationRooms, clientList, clientAdded} = this.state;
+        const {
+            addClientModalStatus,
+            viewClientsModalStatus,
+            editConsultationRoomStatus,
+            setupTeleConferenceCall,
+            consultationRooms,
+            clientList,
+            clientAdded
+        } = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
         const isConsultant = user["providerType"] === ProviderType.Consultant
@@ -113,17 +121,20 @@ class ConsultationRooms extends BaseView {
                                             <Edit/>
                                         </IconButton>
                                     </Box>
-                                    <TimeField value={consultationRoom.scheduledStartTime} labelKey='consultation-room-start-time-label'/>
-                                    <TimeField value={consultationRoom.scheduledEndTime} labelKey='consultation-room-end-time-label'/>
-                                    {isConsultant &&
-                                    <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
-                                    {!_.isNil(consultationRoom.getCurrentAppointment()) && isConsultant &&
-                                    <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.getCurrentClientName()}`}</Typography>}
+                                    <TimeScheduleField additionalStyle={{marginTop: 10}}
+                                                       startTime={consultationRoom.scheduledStartTime} endTime={consultationRoom.scheduledEndTime}/>
+                                    <Box style={{marginTop: 10}}>
+                                        {isConsultant &&
+                                        <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
+                                        {!_.isNil(consultationRoom.getCurrentAppointment()) && isConsultant &&
+                                        <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.getCurrentClientName()}`}</Typography>}
+                                    </Box>
                                 </Box>
                                 <Box>
                                     <Box>
-                                        {consultationRoom.providers.map((provider) => <Chip label={provider.name} color="primary"
-                                                                                            key={provider.id} style={{marginRight: 8}}/>)}
+                                        <Person fontSize="large" style={{marginRight: 10}}/>
+                                        {consultationRoom.providers.map((provider) =>
+                                            <Chip label={provider.name} color="primary" key={provider.id} style={{marginRight: 8, borderRadius: 2}}/>)}
                                     </Box>
                                     <Box sx={{display: "flex", flexDirection: "column", marginTop: 2}}>
                                         {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
@@ -159,9 +170,9 @@ class ConsultationRooms extends BaseView {
             }
             <br/>
             <Snackbar open={clientAdded}
-                autoHideDuration={5000}
-                onClose={() => this.setState({clientAdded: false})}
-                message={i18n.t("client-added-to-room")}
+                      autoHideDuration={5000}
+                      onClose={() => this.setState({clientAdded: false})}
+                      message={i18n.t("client-added-to-room")}
             />
         </Box>;
     }
