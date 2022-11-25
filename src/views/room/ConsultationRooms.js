@@ -148,7 +148,8 @@ class ConsultationRooms extends BaseView {
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
                             <Button variant="contained" color={"secondary"} className={classes.crButton}
-                                    onClick={this.getModalOpenHandler("queueManagementModalStatus", additionalModalState)}>{i18n.t("client-queue")}</Button>}
+                                    onClick={this.getModalOpenHandler("queueManagementModalStatus",
+                                                additionalModalState)}>{i18n.t("client-queue-title")}</Button>}
                             {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="secondary">{i18n.t("view-clients")}</Button>}

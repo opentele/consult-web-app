@@ -8,19 +8,21 @@ import {ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import AddEntity from "../../components/AddEntity";
 import Client from '../../domain/Client';
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import {Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultRoomClient from "../../domain/ConsultRoomClient";
+import {Delete} from '@mui/icons-material';
 
 const styles = theme => ({});
 
-const ClientQueue = function ({consultationRoomClients, classes}) {
+const ClientQueue = function ({consultationRoomClients, classes, onDelete}) {
     return <TableContainer component={Paper} style={{padding: 10}}>
         <Table size="small">
             <TableHead className={classes.tableHeader}>
                 <TableRow>
-                    <TableCell style={{fontSize: "larger", width: 250}}>{i18n.t('client')}</TableCell>
+                    <TableCell style={{fontSize: "larger", width: 300}}>{i18n.t('client')}</TableCell>
                     <TableCell style={{fontSize: "larger"}}>{i18n.t('queue-number')}</TableCell>
+                    <TableCell/>
                 </TableRow>
             </TableHead>
             <TableBody>
@@ -34,6 +36,7 @@ const ClientQueue = function ({consultationRoomClients, classes}) {
                             {x.client.getDisplayName()}
                         </TableCell>
                         <TableCell style={{fontSize: "medium", textAlign: "center"}}>{x.queueNumber}</TableCell>
+                        <TableCell><IconButton onClick={() => onDelete(x.client)}><Delete/></IconButton></TableCell>
                     </TableRow>
                 ))}
             </TableBody>
@@ -46,6 +49,7 @@ class ConsultationRoomQueue extends BaseView {
         super(props, context);
         this.state = {
             addClientServerCall: ServerCall.createInitial(),
+            removeClientServerCall: ServerCall.createInitial(),
             loadClientsServerCall: ServerCall.createInitial([]),
             searchEntityUpdateKey: 0
         };
@@ -75,6 +79,11 @@ class ConsultationRoomQueue extends BaseView {
         this.setState({client: client});
     }
 
+    onRemoveClient(client) {
+        this.makeServerCall(ConsultationRoomService.removeAppointmentFor(this.props.consultationRoom, client), "removeClientServerCall")
+            .then(() => this.loadClients());
+    }
+
     render() {
         const {messageClose, consultationRoom, classes} = this.props;
         const {addClientServerCall, loadClientsServerCall, client, searchEntityUpdateKey} = this.state;
@@ -83,7 +92,7 @@ class ConsultationRoomQueue extends BaseView {
         return <ModalContainerView titleKey="add-client">
             <Box style={{display: "flex", flexDirection: "row", padding: 30}}>
                 <Box style={{display: "flex", flexDirection: "column"}}>
-                    <ClientQueue consultationRoomClients={consultationRoomClients} classes={classes} i18n={this.i18n}/>
+                    <ClientQueue consultationRoomClients={consultationRoomClients} classes={classes} onDelete={(x) => this.onRemoveClient(x)}/>
                 </Box>
                 <Box style={{display: "flex", flexDirection: "column", paddingLeft: 100, paddingRight: 100, paddingTop: 30}}>
                     <SearchEntities key={searchEntityUpdateKey}

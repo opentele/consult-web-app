@@ -1,5 +1,6 @@
 import ServiceUtil from "./ServiceUtil";
 import EntityCollection from "../domain/EntityCollection";
+import ConsultationRoom from "../domain/ConsultationRoom";
 
 class ConsultationRoomService {
     static getTodayRooms() {
@@ -76,6 +77,10 @@ class ConsultationRoomService {
 
     static setAsCurrentAppointment(consultationRoom, appointment) {
         return ServiceUtil.postJson(`consultationRoom/appointment/setCurrent?consultationRoomId=${consultationRoom.id}&appointmentId=${appointment.id}`)
+    }
+
+    static removeAppointmentFor(consultationRoom: ConsultationRoom, client: Client) {
+        return ServiceUtil.delete(`consultationRoom/appointment?consultationRoomId=${consultationRoom.id}&clientId=${client.id}`);
     }
 }
 
