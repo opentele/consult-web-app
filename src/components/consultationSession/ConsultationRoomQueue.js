@@ -8,7 +8,7 @@ import _ from 'lodash';
 import {Link} from "react-router-dom";
 import {ListItemButton} from "@mui/material";
 import ModalStatus from "../../views/framework/ModalStatus";
-import AddClient from "../../views/client/AddClient";
+import AddClient from "../../views/client/ConsultationRoomQueue";
 import BaseView from "../../views/framework/BaseView";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";

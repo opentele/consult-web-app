@@ -8,22 +8,25 @@ import {ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import AddEntity from "../../components/AddEntity";
 import Client from '../../domain/Client';
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultRoomClient from "../../domain/ConsultRoomClient";
 
 const styles = theme => ({});
 
 const ClientQueue = function ({consultationRoomClients, classes}) {
-    return <TableContainer component={Paper}>
-        <Table aria-label="customized table">
+    return <TableContainer component={Paper} style={{padding: 20}}>
+        <Table size="small">
             <TableHead className={classes.tableHeader}>
                 <TableRow>
-                    <TableCell>{i18n.T('client')}</TableCell>
-                    <TableCell>{i18n.T('queue-number')}</TableCell>
+                    <TableCell style={{fontSize: "larger", width: 200}}>{i18n.t('client')}</TableCell>
+                    <TableCell style={{fontSize: "larger"}}>{i18n.t('queue-number')}</TableCell>
                 </TableRow>
             </TableHead>
             <TableBody>
+                {consultationRoomClients.length === 0 && <TableRow>
+                    <TableCell align="center" colSpan={2} style={{fontSize: "medium", paddingTop: 20, paddingBottom: 20}}>{i18n.t("no-clients-in-queue")}</TableCell>
+                </TableRow>}
                 {consultationRoomClients.map((x: ConsultRoomClient) => (
                     <TableRow key={x.client.id} hover={true}>
                         <TableCell component="th" scope="row">
@@ -37,7 +40,7 @@ const ClientQueue = function ({consultationRoomClients, classes}) {
     </TableContainer>
 }
 
-class AddClient extends BaseView {
+class ConsultationRoomQueue extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -73,7 +76,7 @@ class AddClient extends BaseView {
         return <ModalContainerView titleKey="add-client">
             <Box style={{display: "flex", flexDirection: "row", padding: 30}}>
                 <Box style={{display: "flex", flexDirection: "column"}}>
-                    <ClientQueue consultationRoomClients={consultationRoomClients} classes={classes}/>
+                    <ClientQueue consultationRoomClients={consultationRoomClients} classes={classes} i18n={this.i18n}/>
                 </Box>
                 <Box style={{display: "flex", flexDirection: "column", paddingLeft: 100, paddingRight: 100, paddingTop: 30}}>
                     <SearchEntities entitySelected={this.selectClientHandler} searchFn={(q) => ConsultationRoomService.searchClients(q, consultationRoom.id)}
@@ -86,4 +89,4 @@ class AddClient extends BaseView {
     }
 }
 
-export default withStyles(styles)(AddClient);
+export default withStyles(styles)(ConsultationRoomQueue);

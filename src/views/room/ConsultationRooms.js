@@ -8,7 +8,7 @@ import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import Client from "../../domain/Client";
-import AddClient from "../client/AddClient";
+import AddClient from "../client/ConsultationRoomQueue";
 import {i18n, ProviderType} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
