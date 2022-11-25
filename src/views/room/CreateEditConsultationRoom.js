@@ -61,7 +61,8 @@ class CreateEditConsultationRoom extends BaseView {
         super(props);
         this.state = {
             getRoomServerCall: ServerCall.createInitial(),
-            saveRoomServerCall: ServerCall.createInitial()
+            saveRoomServerCall: ServerCall.createInitial(),
+            errors: {}
         };
     }
 
@@ -97,9 +98,14 @@ class CreateEditConsultationRoom extends BaseView {
     }
 
     onSave() {
-        const service = BeanContainer.get(ConsultationRoomService);
-        return this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall")
-            .then(this.getEntitySaveHandler("saveRoomServerCall"));
+        const errors = this.state.room.validate();
+        if (Object.keys(errors).length === 0) {
+            const service = BeanContainer.get(ConsultationRoomService);
+            return this.makeServerCall(service.createUpdateRoom(this.state.room), "saveRoomServerCall")
+                .then(this.getEntitySaveHandler("saveRoomServerCall"));
+        } else {
+            this.setState({errors: errors});
+        }
     }
 
     render() {
@@ -124,14 +130,18 @@ class CreateEditConsultationRoom extends BaseView {
                         <FormLabel textKey="room-name"/>
                         <TextField
                             name="title"
+                            error={this.hasError("title")}
                             onChange={this.getRoomFieldValueChangeHandler("title")}
                             value={room.title}
                             className={classes.textField}
+                            helperText={this.getErrorText("title")}
                         />
                     </Box>
                     <Box className={classes.cercField}>
                         <FormLabel textKey="scheduled-on"/>
                         <TextField type="date"
+                                   error={this.hasError("scheduled-on")}
+                                   helperText={this.getErrorText("scheduled-on")}
                                    value={moment(room.scheduledOn).format('YYYY-MM-DD')}
                                    sx={{width: 220}} InputLabelProps={{shrink: true}}
                                    onChange={this.getRoomFieldValueChangeHandler("scheduledOn")}
@@ -140,6 +150,8 @@ class CreateEditConsultationRoom extends BaseView {
                     <Box className={classes.cercField}>
                         <FormLabel textKey="scheduled-start-time"/>
                         <TextField type="time" value={room.scheduledStartTime} InputLabelProps={{shrink: true}}
+                                   error={this.hasError("scheduled-start-time")}
+                                   helperText={this.getErrorText("scheduled-start-time")}
                                    inputProps={{step: 300}}
                                    sx={{width: 150}}
                                    onChange={this.getRoomFieldValueChangeHandler("scheduledStartTime")}
@@ -148,6 +160,8 @@ class CreateEditConsultationRoom extends BaseView {
                     <Box className={classes.cercField}>
                         <FormLabel textKey="scheduled-end-time"/>
                         <TextField type="time" value={room.scheduledEndTime} InputLabelProps={{shrink: true}}
+                                   error={this.hasError("scheduled-end-time")}
+                                   helperText={this.getErrorText("scheduled-end-time")}
                                    inputProps={{step: 300}}
                                    sx={{width: 150}}
                                    onChange={this.getRoomFieldValueChangeHandler("scheduledEndTime")}
@@ -156,6 +170,8 @@ class CreateEditConsultationRoom extends BaseView {
                     <Box className={classes.cercField}>
                         <FormLabel textKey="total-slots"/>
                         <TextField type="number" value={room.totalSlots} InputLabelProps={{shrink: true}}
+                                   error={this.hasError("totalSlots")}
+                                   helperText={this.getErrorText("totalSlots")}
                                    sx={{width: 150}}
                                    onChange={this.getRoomFieldValueChangeHandler("totalSlots")}
                         />

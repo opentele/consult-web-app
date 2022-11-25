@@ -127,6 +127,18 @@ class ConsultationRoom extends AbstractEntity {
     getProvidersDisplayForClient() {
         return this.providers.map((x) => x.providerClientDisplay).join(". ");
     }
+
+    validate() {
+        const errors = {};
+        if (_.isEmpty(this.title)) errors["title"] = "mandatory-field";
+        if (_.isNil(this.scheduledOn)) errors["scheduledOn"] = "mandatory-field";
+        if (_.isNil(this.scheduledStartTime)) errors["scheduledStartTime"] = "mandatory-field";
+        if (_.isNil(this.scheduledEndTime)) errors["scheduledEndTime"] = "mandatory-field";
+
+        if (_.isNil(this.totalSlots)) errors["totalSlots"] = "mandatory-field";
+        else if (this.totalSlots <= 0) errors["totalSlots"] = "cannot-be-less-than-zero";
+        return errors;
+    }
 }
 
 export default ConsultationRoom;
