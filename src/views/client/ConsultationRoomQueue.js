@@ -51,7 +51,8 @@ class ConsultationRoomQueue extends BaseView {
             addClientServerCall: ServerCall.createInitial(),
             removeClientServerCall: ServerCall.createInitial(),
             loadClientsServerCall: ServerCall.createInitial([]),
-            searchEntityUpdateKey: 0
+            searchEntityUpdateKey: 0,
+            appointmentsChanged: false
         };
     }
 
@@ -62,17 +63,17 @@ class ConsultationRoomQueue extends BaseView {
     };
 
     componentDidMount() {
-        this.loadClients();
+        this.loadClients(false);
     }
 
-    loadClients() {
+    loadClients(appointmentsChanged) {
         this.makeServerCall(ConsultationRoomService.getClientsByConsultationRoom(this.props.consultationRoom.id), "loadClientsServerCall");
-        this.setState({searchEntityUpdateKey: ++this.state.searchEntityUpdateKey});
+        this.setState({searchEntityUpdateKey: ++this.state.searchEntityUpdateKey, appointmentsChanged: appointmentsChanged});
     }
 
     onAddClient() {
         this.makeServerCall(ConsultationRoomService.addClient(this.props.consultationRoom, this.state.client.id), "addClientServerCall")
-            .then(() => this.loadClients());
+            .then(() => this.loadClients(true));
     }
 
     selectClientHandler = (client) => {
@@ -81,12 +82,12 @@ class ConsultationRoomQueue extends BaseView {
 
     onRemoveClient(client) {
         this.makeServerCall(ConsultationRoomService.removeAppointmentFor(this.props.consultationRoom, client), "removeClientServerCall")
-            .then(() => this.loadClients());
+            .then(() => this.loadClients(true));
     }
 
     render() {
         const {messageClose, consultationRoom, classes} = this.props;
-        const {addClientServerCall, loadClientsServerCall, client, searchEntityUpdateKey} = this.state;
+        const {addClientServerCall, loadClientsServerCall, client, searchEntityUpdateKey, appointmentsChanged} = this.state;
 
         const consultationRoomClients = ServerCall.getData(loadClientsServerCall).map((x) => ConsultRoomClient.fromConsultationRoomClientResponse(x));
         return <ModalContainerView titleKey="add-client">
@@ -100,7 +101,8 @@ class ConsultationRoomQueue extends BaseView {
                                     searchFn={(q) => ConsultationRoomService.searchClients(q, consultationRoom.id)}
                                     displayFn={Client.displayNameFromServerResource}
                                     autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
-                    <AddEntity messageClose={messageClose} addEntityHandler={() => this.onAddClient()} entity={client} serverCall={addClientServerCall}/>
+                    <AddEntity messageClose={() => messageClose(appointmentsChanged)}
+                               addEntityHandler={() => this.onAddClient()} entity={client} serverCall={addClientServerCall}/>
                 </Box>
             </Box>
         </ModalContainerView>;

@@ -78,11 +78,11 @@ const styles = theme => ({
         flex: 1
     },
     tcvConsultationRoomQueue: {
-        marginLeft: 20,
-        flex: 0.3
+        marginLeft: 30,
+        flex: 0.27
     },
     tcvJitsiConf: {
-        flex: 0.7
+        flex: 0.73
     }
 });
 

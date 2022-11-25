@@ -8,7 +8,7 @@ import _ from 'lodash';
 import {Link} from "react-router-dom";
 import {ListItemButton} from "@mui/material";
 import ModalStatus from "../../views/framework/ModalStatus";
-import AddClient from "../../views/client/ConsultationRoomQueue";
+import ConsultationRoomQueue from "../../views/client/ConsultationRoomQueue";
 import BaseView from "../../views/framework/BaseView";
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -133,7 +133,7 @@ class ActiveConsultationRoomQueue extends BaseView {
                         </Button>
                     </Box>
                     {addClientModalStatus === ModalStatus.OPENED &&
-                    <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
+                    <ConsultationRoomQueue messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
                                autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
                 </Paper>
             </Box>
