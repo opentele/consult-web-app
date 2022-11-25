@@ -20,22 +20,21 @@ const styles = theme => ({
         padding: 20,
         display: "flex",
         flexDirection: "column",
-        width: 400
+        width: 750
     },
     cercFirstField: {
-        marginTop: 10,
         flexDirection: "column",
         display: "flex",
         alignItems: "flex-start"
     },
     cercField: {
-        marginTop: 25,
         flexDirection: "column",
         display: "flex",
         alignItems: "flex-start"
     },
     cercProviders: {
-        marginTop: 25
+        marginTop: 40,
+        width: 500
     },
     checkbox: {
         marginTop: -10
@@ -126,55 +125,59 @@ class CreateEditConsultationRoom extends BaseView {
 
             <Box className={classes.cecrContainer}>
                 <FormControl>
-                    <Box className={classes.cercFirstField}>
-                        <FormLabel textKey="room-name"/>
-                        <TextField
-                            name="title"
-                            error={this.hasError("title")}
-                            onChange={this.getRoomFieldValueChangeHandler("title")}
-                            value={room.title}
-                            className={classes.textField}
-                            helperText={this.getErrorText("title")}
-                        />
+                    <Box style={{flexDirection: "row", display: "flex"}}>
+                        <Box className={classes.cercFirstField}>
+                            <FormLabel textKey="room-name"/>
+                            <TextField
+                                name="title"
+                                error={this.hasError("title")}
+                                onChange={this.getRoomFieldValueChangeHandler("title")}
+                                value={room.title}
+                                className={classes.textField}
+                                helperText={this.getErrorText("title")}
+                            />
+                        </Box>
+                        <Box className={classes.cercField} style={{marginLeft: 20}}>
+                            <FormLabel textKey="total-slots"/>
+                            <TextField type="number" value={room.totalSlots} InputLabelProps={{shrink: true}}
+                                       error={this.hasError("totalSlots")}
+                                       helperText={this.getErrorText("totalSlots")}
+                                       sx={{width: 150}}
+                                       onChange={this.getRoomFieldValueChangeHandler("totalSlots")}
+                            />
+                        </Box>
                     </Box>
-                    <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduled-on"/>
-                        <TextField type="date"
-                                   error={this.hasError("scheduled-on")}
-                                   helperText={this.getErrorText("scheduled-on")}
-                                   value={moment(room.scheduledOn).format('YYYY-MM-DD')}
-                                   sx={{width: 220}} InputLabelProps={{shrink: true}}
-                                   onChange={this.getRoomFieldValueChangeHandler("scheduledOn")}
-                        />
-                    </Box>
-                    <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduled-start-time"/>
-                        <TextField type="time" value={room.scheduledStartTime} InputLabelProps={{shrink: true}}
-                                   error={this.hasError("scheduled-start-time")}
-                                   helperText={this.getErrorText("scheduled-start-time")}
-                                   inputProps={{step: 300}}
-                                   sx={{width: 150}}
-                                   onChange={this.getRoomFieldValueChangeHandler("scheduledStartTime")}
-                        />
-                    </Box>
-                    <Box className={classes.cercField}>
-                        <FormLabel textKey="scheduled-end-time"/>
-                        <TextField type="time" value={room.scheduledEndTime} InputLabelProps={{shrink: true}}
-                                   error={this.hasError("scheduled-end-time")}
-                                   helperText={this.getErrorText("scheduled-end-time")}
-                                   inputProps={{step: 300}}
-                                   sx={{width: 150}}
-                                   onChange={this.getRoomFieldValueChangeHandler("scheduledEndTime")}
-                        />
-                    </Box>
-                    <Box className={classes.cercField}>
-                        <FormLabel textKey="total-slots"/>
-                        <TextField type="number" value={room.totalSlots} InputLabelProps={{shrink: true}}
-                                   error={this.hasError("totalSlots")}
-                                   helperText={this.getErrorText("totalSlots")}
-                                   sx={{width: 150}}
-                                   onChange={this.getRoomFieldValueChangeHandler("totalSlots")}
-                        />
+                    <Box style={{flexDirection: "row", display: "flex", marginTop: 40}}>
+                        <Box className={[classes.cercField]}>
+                            <FormLabel textKey="scheduled-on"/>
+                            <TextField type="date"
+                                       error={this.hasError("scheduled-on")}
+                                       helperText={this.getErrorText("scheduled-on")}
+                                       value={moment(room.scheduledOn).format('YYYY-MM-DD')}
+                                       sx={{width: 220}} InputLabelProps={{shrink: true}}
+                                       onChange={this.getRoomFieldValueChangeHandler("scheduledOn")}
+                            />
+                        </Box>
+                        <Box className={[classes.cercField]} style={{marginLeft: 50}}>
+                            <FormLabel textKey="scheduled-start-time"/>
+                            <TextField type="time" value={room.scheduledStartTime} InputLabelProps={{shrink: true}}
+                                       error={this.hasError("scheduled-start-time")}
+                                       helperText={this.getErrorText("scheduled-start-time")}
+                                       inputProps={{step: 300}}
+                                       sx={{width: 150}}
+                                       onChange={this.getRoomFieldValueChangeHandler("scheduledStartTime")}
+                            />
+                        </Box>
+                        <Box className={[classes.cercField]} style={{marginLeft: 20}}>
+                            <FormLabel textKey="scheduled-end-time"/>
+                            <TextField type="time" value={room.scheduledEndTime} InputLabelProps={{shrink: true}}
+                                       error={this.hasError("scheduled-end-time")}
+                                       helperText={this.getErrorText("scheduled-end-time")}
+                                       inputProps={{step: 300}}
+                                       sx={{width: 150}}
+                                       onChange={this.getRoomFieldValueChangeHandler("scheduledEndTime")}
+                            />
+                        </Box>
                     </Box>
                     <EditProviders containerClassName={classes.cercProviders} providers={room.providers}
                                    onUpdate={this.getProviderUpdatedHandler()}/>
