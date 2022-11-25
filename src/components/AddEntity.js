@@ -44,7 +44,7 @@ class AddEntity extends React.Component {
             <Grid item lg={10}>
                 <Box className={classes.addEntityButtons}>
                     <Button disabled={_.isNil(entity)} variant="contained" color="primary" onClick={addEntityHandler}
-                            className={classes.addEntitySelectButton}>{i18n.t("select")}</Button>
+                            className={classes.addEntitySelectButton}>{i18n.t("add-button")}</Button>
                     <CancelButton onClickHandler={messageClose}/>
                 </Box>
             </Grid>

@@ -1,7 +1,7 @@
 import React from "react";
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
-import ConsultationRoomQueue from "../../components/consultationSession/ConsultationRoomQueue";
+import ConsultationRoomQueue from "../../components/consultationSession/ActiveConsultationRoomQueue";
 import JitsiConference from "../../components/consultationSession/JitsiConference";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {BeanContainer, ServerCall} from 'react-app-common';

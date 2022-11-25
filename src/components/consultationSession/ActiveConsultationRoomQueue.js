@@ -31,7 +31,7 @@ const styles = theme => ({
     }
 });
 
-class ConsultationRoomQueue extends BaseView {
+class ActiveConsultationRoomQueue extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -140,9 +140,4 @@ class ConsultationRoomQueue extends BaseView {
     }
 }
 
-export default withStyles(styles)
-
-(
-    ConsultationRoomQueue
-)
-;
+export default withStyles(styles)(ActiveConsultationRoomQueue);

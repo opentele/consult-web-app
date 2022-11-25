@@ -47,7 +47,11 @@ export default class Client extends AbstractEntity {
         return client;
     }
 
-    static displayName(client: Client) {
+    getDisplayName() {
+        return `${this.name}; ${this.displayAge()}; ${this.gender}`;
+    }
+
+    static displayNameFromServerResource(client) {
         return `${client.name}; ${DateTimeUtil.getAgeDisplay(client.age)}; ${client.gender}`;
     }
 
