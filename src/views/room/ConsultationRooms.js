@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar} from "@mui/material";
-import {Edit} from "@mui/icons-material";
+import {Edit, People, Queue, VideoCall} from "@mui/icons-material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
@@ -110,7 +110,7 @@ class ConsultationRooms extends BaseView {
 
         return <Box className={classes.rooms}>
             {
-                consultationRooms.map((consultationRoom) => {
+                consultationRooms.map((consultationRoom: ConsultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
                     const additionalModalState = {selectedConsultationRoom: consultationRoom};
                     return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
@@ -135,6 +135,7 @@ class ConsultationRooms extends BaseView {
                                 <Box>
                                     <Box>
                                         <SupervisorAccount fontSize="large" style={{marginRight: 10}}/>
+                                        {consultationRoom.providers.length === 0 && <Typography>{i18n.t("no-providers")}</Typography>}
                                         {consultationRoom.providers.map((provider) =>
                                             <Chip label={provider.name} color="primary" key={provider.id} style={{marginRight: 8, borderRadius: 2}}/>)}
                                     </Box>
@@ -147,14 +148,15 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
-                            <Button variant="contained" color={"secondary"} className={classes.crButton}
+                            <Button variant="contained" color={"secondary"} className={classes.crButton} startIcon={<Queue/>}
                                     onClick={this.getModalOpenHandler("queueManagementModalStatus",
-                                                additionalModalState)}>{i18n.t("client-queue-title")}</Button>}
+                                                additionalModalState)}>{i18n.t("manage-client-queue")}</Button>}
                             {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
+                                    startIcon={<People/>}
                                     color="secondary">{i18n.t("view-clients")}</Button>}
                             {consultationRoom.canJoinConference() &&
-                            <Button variant="contained" color="primary" className={classes.crButton}
+                            <Button variant="contained" color="primary" className={classes.crButton} startIcon={<VideoCall/>}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
                     </Card>

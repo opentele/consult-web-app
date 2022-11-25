@@ -1,7 +1,7 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
 import {Box, Button, CircularProgress, Fab, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography} from '@mui/material';
-import {Add, ArrowCircleDown, ArrowCircleUp, Person, VideoCall as VideoCallIcon} from '@mui/icons-material';
+import {Add, ArrowCircleDown, ArrowCircleUp, Person, Queue, VideoCall as VideoCallIcon} from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import {i18n} from "consult-app-common";
 import _ from 'lodash';
@@ -87,7 +87,7 @@ class ActiveConsultationRoomQueue extends BaseView {
 
         return (
             <Box className={containerClassName}>
-                <Typography variant="h5">{i18n.t('client-queue-title')}</Typography>
+                <Typography variant="h5" style={{marginLeft: 5}}>{i18n.t('client-queue-title')}</Typography>
                 <Paper className={classes.crqContainer} elevation={0}>
                     <Box>
                         <List dense={true}>
@@ -127,8 +127,9 @@ class ActiveConsultationRoomQueue extends BaseView {
                         </Menu>}
                     </Box>
                     <Box className={classes.addClient}>
-                        <Button variant="text" color="primary" onClick={() => this.onModalOpen("addClientModalStatus")}>
-                            {`${i18n.t('add-client')}`}
+                        <Button variant="outlined" color="primary" startIcon={<Queue/>}
+                                onClick={() => this.onModalOpen("addClientModalStatus")}>
+                            {`${i18n.t('manage-client-queue')}`}
                         </Button>
                     </Box>
                     {addClientModalStatus === ModalStatus.OPENED &&
