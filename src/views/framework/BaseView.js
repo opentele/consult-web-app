@@ -81,12 +81,13 @@ class BaseView extends Component {
         throw new Error("Must be implemented");
     }
 
-    getModalOpenHandler(stateField) {
-        return () => this.onModalOpen(stateField);
+    getModalOpenHandler(stateField, additionalState = {}) {
+        return () => this.onModalOpen(stateField, additionalState);
     }
-    onModalOpen(stateField) {
-        let newState = {...this.state};
+    onModalOpen(stateField, additionalState = {}) {
+        const newState = {...this.state};
         newState[stateField] = ModalStatus.OPENED;
+        Object.assign(newState, additionalState);
         this.setState(newState);
     }
 
@@ -95,7 +96,7 @@ class BaseView extends Component {
     }
     onEntitySave(serverCallName) {
         const serverCall = ServerCall.responseReceived(this.state[serverCallName]);
-        if (serverCall.callStatus !== ServerCallStatus.FAILURE) {
+        if (!ServerCall.errored(serverCall)) {
             this.props.messageClose(true);
         }
     }

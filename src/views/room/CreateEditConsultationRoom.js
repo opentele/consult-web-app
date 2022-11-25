@@ -50,6 +50,9 @@ const styles = theme => ({
     cercUnselectedProvider: {
         fontWeight: theme.typography.fontWeightMedium,
         color: 'black'
+    },
+    cercServerError: {
+        marginTop: 10
     }
 });
 
@@ -159,7 +162,7 @@ class CreateEditConsultationRoom extends BaseView {
                     </Box>
                     <EditProviders containerClassName={classes.cercProviders} providers={room.providers}
                                    onUpdate={this.getProviderUpdatedHandler()}/>
-                    <ServerErrorMessage serverCall={saveRoomServerCall}/>
+                    <ServerErrorMessage serverCall={saveRoomServerCall} className={classes.cercServerError}/>
                     <SaveCancelButtons onSaveHandler={() => this.onSave()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
                 </FormControl>
             </Box>

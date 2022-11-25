@@ -5,12 +5,14 @@ import {BottomNavigationAction, Box, Paper, Table, TableBody, TableCell, TableCo
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
 import {Edit} from "@mui/icons-material";
-import ModalStatus from "../framework/ModalStatus";
 import {Link} from "react-router-dom";
 
 const styles = theme => ({
     clientListMainBox: {
         padding: 20
+    },
+    tableHeader: {
+        backgroundColor: theme.customProps.tableHeadBackgroundColor
     }
 });
 
@@ -27,11 +29,10 @@ class ClientList extends BaseView {
 
     render() {
         const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
-        const {clientDashboardOpenStatus} = this.state;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
-                <Table sx={{minWidth: 700}} aria-label="customized table">
-                    <TableHead>
+                    <Table sx={{minWidth: 700}} aria-label="customized table">
+                    <TableHead className={classes.tableHeader}>
                         <TableRow>
                             <TableCell>{i18n.T('name')}</TableCell>
                             <TableCell>{i18n.T('gender')}</TableCell>

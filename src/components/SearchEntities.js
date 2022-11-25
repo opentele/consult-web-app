@@ -9,11 +9,6 @@ import BaseView from "../views/framework/BaseView";
 import ServerErrorMessage from "./ServerErrorMessage";
 
 const styles = () => ({
-    seMain: {
-        paddingLeft: 230,
-        paddingRight: 210,
-        paddingTop: 20
-    },
     seAutocomplete: {
         width: '400px'
     }
@@ -68,7 +63,7 @@ class SearchEntities extends BaseView {
 
         const {serverCall, autoCompleteOpen} = this.state;
 
-        return <Grid container className={classes.seMain}>
+        return <Grid container>
             <Grid item lg={10}>
                 <Autocomplete
                     className={classes.seAutocomplete}

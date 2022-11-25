@@ -9,9 +9,6 @@ import ServerErrorMessage from "./ServerErrorMessage";
 
 const styles = theme => ({
     addEntityMain: {
-        paddingLeft: 230,
-        paddingRight: 210,
-        paddingTop: 20,
         marginBottom: 270
     },
     addEntityButtons: {

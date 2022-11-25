@@ -13,9 +13,6 @@
     "@rpldy/upload-button": "^1.0.0",
     "@rpldy/upload-preview": "^1.0.0",
     "@rpldy/uploady": "^1.0.0",
-    "@testing-library/jest-dom": "^5.11.4",
-    "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^4.0.0",
     "consult-app-common": "link:./../consult-app-common",
     "formsy-react": "^2.2.5",
@@ -83,6 +80,9 @@
     "express": "4.17.1",
     "http-proxy-middleware": "2.0.1",
     "storybook-react-router": "^1.0.8",
-    "wrangler": "2.1.10"
+    "wrangler": "2.1.10",
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10"
   }
 }

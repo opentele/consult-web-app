@@ -34,7 +34,8 @@ const themeOptions = Object.assign({}, defaultDarkTheme, {
     },
     customProps: {
         paperDividerHeight: "15px",
-            paperDividerElevation: 30
+        paperDividerElevation: 30,
+        tableHeadBackgroundColor: "darkgreen"
     },
     customPalette: {
         textboxBackgroundColor: "#383838"

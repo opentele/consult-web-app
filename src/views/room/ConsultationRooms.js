@@ -17,7 +17,7 @@ import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import {Redirect} from "react-router-dom";
 import _ from 'lodash';
 import TimeScheduleField from "../../components/DurationField";
-import {Person} from "@mui/icons-material";
+import {SupervisorAccount} from "@mui/icons-material";
 
 const styles = theme => ({
     rooms: {
@@ -50,7 +50,7 @@ class ConsultationRooms extends BaseView {
             getRoomsCall: ServerCall.createInitial([]),
             clientListCall: ServerCall.createInitial([]),
             setupTeleConferenceCall: ServerCall.createInitial(),
-            addClientModalStatus: ModalStatus.NOT_OPENED,
+            queueManagementModalStatus: ModalStatus.NOT_OPENED,
             viewClientsModalStatus: ModalStatus.NOT_OPENED,
             editConsultationRoomStatus: ModalStatus.NOT_OPENED,
             consultationRooms: [],
@@ -69,13 +69,13 @@ class ConsultationRooms extends BaseView {
 
     refresh(stateField) {
         this.makeServerCall(this.serviceMethod(), "getRoomsCall");
-        if (stateField === "addClientModalStatus")
+        if (stateField === "queueManagementModalStatus")
             this.setState({clientAdded: true});
     }
 
     updateServerResponseState(newState, serverCallName) {
         if (serverCallName === "getRoomsCall") {
-            newState.addClientModalStatus = ModalStatus.NOT_OPENED;
+            newState.queueManagementModalStatus = ModalStatus.NOT_OPENED;
             newState.consultationRooms = ConsultationRoom.fromServerResources(ServerCall.getData(newState.getRoomsCall));
         } else if (serverCallName === "clientListCall") {
             newState.viewClientsModalStatus = ModalStatus.OPENED;
@@ -91,13 +91,14 @@ class ConsultationRooms extends BaseView {
 
     render() {
         const {
-            addClientModalStatus,
+            queueManagementModalStatus,
             viewClientsModalStatus,
             editConsultationRoomStatus,
             setupTeleConferenceCall,
             consultationRooms,
             clientList,
-            clientAdded
+            clientAdded,
+            selectedConsultationRoom
         } = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
@@ -111,13 +112,14 @@ class ConsultationRooms extends BaseView {
             {
                 consultationRooms.map((consultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
+                    const additionalModalState = {selectedConsultationRoom: consultationRoom};
                     return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>
                                     <Box sx={{display: "flex", flexDirection: "row"}}>
                                         <Typography variant="h4">{consultationRoom.getDisplayTitle()}</Typography>
-                                        <IconButton onClick={() => this.onModalOpen("editConsultationRoomStatus")}>
+                                        <IconButton onClick={this.getModalOpenHandler("editConsultationRoomStatus", additionalModalState)}>
                                             <Edit/>
                                         </IconButton>
                                     </Box>
@@ -132,7 +134,7 @@ class ConsultationRooms extends BaseView {
                                 </Box>
                                 <Box>
                                     <Box>
-                                        <Person fontSize="large" style={{marginRight: 10}}/>
+                                        <SupervisorAccount fontSize="large" style={{marginRight: 10}}/>
                                         {consultationRoom.providers.map((provider) =>
                                             <Chip label={provider.name} color="primary" key={provider.id} style={{marginRight: 8, borderRadius: 2}}/>)}
                                     </Box>
@@ -146,7 +148,7 @@ class ConsultationRooms extends BaseView {
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
                             <Button variant="contained" color={"secondary"} className={classes.crButton}
-                                    onClick={() => this.onModalOpen("addClientModalStatus")}>{i18n.t("add-client")}</Button>}
+                                    onClick={this.getModalOpenHandler("queueManagementModalStatus", additionalModalState)}>{i18n.t("client-queue")}</Button>}
                             {consultationRoom.canViewClients() &&
                             <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
                                     color="secondary">{i18n.t("view-clients")}</Button>}
@@ -154,21 +156,20 @@ class ConsultationRooms extends BaseView {
                             <Button variant="contained" color="primary" className={classes.crButton}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
-
-                        {addClientModalStatus === ModalStatus.OPENED &&
-                        <AddClient messageClose={this.getModalCloseHandler("addClientModalStatus")} consultationRoom={consultationRoom}
-                                   autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
-
-                        {viewClientsModalStatus === ModalStatus.OPENED && <ConsultationRoomClientsView
-                            messageClose={this.getModalCloseHandler("viewClientsModalStatus")}
-                            clientList={clientList}/>}
-                        {editConsultationRoomStatus === ModalStatus.OPENED &&
-                        <CreateEditConsultationRoom roomId={consultationRoom.id}
-                                                    messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
                     </Card>
                 })
             }
             <br/>
+            {queueManagementModalStatus === ModalStatus.OPENED &&
+            <AddClient messageClose={this.getModalCloseHandler("queueManagementModalStatus")} consultationRoom={selectedConsultationRoom}
+                       autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
+
+            {viewClientsModalStatus === ModalStatus.OPENED &&
+                <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
+
+            {editConsultationRoomStatus === ModalStatus.OPENED &&
+            <CreateEditConsultationRoom roomId={selectedConsultationRoom.id}
+                                        messageClose={this.getModalCloseHandler("editConsultationRoomStatus")}/>}
             <Snackbar open={clientAdded}
                       autoHideDuration={5000}
                       onClose={() => this.setState({clientAdded: false})}
