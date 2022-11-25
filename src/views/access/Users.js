@@ -9,6 +9,7 @@ import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
 import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
+import {GroupAdd, PersonAddAlt} from "@mui/icons-material";
 
 class Users extends BaseView {
     constructor(props, context) {
@@ -49,7 +50,7 @@ class Users extends BaseView {
                 {this.renderIfEditUser()}
                 <TableContainer component={Paper}>
                     <Table sx={{minWidth: 700}} aria-label="customized table">
-                        <TableHead>
+                        <TableHead className={classes.tableHeader}>
                             <TableRow>
                                 <TableCell key={1}>{i18n.T('name')}</TableCell>
                                 <TableCell key={2}>{i18n.T('role-column-text')}</TableCell>
@@ -74,9 +75,11 @@ class Users extends BaseView {
                         </TableBody>
                     </Table>
                     <Box className={classes.usersButtons}>
-                        <Button className={classes.usersButton} variant="contained" color="primary"
+                        <Button className={classes.usersButton} variant="outlined" color="primary"
+                                startIcon={<GroupAdd/>}
                                 onClick={() => this.onModalOpen("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
-                        <Button variant="contained" color="primary" className={classes.usersButton}
+                        <Button variant="outlined" color="primary" className={classes.usersButton}
+                                startIcon={<PersonAddAlt/>}
                                 onClick={() => this.onModalOpen("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
                     </Box>
                 </TableContainer>
@@ -124,6 +127,9 @@ const styles = theme => ({
     },
     uListMainBox: {
         padding: 20
+    },
+    tableHeader: {
+        backgroundColor: theme.customProps.tableHeadBackgroundColor
     }
 });
 

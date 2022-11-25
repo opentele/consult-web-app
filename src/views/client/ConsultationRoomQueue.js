@@ -13,7 +13,11 @@ import {i18n} from "consult-app-common";
 import ConsultRoomClient from "../../domain/ConsultRoomClient";
 import {Delete} from '@mui/icons-material';
 
-const styles = theme => ({});
+const styles = theme => ({
+    tableHeader: {
+        backgroundColor: theme.customProps.tableHeadBackgroundColor
+    }
+});
 
 const ClientQueue = function ({consultationRoomClients, classes, onDelete}) {
     return <TableContainer component={Paper} style={{padding: 10}}>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
-import {Translate, Home, DarkMode, LightMode} from "@mui/icons-material";
+import {Translate, Home, DarkMode, LightMode, AccountCircle, Logout} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
 import {i18n, UserService} from "consult-app-common";
@@ -30,6 +30,13 @@ const styles = theme => ({
 });
 
 const pages = [];
+
+const AppBarMenu = function ({onClickHandler, Icon, displayKey, fieldName}) {
+    return <MenuItem key={fieldName} onClick={onClickHandler}>
+        <Icon/>
+        <Typography style={{marginLeft: 10}}>{i18n.t(displayKey)}</Typography>
+    </MenuItem>
+}
 
 class ConsultAppBar extends BaseView {
     static propTypes = {
@@ -105,7 +112,7 @@ class ConsultAppBar extends BaseView {
                             <IconButton component={Link} to="/">
                                 <Home fontSize="large"/>
                             </IconButton>
-                            <Typography variant="h6" className={classes.brandLabel}>Tele Immerse</Typography>
+                            <Typography variant="h6" className={classes.brandLabel}>{i18n.t('tele-sathi')}</Typography>
                         </Box>
                         <Box>
                             {pages.map((page) => (
@@ -135,15 +142,12 @@ class ConsultAppBar extends BaseView {
                                   }}
                                   open={Boolean(this.state.anchorElUser)}
                                   onClose={this.handleCloseUserMenu()}>
-                                <MenuItem key='profile' onClick={() => this.onOpenMenuModal("profileOpenStatus")}>
-                                    <Typography>{i18n.t('profile-menu-item')}</Typography>
-                                </MenuItem>
-                                <MenuItem key='changeLanguage' onClick={this.getOpenLanguageModalHandler()}>
-                                    <Typography>{i18n.t('change-language-menu-item')}</Typography>
-                                </MenuItem>
-                                <MenuItem key='logout' onClick={this.logoutHandler()}>
-                                    <Typography>{i18n.t('logout-menu-item')}</Typography>
-                                </MenuItem>
+                                <AppBarMenu onClickHandler={() => this.onOpenMenuModal("profileOpenStatus")}
+                                            displayKey="profile-menu-item" fieldName="profile" Icon={AccountCircle}/>
+                                <AppBarMenu onClickHandler={this.getOpenLanguageModalHandler()}
+                                            displayKey="change-language-menu-item" fieldName="changeLanguage" Icon={Translate}/>
+                                <AppBarMenu onClickHandler={this.logoutHandler()}
+                                            displayKey="logout-menu-item" fieldName="logout" Icon={Logout}/>
                             </Menu>
                         </Box>
                     </Toolbar>
