@@ -9,6 +9,7 @@ import {ServerCall} from "react-app-common";
 import {User, UserService} from "consult-app-common";
 import WaitView from "../../components/WaitView";
 import {Box} from "@mui/material";
+import GlobalContext from "../../framework/GlobalContext";
 
 const styles = theme => ({});
 
@@ -17,7 +18,8 @@ class EditUser extends BaseView {
         super(props, context);
         this.state = {
             saveCall: ServerCall.createInitial(),
-            loadUserCall: ServerCall.createInitial()
+            loadUserCall: ServerCall.createInitial(),
+            user: null
         };
     }
 
@@ -27,9 +29,13 @@ class EditUser extends BaseView {
     };
 
     onSave() {
-        if (this.state.editUserState.valid)
+        if (GlobalContext.isLoggedInUser(this.state.user) && this.state.editUserState.valid) {
             this.makeServerCall(UserService.updateProfile(this.state.editUserState.user), "saveCall")
                 .then(this.getEntitySaveHandler("saveCall"));
+        } else if (!GlobalContext.isLoggedInUser(this.state.user)) {
+            this.makeServerCall(UserService.updateUser(this.state.editUserState.user), "saveCall")
+                .then(this.getEntitySaveHandler("saveCall"));
+        }
     }
 
     componentDidMount() {

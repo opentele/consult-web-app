@@ -190,8 +190,9 @@ class EditUserFields extends BaseView {
                 <FormLabel error={this.hasError("providerType")}>{i18n.t('provider-type-label')}</FormLabel>
                 <RadioGroup value={providerType} row onChange={this.getUserFieldValueChangedHandler("providerType")}>
                     <FormControlLabel value="Consultant" control={<Radio/>} label={i18n.t("consultant")}/>
-                    <FormControlLabel value="Usher" control={<Radio/>} label={i18n.t("usher")}/>
+                    <FormControlLabel value="Moderator" control={<Radio/>} label={i18n.t("moderator")}/>
                     <FormControlLabel value="None" control={<Radio/>} label={i18n.t("none")}/>
+                    <FormControlLabel value="Both" control={<Radio/>} label={i18n.t("both")}/>
                 </RadioGroup>
                 <FormHelperText error={this.hasError("providerType")}>{this.getErrorText("providerType")}</FormHelperText>
             </FormControl>}

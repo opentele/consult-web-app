@@ -25,6 +25,10 @@ class GlobalContext {
         return this.user;
     }
 
+    isLoggedInUser(user) {
+        return this.user.id === user.id;
+    }
+
     hasUser() {
         return !_.isNil(this.user);
     }

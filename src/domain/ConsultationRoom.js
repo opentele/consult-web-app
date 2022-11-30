@@ -54,15 +54,15 @@ class ConsultationRoom extends AbstractEntity {
     getAlerts() {
         const user = GlobalContext.getUser();
         const alerts = [];
-        if (this.hasMoreClients() && user["providerType"] === ProviderType.Usher)
+        if (this.hasMoreClients() && user["providerType"] === ProviderType.Moderator)
             alerts.push(Alert.info(i18n.t("conference-client-next", {client: this.getCurrentClientName()})));
 
-        if (this.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Usher)
+        if (this.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Moderator)
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
                 numberOfClientsCompleted: this.numberOfUserClientCompleted(),
                 numberOfClientsPending: this.numberOfUserClientsPending
             })));
-        if (!this.hasVacancy() && user["providerType"] === ProviderType.Usher)
+        if (!this.hasVacancy() && user["providerType"] === ProviderType.Moderator)
             alerts.push(Alert.error(i18n.t("conference-no-vacancy")));
 
         return alerts;
