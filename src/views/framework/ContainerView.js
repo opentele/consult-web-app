@@ -6,7 +6,7 @@ import ConsultAppBar from "../../components/ConsultAppBar";
 import {BottomNavigation, BottomNavigationAction, Box, Button} from "@mui/material";
 import SecurityIcon from '@mui/icons-material/Security';
 import PeopleIcon from '@mui/icons-material/People';
-import HomeIcon from '@mui/icons-material/Home';
+import MeetingRoom from '@mui/icons-material/MeetingRoom';
 import {Paper} from "@mui/material";
 import {i18n} from "consult-app-common";
 import {Link, withRouter} from 'react-router-dom';
@@ -58,7 +58,7 @@ class ContainerView extends BaseView {
                     value={tabIndexes[activeTab]}
                     onChange={(event, newValue) => {
                     }}>
-                    <BottomNavigationAction component={Link} to="/" label={i18n.t("home")} icon={<HomeIcon/>}/>
+                    <BottomNavigationAction component={Link} to="/" label={i18n.t("rooms")} icon={<MeetingRoom/>}/>
                     <BottomNavigationAction component={Link} to="/clients" label={i18n.t('client-navigation-icon')} icon={<PeopleIcon/>}/>
                     {GlobalContext.getUser().canManageUsers() &&
                         <BottomNavigationAction component={Link} to="/users" label={i18n.t('manage-users-menu-item')} icon={<SecurityIcon/>}/>}

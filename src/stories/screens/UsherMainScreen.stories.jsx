@@ -6,7 +6,7 @@ import ConsultationServiceStub from "../stubs/ConsultationServiceStub";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 
 export default {
-    title: 'Usher / Main Screen',
+    title: 'Moderator / Main Screen',
     component: About,
 };
 
@@ -16,6 +16,6 @@ const Template = (args) => <About {...args} />;
 export const MainScreen = Template.bind({});
 
 MainScreen.args = {
-    role: UserType.Usher,
+    role: UserType.Moderator,
     user: {name: "Ramesh"}
 };

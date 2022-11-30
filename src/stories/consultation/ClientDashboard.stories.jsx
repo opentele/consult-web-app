@@ -3,7 +3,7 @@ import ClientRecord from '../testdata/client-record.json';
 import About from "../../views/consultation/ClientDashboard";
 
 export default {
-    title: 'Consultant and Remote Usher / Client Dashboard',
+    title: 'Consultant and Remote Moderator / Client Dashboard',
     component: About,
 };
 

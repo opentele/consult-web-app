@@ -2,7 +2,7 @@ import React from 'react';
 import About from "../../views/consultation/ConsultationRecordView";
 
 export default {
-    title: 'Consultant and Remote Usher / Consultation Record',
+    title: 'Consultant and Remote Moderator / Consultation Record',
     component: About,
 };
 
