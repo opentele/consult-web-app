@@ -25,7 +25,8 @@ const styles = theme => ({
         alignItems: "center"
     },
     brandLabel: {
-        marginLeft: 10
+        marginLeft: 10,
+        color: "white"
     }
 });
 
@@ -109,10 +110,10 @@ class ConsultAppBar extends BaseView {
 
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
-                            <IconButton component={Link} to="/">
-                                <Avatar alt="Example Alt" src="/ts-logo.png" />
+                            <IconButton component={"a"} href="https://telesathi.com" target="_blank">
+                                <Avatar alt="Tele Sathi" src="/ts-logo.png" />
                             </IconButton>
-                            <Typography variant="h6" className={classes.brandLabel}>{i18n.t('tele-sathi')}</Typography>
+                            <Link variant="h6" className={classes.brandLabel} href="/">{i18n.t('tele-sathi')}</Link>
                         </Box>
                         <Box>
                             {pages.map((page) => (
