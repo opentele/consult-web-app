@@ -23,6 +23,11 @@ const styles = theme => ({
     rooms: {
         margin: 30
     },
+    noRooms: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center"
+    },
     conferenceBox: {
         marginTop: 15,
         padding: 10
@@ -108,7 +113,10 @@ class ConsultationRooms extends BaseView {
             return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
         }
 
-        return <Box className={classes.rooms}>
+        const hasRooms = consultationRooms.length !== 0;
+
+        return <Box className={hasRooms ? classes.rooms : classes.noRooms}>
+            {!hasRooms && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
             {
                 consultationRooms.map((consultationRoom: ConsultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
