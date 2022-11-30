@@ -25,7 +25,7 @@ const styles = theme => ({
         alignItems: "center"
     },
     brandLabel: {
-        marginLeft: 20
+        marginLeft: 10
     }
 });
 
@@ -110,7 +110,7 @@ class ConsultAppBar extends BaseView {
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
                             <IconButton component={Link} to="/">
-                                <Home fontSize="large"/>
+                                <Avatar alt="Example Alt" src="/ts-logo.png" />
                             </IconButton>
                             <Typography variant="h6" className={classes.brandLabel}>{i18n.t('tele-sathi')}</Typography>
                         </Box>
