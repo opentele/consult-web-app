@@ -10,6 +10,7 @@ import ConsultationDisplay from "../../components/consultation/ConsultationDispl
 import ModalContainerView from "../framework/ModalContainerView";
 import WaitView from "../../components/WaitView";
 import Client from '../../domain/Client';
+import CancelButton from "../../components/CancelButton";
 
 const styles = theme => ({});
 
@@ -41,7 +42,7 @@ class ConsultationRecordDuringConferenceView extends BaseView {
         const client = Client.fromServerResource(ServerCall.getData(viewClientCall));
         return <ModalContainerView titleKey="consultation-record-create-edit-title"
                                    titleObj={{client: ServerCall.getData(viewClientCall).name}}>
-            <Box style={{width: "600px", padding: 20}}>
+            <Box style={{width: "100%", padding: 20, flexDirection: "column", display: "flex"}}>
                 <ConsultationRecordView client={client} messageClose={onClose} consultationSessionRecordId={client.getCurrentSessionRecordId(consultationRoom)}/>
                 <Box style={{marginTop: 40}}>
                     {client.getConsultationSessionRecordsInOrder().map((record) =>
@@ -49,6 +50,9 @@ class ConsultationRecordDuringConferenceView extends BaseView {
                             <ConsultationDisplay consultationSessionRecord={record} client={client}/>
                         </Box>
                     )}
+                </Box>
+                <Box style={{alignSelf: "flex-end"}}>
+                    <CancelButton onClickHandler={() => onClose(false)}/>
                 </Box>
             </Box>
         </ModalContainerView>;
