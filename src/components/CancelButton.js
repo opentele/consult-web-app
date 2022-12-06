@@ -13,12 +13,17 @@ class CancelButton extends React.Component {
 
     static propTypes = {
         onClickHandler: PropTypes.func.isRequired,
-        className: PropTypes.string
+        className: PropTypes.string,
+        cancelButtonTextKey: PropTypes.string
+    };
+
+    static defaultProps = {
+        cancelButtonTextKey: "cancel-button"
     };
 
     render() {
-        const {onClickHandler, className} = this.props;
-        return <Button className={className} variant="contained" color={"secondary"} onClick={() => onClickHandler(false)}>{i18n.t("cancel-button")}</Button>;
+        const {onClickHandler, className, cancelButtonTextKey} = this.props;
+        return <Button className={className} variant="contained" color={"secondary"} onClick={() => onClickHandler(false)}>{i18n.t(cancelButtonTextKey)}</Button>;
     }
 }
 

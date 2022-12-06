@@ -4,7 +4,7 @@ import {withStyles} from "@mui/styles";
 import {BottomNavigationAction, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
-import {Edit} from "@mui/icons-material";
+import {FileOpen} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 
 const styles = theme => ({
@@ -54,7 +54,7 @@ class ClientList extends BaseView {
                                 <TableCell>{x.registrationNumber}</TableCell>
                                 {displayQueueNumber && <TableCell>{x["queueNumber"]}</TableCell>}
                                 {displayNumberOfSessions && <TableCell><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
-                                <TableCell component={Link} to={`/client?id=${x.id}`}><Edit/></TableCell>
+                                <TableCell component={Link} to={`/client?id=${x.id}`}><FileOpen/></TableCell>
                             </TableRow>
                         ))}
                     </TableBody>

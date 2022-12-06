@@ -4,11 +4,13 @@ import PropTypes from "prop-types";
 import ConsultationRecordPrintView from "../consultation/ConsultationRecordPrintView";
 import BaseView from "./BaseView";
 import ModalContainerView from "./ModalContainerView";
-import {Fab} from "@mui/material";
+import {createTheme, Fab, ThemeProvider} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import PrintIcon from "@mui/icons-material/Print";
 import {Box} from "@mui/material";
 import GlobalContext from "../../framework/GlobalContext";
+import {withStyles} from "@mui/styles";
+import LightTheme from "../../theming/LightTheme";
 
 const pageStyle = `
   @media print {
@@ -18,8 +20,19 @@ const pageStyle = `
   }
 `;
 
+const styles = theme => ({
+    pvContainer: {
+        width: "100%",
+        flexDirection: 'row-reverse',
+        display: "flex",
+        marginTop: -25,
+        paddingRight: 20,
+        backgroundColor: "white"
+    }
+});
+
 class PrintView extends BaseView {
-    componentRef = null;
+    printComponentRef = null;
 
     constructor(props) {
         super(props);
@@ -40,12 +53,12 @@ class PrintView extends BaseView {
     handleOnBeforeGetContent = () => {
     };
 
-    setComponentRef = (ref) => {
-        this.componentRef = ref;
+    setAsPrintComponentRef = (ref) => {
+        this.printComponentRef = ref;
     };
 
     reactToPrintContent = () => {
-        return this.componentRef;
+        return this.printComponentRef;
     };
 
     reactToPrintTrigger = () => {
@@ -55,29 +68,31 @@ class PrintView extends BaseView {
     };
 
     render() {
-        const {consultationSessionRecordId, client, messageClose} = this.props;
+        const {consultationSessionRecordId, client, messageClose, classes} = this.props;
 
         return (
-            <ModalContainerView>
-                <Box style={{width: "100%", flexDirection: 'row-reverse', display: "flex", marginTop: -25, paddingRight: 20, backgroundColor: "darkgreen"}}>
-                    <Fab color="secondary" size="small" onClick={() => messageClose(false)}>
-                        <CloseIcon/>
-                    </Fab>
-                    <ReactToPrint
-                        content={this.reactToPrintContent}
-                        documentTitle={`${GlobalContext.getOrganisation()} - ${GlobalContext.getUser().name} - ${client.name}`}
-                        onAfterPrint={this.handleAfterPrint}
-                        onBeforeGetContent={this.handleOnBeforeGetContent}
-                        onBeforePrint={this.handleBeforePrint}
-                        removeAfterPrint
-                        trigger={this.reactToPrintTrigger}
-                        pageStyle={""}
-                    />
-                </Box>
-                <ConsultationRecordPrintView consultationSessionRecordId={consultationSessionRecordId} client={client} ref={this.setComponentRef}/>
-            </ModalContainerView>
+            <ThemeProvider theme={createTheme(LightTheme)}>
+                <ModalContainerView>
+                    <Box className={classes.pvContainer}>
+                        <Fab color="secondary" size="small" onClick={() => messageClose(false)}>
+                            <CloseIcon/>
+                        </Fab>
+                        <ReactToPrint
+                            content={this.reactToPrintContent}
+                            documentTitle={`${GlobalContext.getOrganisation()} - ${GlobalContext.getUser().name} - ${client.name}`}
+                            onAfterPrint={this.handleAfterPrint}
+                            onBeforeGetContent={this.handleOnBeforeGetContent}
+                            onBeforePrint={this.handleBeforePrint}
+                            removeAfterPrint
+                            trigger={this.reactToPrintTrigger}
+                            pageStyle={""}
+                        />
+                    </Box>
+                    <ConsultationRecordPrintView consultationSessionRecordId={consultationSessionRecordId} client={client} ref={this.setAsPrintComponentRef}/>
+                </ModalContainerView>
+            </ThemeProvider>
         );
     }
 }
 
-export default PrintView;
+export default withStyles(styles)(PrintView);

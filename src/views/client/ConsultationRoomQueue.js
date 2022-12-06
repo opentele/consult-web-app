@@ -106,7 +106,8 @@ class ConsultationRoomQueue extends BaseView {
                                     displayFn={Client.displayNameFromServerResource}
                                     autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>
                     <AddEntity messageClose={() => messageClose(appointmentsChanged)}
-                               addEntityHandler={() => this.onAddClient()} entity={client} serverCall={addClientServerCall}/>
+                               addEntityHandler={() => this.onAddClient()} entity={client} serverCall={addClientServerCall}
+                               cancelButtonTextKey={"done-button"}/>
                 </Box>
             </Box>
         </ModalContainerView>;

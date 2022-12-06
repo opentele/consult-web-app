@@ -51,14 +51,12 @@ class ClientDashboard extends BaseView {
         }
     }
 
-    getClientPrintHandler() {
-        return (clientId) => {
-            let newState = {...this.state};
-            newState.printModalStatus = ModalStatus.OPENED;
-            newState.consultationSessionRecordId = null;
-            newState.clientId = clientId;
-            this.setState(newState);
-        }
+    onClientPrint(clientId) {
+        let newState = {...this.state};
+        newState.printModalStatus = ModalStatus.OPENED;
+        newState.consultationSessionRecordId = null;
+        newState.clientId = clientId;
+        this.setState(newState);
     }
 
     render() {
@@ -77,7 +75,7 @@ class ClientDashboard extends BaseView {
             <Box className={classes.container}>
                 <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light}}/>
                 <Box className={classes.section}>
-                    <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={this.getClientPrintHandler()}/>
+                    <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>
                 </Box>
                 {client.consultationSessionRecords.map((record) => {
                         return <Box className={classes.section} key={record.id}>

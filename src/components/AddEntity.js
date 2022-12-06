@@ -34,18 +34,19 @@ class AddEntity extends React.Component {
         entity: PropTypes.object,
         addEntityHandler: PropTypes.func.isRequired,
         messageClose: PropTypes.func.isRequired,
-        serverCall: PropTypes.object
+        serverCall: PropTypes.object,
+        cancelButtonTextKey: PropTypes.string
     };
 
     render() {
-        const {classes, entity, addEntityHandler, messageClose, serverCall} = this.props;
+        const {classes, entity, addEntityHandler, messageClose, serverCall, cancelButtonTextKey} = this.props;
 
         return <Grid container className={classes.addEntityMain}>
             <Grid item lg={10}>
                 <Box className={classes.addEntityButtons}>
                     <Button disabled={_.isNil(entity)} variant="contained" color="primary" onClick={addEntityHandler}
                             className={classes.addEntitySelectButton}>{i18n.t("add-button")}</Button>
-                    <CancelButton onClickHandler={messageClose}/>
+                    <CancelButton onClickHandler={messageClose} cancelButtonTextKey={cancelButtonTextKey}/>
                 </Box>
             </Grid>
             <Grid item lg={10}>

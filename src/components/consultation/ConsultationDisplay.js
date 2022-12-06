@@ -34,8 +34,7 @@ class ConsultationDisplay extends BaseView {
         consultationSessionRecord: PropTypes.object.isRequired,
         client: PropTypes.object.isRequired,
         onModification: PropTypes.func,
-        onPrint: PropTypes.func.isRequired,
-        printMode: PropTypes.bool
+        onPrint: PropTypes.func.isRequired
     }
 
     refresh() {
@@ -49,7 +48,6 @@ class ConsultationDisplay extends BaseView {
             client,
             onPrint,
             onModification,
-            printMode,
             theme
         } = this.props;
         const {editModalStatus} = this.state;
@@ -77,7 +75,7 @@ class ConsultationDisplay extends BaseView {
                     <FieldDisplay fieldName="date-of-consultation" fieldValue={consultationSessionRecord.createdOnForDisplay}/>
                     <FieldDisplay fieldName="key-inference" fieldValue={consultationSessionRecord.keyInference}/>
                     <FieldDisplay fieldName="complaints" fieldValue={consultationSessionRecord.complaints}/>
-                    {!printMode && <FieldDisplay fieldName="observations" fieldValue={consultationSessionRecord.observations}/>}
+                    {!onPrint && <FieldDisplay fieldName="observations" fieldValue={consultationSessionRecord.observations}/>}
                     <FieldDisplay fieldName="recommendations" fieldValue={consultationSessionRecord.recommendations}/>
                     <FieldDisplay fieldName="follow-up-in" fieldValue={consultationSessionRecord.followUpIn}/>
                     <FieldDisplay fieldName="created-by" fieldValue={consultationSessionRecord.createdBy}/>
@@ -89,4 +87,4 @@ class ConsultationDisplay extends BaseView {
     }
 }
 
-export default withStyles(styles, { withTheme: true })(ConsultationDisplay);
+export default withStyles(styles, {withTheme: true})(ConsultationDisplay);
