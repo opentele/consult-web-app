@@ -46,18 +46,13 @@ const submitButtonD = {
     ...CommonCSS.primaryButton
 }
 
-const submitButtonL = {
-    backgroundColor: LightColors.DefaultBackground,
-    ...CommonCSS.primaryButton
-}
-
 const textAreaD = {
     backgroundColor: "#2C303B",
     color: "white"
 }
 
 const textAreaL = {
-    backgroundColor: LightColors.DefaultBackground,
+    backgroundColor: LightColors.PaperBackground
 }
 
 class CSS {
@@ -74,7 +69,7 @@ class CSS {
     }
 
     static get submitButton() {
-        return GlobalContext.isDarkTheme() ? submitButtonD : submitButtonL;
+        return GlobalContext.isDarkTheme() ? submitButtonD : submitButtonD;
     }
 
     static get textArea() {
