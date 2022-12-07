@@ -10,8 +10,9 @@ export default class Client extends AbstractEntity {
     ageDurationType;
     gender;
     registrationNumber;
-    consultationSessionRecords;
     otherDetails;
+    consultationSessionRecords;
+    numberOfSessions;
 
     static newInstance() {
         let client = new Client();
@@ -29,18 +30,10 @@ export default class Client extends AbstractEntity {
         AbstractEntity.fromOther(resource, client);
         AbstractEntity.copyFields(resource, client, ["name", "gender", "registrationNumber", "otherDetails"]);
 
-        const {years, months} = DateTimeUtil.parsePeriod(resource.age);
-        if (!_.isEmpty(years) && parseInt(years) > 0) {
-            client.age = years;
-            client.ageDurationType = DateTimeUtil.Years;
-        }
-        else if (!_.isEmpty(months) && parseInt(months) > 0) {
-            client.age = months;
-            client.ageDurationType = DateTimeUtil.Months;
-        } else {
-            client.age = "";
-            client.ageDurationType = DateTimeUtil.Months;
-        }
+        const {age, ageDurationType} = DateTimeUtil.periodAsAge(resource.age);
+        client.age = age;
+        client.ageDurationType = ageDurationType;
+        client.numberOfSessions = resource.numberOfSessions;
 
         if (!_.isNil(resource.consultationSessionRecords))
             client.consultationSessionRecords = resource.consultationSessionRecords.map((csr) => ConsultationSessionRecord.fromServerResource(csr));

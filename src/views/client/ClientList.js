@@ -1,18 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from "@mui/styles";
-import {BottomNavigationAction, Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
 import {FileOpen} from "@mui/icons-material";
 import {Link} from "react-router-dom";
+import CSS from "../../theming/CSS";
 
 const styles = theme => ({
     clientListMainBox: {
-        padding: 20
-    },
-    tableHeader: {
-        backgroundColor: theme.customProps.tableHeadBackgroundColor
     }
 });
 
@@ -31,21 +28,21 @@ class ClientList extends BaseView {
         const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
         return <Box className={classes.clientListMainBox}>
             <TableContainer component={Paper}>
-                    <Table sx={{minWidth: 700}} aria-label="customized table">
-                    <TableHead className={classes.tableHeader}>
-                        <TableRow>
-                            <TableCell>{i18n.T('name')}</TableCell>
-                            <TableCell>{i18n.T('gender')}</TableCell>
-                            <TableCell>{i18n.T('age')}</TableCell>
-                            <TableCell>{i18n.T('registration-number')}</TableCell>
-                            {displayQueueNumber && <TableCell>{i18n.T('queue-number')}</TableCell>}
-                            {displayNumberOfSessions && <TableCell>{i18n.T('number-of-sessions')}</TableCell>}
+                <Table sx={{minWidth: 700}} size="small" aria-label="customized table">
+                    <TableHead>
+                        <TableRow sx={CSS.th}>
+                            <TableCell>{i18n.t('name')}</TableCell>
+                            <TableCell>{i18n.t('gender')}</TableCell>
+                            <TableCell>{i18n.t('age')}</TableCell>
+                            <TableCell>{i18n.t('registration-number')}</TableCell>
+                            {displayQueueNumber && <TableCell>{i18n.t('queue-number')}</TableCell>}
+                            {displayNumberOfSessions && <TableCell>{i18n.t('number-of-sessions')}</TableCell>}
                             <TableCell/>
                         </TableRow>
                     </TableHead>
                     <TableBody>
                         {clientList.map((x) => (
-                            <TableRow key={x.name} hover={true}>
+                            <TableRow key={x.name} hover={true} sx={CSS.tr}>
                                 <TableCell component="th" scope="row">
                                     {x.name}
                                 </TableCell>

@@ -53,24 +53,33 @@ class Clients extends BaseView {
         });
 
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
-            <br/>
-            {addClientModalStatus === ModalStatus.OPENED &&
-            <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
-            <Box className={classes.clientsWrapperSection}>
-                <Box className={classes.clientsSearchAndRegisterSection}>
-                    <Box className={classes.clientsSearchSection}>
-                        <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} className={classes.clientSearchSectionItem}/>
-                        <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}
-                                   className={classes.clientSearchSectionItem}/>
-                        <Button variant="contained" color="secondary" onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
-                    </Box>
-                    <Fab variant="extended" aria-label="add"
-                         onClick={() => this.onModalOpen("addClientModalStatus")}>
+            <Box style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 30}}>
+                {addClientModalStatus === ModalStatus.OPENED &&
+                <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
+                <Box style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingTop: 20}}>
+                    <Button variant="outlined" aria-label="add"
+                            onClick={() => this.onModalOpen("addClientModalStatus")}>
                         <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
-                    </Fab>
+                    </Button>
                 </Box>
-                <Typography variant="h6" className={classes.totalClients}>{totalClientsMessage}</Typography>
+                <br/>
+                <Box className={classes.clientsWrapperSection}>
+                    <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%"}}>
+                        <Box>
+                            <Typography variant={"h3"}>{i18n.t("client-list")}</Typography>
+                            <Typography variant={"button"}>{totalClientsMessage}</Typography>
+                        </Box>
+                        <Box style={{flexDirection: "row", display: "flex", padding: 20}}>
+                            <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} className={classes.clientSearchSectionItem}/>
+                            <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}
+                                       className={classes.clientSearchSectionItem}/>
+                            <Button variant="contained" color="secondary" onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
+                        </Box>
+                    </Box>
+                </Box>
+                <br/>
                 <ClientList clientList={clientSearchResults} displayQueueNumber={false} displayNumberOfSessions={true}/>
+                <br/><br/>
             </Box>
         </ContainerView>;
     }
@@ -78,16 +87,8 @@ class Clients extends BaseView {
 
 const styles = theme => ({
     clientsWrapperSection: {
-        padding: 20,
-        flexDirection: "column",
-        display: "flex",
-        marginBottom: 40
-    },
-    clientsSearchAndRegisterSection: {
         flexDirection: "row",
-        display: "flex",
-        justifyContent: "space-between",
-        padding: 20
+        display: "flex"
     },
     clientsSearchSection: {
         flexDirection: "row",
@@ -96,11 +97,6 @@ const styles = theme => ({
     },
     clientSearchSectionItem: {
         marginRight: 20
-    },
-    totalClients: {
-        marginTop: 30,
-        marginRight: 30,
-        alignSelf: "flex-end"
     }
 });
 

@@ -16,7 +16,7 @@ const themeOptions = Object.assign({}, defaultLightTheme, {
     customProps: {
         paperDividerHeight: "15px",
         paperDividerElevation: 30,
-        tableHeadBackgroundColor: "white"
+        tableHeaderTextColor: "blue"
     },
     customPalette: {
         textboxBackgroundColor: "white"
