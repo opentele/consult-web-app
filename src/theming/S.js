@@ -63,6 +63,14 @@ const entityListContainer = {
     marginBottom: 50
 }
 
+const modalFormContainer = {
+    flexDirection: "column",
+    display: "flex",
+    justifyContent: "center",
+    padding: 30,
+    width: 600
+}
+
 class S {
     static get th() {
         return GlobalContext.isDarkTheme() ? tableHeaderD : tableHeaderL;
@@ -86,6 +94,10 @@ class S {
 
     static get entityListContainer() {
         return entityListContainer;
+    }
+
+    static get modalFormContainer() {
+        return modalFormContainer;
     }
 }
 

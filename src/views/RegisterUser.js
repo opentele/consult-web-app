@@ -9,6 +9,8 @@ import ServerErrorMessage from "../components/ServerErrorMessage";
 import {ServerCall} from "react-app-common";
 import {Box} from "@mui/material";
 import BaseView from "./framework/BaseView";
+import S from "../theming/S";
+import Paper from "@mui/material/Paper";
 
 const styles = theme => ({
     ruContainer: {
@@ -66,18 +68,15 @@ class RegisterUser extends BaseView {
         if (ServerCall.noCallOrWait(getUserCall))
             return this.renderForErrorOrWait(getUserCall);
 
-        const {
-            classes,
-            messageClose
-        } = this.props;
+        const {messageClose} = this.props;
         return (
             <ModalContainerView titleKey="register-new-user">
-                <Box className={classes.ruContainer}>
+                <Paper style={S.modalFormContainer}>
                     <EditUserFields displayError={submitFailure} user={User.newUser()}
                                     notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}/>
                     <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={(e) => this.onRegisterUser(e)} disabled={false}/>
                     <ServerErrorMessage serverCall={serverCall}/>
-                </Box>
+                </Paper>
             </ModalContainerView>
         );
     }

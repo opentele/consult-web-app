@@ -77,9 +77,9 @@ class PersonView extends BaseView {
         const loading = saveClientCall.callStatus === ServerCallStatus.WAITING || (this.editingClient && ServerCall.noCallOrWait(getClientCall));
 
         return <ModalContainerView titleKey={this.editingClient ? "edit-client-title" : "add-client-title"}>
-            {loading ? <WaitView containerClassName={classes.pvContainer}/> :
+            {loading ? <WaitView style={S.modalFormContainer}/> :
                 <FormControl>
-                    <Paper className={classes.pvContainer}>
+                    <Paper style={S.modalFormContainer}>
                         <Box className={classes.personViewFieldBox}>
                             <FormLabel textKey="full-name"/>
                             <TextField
@@ -177,13 +177,6 @@ function createStyleOptions(theme) {
         },
         personViewAlert: {
             marginBottom: 10
-        },
-        pvContainer: {
-            flexDirection: "column",
-            display: "flex",
-            justifyContent: "center",
-            padding: 30,
-            width: 600
         },
         radioGroup: {
             display: "flex",
