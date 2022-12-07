@@ -2,14 +2,14 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography} from "@mui/material";
 import {i18n, User, UserService} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
 import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
-import {GroupAdd, PersonAddAlt} from "@mui/icons-material";
+import {GroupAdd, PersonAddAlt, Search} from "@mui/icons-material";
 import S from "../../theming/S";
 
 class Users extends BaseView {
@@ -45,24 +45,39 @@ class Users extends BaseView {
         const users = User.fromResources(ServerCall.getData(getUsersServerCall));
         return <ContainerView activeTab="users" onRefresh={() => this.refresh()}>
             <Box style={S.entityListContainer} component={Paper}>
-                <br/>
                 {this.renderIfAddUser()}
                 {this.renderIfRegisterUser()}
                 {this.renderIfEditUser()}
-                <TableContainer component={Paper}>
-                    <Table sx={{minWidth: 700}} aria-label="customized table">
-                        <TableHead className={classes.tableHeader}>
-                            <TableRow>
-                                <TableCell key={1}>{i18n.T('name')}</TableCell>
-                                <TableCell key={2}>{i18n.T('role-column-text')}</TableCell>
-                                <TableCell key={3}>{i18n.T('email-or-mobile')}</TableCell>
-                                <TableCell key={4}>{i18n.T('provider-type')}</TableCell>
+                <Box style={{flexDirection: "row", display: "flex", marginTop: 30}}>
+                    <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%", paddingLeft: 20}}>
+                        <Box>
+                            <Typography variant={"h3"}>{i18n.t("users-list")}</Typography>
+                        </Box>
+                        <Box style={{flexDirection: "row", display: "flex", padding: 20}}>
+                            <Button className={classes.usersButton} variant="outlined" color="primary"
+                                    startIcon={<GroupAdd/>}
+                                    onClick={() => this.onModalOpen("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
+                            <Button variant="outlined" color="primary" className={classes.usersButton}
+                                    startIcon={<PersonAddAlt/>}
+                                    onClick={() => this.onModalOpen("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
+                        </Box>
+                    </Box>
+                </Box>
+                <br/>
+                <TableContainer>
+                    <Table sx={{minWidth: 700}} size="small" aria-label="customized table">
+                        <TableHead>
+                            <TableRow sx={S.th}>
+                                <TableCell key={1}>{i18n.t('name')}</TableCell>
+                                <TableCell key={2}>{i18n.t('role-column-text')}</TableCell>
+                                <TableCell key={3}>{i18n.t('email-or-mobile')}</TableCell>
+                                <TableCell key={4}>{i18n.t('provider-type')}</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {users.map((x) => (
                                 <TableRow key={x.userName} hover={true} className={classes.uTableRow}
-                                          onClick={this.getEditUserHandler(x)}>
+                                          onClick={this.getEditUserHandler(x)} sx={S.tr}>
                                     <TableCell component="th" scope="row" key={1}>
                                         {x.name}
                                     </TableCell>
@@ -75,16 +90,10 @@ class Users extends BaseView {
                             ))}
                         </TableBody>
                     </Table>
-                    <Box className={classes.usersButtons}>
-                        <Button className={classes.usersButton} variant="outlined" color="primary"
-                                startIcon={<GroupAdd/>}
-                                onClick={() => this.onModalOpen("addUserModalStatus")}>{i18n.t('add-user-button')}</Button>
-                        <Button variant="outlined" color="primary" className={classes.usersButton}
-                                startIcon={<PersonAddAlt/>}
-                                onClick={() => this.onModalOpen("registerUserModalStatus")}>{i18n.t('register-user-button')}</Button>
-                    </Box>
                 </TableContainer>
+                <br/><br/>
             </Box>
+            <br/><br/>
         </ContainerView>;
     }
 
@@ -105,14 +114,6 @@ class Users extends BaseView {
 }
 
 const styles = theme => ({
-    usersButtons: {
-        marginTop: 20,
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "flex-end",
-        marginBottom: 20,
-        marginRight: 20
-    },
     usersButton: {
         marginLeft: 10
     },
@@ -123,9 +124,6 @@ const styles = theme => ({
     },
     uListMainBox: {
         padding: 20
-    },
-    tableHeader: {
-        backgroundColor: theme.customProps.tableHeadBackgroundColor
     }
 });
 

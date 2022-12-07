@@ -9,8 +9,6 @@ import {Link} from "react-router-dom";
 import S from "../../theming/S";
 
 const styles = theme => ({
-    clientListMainBox: {
-    }
 });
 
 class ClientList extends BaseView {
@@ -25,9 +23,8 @@ class ClientList extends BaseView {
     };
 
     render() {
-        const {classes, clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
-        return <Box className={classes.clientListMainBox}>
-            <TableContainer>
+        const {clientList, displayQueueNumber, displayNumberOfSessions} = this.props;
+        return <TableContainer>
                 <Table sx={{minWidth: 700}} size="small" aria-label="customized table">
                     <TableHead>
                         <TableRow sx={S.th}>
@@ -56,8 +53,7 @@ class ClientList extends BaseView {
                         ))}
                     </TableBody>
                 </Table>
-            </TableContainer>
-        </Box>;
+            </TableContainer>;
     }
 }
 
