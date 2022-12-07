@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Fab, TextField, Typography} from "@mui/material";
+import {Box, Button, Fab, Paper, TextField, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
@@ -53,10 +53,10 @@ class Clients extends BaseView {
         });
 
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
-            <Box style={{paddingRight: 30, paddingLeft: 30, paddingBottom: 30}}>
+            <Box style={{marginRight: 40, marginLeft: 40, marginTop: 20, borderRadius: 10, marginBottom: 50}} component={Paper}>
                 {addClientModalStatus === ModalStatus.OPENED &&
                 <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
-                <Box style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingTop: 20}}>
+                <Box style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingTop: 20, paddingRight: 20}}>
                     <Button variant="outlined" aria-label="add"
                             onClick={() => this.onModalOpen("addClientModalStatus")}>
                         <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
@@ -64,7 +64,7 @@ class Clients extends BaseView {
                 </Box>
                 <br/>
                 <Box className={classes.clientsWrapperSection}>
-                    <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%"}}>
+                    <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%", paddingLeft: 20}}>
                         <Box>
                             <Typography variant={"h3"}>{i18n.t("client-list")}</Typography>
                             <Typography variant={"button"}>{totalClientsMessage}</Typography>
@@ -81,6 +81,7 @@ class Clients extends BaseView {
                 <ClientList clientList={clientSearchResults} displayQueueNumber={false} displayNumberOfSessions={true}/>
                 <br/><br/>
             </Box>
+            <br/><br/>
         </ContainerView>;
     }
 }

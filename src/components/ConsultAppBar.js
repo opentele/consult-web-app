@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography} from "@mui/material";
+import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Paper, Toolbar, Tooltip, Typography} from "@mui/material";
 import {Translate, Home, DarkMode, LightMode, AccountCircle, Logout} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
@@ -21,12 +21,10 @@ const styles = theme => ({
     leftSet: {
         display: "flex",
         flexDirection: "row",
-        marginLeft: -20,
         alignItems: "center"
     },
     brandLabel: {
-        marginLeft: 10,
-        color: "white"
+        marginLeft: 10
     }
 });
 
@@ -77,6 +75,7 @@ class ConsultAppBar extends BaseView {
     getOpenLanguageModalHandler() {
         return () => this.onOpenMenuModal("changeLanguageStatus");
     }
+
     onOpenMenuModal(modalStatusField) {
         const newState = {};
         newState[modalStatusField] = ModalStatus.OPENED;
@@ -102,7 +101,7 @@ class ConsultAppBar extends BaseView {
         const {profileOpenStatus, changeLanguageStatus} = this.state;
         return <>
             <AppBar position="static">
-                <Container maxWidth="xl">
+                <Paper elevation={0} style={{borderRadius: 0, paddingRight: 10, paddingLeft: 10}}>
                     {profileOpenStatus === ModalStatus.OPENED &&
                     <EditUser messageClose={this.getModalCloseHandler("profileOpenStatus")} userId={GlobalContext.getUser().id}/>}
 
@@ -111,7 +110,7 @@ class ConsultAppBar extends BaseView {
                     <Toolbar disableGutters className={classes.toolbar}>
                         <Box className={classes.leftSet}>
                             <IconButton component={"a"} href="https://telesathi.com" target="_blank">
-                                <Avatar alt="Tele Sathi" src="/ts-logo.png" />
+                                <Avatar alt="Tele Sathi" src="/ts-logo.png"/>
                             </IconButton>
                             <Link variant="h6" className={classes.brandLabel} href="/">{i18n.t('tele-sathi')}</Link>
                         </Box>
@@ -152,7 +151,7 @@ class ConsultAppBar extends BaseView {
                             </Menu>
                         </Box>
                     </Toolbar>
-                </Container>
+                </Paper>
             </AppBar>
         </>;
     }

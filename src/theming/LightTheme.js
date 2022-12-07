@@ -7,6 +7,12 @@ const defaultLightTheme = createTheme({
 });
 
 const themeOptions = Object.assign({}, defaultLightTheme, {
+    palette: {
+        background: {
+            default: "#EBEEF5",
+            paper: "#fff"
+        }
+    },
     textColor: {
         assistive: "#BB86FC"
     },

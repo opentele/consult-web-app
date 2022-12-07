@@ -8,7 +8,7 @@ const defaultDarkTheme = createTheme({
 
 const themeOptions = Object.assign({}, defaultDarkTheme, {
     palette: {
-        mode: 'dark',
+        mode: 'dark'
     },
     textColor: {
         assistive: "#BB86FC"
