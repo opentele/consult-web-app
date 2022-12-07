@@ -50,7 +50,7 @@ class ClientList extends BaseView {
                                 <TableCell>{x.displayAge()}</TableCell>
                                 <TableCell>{x.registrationNumber}</TableCell>
                                 {displayQueueNumber && <TableCell>{x["queueNumber"]}</TableCell>}
-                                {displayNumberOfSessions && <TableCell><a href={`/client?id=${x.id}`}>{x["numberOfSessions"]}</a></TableCell>}
+                                {displayNumberOfSessions && <TableCell>{x["numberOfSessions"]}</TableCell>}
                                 <TableCell component={Link} to={`/client?id=${x.id}`}><FileOpen/></TableCell>
                             </TableRow>
                         ))}

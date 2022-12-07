@@ -29,6 +29,16 @@ const tableRowD = {
     }
 }
 
+const primaryButtonD = {
+    backgroundColor: DarkColors.DefaultBackground,
+    ...CommonCSS.primaryButton
+}
+
+const primaryButtonL = {
+    backgroundColor: "white",
+    ...CommonCSS.primaryButton
+}
+
 class CSS {
     static get th() {
         return GlobalContext.isDarkTheme() ? tableHeaderD : tableHeaderL;
@@ -36,6 +46,10 @@ class CSS {
 
     static get tr() {
         return GlobalContext.isDarkTheme() ? tableRowD : tableRowL;
+    }
+
+    static get PrimaryButton() {
+        return GlobalContext.isDarkTheme() ? primaryButtonD : primaryButtonL;
     }
 }
 

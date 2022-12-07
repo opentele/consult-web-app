@@ -24,7 +24,8 @@ const styles = theme => ({
         alignItems: "center"
     },
     brandLabel: {
-        marginLeft: 10
+        marginLeft: 10,
+        color: theme.palette.text.primary
     }
 });
 
