@@ -15,7 +15,7 @@ import WaitView from "../../components/WaitView";
 import ThemeHelper from "../../theming/ThemeHelper";
 import {i18n} from "consult-app-common";
 import Paper from "@mui/material/Paper";
-import CSS from "../../theming/CSS";
+import S from "../../theming/S";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -148,7 +148,7 @@ class PersonView extends BaseView {
                             <TextareaAutosize
                                 variant="filled"
                                 minRows={3}
-                                style={CSS.textArea}
+                                style={S.textArea}
                                 onChange={this.getClientFieldValueChangeHandler("otherDetails")}
                                 value={client.otherDetails}
                             />

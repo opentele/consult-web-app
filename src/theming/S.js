@@ -55,7 +55,15 @@ const textAreaL = {
     backgroundColor: LightColors.PaperBackground
 }
 
-class CSS {
+const entityListContainer = {
+    marginRight: 40,
+    marginLeft: 40,
+    marginTop: 20,
+    borderRadius: 10,
+    marginBottom: 50
+}
+
+class S {
     static get th() {
         return GlobalContext.isDarkTheme() ? tableHeaderD : tableHeaderL;
     }
@@ -75,6 +83,10 @@ class CSS {
     static get textArea() {
         return GlobalContext.isDarkTheme() ? textAreaD : textAreaL;
     }
+
+    static get entityListContainer() {
+        return entityListContainer;
+    }
 }
 
-export default CSS;
+export default S;

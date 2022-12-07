@@ -7,7 +7,7 @@ import {i18n} from "consult-app-common";
 import Draggable from 'react-draggable';
 import {DialogTitle} from "@mui/material";
 import CloseIcon from "@mui/icons-material/CloseRounded";
-import CSS from "../../theming/CSS";
+import S from "../../theming/S";
 
 const styles = theme => ({
 });

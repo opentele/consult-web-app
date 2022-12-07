@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {i18n} from "consult-app-common";
 import {Button} from "@mui/material";
-import CSS from "../theming/CSS";
 
 const styles = theme => ({});
 

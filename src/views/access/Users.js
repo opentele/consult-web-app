@@ -10,6 +10,7 @@ import ContainerView from "../framework/ContainerView";
 import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
 import {GroupAdd, PersonAddAlt} from "@mui/icons-material";
+import S from "../../theming/S";
 
 class Users extends BaseView {
     constructor(props, context) {
@@ -43,7 +44,7 @@ class Users extends BaseView {
         const {getUsersServerCall} = this.state;
         const users = User.fromResources(ServerCall.getData(getUsersServerCall));
         return <ContainerView activeTab="users" onRefresh={() => this.refresh()}>
-            <Box className={classes.usersContainer}>
+            <Box style={S.entityListContainer} component={Paper}>
                 <br/>
                 {this.renderIfAddUser()}
                 {this.renderIfRegisterUser()}
@@ -104,11 +105,6 @@ class Users extends BaseView {
 }
 
 const styles = theme => ({
-    usersContainer: {
-        padding: 30,
-        flexDirection: "column",
-        display: "flex"
-    },
     usersButtons: {
         marginTop: 20,
         display: "flex",

@@ -12,7 +12,7 @@ import AddIcon from '@mui/icons-material/Add';
 import PersonView from "../consultation/PersonView";
 import Client from "../../domain/Client";
 import {Search} from "@mui/icons-material";
-import CSS from "../../theming/CSS";
+import S from "../../theming/S";
 
 class Clients extends BaseView {
     constructor(props, context) {
@@ -55,9 +55,9 @@ class Clients extends BaseView {
         });
 
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
-            <Box style={{marginRight: 40, marginLeft: 40, marginTop: 20, borderRadius: 10, marginBottom: 50}} component={Paper}>
-                {addClientModalStatus === ModalStatus.OPENED &&
-                <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
+            {addClientModalStatus === ModalStatus.OPENED &&
+            <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
+            <Box style={S.entityListContainer} component={Paper}>
                 <Box style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingTop: 20, paddingRight: 20}}>
                     <Button variant="outlined" sx={{fontWeight: "bold"}} aria-label="add"
                             onClick={() => this.onModalOpen("addClientModalStatus")}>
@@ -65,17 +65,17 @@ class Clients extends BaseView {
                     </Button>
                 </Box>
                 <br/>
-                <Box className={classes.clientsWrapperSection}>
+                <Box style={{flexDirection: "row", display: "flex"}}>
                     <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%", paddingLeft: 20}}>
                         <Box>
                             <Typography variant={"h3"}>{i18n.t("client-list")}</Typography>
                             <Typography variant={"button"}>{totalClientsMessage}</Typography>
                         </Box>
                         <Box style={{flexDirection: "row", display: "flex", padding: 20}}>
-                            <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} className={classes.clientSearchSectionItem}/>
+                            <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} style={{marginRight: 20}}/>
                             <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}
-                                       className={classes.clientSearchSectionItem}/>
-                            <Button variant="outlined" sx={CSS.primaryButton}
+                                       style={{marginRight: 20}}/>
+                            <Button variant="outlined" sx={S.primaryButton}
                                     startIcon={<Search/>}
                                     onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
                         </Box>
@@ -91,18 +91,6 @@ class Clients extends BaseView {
 }
 
 const styles = theme => ({
-    clientsWrapperSection: {
-        flexDirection: "row",
-        display: "flex"
-    },
-    clientsSearchSection: {
-        flexDirection: "row",
-        display: "flex",
-        justifyContent: "flex-start"
-    },
-    clientSearchSectionItem: {
-        marginRight: 20
-    }
 });
 
 export default withStyles(styles)(Clients);

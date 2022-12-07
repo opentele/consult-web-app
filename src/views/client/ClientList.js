@@ -6,7 +6,7 @@ import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
 import {FileOpen} from "@mui/icons-material";
 import {Link} from "react-router-dom";
-import CSS from "../../theming/CSS";
+import S from "../../theming/S";
 
 const styles = theme => ({
     clientListMainBox: {
@@ -30,7 +30,7 @@ class ClientList extends BaseView {
             <TableContainer>
                 <Table sx={{minWidth: 700}} size="small" aria-label="customized table">
                     <TableHead>
-                        <TableRow sx={CSS.th}>
+                        <TableRow sx={S.th}>
                             <TableCell>{i18n.t('name')}</TableCell>
                             <TableCell>{i18n.t('gender')}</TableCell>
                             <TableCell>{i18n.t('age')}</TableCell>
@@ -42,7 +42,7 @@ class ClientList extends BaseView {
                     </TableHead>
                     <TableBody>
                         {clientList.map((x) => (
-                            <TableRow key={x.name} hover={true} sx={CSS.tr}>
+                            <TableRow key={x.name} hover={true} sx={S.tr}>
                                 <TableCell component="th" scope="row">
                                     {x.name}
                                 </TableCell>

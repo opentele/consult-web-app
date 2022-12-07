@@ -4,7 +4,7 @@ import {withStyles} from '@mui/styles';
 import {i18n} from "consult-app-common";
 import {Button, CircularProgress} from "@mui/material";
 import {ServerCallStatus} from "react-app-common";
-import CSS from "../theming/CSS";
+import S from "../theming/S";
 
 const styles = theme => ({});
 
@@ -22,7 +22,7 @@ class SaveButton extends React.Component {
 
     render() {
         const {classes, className, onSaveHandler, disabled, serverCall} = this.props;
-        return <Button type="submit" className={className} variant="contained" sx={CSS.submitButton}
+        return <Button type="submit" className={className} variant="contained" sx={S.submitButton}
                        onClick={onSaveHandler} disabled={disabled}>{i18n.t("save")}
             {serverCall.callStatus === ServerCallStatus.WAITING && <CircularProgress color="inherit" style={{marginLeft: 10}}/>}
         </Button>;
