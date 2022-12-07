@@ -1,9 +1,18 @@
 import _ from "lodash";
 import CommonCSS from "./CommonCSS";
+import GlobalContext from "../framework/GlobalContext";
+import {DarkColors} from "./DarkTheme";
+
+const tableHeaderD = {
+    "& th": {
+        color: "#6B7CFF",
+        ...CommonCSS.tableHeader
+    }
+};
 
 const tableHeaderL = {
     "& th": {
-        color: "rgba(0, 0, 255)",
+        color: "#645DF9",
         ...CommonCSS.tableHeader
     }
 };
@@ -14,13 +23,19 @@ const tableRowL = {
     }
 }
 
+const tableRowD = {
+    "&:nth-of-type(odd)": {
+        backgroundColor: DarkColors.DefaultBackground
+    }
+}
+
 class CSS {
     static get th() {
-        return tableHeaderL;
+        return GlobalContext.isDarkTheme() ? tableHeaderD : tableHeaderL;
     }
 
     static get tr() {
-        return tableRowL;
+        return GlobalContext.isDarkTheme() ? tableRowD : tableRowL;
     }
 }
 

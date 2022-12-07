@@ -6,9 +6,18 @@ const defaultDarkTheme = createTheme({
     }
 });
 
+const DarkColors = {
+    DefaultBackground: "#14161E",
+    PaperBackground: "#212531"
+};
+
 const themeOptions = Object.assign({}, defaultDarkTheme, {
     palette: {
-        mode: 'dark'
+        mode: 'dark',
+        background: {
+            default: DarkColors.DefaultBackground,
+            paper: DarkColors.PaperBackground
+        }
     },
     textColor: {
         assistive: "#BB86FC"
@@ -49,4 +58,5 @@ const themeOptions = Object.assign({}, defaultDarkTheme, {
     }
 });
 
+export {DarkColors};
 export default themeOptions;
