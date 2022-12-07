@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import {i18n} from "consult-app-common";
 import {Button} from "@mui/material";
+import CSS from "../theming/CSS";
 
 const styles = theme => ({});
 
@@ -23,7 +24,8 @@ class CancelButton extends React.Component {
 
     render() {
         const {onClickHandler, className, cancelButtonTextKey} = this.props;
-        return <Button className={className} variant="contained" color={"secondary"} onClick={() => onClickHandler(false)}>{i18n.t(cancelButtonTextKey)}</Button>;
+        return <Button className={className} variant="outlined" sx={{fontWeight: "bold"}}
+                       onClick={() => onClickHandler(false)}>{i18n.t(cancelButtonTextKey)}</Button>;
     }
 }
 

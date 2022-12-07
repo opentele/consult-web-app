@@ -6,11 +6,16 @@ const defaultLightTheme = createTheme({
     }
 });
 
+const LightColors = {
+    DefaultBackground: "#EBEEF5",
+    PaperBackground: "#fff"
+};
+
 const themeOptions = Object.assign({}, defaultLightTheme, {
     palette: {
         background: {
-            default: "#EBEEF5",
-            paper: "#fff"
+            default: LightColors.DefaultBackground,
+            paper: LightColors.PaperBackground
         }
     },
     textColor: {
@@ -26,14 +31,8 @@ const themeOptions = Object.assign({}, defaultLightTheme, {
     },
     customPalette: {
         textboxBackgroundColor: "white"
-    },
-    unsupportedComponents: {
-        TextareaAutosize: {
-            styleOverrides: {
-                backgroundColor: defaultLightTheme.palette.background.default
-            }
-        }
     }
 });
 
+export {LightColors};
 export default themeOptions;

@@ -7,6 +7,7 @@ import {i18n} from "consult-app-common";
 import Draggable from 'react-draggable';
 import {DialogTitle} from "@mui/material";
 import CloseIcon from "@mui/icons-material/CloseRounded";
+import CSS from "../../theming/CSS";
 
 const styles = theme => ({
 });
@@ -16,7 +17,7 @@ function PaperComponent(props) {
         <Draggable
             handle="#draggable-dialog-title"
             cancel={'[class*="MuiDialogContent-root"]'}>
-            <Paper {...props} />
+            <Paper {...props}/>
         </Draggable>
     );
 }

@@ -54,8 +54,6 @@ class Clients extends BaseView {
             displayCount: data.entities.length
         });
 
-        let primaryButton = CSS.PrimaryButton;
-
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
             <Box style={{marginRight: 40, marginLeft: 40, marginTop: 20, borderRadius: 10, marginBottom: 50}} component={Paper}>
                 {addClientModalStatus === ModalStatus.OPENED &&
@@ -77,7 +75,7 @@ class Clients extends BaseView {
                             <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} className={classes.clientSearchSectionItem}/>
                             <TextField label={i18n.t('registration-number')} onChange={this.getValueChangedHandler("registrationNumber")}
                                        className={classes.clientSearchSectionItem}/>
-                            <Button variant="outlined" sx={CSS.PrimaryButton}
+                            <Button variant="outlined" sx={CSS.primaryButton}
                                     startIcon={<Search/>}
                                     onClick={this.getSearchHandler()}>{i18n.t('search')}</Button>
                         </Box>

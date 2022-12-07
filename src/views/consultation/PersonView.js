@@ -14,6 +14,8 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import WaitView from "../../components/WaitView";
 import ThemeHelper from "../../theming/ThemeHelper";
 import {i18n} from "consult-app-common";
+import Paper from "@mui/material/Paper";
+import CSS from "../../theming/CSS";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -77,7 +79,7 @@ class PersonView extends BaseView {
         return <ModalContainerView titleKey={this.editingClient ? "edit-client-title" : "add-client-title"}>
             {loading ? <WaitView containerClassName={classes.pvContainer}/> :
                 <FormControl>
-                    <Box className={classes.pvContainer}>
+                    <Paper className={classes.pvContainer}>
                         <Box className={classes.personViewFieldBox}>
                             <FormLabel textKey="full-name"/>
                             <TextField
@@ -146,7 +148,7 @@ class PersonView extends BaseView {
                             <TextareaAutosize
                                 variant="filled"
                                 minRows={3}
-                                className={classes.personViewTextAreaBox}
+                                style={CSS.textArea}
                                 onChange={this.getClientFieldValueChangeHandler("otherDetails")}
                                 value={client.otherDetails}
                             />
@@ -154,7 +156,7 @@ class PersonView extends BaseView {
                         <ServerErrorMessage className={classes.personViewAlert} serverCall={saveClientCall}/>
                         <SaveCancelButtons className={classes.pvSaveCancelButtons} disabled={false} onSaveHandler={() => this.onSave()} serverCall={saveClientCall}
                                            onCancelHandler={messageClose}/>
-                    </Box>
+                    </Paper>
                 </FormControl>}
         </ModalContainerView>;
     }
@@ -189,7 +191,7 @@ function createStyleOptions(theme) {
             alignContent: 'flex-end'
         }
     };
-    return ThemeHelper.mergeTextAreaStyle(styleOptions, theme,"personViewTextAreaBox");
+    return styleOptions;
 }
 
 export default withStyles(createStyleOptions)(PersonView);

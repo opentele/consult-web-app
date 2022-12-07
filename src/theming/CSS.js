@@ -2,6 +2,7 @@ import _ from "lodash";
 import CommonCSS from "./CommonCSS";
 import GlobalContext from "../framework/GlobalContext";
 import {DarkColors} from "./DarkTheme";
+import {LightColors} from "./LightTheme";
 
 const tableHeaderD = {
     "& th": {
@@ -35,8 +36,28 @@ const primaryButtonD = {
 }
 
 const primaryButtonL = {
-    backgroundColor: "white",
+    backgroundColor: LightColors.DefaultBackground,
     ...CommonCSS.primaryButton
+}
+
+const submitButtonD = {
+    backgroundColor: "#4450F3",
+    color: "white",
+    ...CommonCSS.primaryButton
+}
+
+const submitButtonL = {
+    backgroundColor: LightColors.DefaultBackground,
+    ...CommonCSS.primaryButton
+}
+
+const textAreaD = {
+    backgroundColor: "#2C303B",
+    color: "white"
+}
+
+const textAreaL = {
+    backgroundColor: LightColors.DefaultBackground,
 }
 
 class CSS {
@@ -48,8 +69,16 @@ class CSS {
         return GlobalContext.isDarkTheme() ? tableRowD : tableRowL;
     }
 
-    static get PrimaryButton() {
+    static get primaryButton() {
         return GlobalContext.isDarkTheme() ? primaryButtonD : primaryButtonL;
+    }
+
+    static get submitButton() {
+        return GlobalContext.isDarkTheme() ? submitButtonD : submitButtonL;
+    }
+
+    static get textArea() {
+        return GlobalContext.isDarkTheme() ? textAreaD : textAreaL;
     }
 }
 

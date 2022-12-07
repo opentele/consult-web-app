@@ -33,7 +33,7 @@ const themeOptions = Object.assign({}, defaultDarkTheme, {
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    backgroundColor: defaultDarkTheme.palette.secondary.dark
+                    backgroundColor: DarkColors.DefaultBackground
                 }
             }
         }
@@ -47,14 +47,7 @@ const themeOptions = Object.assign({}, defaultDarkTheme, {
         tableHeadBackgroundColor: "darkgreen"
     },
     customPalette: {
-        textboxBackgroundColor: "#383838"
-    },
-    unsupportedComponents: {
-        TextareaAutosize: {
-            styleOverrides: {
-                backgroundColor: defaultDarkTheme.palette.background.default
-            }
-        }
+        textboxBackgroundColor: DarkColors.PaperBackground
     }
 });
 
