@@ -15,6 +15,8 @@ import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 import ModalStatus from "../framework/ModalStatus";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
 import TabState from "../../state/TabState";
+import Button from "@mui/material/Button";
+import S from "../../theming/S";
 
 const styles = theme => ({
     createRoom: {
@@ -26,9 +28,6 @@ const styles = theme => ({
         position: 'absolute',
         width: 160,
         right: 225
-    },
-    createRoomIcon: {
-        marginRight: 10
     }
 });
 
@@ -85,16 +84,16 @@ class Home extends BaseView {
                     <Tab icon={<IconButton><Today/></IconButton>} label={i18n.t('today')}/>
                     <Tab icon={<IconButton><Schedule/></IconButton>} label={i18n.t('scheduled-later')}/>
                     <Tab icon={<IconButton><AllInclusive/></IconButton>} label={i18n.t('all-scheduled-rooms')}/>
-                    <Fab variant="extended" size="medium" className={classes.createRoom}
-                         onClick={() => this.onModalOpen("createConsultationRoom")}>
-                        <AddCircle className={classes.createRoomIcon}/>
+                    <Button variant="outlined" className={classes.createRoom} sx={S.secondaryButton}
+                            onClick={() => this.onModalOpen("createConsultationRoom")}
+                            startIcon={<AddCircle/>}>
                         {i18n.t('start-new-room')}
-                    </Fab>
-                    <Fab variant="extended" size="medium" className={classes.createRoomSchedule}
-                         onClick={() => this.onModalOpen("scheduleConsultationRoom")}>
-                        <AddCircle className={classes.createRoomIcon}/>
+                    </Button>
+                    <Button variant="outlined" className={classes.createRoomSchedule} sx={S.secondaryButton}
+                            onClick={() => this.onModalOpen("scheduleConsultationRoom")}
+                            startIcon={<AddCircle/>}>
                         {i18n.t('schedule')}
-                    </Fab>
+                    </Button>
                 </Tabs>
                 {getTabComponent(key)}
             </ContainerView>;
