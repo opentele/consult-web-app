@@ -12,6 +12,7 @@ import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
 import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 import {i18n} from "consult-app-common";
+import ProviderChip from "../../components/ProviderChip";
 
 const styles = theme => ({
     crsRooms: {
@@ -89,7 +90,7 @@ class ConsultationRoomSchedules extends BaseView {
                             </Box>
                             <Box>
                                 <Box>
-                                    {consultationRoomSchedule.providers.map((provider) => <Chip label={provider.name} color="primary" style={{marginRight: 8}}/>)}
+                                    {consultationRoomSchedule.providers.map((provider) => <ProviderChip provider={provider}/>)}
                                 </Box>
                             </Box>
                         </Box>

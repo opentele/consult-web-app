@@ -19,7 +19,7 @@ import _ from 'lodash';
 import TimeScheduleField from "../../components/DurationField";
 import {SupervisorAccount} from "@mui/icons-material";
 import S from "../../theming/S";
-import {DarkColors} from "../../theming/DarkTheme";
+import ProviderChip from "../../components/ProviderChip";
 
 const styles = theme => ({
     rooms: {
@@ -41,11 +41,6 @@ const styles = theme => ({
     crButton: {
         marginRight: 5,
         marginLeft: 5
-    },
-    chip: {
-        marginRight: 8,
-        borderRadius: 4,
-        backgroundColor: theme.palette.background.default
     }
 });
 
@@ -151,8 +146,7 @@ class ConsultationRooms extends BaseView {
                                     <Box style={{display: "flex", flexDirection: "row", alignContent: "center"}}>
                                         <SupervisorAccount fontSize="large" style={{marginRight: 10}}/>
                                         {consultationRoom.providers.length === 0 && <Typography>{i18n.t("no-providers")}</Typography>}
-                                        {consultationRoom.providers.map((provider) =>
-                                            <Chip label={provider.name} key={provider.id} className={classes.chip}/>)}
+                                        {consultationRoom.providers.map((provider) => <ProviderChip provider={provider}/>)}
                                     </Box>
                                     <Box sx={{display: "flex", flexDirection: "column", marginTop: 2}}>
                                         {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
