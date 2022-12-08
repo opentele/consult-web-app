@@ -10,19 +10,29 @@ class TabItemState {
     }
 }
 
+const consultationRoomTabIndexKey = "consultationRoomTabIndexKey";
+
 class TabState {
-    tabIndex;
     tabItems;
     updateIndex;
+
+    static get rememberedTabIndex() {
+        return localStorage.getItem(consultationRoomTabIndexKey);
+    }
 
     static initialState(tabIndex, tabNames) {
         const map = new Map();
         tabNames.forEach((x, index) => map.set(index, new TabItemState(index, x, 0)));
-        return new TabState(tabIndex, map, 0);
+        if (_.isNil(TabState.rememberedTabIndex))
+            localStorage.setItem(consultationRoomTabIndexKey, tabIndex);
+        return new TabState(map, 0);
     }
 
-    constructor(tabIndex, tabItems, updateIndex) {
-        this.tabIndex = tabIndex;
+    get tabIndex() {
+        return _.toNumber(TabState.rememberedTabIndex);
+    }
+
+    constructor(tabItems, updateIndex) {
         this.tabItems = tabItems;
         this.updateIndex = updateIndex;
     }
@@ -32,7 +42,7 @@ class TabState {
         for (const [key, value] of this.tabItems.entries()) {
             map.set(key, new TabItemState(value.tabIndex, value.tabName));
         }
-        return new TabState(this.tabIndex, map, this.updateIndex);
+        return new TabState(map, this.updateIndex);
     }
 
     tabDataChanged() {
@@ -44,7 +54,7 @@ class TabState {
     }
 
     tabChanged(tabId) {
-        this.tabIndex = tabId;
+        localStorage.setItem(consultationRoomTabIndexKey, tabId);
         this.updateIndex++;
     }
 }
