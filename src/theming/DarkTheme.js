@@ -33,7 +33,7 @@ const themeOptions = Object.assign({}, defaultDarkTheme, {
         MuiDialogTitle: {
             styleOverrides: {
                 root: {
-                    backgroundColor: DarkColors.DefaultBackground
+                    backgroundColor: DarkColors.PaperBackground
                 }
             }
         }

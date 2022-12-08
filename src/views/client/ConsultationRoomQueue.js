@@ -12,6 +12,7 @@ import {Box, IconButton, Paper, Table, TableBody, TableCell, TableContainer, Tab
 import {i18n} from "consult-app-common";
 import ConsultRoomClient from "../../domain/ConsultRoomClient";
 import {Delete} from '@mui/icons-material';
+import S from "../../theming/S";
 
 const styles = theme => ({
     tableHeader: {
@@ -20,10 +21,10 @@ const styles = theme => ({
 });
 
 const ClientQueue = function ({consultationRoomClients, classes, onDelete}) {
-    return <TableContainer component={Paper} style={{padding: 10}}>
+    return <TableContainer>
         <Table size="small">
-            <TableHead className={classes.tableHeader}>
-                <TableRow>
+            <TableHead>
+                <TableRow sx={S.th}>
                     <TableCell style={{fontSize: "larger", width: 300}}>{i18n.t('client')}</TableCell>
                     <TableCell style={{fontSize: "larger"}}>{i18n.t('queue-number')}</TableCell>
                     <TableCell/>
@@ -35,7 +36,7 @@ const ClientQueue = function ({consultationRoomClients, classes, onDelete}) {
                                style={{fontSize: "medium", paddingTop: 20, paddingBottom: 20}}>{i18n.t("no-clients-in-queue")}</TableCell>
                 </TableRow>}
                 {consultationRoomClients.map((x: ConsultRoomClient) => (
-                    <TableRow key={x.client.id} hover={true}>
+                    <TableRow key={x.client.id} hover={true} sx={S.tr}>
                         <TableCell component="th" scope="row" style={{fontSize: "medium"}}>
                             {x.client.getDisplayName()}
                         </TableCell>

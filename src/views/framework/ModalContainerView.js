@@ -43,13 +43,14 @@ class ModalContainerView extends React.Component {
         const {children, titleKey, classes, titleObj, showCloseButton} = this.props;
         return <Dialog open={true} maxWidth="lg" PaperComponent={PaperComponent} aria-labelledby="draggable-dialog-title" onClose={this.handleClose}>
             <Box style={{display: "flex", flexDirection: "column"}}>
-                <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title">
+                <DialogTitle style={{cursor: 'move'}} id="draggable-dialog-title" sx={{fontWeight: "bold"}}>
                     {i18n.t(titleKey, titleObj)}
                 </DialogTitle>
                 {showCloseButton && <Fab color="secondary" aria-label="print" size="small"
                      onClick={() => this.props.onClose(false)} style={{marginTop: -52, marginRight: 10, alignSelf: "flex-end"}}>
                     <CloseIcon/>
                 </Fab>}
+                <hr/>
                 {children}
             </Box>
         </Dialog>;
