@@ -96,6 +96,7 @@ class Home extends BaseView {
                     </Button>
                 </Tabs>
                 {getTabComponent(key)}
+                <br/><br/>
             </ContainerView>;
     }
 }

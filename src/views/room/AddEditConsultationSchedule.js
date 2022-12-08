@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.css';
 import BaseView from "../framework/BaseView";
 import {Box, Grid, TextField} from "@mui/material";
 import RRuleGenerator from 'react-rrule-generator';
