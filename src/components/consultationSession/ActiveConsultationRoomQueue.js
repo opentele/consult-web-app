@@ -86,7 +86,7 @@ class ActiveConsultationRoomQueue extends BaseView {
         const movingClient = moveClientCall.callStatus === ServerCallStatus.WAITING;
 
         return (
-            <Box className={containerClassName}>
+            <Box className={containerClassName} component={Paper} style={{borderRadius: 10, padding: 20}}>
                 <Typography variant="h5" style={{marginLeft: 5}}>{i18n.t('client-queue-title')}</Typography>
                 <Paper className={classes.crqContainer} elevation={0}>
                     <Box>
