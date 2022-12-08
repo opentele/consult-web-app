@@ -93,7 +93,7 @@ class ActiveConsultationRoomQueue extends BaseView {
                         <List dense={true}>
                             {
                                 consultationRoom.appointments.map((appointment, index, arr) => {
-                                    return <ListItem>
+                                    return <ListItem key={index}>
                                         <ListItemButton selected={appointment.current}
                                                         onClick={(e) => this.setState({clientMenuAnchor: e.currentTarget, selectedAppointment: appointment})}>
                                             <ListItemIcon>

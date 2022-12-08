@@ -3,7 +3,6 @@ import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import JitsiPlaceholder from "./JitsiPlaceholder";
 import {Box, CircularProgress, Fab, Paper} from "@mui/material";
-import ConsultationRoom from "../../domain/ConsultationRoom";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../../views/framework/BaseView";
@@ -15,6 +14,9 @@ import Button from "@mui/material/Button";
 import {ArrowLeft, ArrowRight, Source} from "@mui/icons-material";
 import S from "../../theming/S";
 import ProviderChip from "../ProviderChip";
+import _ from 'lodash';
+
+const placeholder = _.isNil(process.env.REACT_APP_JITSI_PLACEHOLDER) ? false : process.env.REACT_APP_JITSI_PLACEHOLDER;
 
 const styles = theme => ({
     jcContainer: {
@@ -53,14 +55,9 @@ class JitsiConference extends BaseView {
     }
 
     static propTypes = {
-        placeholder: PropTypes.bool,
         consultationRoom: PropTypes.object.isRequired,
         parentClassName: PropTypes.string,
         onDataChanged: PropTypes.func.isRequired
-    }
-
-    static defaultProp = {
-        placeholder: false
     }
 
     getGoToNextClientHandler() {
@@ -81,7 +78,6 @@ class JitsiConference extends BaseView {
     render() {
         const {
             classes,
-            placeholder,
             consultationRoom,
             parentClassName
         } = this.props;
