@@ -59,7 +59,7 @@ class Clients extends BaseView {
             <PersonView messageClose={this.getModalCloseHandler("addClientModalStatus")}/>}
             <Box style={S.entityListContainer} component={Paper}>
                 <Box style={{display: "flex", flexDirection: "row", justifyContent: "flex-end", paddingTop: 20, paddingRight: 20}}>
-                    <Button variant="outlined" sx={{fontWeight: "bold"}} aria-label="add"
+                    <Button variant="outlined" sx={S.secondaryButton} aria-label="add"
                             onClick={() => this.onModalOpen("addClientModalStatus")}>
                         <AddIcon sx={{mr: 1}}/>{i18n.t('add-client-title')}
                     </Button>

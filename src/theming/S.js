@@ -71,6 +71,10 @@ const modalFormContainer = {
     width: 600
 }
 
+const secondaryButton = {
+    fontWeight: "bold"
+}
+
 class S {
     static get th() {
         return GlobalContext.isDarkTheme() ? tableHeaderD : tableHeaderL;
@@ -82,6 +86,10 @@ class S {
 
     static get primaryButton() {
         return GlobalContext.isDarkTheme() ? primaryButtonD : primaryButtonL;
+    }
+
+    static get secondaryButton() {
+        return secondaryButton;
     }
 
     static get submitButton() {

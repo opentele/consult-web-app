@@ -18,6 +18,8 @@ import {Redirect} from "react-router-dom";
 import _ from 'lodash';
 import TimeScheduleField from "../../components/DurationField";
 import {SupervisorAccount} from "@mui/icons-material";
+import S from "../../theming/S";
+import {DarkColors} from "../../theming/DarkTheme";
 
 const styles = theme => ({
     rooms: {
@@ -39,6 +41,11 @@ const styles = theme => ({
     crButton: {
         marginRight: 5,
         marginLeft: 5
+    },
+    chip: {
+        marginRight: 8,
+        borderRadius: 4,
+        backgroundColor: theme.palette.background.default
     }
 });
 
@@ -141,11 +148,11 @@ class ConsultationRooms extends BaseView {
                                     </Box>
                                 </Box>
                                 <Box>
-                                    <Box>
+                                    <Box style={{display: "flex", flexDirection: "row", alignContent: "center"}}>
                                         <SupervisorAccount fontSize="large" style={{marginRight: 10}}/>
                                         {consultationRoom.providers.length === 0 && <Typography>{i18n.t("no-providers")}</Typography>}
                                         {consultationRoom.providers.map((provider) =>
-                                            <Chip label={provider.name} color="primary" key={provider.id} style={{marginRight: 8, borderRadius: 2}}/>)}
+                                            <Chip label={provider.name} key={provider.id} className={classes.chip}/>)}
                                     </Box>
                                     <Box sx={{display: "flex", flexDirection: "column", marginTop: 2}}>
                                         {alerts.map((alert, index) => <Alert key={index} sx={{alignSelf: "flex-start", m: 0.25}}
@@ -156,15 +163,14 @@ class ConsultationRooms extends BaseView {
                         </CardContent>
                         <CardActions className={classes.crCardActions}>
                             {consultationRoom.canAddClient() &&
-                            <Button variant="contained" color={"secondary"} className={classes.crButton} startIcon={<Queue/>}
+                            <Button variant="outlined" sx={S.secondaryButton} className={classes.crButton} startIcon={<Queue/>}
                                     onClick={this.getModalOpenHandler("queueManagementModalStatus",
                                                 additionalModalState)}>{i18n.t("manage-client-queue")}</Button>}
                             {consultationRoom.canViewClients() &&
-                            <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="contained"
-                                    startIcon={<People/>}
-                                    color="secondary">{i18n.t("view-clients")}</Button>}
+                            <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="outlined" sx={S.secondaryButton}
+                                    startIcon={<People/>}>{i18n.t("view-clients")}</Button>}
                             {consultationRoom.canJoinConference() &&
-                            <Button variant="contained" color="primary" className={classes.crButton} startIcon={<VideoCall/>}
+                            <Button variant="contained" sx={S.secondaryButton} className={classes.crButton} startIcon={<VideoCall/>}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
                         </CardActions>
                     </Card>
