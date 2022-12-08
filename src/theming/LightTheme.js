@@ -18,6 +18,15 @@ const themeOptions = Object.assign({}, defaultLightTheme, {
             paper: LightColors.PaperBackground
         }
     },
+    components: {
+        MuiDialogTitle: {
+            styleOverrides: {
+                root: {
+                    backgroundColor: LightColors.PaperBackground
+                }
+            }
+        }
+    },
     textColor: {
         assistive: "#BB86FC"
     },

@@ -65,6 +65,7 @@ class TeleConferenceView extends BaseView {
                 <JitsiConference placeholder={true} consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
                 <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={consultationRoom} onDataChanged={() => this.refresh()}/>
             </Box>
+            <br/><br/>
         </ContainerView>;
     }
 }
