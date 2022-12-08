@@ -49,6 +49,10 @@ const config = {
 //https://jitsi.github.io/handbook/docs/dev-guide/dev-guide-iframe
 
 class JitsiWrapper extends React.Component {
+    constructor(props, context) {
+        super(props, context);
+    }
+
     handleAPI(api) {
         api.executeCommand("toggleVideo");
         // setTimeout(() => JitsiMeetAPI.executeCommand("hangup"), 5000);
@@ -59,8 +63,8 @@ class JitsiWrapper extends React.Component {
         providerDisplayForClient: PropTypes.string.isRequired
     };
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
-        return this.props.roomName !== prevProps.roomName;
+    shouldComponentUpdate(nextProps, nextState, nextContext) {
+        return this.props.roomName !== nextProps.roomName;
     }
 
     render() {

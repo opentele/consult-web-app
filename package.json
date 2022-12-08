@@ -35,6 +35,7 @@
   },
   "scripts": {
     "start": "SKIP_PREFLIGHT_CHECK=true BACKEND_URL=http://localhost:6054 REACT_APP_JITSI_PLACEHOLDER=true HTTPS=true react-scripts start",
+    "start-jitsi": "SKIP_PREFLIGHT_CHECK=true BACKEND_URL=http://localhost:6054 REACT_APP_JITSI_PLACEHOLDER=false HTTPS=true react-scripts start",
     "build": "SKIP_PREFLIGHT_CHECK=true react-scripts build",
     "test": "SKIP_PREFLIGHT_CHECK=true react-scripts test",
     "eject": "react-scripts eject",

@@ -18,7 +18,7 @@ class TeleConferenceView extends BaseView {
         super(props);
         this.state = {
             getTeleConferenceRoomCall: ServerCall.createInitial(),
-            consultationRoom: ConsultationRoom.newRoom()
+            consultationRoom: null
         };
     }
 
@@ -47,17 +47,10 @@ class TeleConferenceView extends BaseView {
     }
 
     render() {
-        const {
-            classes,
-            jitsiPlaceHolder
-        } = this.props;
+        const {classes} = this.props;
+        const {getTeleConferenceRoomCall, consultationRoom} = this.state;
 
-        const {
-            getTeleConferenceRoomCall,
-            consultationRoom
-        } = this.state;
-
-        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall))
+        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(consultationRoom))
             return <WaitView/>;
 
         return <ContainerView showBackButton={false} activeTab="home">

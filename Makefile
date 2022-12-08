@@ -1,10 +1,10 @@
-set-default-node-version:
-	. ${NVM_DIR}/nvm.sh && nvm alias default 16
-
-start: set-default-node-version
+start:
 	HOST=consultweb PORT=6052 yarn start
 
-storybook: set-default-node-version
+start-jitsi:
+	HOST=consultweb PORT=6052 yarn start-jitsi
+
+storybook:
 	yarn storybook
 
 deps:

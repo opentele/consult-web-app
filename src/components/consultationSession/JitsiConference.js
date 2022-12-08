@@ -16,7 +16,7 @@ import S from "../../theming/S";
 import ProviderChip from "../ProviderChip";
 import _ from 'lodash';
 
-const placeholder = _.isNil(process.env.REACT_APP_JITSI_PLACEHOLDER) ? false : process.env.REACT_APP_JITSI_PLACEHOLDER;
+const placeholder = _.isNil(process.env.REACT_APP_JITSI_PLACEHOLDER) ? false : process.env.REACT_APP_JITSI_PLACEHOLDER === "true";
 
 const styles = theme => ({
     jcContainer: {
@@ -111,7 +111,7 @@ class JitsiConference extends BaseView {
                 {consultationRoom.providers.map((x) => <ProviderChip provider={x}/>)}
             </Box>
 
-            {placeholder ? <JitsiPlaceholder/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}
+            {placeholder ? <JitsiPlaceholder key={consultationRoom.activeTeleConferenceId}/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}
                                                                providerDisplayForClient={consultationRoom.providerClientDisplay}/>}
 
             {clientRecordModalStatus === ModalStatus.OPENED &&

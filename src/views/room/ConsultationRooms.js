@@ -14,7 +14,7 @@ import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
-import {Redirect} from "react-router-dom";
+import {Redirect, withRouter} from "react-router-dom";
 import _ from 'lodash';
 import TimeScheduleField from "../../components/DurationField";
 import {SupervisorAccount} from "@mui/icons-material";
@@ -112,7 +112,7 @@ class ConsultationRooms extends BaseView {
         const isConsultant = user["providerType"] === ProviderType.Consultant
 
         if (setupTeleConferenceCall.callStatus === ServerCallStatus.SUCCESS) {
-            return <Redirect to={`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`}/>
+            this.props.history.push(`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`);
         }
 
         const hasRooms = consultationRooms.length !== 0;
@@ -194,4 +194,4 @@ class ConsultationRooms extends BaseView {
     }
 }
 
-export default withStyles(styles)(ConsultationRooms);
+export default withStyles(styles)(withRouter(ConsultationRooms));
