@@ -14,6 +14,9 @@ import ServerErrorMessage from "../../components/ServerErrorMessage";
 import NamedFilesUpload from "../NamedFilesUpload";
 import ThemeHelper from "../../theming/ThemeHelper";
 import ConfirmationBox from "../framework/ConfirmationBox";
+import Paper from "@mui/material/Paper";
+import S from "../../theming/S";
+import {DarkColors} from "../../theming/DarkTheme";
 
 function createStyleOptions(theme) {
     const styleOptions = {
@@ -113,6 +116,7 @@ class ConsultationRecordView extends BaseView {
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="complaints" mandatory={false}/>
                 <TextareaAutosize
+                    style={S.textArea}
                     minRows={3}
                     className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("complaints")}
@@ -122,6 +126,7 @@ class ConsultationRecordView extends BaseView {
             <Box className={classes.crvFieldBox}>
                 <FormLabel textKey="observations" mandatory={false}/>
                 <TextareaAutosize
+                    style={S.textArea}
                     minRows={3}
                     className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("observations")}
@@ -138,7 +143,7 @@ class ConsultationRecordView extends BaseView {
                 <FormLabel textKey="recommendations"/>
                 <TextareaAutosize
                     minRows={3}
-                    style={_.includes(missingFields, "recommendations") && {borderColor: "red", borderWidth: 2}}
+                    style={_.includes(missingFields, "recommendations") ? Object.assign({borderColor: "red", borderWidth: 2}, S.textArea) : S.textArea}
                     className={textAreaClassName}
                     onChange={this.getConsultationChangeHandler("recommendations")}
                     value={consultation.recommendations}
