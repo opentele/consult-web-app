@@ -21,11 +21,9 @@ const styles = (theme) => ({
     rruleBox: {
         marginTop: 20
     },
-    addConsultationScheduleField: {
-        marginTop: 20
-    },
     startTimeField: {
-        marginRight: 20
+        marginRight: 20,
+        marginLeft: 20
     },
     addConsultationScheduleForm: {
         display: "flex",
@@ -48,7 +46,9 @@ const styles = (theme) => ({
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end",
-        padding: 20
+        paddingRight: 20,
+        paddingLeft: 10,
+        paddingBottom: 20
     },
     scheduleActionButton: {
         marginRight: 10
@@ -112,7 +112,7 @@ class AddEditConsultationSchedule extends BaseView {
         return <ModalContainerView titleKey={schedule.isNew() ? "create-new-schedule" : "edit-schedule-title"}>
             <Box>
                 <Grid container>
-                    <Grid item container lg={6} xs={11} className={classes.addConsultationScheduleForm}>
+                    <Grid item container lg={8} xs={11} className={classes.addConsultationScheduleForm}>
                         <Box style={{flexDirection: "row", display: "flex"}}>
                             <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
                                        label={i18n.t("schedule-title")} value={schedule.title}
@@ -124,14 +124,13 @@ class AddEditConsultationSchedule extends BaseView {
                                        onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>
                         </Box>
 
-                        <DateInput classNames={classes.addConsultationScheduleField} value={schedule.startDate}
-                                   changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
-
-                        <Box>
-                            <TimeInput classNames={`${classes.addConsultationScheduleField} ${classes.startTimeField}`} value={schedule.startTime}
+                        <Box style={{marginTop: 20, flexDirection: "row", display: "flex"}}>
+                            <DateInput value={schedule.startDate}
+                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
+                            <TimeInput classNames={classes.startTimeField} value={schedule.startTime}
                                        changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")}
                                        label={i18n.t("start-time")}/>
-                            <TimeInput classNames={`${classes.addConsultationScheduleField}`} value={schedule.endTime}
+                            <TimeInput value={schedule.endTime}
                                        changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")}
                                        label={i18n.t("end-time")}/>
                         </Box>
