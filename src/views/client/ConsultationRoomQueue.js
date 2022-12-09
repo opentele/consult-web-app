@@ -78,7 +78,10 @@ class ConsultationRoomQueue extends BaseView {
 
     onAddClient() {
         this.makeServerCall(ConsultationRoomService.addClient(this.props.consultationRoom, this.state.client.id), "addClientServerCall")
-            .then(() => this.loadClients(true));
+            .then(() => {
+                this.setState({client: null});
+                this.loadClients(true);
+            });
     }
 
     selectClientHandler = (client) => {
