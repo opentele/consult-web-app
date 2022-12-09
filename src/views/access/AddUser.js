@@ -28,14 +28,13 @@ const styles = theme => ({
         width: "300px"
     },
     auCheckButton: {
-        marginLeft: 30,
-        marginTop: 20
+        marginLeft: 20
     },
     auServerAlert: {
         marginTop: 20
     },
     auButtons: {
-        marginTop: 30,
+        marginTop: 60,
         display: "flex",
         flexDirection: "row",
         justifyContent: "flex-end"
@@ -97,8 +96,8 @@ class AddUser extends BaseView {
                                label={i18n.t('add-user-text-placeholder')} onChange={this.getValueChangedHandler("searchUserName")}
                                error={this.hasError("userName")}
                                helperText={this.getErrorText("userName", "invalid-user-name")}/>
-                    <Button className={classes.auCheckButton} size="small"
-                            color="secondary" variant="text" onClick={this.getCheckUserHandler()}>
+                    <Button className={classes.auCheckButton}
+                            color="secondary" variant="contained" size="small" onClick={this.getCheckUserHandler()}>
                         {i18n.t("check-user")}
                     </Button>
                 </Box>

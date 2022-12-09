@@ -80,14 +80,31 @@ class PersonView extends BaseView {
             {loading ? <WaitView style={S.modalFormContainer}/> :
                 <FormControl>
                     <Paper style={S.modalFormContainer}>
-                        <Box className={classes.personViewFieldBox}>
-                            <FormLabel textKey="full-name"/>
-                            <TextField
-                                name="name"
-                                error={_.includes(missingFields, "name")}
-                                onChange={this.getClientFieldValueChangeHandler("name")}
-                                value={client.name}
-                            />
+                        <Box style={{display: "flex", flexDirection: "row"}}>
+                            <Box className={classes.personViewFieldBox} style={{width: "50%"}}>
+                                <FormLabel textKey="full-name"/>
+                                <TextField
+                                    name="name"
+                                    error={_.includes(missingFields, "name")}
+                                    onChange={this.getClientFieldValueChangeHandler("name")}
+                                    value={client.name}
+                                />
+                            </Box>
+
+                            <Box className={[classes.personViewFieldBox]} style={{marginLeft: 40}}>
+                                <FormLabel textKey="gender"/>
+                                <RadioGroup
+                                    defaultValue="Female"
+                                    name="gender"
+                                    className={classes.radioGroup}>
+                                    <FormControlLabel value="Male" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                      label={i18n.t("male")}/>
+                                    <FormControlLabel value="Female" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                      label={i18n.t("female")}/>
+                                    <FormControlLabel value="Other" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
+                                                      label={i18n.t("other")}/>
+                                </RadioGroup>
+                            </Box>
                         </Box>
                         <Box className={classes.personViewFieldBox}>
                             <FormLabel textKey="age"/>
@@ -97,7 +114,7 @@ class PersonView extends BaseView {
                                     error={_.includes(missingFields, "age")}
                                     onChange={this.getClientFieldValueChangeHandler("age")}
                                     value={client.age}
-                                    style={{marginRight: 7}}/>
+                                    style={{marginRight: 13, width: "10%"}}/>
                                 <RadioGroup
                                     value={client.ageDurationType}
                                     name="durationType"
@@ -111,37 +128,24 @@ class PersonView extends BaseView {
                                 </RadioGroup>
                             </Box>
                         </Box>
-                        <Box className={[classes.personViewFieldBox]}>
-                            <FormLabel textKey="gender"/>
-                            <RadioGroup
-                                defaultValue="Female"
-                                name="gender"
-                                className={classes.radioGroup}>
-                                <FormControlLabel value="Male" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
-                                                  label={i18n.t("male")}/>
-                                <FormControlLabel value="Female" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
-                                                  label={i18n.t("female")}/>
-                                <FormControlLabel value="Other" control={<Radio onChange={this.getClientFieldValueChangeHandler("gender")}/>}
-                                                  label={i18n.t("other")}/>
-                            </RadioGroup>
-                        </Box>
-                        <Box className={[classes.personViewFieldBox]}>
-                            <FormLabel textKey="mobile" mandatory={false}/>
-                            <TextField
-                                name="mobile"
-                                className={[]}
-                                onChange={this.getClientFieldValueChangeHandler("mobile")}
-                                value={client.mobile}
-                            />
-                        </Box>
-                        <Box className={[classes.personViewFieldBox]}>
-                            <FormLabel textKey="registration-number" mandatory={false}/>
-                            <TextField
-                                name="registrationNumber"
-                                className={[]}
-                                onChange={this.getClientFieldValueChangeHandler("registrationNumber")}
-                                value={client.registrationNumber}
-                            />
+                        <Box style={{display: "flex", flexDirection: "row"}}>
+                            <Box className={[classes.personViewFieldBox]}>
+                                <FormLabel textKey="mobile" mandatory={false}/>
+                                <TextField
+                                    name="mobile"
+                                    onChange={this.getClientFieldValueChangeHandler("mobile")}
+                                    value={client.mobile}
+                                />
+                            </Box>
+                            <Box className={[classes.personViewFieldBox]} style={{marginLeft: 40}}>
+                                <FormLabel textKey="registration-number" mandatory={false}/>
+                                <TextField
+                                    name="registrationNumber"
+                                    className={[]}
+                                    onChange={this.getClientFieldValueChangeHandler("registrationNumber")}
+                                    value={client.registrationNumber}
+                                />
+                            </Box>
                         </Box>
                         <Box className={classes.personViewFieldBox}>
                             <FormLabel textKey="other-details" mandatory={false}/>

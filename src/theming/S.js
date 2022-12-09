@@ -68,7 +68,7 @@ const modalFormContainer = {
     display: "flex",
     justifyContent: "center",
     padding: 30,
-    width: 600
+    width: 700
 }
 
 const secondaryButton = {
