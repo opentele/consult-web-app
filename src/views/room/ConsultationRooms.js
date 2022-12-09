@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar} from "@mui/material";
+import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar, CircularProgress} from "@mui/material";
 import {Edit, People, Queue, VideoCall} from "@mui/icons-material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -92,7 +92,7 @@ class ConsultationRooms extends BaseView {
     }
 
     getClientListHandler(consultationRoom) {
-        return () => this.makeServerCall(BeanContainer.get(ConsultationRoomService).getClientsByConsultationRoom(consultationRoom.id),
+        return () => this.makeServerCall(ConsultationRoomService.getClientsByConsultationRoom(consultationRoom.id),
             "clientListCall");
     }
 
@@ -105,7 +105,8 @@ class ConsultationRooms extends BaseView {
             consultationRooms,
             clientList,
             clientAdded,
-            selectedConsultationRoom
+            selectedConsultationRoom,
+            clientListCall
         } = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
@@ -161,8 +162,11 @@ class ConsultationRooms extends BaseView {
                                     onClick={this.getModalOpenHandler("queueManagementModalStatus",
                                                 additionalModalState)}>{i18n.t("manage-client-queue")}</Button>}
                             {consultationRoom.canViewClients() &&
-                            <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton} variant="outlined" sx={S.secondaryButton}
-                                    startIcon={<People/>}>{i18n.t("view-clients")}</Button>}
+                                <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton}
+                                    variant="outlined" sx={S.secondaryButton}
+                                    startIcon={<People/>}>
+                                    {ServerCall.waiting(clientListCall)
+                                                        ? <CircularProgress size={20} color="inherit"/> : i18n.t("view-clients")}</Button>}
                             {consultationRoom.canJoinConference() &&
                             <Button variant="contained" sx={S.secondaryButton} className={classes.crButton} startIcon={<VideoCall/>}
                                     onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
