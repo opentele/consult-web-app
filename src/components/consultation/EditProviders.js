@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import FormLabel from "../FormLabel";
-import {MenuItem, Select} from "@mui/material";
+import {MenuItem, Select, Skeleton} from "@mui/material";
 import {Box, Chip, OutlinedInput} from "@mui/material";
 import {ServerCall} from "react-app-common";
 import WaitView from "../WaitView";
@@ -47,33 +47,33 @@ class EditProviders extends BaseView {
     render() {
         const {getProvidersCall} = this.state;
         const {classes, containerClassName, providers} = this.props;
-        if (ServerCall.noCallOrWait(getProvidersCall))
-            return <WaitView/>;
 
         const allProviders = ServerCall.getData(getProvidersCall);
         const providerIds = EntityCollection.getIds(providers);
 
         return (<Box className={[containerClassName, classes.epContainer]}>
             <FormLabel textKey="providers"/>
-            <Select multiple value={_.isEmpty(providerIds) ? [-1] : providerIds}
-                    onChange={(e) => this.onProvidersChanged(e)}
-                    input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
-                    renderValue={(providerIds) => (
-                        <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
-                            {
-                                providerIds.map((providerId) => {
-                                    return <Chip key={providerId}
-                                                 label={providerId === -1 ? i18n.t("select-provider") : EntityCollection.getEntity(providers, providerId).name}/>
-                                })
-                            }
-                        </Box>
-                    )}>
-                {allProviders.map((provider) => (
-                    <MenuItem key={provider.id} value={provider.id}>
-                        {provider.name}
-                    </MenuItem>
-                ))}
-            </Select>
+            {ServerCall.noCallOrWait(getProvidersCall) ?
+                <Skeleton variant="rectangular" width={210} height={60} animation="wave"/> :
+                <Select multiple value={_.isEmpty(providerIds) ? [-1] : providerIds}
+                        onChange={(e) => this.onProvidersChanged(e)}
+                        input={<OutlinedInput id="select-multiple-chip" label="Chip"/>}
+                        renderValue={(providerIds) => (
+                            <Box sx={{display: 'flex', flexWrap: 'wrap', gap: 0.5}}>
+                                {
+                                    providerIds.map((providerId) => {
+                                        return <Chip key={providerId}
+                                                     label={providerId === -1 ? i18n.t("select-provider") : EntityCollection.getEntity(providers, providerId).name}/>
+                                    })
+                                }
+                            </Box>
+                        )}>
+                    {allProviders.map((provider) => (
+                        <MenuItem key={provider.id} value={provider.id}>
+                            {provider.name}
+                        </MenuItem>
+                    ))}
+                </Select>}
         </Box>);
     }
 }

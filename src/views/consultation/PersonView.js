@@ -12,7 +12,6 @@ import ServerErrorMessage from "../../components/ServerErrorMessage";
 import Client from "../../domain/Client";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import WaitView from "../../components/WaitView";
-import ThemeHelper from "../../theming/ThemeHelper";
 import {i18n} from "consult-app-common";
 import Paper from "@mui/material/Paper";
 import S from "../../theming/S";
