@@ -116,11 +116,11 @@ class AddEditConsultationSchedule extends BaseView {
                     <Grid container>
                         <Grid item container lg={8} xs={11} className={classes.addConsultationScheduleForm}>
                             <Box style={{flexDirection: "row", display: "flex"}}>
-                                <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
+                                <TextField name="title" required className={classes.addConsultationScheduleTitleField}
                                            label={i18n.t("schedule-title")} value={schedule.title}
                                            onChange={this.getStateFieldValueChangedHandler("schedule", "title")}/>
 
-                                <TextField name="totalSlots" className={`${classes.addConsultationScheduleField}`}
+                                <TextField name="totalSlots"
                                            label={i18n.t("total-slots")} value={schedule.totalSlots}
                                            type="number"
                                            onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>
