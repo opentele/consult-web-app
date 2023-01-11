@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar, CircularProgress} from "@mui/material";
+import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar, CircularProgress, Skeleton} from "@mui/material";
 import {Edit, People, Queue, VideoCall} from "@mui/icons-material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -20,6 +20,7 @@ import TimeScheduleField from "../../components/DurationField";
 import {SupervisorAccount} from "@mui/icons-material";
 import S from "../../theming/S";
 import ProviderChip from "../../components/ProviderChip";
+import {DarkColors} from "../../theming/DarkTheme";
 
 const styles = theme => ({
     rooms: {
@@ -106,7 +107,8 @@ class ConsultationRooms extends BaseView {
             clientList,
             clientAdded,
             selectedConsultationRoom,
-            clientListCall
+            clientListCall,
+            getRoomsCall
         } = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
@@ -117,9 +119,11 @@ class ConsultationRooms extends BaseView {
         }
 
         const hasRooms = consultationRooms.length !== 0;
+        const gettingRooms = ServerCall.waiting(getRoomsCall);
 
         return <Box className={hasRooms ? classes.rooms : classes.noRooms}>
-            {!hasRooms && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
+            {(!hasRooms && !gettingRooms) && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
+            {gettingRooms && <Skeleton variant="rectangular" animation="wave" height={100} sx={{bgcolor: "white"}}/>}
             {
                 consultationRooms.map((consultationRoom: ConsultationRoom) => {
                     const alerts = consultationRoom.getAlerts();

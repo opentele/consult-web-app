@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Fab, Paper, TextField, Typography} from "@mui/material";
+import {Box, Button, Fab, Paper, Skeleton, TextField, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
@@ -13,6 +13,7 @@ import PersonView from "../consultation/PersonView";
 import Client from "../../domain/Client";
 import {Search} from "@mui/icons-material";
 import S from "../../theming/S";
+import TableSkeleton from "../../components/TableSkeleton";
 
 class Clients extends BaseView {
     constructor(props, context) {
@@ -33,9 +34,7 @@ class Clients extends BaseView {
     }
 
     refresh() {
-        ClientService.getClientsByNameAndRegistrationNumber(this.state.name, this.state.registrationNumber).then((response) => {
-            this.setState({getClientsServerCall: ServerCall.responseReceived(this.state.getClientsServerCall, response)});
-        })
+        this.makeServerCall(ClientService.getClientsByNameAndRegistrationNumber(this.state.name, this.state.registrationNumber), "getClientsServerCall");
     }
 
     getSearchHandler() {
@@ -53,6 +52,7 @@ class Clients extends BaseView {
             totalCount: data.totalCount,
             displayCount: data.entities.length
         });
+        const loadingClients = ServerCall.waiting(getClientsServerCall);
 
         return <ContainerView activeTab="client" onRefresh={() => this.refresh()}>
             {addClientModalStatus === ModalStatus.OPENED &&
@@ -69,7 +69,7 @@ class Clients extends BaseView {
                     <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between", width: "100%", paddingLeft: 20}}>
                         <Box>
                             <Typography variant={"h3"}>{i18n.t("client-list")}</Typography>
-                            <Typography variant={"button"}>{totalClientsMessage}</Typography>
+                            {!loadingClients && <Typography variant={"button"}>{totalClientsMessage}</Typography>}
                         </Box>
                         <Box style={{flexDirection: "row", display: "flex", padding: 20}}>
                             <TextField label={i18n.t('name')} onChange={this.getValueChangedHandler("name")} style={{marginRight: 20}}/>
@@ -82,7 +82,8 @@ class Clients extends BaseView {
                     </Box>
                 </Box>
                 <br/>
-                <ClientList clientList={clientSearchResults} displayQueueNumber={false} displayNumberOfSessions={true}/>
+                {loadingClients ? <TableSkeleton/> :
+                    <ClientList clientList={clientSearchResults} displayQueueNumber={false} displayNumberOfSessions={true}/>}
                 <br/><br/>
             </Box>
             <br/><br/>
@@ -90,7 +91,6 @@ class Clients extends BaseView {
     }
 }
 
-const styles = theme => ({
-});
+const styles = theme => ({});
 
 export default withStyles(styles)(Clients);
