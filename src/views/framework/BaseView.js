@@ -59,13 +59,6 @@ class BaseView extends Component {
         return this.hasError(field) && i18n.t(this.state.errors[field]);
     }
 
-    renderForErrorOrWait(serverCall) {
-        if (serverCall.callStatus === ServerCallStatus.WAITING)
-            return <CircularProgress/>;
-        else
-            return <ErrorAlert title={'unexpected-error-title'} message={'unexpected-error-message'}/>;
-    }
-
     getModalCloseHandler(stateField) {
         return (saved) => this.onModalClose(stateField, saved);
     }

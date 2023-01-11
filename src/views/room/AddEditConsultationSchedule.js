@@ -16,6 +16,7 @@ import ConsultationRoomScheduleService from "../../service/ConsultationRoomSched
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import EditProviders from "../../components/consultation/EditProviders";
 import GlobalContext from "../../framework/GlobalContext";
+import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = (theme) => ({
     rruleBox: {
@@ -104,55 +105,56 @@ class AddEditConsultationSchedule extends BaseView {
 
     render() {
         const {classes, messageClose} = this.props;
-
         const {getScheduleCall, saveScheduleCall, schedule} = this.state;
-        if (ServerCall.noCallOrWait(getScheduleCall))
-            return this.renderForErrorOrWait(getScheduleCall);
 
-        return <ModalContainerView titleKey={schedule.isNew() ? "create-new-schedule" : "edit-schedule-title"}>
-            <Box>
-                <Grid container>
-                    <Grid item container lg={8} xs={11} className={classes.addConsultationScheduleForm}>
-                        <Box style={{flexDirection: "row", display: "flex"}}>
-                            <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
-                                       label={i18n.t("schedule-title")} value={schedule.title}
-                                       onChange={this.getStateFieldValueChangedHandler("schedule", "title")}/>
+        const loading = ServerCall.noCallOrWait(getScheduleCall);
+        const titleKey = schedule ? (schedule.isNew() ? "create-new-schedule" : "edit-schedule-title") : "loading";
 
-                            <TextField name="totalSlots" className={`${classes.addConsultationScheduleField}`}
-                                       label={i18n.t("total-slots")} value={schedule.totalSlots}
-                                       type="number"
-                                       onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>
-                        </Box>
+        return <ModalContainerView titleKey={titleKey}>
+            {loading ? <ContainerSkeleton/> :
+                <Box>
+                    <Grid container>
+                        <Grid item container lg={8} xs={11} className={classes.addConsultationScheduleForm}>
+                            <Box style={{flexDirection: "row", display: "flex"}}>
+                                <TextField name="title" required className={`${classes.addConsultationScheduleField} ${classes.addConsultationScheduleTitleField}`}
+                                           label={i18n.t("schedule-title")} value={schedule.title}
+                                           onChange={this.getStateFieldValueChangedHandler("schedule", "title")}/>
 
-                        <Box style={{marginTop: 20, flexDirection: "row", display: "flex"}}>
-                            <DateInput value={schedule.startDate}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
-                            <TimeInput classNames={classes.startTimeField} value={schedule.startTime}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")}
-                                       label={i18n.t("start-time")}/>
-                            <TimeInput value={schedule.endTime}
-                                       changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")}
-                                       label={i18n.t("end-time")}/>
-                        </Box>
+                                <TextField name="totalSlots" className={`${classes.addConsultationScheduleField}`}
+                                           label={i18n.t("total-slots")} value={schedule.totalSlots}
+                                           type="number"
+                                           onChange={this.getStateFieldValueChangedHandler("schedule", "totalSlots")}/>
+                            </Box>
+
+                            <Box style={{marginTop: 20, flexDirection: "row", display: "flex"}}>
+                                <DateInput value={schedule.startDate}
+                                           changeHandler={this.getStateFieldValueChangedHandler("schedule", "startDate")}/>
+                                <TimeInput classNames={classes.startTimeField} value={schedule.startTime}
+                                           changeHandler={this.getStateFieldValueChangedHandler("schedule", "startTime")}
+                                           label={i18n.t("start-time")}/>
+                                <TimeInput value={schedule.endTime}
+                                           changeHandler={this.getStateFieldValueChangedHandler("schedule", "endTime")}
+                                           label={i18n.t("end-time")}/>
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <Grid container>
-                    <Grid item lg={6} xs={11}>
-                        <Box className={classes.rRuleContainer}>
-                            <RRuleGenerator
-                                config={{frequency: ['Yearly', 'Monthly', 'Weekly', 'Daily']}}
-                                onChange={(rrule) => this.onScheduleRuleUpdate(rrule)}
-                                value={schedule.recurrenceRule}
-                                translations={this.getTranslation()}
-                            />
-                        </Box>
+                    <Grid container>
+                        <Grid item lg={6} xs={11}>
+                            <Box className={classes.rRuleContainer}>
+                                <RRuleGenerator
+                                    config={{frequency: ['Yearly', 'Monthly', 'Weekly', 'Daily']}}
+                                    onChange={(rrule) => this.onScheduleRuleUpdate(rrule)}
+                                    value={schedule.recurrenceRule}
+                                    translations={this.getTranslation()}
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-                <EditProviders containerClassName={classes.aecsProviders} providers={schedule.providers}
-                               onUpdate={(providers) => this.onProvidersUpdate(providers)}/>
-                <SaveCancelButtons className={classes.scheduleButtonsBox} serverCall={saveScheduleCall} onCancelHandler={messageClose}
-                                   onSaveHandler={() => this.onSave()} disabled={false}/>
-            </Box>
+                    <EditProviders containerClassName={classes.aecsProviders} providers={schedule.providers}
+                                   onUpdate={(providers) => this.onProvidersUpdate(providers)}/>
+                    <SaveCancelButtons className={classes.scheduleButtonsBox} serverCall={saveScheduleCall} onCancelHandler={messageClose}
+                                       onSaveHandler={() => this.onSave()} disabled={false}/>
+                </Box>}
         </ModalContainerView>;
     }
 }
