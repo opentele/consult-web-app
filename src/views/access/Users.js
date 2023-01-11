@@ -11,7 +11,7 @@ import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
 import {GroupAdd, PersonAddAlt, Search} from "@mui/icons-material";
 import S from "../../theming/S";
-import TableSkeleton from "../../components/TableSkeleton";
+import {TableSkeleton} from "../../components/ConsultSkeleton";
 
 class Users extends BaseView {
     constructor(props, context) {

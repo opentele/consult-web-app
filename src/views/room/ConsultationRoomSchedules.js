@@ -1,18 +1,18 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
-import {Box, Card, CardActions, CardContent, Chip, IconButton, Typography} from "@mui/material";
+import {Box, Card, CardActions, CardContent, IconButton, Typography} from "@mui/material";
 import {Edit} from "@mui/icons-material";
 import {ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
 import TimeField from "../../components/TimeField";
 import ModalStatus from "../framework/ModalStatus";
-import WaitView from "../../components/WaitView";
 import ConsultationRoomSchedule from "../../domain/ConsultationRoomSchedule";
 import ConsultationRoomScheduleService from "../../service/ConsultationRoomScheduleService";
 import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 import {i18n} from "consult-app-common";
 import ProviderChip from "../../components/ProviderChip";
+import {CardsSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     crsRooms: {
@@ -63,9 +63,7 @@ class ConsultationRoomSchedules extends BaseView {
         const {getSchedulesCall, editScheduleStatus, viewRoomsStatus, currentScheduleId} = this.state;
         const {classes} = this.props;
 
-        if (ServerCall.noCallOrWait(getSchedulesCall)) {
-            return <WaitView/>;
-        }
+        const gettingSchedules = ServerCall.waiting(getSchedulesCall);
         const consultationRoomSchedules = ServerCall.getData(getSchedulesCall).map((x) => ConsultationRoomSchedule.fromServerResource(x));
 
         return <Box className={classes.crsRooms}>
@@ -73,6 +71,7 @@ class ConsultationRoomSchedules extends BaseView {
                 consultationScheduleId={currentScheduleId}
                 messageClose={this.getModalCloseHandler("editScheduleStatus")}/>}
 
+            {gettingSchedules && <CardsSkeleton/>}
             {consultationRoomSchedules.map((consultationRoomSchedule) => {
                 return <Card raised={true} elevation={3} className={classes.crsConferenceBox} key={consultationRoomSchedule.id}>
                     <CardContent>

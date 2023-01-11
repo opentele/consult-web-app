@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Alert, Box, Button, Card, CardActions, CardContent, Chip, IconButton, Typography, Snackbar, CircularProgress, Skeleton} from "@mui/material";
-import {Edit, People, Queue, VideoCall} from "@mui/icons-material";
+import {Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, IconButton, Snackbar, Typography} from "@mui/material";
+import {Edit, People, Queue, SupervisorAccount, VideoCall} from "@mui/icons-material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../framework/BaseView";
@@ -14,13 +14,12 @@ import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
 import CreateEditConsultationRoom from "./CreateEditConsultationRoom";
-import {Redirect, withRouter} from "react-router-dom";
+import {withRouter} from "react-router-dom";
 import _ from 'lodash';
 import TimeScheduleField from "../../components/DurationField";
-import {SupervisorAccount} from "@mui/icons-material";
 import S from "../../theming/S";
 import ProviderChip from "../../components/ProviderChip";
-import {DarkColors} from "../../theming/DarkTheme";
+import {CardsSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     rooms: {
@@ -123,8 +122,7 @@ class ConsultationRooms extends BaseView {
 
         return <Box className={hasRooms ? classes.rooms : classes.noRooms}>
             {(!hasRooms && !gettingRooms) && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
-            {gettingRooms && <Skeleton variant="rectangular" animation="wave" height={100} sx={{bgcolor: "white"}}/>}
-            {
+            {gettingRooms ? <CardsSkeleton/> :
                 consultationRooms.map((consultationRoom: ConsultationRoom) => {
                     const alerts = consultationRoom.getAlerts();
                     const additionalModalState = {selectedConsultationRoom: consultationRoom};

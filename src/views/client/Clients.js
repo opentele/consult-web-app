@@ -13,7 +13,7 @@ import PersonView from "../consultation/PersonView";
 import Client from "../../domain/Client";
 import {Search} from "@mui/icons-material";
 import S from "../../theming/S";
-import TableSkeleton from "../../components/TableSkeleton";
+import {TableSkeleton} from "../../components/ConsultSkeleton";
 
 class Clients extends BaseView {
     constructor(props, context) {
