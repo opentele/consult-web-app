@@ -50,14 +50,15 @@ class TeleConferenceView extends BaseView {
         const {classes} = this.props;
         const {getTeleConferenceRoomCall, consultationRoom} = this.state;
 
-        if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(consultationRoom))
-            return <CardsSkeleton/>;
+        const loading = ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(consultationRoom);
 
         return <ContainerView showBackButton={false} activeTab="home">
-            <Box className={classes.tcvContainer}>
-                <JitsiConference consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
-                <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={consultationRoom} onDataChanged={() => this.refresh()}/>
-            </Box>
+            {loading ? <CardsSkeleton/> :
+                <Box className={classes.tcvContainer}>
+                    <JitsiConference consultationRoom={consultationRoom} parentClassName={classes.tcvJitsiConf} onDataChanged={() => this.refresh()}/>
+                    <ConsultationRoomQueue containerClassName={classes.tcvConsultationRoomQueue} consultationRoom={consultationRoom}
+                                           onDataChanged={() => this.refresh()}/>
+                </Box>}
             <br/><br/>
         </ContainerView>;
     }

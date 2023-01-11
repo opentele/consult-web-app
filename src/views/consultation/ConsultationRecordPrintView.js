@@ -10,7 +10,7 @@ import ClientService from "../../service/ClientService";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 import GlobalContext from "../../framework/GlobalContext";
-import {TableSkeleton} from "../../components/ConsultSkeleton";
+import {ContainerSkeleton, TableSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     crpvContainer: {
@@ -53,24 +53,27 @@ class ConsultationRecordPrintView extends BaseView {
         this.makeServerCall(promise, "getRecordCall");
     }
 
+    getConsultations() {
+        const data = ServerCall.getData(this.state.getRecordCall);
+        return this.consultationDisplayMode === "single" ?
+            [ConsultationSessionRecord.fromServerResource(data)] :
+            ConsultationSessionRecord.fromServerResources(data.consultationSessionRecords);
+    }
+
     render() {
         const {classes, client} = this.props;
         const {getRecordCall} = this.state;
-        if (ServerCall.noCallOrWait(getRecordCall))
-            return <TableSkeleton/>;
-
-        const data = ServerCall.getData(getRecordCall);
-        const consultations = this.consultationDisplayMode === "single" ?
-            [ConsultationSessionRecord.fromServerResource(data)] :
-            ConsultationSessionRecord.fromServerResources(data.consultationSessionRecords);
+        const loading = ServerCall.noCallOrWait(getRecordCall);
 
         return <Box className={classes.crpvContainer}>
+            {loading ? <ContainerSkeleton/> : <>
                 <Paper className={classes.crpvHeader} elevation={0}>
                     <Typography variant="h4" style={{marginLeft: 20}}>{GlobalContext.getOrganisation()}</Typography>
                 </Paper>
                 <ClientDisplay client={client}/>
-                {consultations.map((record) => <ConsultationDisplay consultationSessionRecord={record} client={client}/>)}
-            </Box>;
+                {this.getConsultations().map((record) => <ConsultationDisplay consultationSessionRecord={record} client={client}/>)}
+            </>}
+        </Box>;
     }
 }
 

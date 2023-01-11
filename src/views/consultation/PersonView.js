@@ -14,7 +14,7 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import {i18n} from "consult-app-common";
 import Paper from "@mui/material/Paper";
 import S from "../../theming/S";
-import {TableSkeleton} from "../../components/ConsultSkeleton";
+import {ContainerSkeleton, TableSkeleton} from "../../components/ConsultSkeleton";
 
 class PersonView extends BaseView {
     constructor(props) {
@@ -76,7 +76,7 @@ class PersonView extends BaseView {
         const loading = saveClientCall.callStatus === ServerCallStatus.WAITING || (this.editingClient && ServerCall.noCallOrWait(getClientCall));
 
         return <ModalContainerView titleKey={this.editingClient ? "edit-client-title" : "add-client-title"}>
-            {loading ? <TableSkeleton/> :
+            {loading ? <ContainerSkeleton/> :
                 <FormControl>
                     <Paper style={S.modalFormContainer}>
                         <Box style={{display: "flex", flexDirection: "row"}}>
@@ -166,7 +166,7 @@ class PersonView extends BaseView {
 }
 
 function createStyleOptions(theme) {
-    const styleOptions = {
+    return {
         pvSaveCancelButtons: {
             marginBottom: 30
         },
@@ -187,7 +187,6 @@ function createStyleOptions(theme) {
             alignContent: 'flex-end'
         }
     };
-    return styleOptions;
 }
 
 export default withStyles(createStyleOptions)(PersonView);
