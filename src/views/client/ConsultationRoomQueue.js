@@ -8,12 +8,11 @@ import {ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import AddEntity from "../../components/AddEntity";
 import Client from '../../domain/Client';
-import {Box, IconButton, Paper, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import {Box, CircularProgress, IconButton, Skeleton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultRoomClient from "../../domain/ConsultRoomClient";
 import {Delete} from '@mui/icons-material';
 import S from "../../theming/S";
-import {DarkColors} from "../../theming/DarkTheme";
 
 const styles = theme => ({
     tableHeader: {
@@ -21,35 +20,45 @@ const styles = theme => ({
     }
 });
 
-const ClientQueue = function ({consultationRoomClients, onDelete, loadClientsServerCall}) {
+function LoadingTableCell() {
+    return <TableCell colSpan={3}><Skeleton variant="rectangular" animation="wave" height={50}/></TableCell>;
+}
+
+const ClientQueue = function ({consultationRoomClients, onDelete, loadClientsServerCall, removeClientServerCall, removingClient}) {
     const notLoadedYet = ServerCall.noCallOrWait(loadClientsServerCall);
+    const removing = ServerCall.waiting(removeClientServerCall);
     return <TableContainer>
-                <Table size="small">
-                    <TableHead>
-                        <TableRow sx={S.th}>
-                            <TableCell style={{fontSize: "larger", width: 300}}>{i18n.t('client')}</TableCell>
-                            <TableCell style={{fontSize: "larger"}}>{i18n.t('queue-number')}</TableCell>
-                            <TableCell/>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {consultationRoomClients.length === 0 && <TableRow>
-                            {notLoadedYet ? <TableCell colSpan={2}><Skeleton variant="rectangular" animation="wave" height={60}/></TableCell> :
-                            <TableCell align="center" colSpan={2}
-                                       style={{fontSize: "medium", paddingTop: 20, paddingBottom: 20}}>{i18n.t("no-clients-in-queue")}</TableCell>}
-                        </TableRow>}
-                        {consultationRoomClients.map((x: ConsultRoomClient) => (
+        <Table size="small">
+            <TableHead>
+                <TableRow sx={S.th}>
+                    <TableCell style={{fontSize: "larger", width: 300}}>{i18n.t('client')}</TableCell>
+                    <TableCell style={{fontSize: "larger"}}>{i18n.t('queue-number')}</TableCell>
+                    <TableCell/>
+                </TableRow>
+            </TableHead>
+            <TableBody>
+                {consultationRoomClients.length === 0 && <TableRow>
+                    {notLoadedYet ? <LoadingTableCell/> :
+                        <TableCell align="center" colSpan={2}
+                                   style={{fontSize: "medium", paddingTop: 20, paddingBottom: 20}}>{i18n.t("no-clients-in-queue")}</TableCell>}
+                </TableRow>}
+                {consultationRoomClients.map((x: ConsultRoomClient) => {
+                    const removingThisClient = removing && removingClient.id === x.client.id;
+                    return notLoadedYet ? <LoadingTableCell/> :
                             <TableRow key={x.client.id} hover={true} sx={S.tr}>
                                 <TableCell component="th" scope="row" style={{fontSize: "medium"}}>
                                     {x.client.getDisplayName()}
                                 </TableCell>
                                 <TableCell style={{fontSize: "medium", textAlign: "center"}}>{x.queueNumber}</TableCell>
-                                <TableCell><IconButton onClick={() => onDelete(x.client)}><Delete/></IconButton></TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>;
+                                <TableCell>{removingThisClient ?
+                                    <CircularProgress size={20} color="inherit"/> :
+                                    <IconButton onClick={() => onDelete(x.client)}><Delete/></IconButton>}
+                                </TableCell>
+                            </TableRow>;
+                })}
+            </TableBody>
+        </Table>
+    </TableContainer>;
 }
 
 class ConsultationRoomQueue extends BaseView {
@@ -60,7 +69,8 @@ class ConsultationRoomQueue extends BaseView {
             removeClientServerCall: ServerCall.createInitial(),
             loadClientsServerCall: ServerCall.createInitial([]),
             searchEntityUpdateKey: 0,
-            appointmentsChanged: false
+            appointmentsChanged: false,
+            removingClient: null
         };
     }
 
@@ -94,17 +104,20 @@ class ConsultationRoomQueue extends BaseView {
     onRemoveClient(client) {
         this.makeServerCall(ConsultationRoomService.removeAppointmentFor(this.props.consultationRoom, client), "removeClientServerCall")
             .then(() => this.loadClients(true));
+        this.setState({removingClient: client});
     }
 
     render() {
         const {messageClose, consultationRoom, classes} = this.props;
-        const {addClientServerCall, loadClientsServerCall, client, searchEntityUpdateKey, appointmentsChanged} = this.state;
+        const {addClientServerCall, loadClientsServerCall, client, searchEntityUpdateKey, appointmentsChanged, removeClientServerCall, removingClient} = this.state;
 
         const consultationRoomClients = ServerCall.getData(loadClientsServerCall).map((x) => ConsultRoomClient.fromConsultationRoomClientResponse(x));
         return <ModalContainerView titleKey="add-client">
             <Box style={{display: "flex", flexDirection: "row", padding: 30}}>
                 <Box style={{display: "flex", flexDirection: "column"}}>
                     <ClientQueue loadClientsServerCall={loadClientsServerCall}
+                                 removeClientServerCall={removeClientServerCall}
+                                 removingClient={removingClient}
                                  consultationRoomClients={consultationRoomClients} classes={classes} onDelete={(x) => this.onRemoveClient(x)}/>
                 </Box>
                 <Box style={{display: "flex", flexDirection: "column", paddingLeft: 100, paddingRight: 100, paddingTop: 30}}>

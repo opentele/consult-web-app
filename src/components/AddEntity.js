@@ -6,6 +6,8 @@ import _ from "lodash";
 import {i18n} from "consult-app-common";
 import CancelButton from "./CancelButton";
 import ServerErrorMessage from "./ServerErrorMessage";
+import {ActionButton} from "./ConsultButtons";
+import {Add} from "@mui/icons-material";
 
 const styles = theme => ({
     addEntityMain: {
@@ -44,8 +46,8 @@ class AddEntity extends React.Component {
         return <Grid container className={classes.addEntityMain}>
             <Grid item lg={10}>
                 <Box className={classes.addEntityButtons}>
-                    <Button disabled={_.isNil(entity)} variant="contained" color="primary" onClick={addEntityHandler}
-                            className={classes.addEntitySelectButton}>{i18n.t("add-button")}</Button>
+                    <ActionButton show={true} serverCall={serverCall} className={classes.addEntitySelectButton} Icon={Add} onClick={addEntityHandler}
+                                  variant="contained" displayKey="add-button" disabled={_.isNil(entity)}/>
                     <CancelButton onClickHandler={messageClose} cancelButtonTextKey={cancelButtonTextKey}/>
                 </Box>
             </Grid>

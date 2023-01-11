@@ -38,10 +38,12 @@ class ConsultationRecordDuringConferenceView extends BaseView {
         const {viewClientCall} = this.state;
 
         const loading = ServerCall.noCallOrWait(viewClientCall);
-        const client = Client.fromServerResource(ServerCall.getData(viewClientCall));
+        let client;
+        if (!loading)
+            client = Client.fromServerResource(ServerCall.getData(viewClientCall));
 
         return <ModalContainerView titleKey={loading ? "loading" : "consultation-record-create-edit-title"}
-                                   titleObj={!loading && {client: ServerCall.getData(viewClientCall).name}}>
+                                   titleObj={!loading && {client: client.name}}>
             {loading ? <ContainerSkeleton/> :
                 <Paper style={{padding: 20, flexDirection: "column", display: "flex"}}>
                     <ConsultationRecordView client={client} messageClose={onClose} consultationSessionRecordId={client.getCurrentSessionRecordId(consultationRoom)}/>
