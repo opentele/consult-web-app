@@ -1,22 +1,16 @@
 import React from "react";
 import {withStyles} from '@mui/styles';
-import {Box, createTheme, Paper, ThemeProvider, Typography} from '@mui/material';
+import {Box, Paper, Typography} from '@mui/material';
 import BaseView from "../framework/BaseView";
 import PropTypes from 'prop-types';
 import ConsultationSessionRecordService from "../../service/ConsultationSessionRecordService";
 import {ServerCall} from "react-app-common";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
-import WaitView from "../../components/WaitView";
 import ClientService from "../../service/ClientService";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
-import ModalContainerView from "../framework/ModalContainerView";
-import {Fab} from "@mui/material";
-import PrintIcon from "@mui/icons-material/Print";
-import CloseIcon from "@mui/icons-material/Close";
 import GlobalContext from "../../framework/GlobalContext";
-import ThemeHelper from "../../theming/ThemeHelper";
-import LightTheme from "../../theming/LightTheme";
+import {TableSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     crpvContainer: {
@@ -63,7 +57,7 @@ class ConsultationRecordPrintView extends BaseView {
         const {classes, client} = this.props;
         const {getRecordCall} = this.state;
         if (ServerCall.noCallOrWait(getRecordCall))
-            return <WaitView containerClassName={classes.container}/>;
+            return <TableSkeleton/>;
 
         const data = ServerCall.getData(getRecordCall);
         const consultations = this.consultationDisplayMode === "single" ?

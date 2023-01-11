@@ -2,14 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
 import FormLabel from "../FormLabel";
-import {MenuItem, Select, Skeleton} from "@mui/material";
-import {Box, Chip, OutlinedInput} from "@mui/material";
+import {Box, Chip, MenuItem, OutlinedInput, Select, Skeleton} from "@mui/material";
 import {ServerCall} from "react-app-common";
-import WaitView from "../WaitView";
 import EntityCollection from "../../domain/EntityCollection";
 import {i18n, UserService} from "consult-app-common";
 import BaseView from "../../views/framework/BaseView";
-import Provider from "../../domain/Provider";
 import _ from 'lodash';
 
 const styles = theme => ({

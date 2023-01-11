@@ -7,11 +7,11 @@ import ConsultationRoomService from "../../service/ConsultationRoomService";
 import {BeanContainer, ServerCall} from 'react-app-common';
 import BaseView from "../framework/BaseView";
 import ContainerView from "../framework/ContainerView";
-import WaitView from "../../components/WaitView";
 import {withRouter} from "react-router-dom";
 import {Box} from "@mui/material";
 import _ from 'lodash';
 import ConsultationRoom from "../../domain/ConsultationRoom";
+import {CardsSkeleton} from "../../components/ConsultSkeleton";
 
 class TeleConferenceView extends BaseView {
     constructor(props) {
@@ -51,7 +51,7 @@ class TeleConferenceView extends BaseView {
         const {getTeleConferenceRoomCall, consultationRoom} = this.state;
 
         if (ServerCall.noCallOrWait(getTeleConferenceRoomCall) && _.isNil(consultationRoom))
-            return <WaitView/>;
+            return <CardsSkeleton/>;
 
         return <ContainerView showBackButton={false} activeTab="home">
             <Box className={classes.tcvContainer}>

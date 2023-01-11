@@ -1,7 +1,7 @@
 import {Box, Skeleton} from "@mui/material";
 import React from "react";
 
-function MultipleSkeletons ({height, margin}) {
+function MultipleSkeletons({height, margin}) {
     return <Box style={{padding: 50, width: "100%"}}>
         <Skeleton style={{width: "100%"}} variant="rectangular" height={height}/>
         <Skeleton style={{width: "100%", marginTop: margin}} variant="rectangular" height={height}/>
@@ -15,4 +15,10 @@ export function TableSkeleton() {
 
 export function CardsSkeleton() {
     return <MultipleSkeletons height={60} margin={40}/>;
+}
+
+export function ContainerSkeleton() {
+    return <Box style={{width: "500px"}}>
+        <CardsSkeleton/>
+    </Box>
 }

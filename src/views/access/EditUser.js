@@ -7,9 +7,9 @@ import BaseView from "../framework/BaseView";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import {ServerCall} from "react-app-common";
 import {User, UserService} from "consult-app-common";
-import WaitView from "../../components/WaitView";
 import {Box} from "@mui/material";
 import GlobalContext from "../../framework/GlobalContext";
+import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({});
 
@@ -54,17 +54,16 @@ class EditUser extends BaseView {
     }
 
     render() {
-        const {classes, messageClose} = this.props;
+        const {messageClose} = this.props;
         const {saveCall, user} = this.state;
+        const loading = ServerCall.noCallOrWait(this.state.loadUserCall);
 
-        if (ServerCall.noCallOrWait(this.state.loadUserCall))
-            return <WaitView containerClassName={classes.eufContainer}/>;
-
-        return <ModalContainerView titleKey="edit-user-title" titleObj={{userName: user.name}}>
-            <Box style={{padding: 20}}>
+        return <ModalContainerView titleKey={loading ? "loading" : "edit-user-title"} titleObj={!loading && {userName: user.name}}>
+            {loading ? <ContainerSkeleton/> :
+                <Box style={{padding: 20}}>
                 <EditUserFields user={user} notifyStateChange={this.getEditUserStateChangeHandler()}/>
                 <SaveCancelButtons serverCall={saveCall} disabled={false} onSaveHandler={() => this.onSave()} onCancelHandler={messageClose}/>
-            </Box>
+            </Box>}
         </ModalContainerView>;
     }
 }

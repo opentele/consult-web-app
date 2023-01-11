@@ -9,14 +9,12 @@ import ConsultationSessionRecordService from "../../service/ConsultationSessionR
 import {ServerCall, ServerCallStatus} from "react-app-common";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
-import WaitView from "../../components/WaitView";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import NamedFilesUpload from "../NamedFilesUpload";
 import ThemeHelper from "../../theming/ThemeHelper";
 import ConfirmationBox from "../framework/ConfirmationBox";
-import Paper from "@mui/material/Paper";
 import S from "../../theming/S";
-import {DarkColors} from "../../theming/DarkTheme";
+import {CardsSkeleton} from "../../components/ConsultSkeleton";
 
 function createStyleOptions(theme) {
     const styleOptions = {
@@ -105,7 +103,7 @@ class ConsultationRecordView extends BaseView {
         const {consultation, saveRecordCall, getRecordCall, missingFields, askCancelConfirmation} = this.state;
         const loading = saveRecordCall.callStatus === ServerCallStatus.WAITING || (this.editing && ServerCall.noCallOrWait(getRecordCall));
         if (loading)
-            return <WaitView containerClassName={classes.container}/>;
+            return <CardsSkeleton/>;
 
         let textAreaClassName = classes["textAreaField"];
         return <Box className={classes.container}>
