@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Box, Button, Grid} from "@mui/material";
+import {Box, Grid} from "@mui/material";
 import _ from "lodash";
-import {i18n} from "consult-app-common";
 import CancelButton from "./CancelButton";
 import ServerErrorMessage from "./ServerErrorMessage";
 import {ActionButton} from "./ConsultButtons";

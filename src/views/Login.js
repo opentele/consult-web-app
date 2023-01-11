@@ -1,7 +1,7 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
-import {Box, Button, Tab, Tabs, TextField} from "@mui/material";
+import {Box, Button, CircularProgress, Tab, Tabs, TextField} from "@mui/material";
 import {Link, Redirect} from 'react-router-dom';
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import {Google, VerifiedUser} from "@mui/icons-material";
@@ -88,10 +88,6 @@ class Login extends BaseView {
             return <Redirect to="/"/>;
 
         return (<div>
-            {/*<Tabs value={loginBy} onChange={(e, newValue) => this.setState({loginBy: newValue})} centered>*/}
-            {/*    <Tab icon={<VerifiedUser/>} label="User ID" value="userName"/>*/}
-            {/*    <Tab icon={<Google/>} label="Google" value="google"/>*/}
-            {/*</Tabs>*/}
             {loginBy === "userName" && <Box component="form" className={classes.form}>
                 <TextField
                     name="userName"
@@ -109,7 +105,10 @@ class Login extends BaseView {
                 <Box className={classes.lActions}>
                     <Button type="submit"
                             fullWidth
-                            variant="contained" color="primary" onClick={(e) => this.onSubmit(e)}>{i18n.t("login")}</Button>
+                            variant="contained" color="primary" onClick={(e) => this.onSubmit(e)}>
+                        {ServerCall.waiting(loginServerCall) ?
+                            <><CircularProgress size={20} color="inherit" style={{marginRight: 4}}/>{i18n.t("login")}</> : i18n.t("login")}
+                    </Button>
                 </Box>
             </Box>}
             {loginBy === "google" && <GoogleSignIn/>}
