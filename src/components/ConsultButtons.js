@@ -4,7 +4,7 @@ import {ServerCall} from "react-app-common";
 import {i18n} from "consult-app-common";
 import React from "react";
 
-export const ActionButton = function ({show, className, Icon, onClick, serverCall, displayKey, variant, disabled = false}) {
+export const ActionButton = function ({show = true, className = "", Icon, onClick, serverCall, displayKey, variant = "comtained", disabled = false}) {
     return show &&
         <Button disabled={disabled} variant={variant} sx={S.secondaryButton} className={className} startIcon={<Icon/>}
                 onClick={onClick}>

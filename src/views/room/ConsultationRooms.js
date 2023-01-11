@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {Alert, Box, Button, Card, CardActions, CardContent, CircularProgress, IconButton, Snackbar, Typography} from "@mui/material";
+import {Alert, Box, Button, Card, CardActions, CardContent, IconButton, Snackbar, Typography} from "@mui/material";
 import {Edit, People, Queue, SupervisorAccount, VideoCall} from "@mui/icons-material";
 import {BeanContainer, ServerCall, ServerCallStatus} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
@@ -124,10 +124,10 @@ class ConsultationRooms extends BaseView {
         return <Box className={hasRooms ? classes.rooms : classes.noRooms}>
             {(!hasRooms && !gettingRooms) && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
             {gettingRooms ? <CardsSkeleton/> :
-                consultationRooms.map((consultationRoom: ConsultationRoom) => {
+                consultationRooms.map((consultationRoom: ConsultationRoom, index) => {
                     const alerts = consultationRoom.getAlerts();
                     const additionalModalState = {selectedConsultationRoom: consultationRoom};
-                    return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
+                    return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id} key={index}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>

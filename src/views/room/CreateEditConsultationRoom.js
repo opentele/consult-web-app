@@ -14,6 +14,7 @@ import WaitBackdrop from "../../components/WaitBackdrop";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import EditProviders from "../../components/consultation/EditProviders";
+import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     cecrContainer: {
@@ -115,15 +116,14 @@ class CreateEditConsultationRoom extends BaseView {
 
         const {
             saveRoomServerCall,
-            getRoomServerCall,
             room
         } = this.state;
 
-        if (_.isNil(room)) return null;
+        const loaded = _.isNil(room);
+        const titleKey = room ? (room.isNew() ? "one-time-consultation-room-title" : "edit-consultation-room-title") : "loading";
 
-        return <ModalContainerView titleKey={room.isNew() ? "one-time-consultation-room-title" : "edit-consultation-room-title"}>
-
-            <Box className={classes.cecrContainer}>
+        return <ModalContainerView titleKey={titleKey}>
+            {loaded ? <ContainerSkeleton/> : <Box className={classes.cecrContainer}>
                 <FormControl>
                     <Box style={{flexDirection: "row", display: "flex"}}>
                         <Box className={classes.cercFirstField}>
@@ -184,9 +184,7 @@ class CreateEditConsultationRoom extends BaseView {
                     <ServerErrorMessage serverCall={saveRoomServerCall} className={classes.cercServerError}/>
                     <SaveCancelButtons onSaveHandler={() => this.onSave()} serverCall={saveRoomServerCall} onCancelHandler={messageClose}/>
                 </FormControl>
-            </Box>
-
-            {ServerCall.noCallOrWait(getRoomServerCall) && <WaitBackdrop/>}
+            </Box>}
         </ModalContainerView>;
     }
 }
