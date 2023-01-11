@@ -10,6 +10,7 @@ import {User, UserService} from "consult-app-common";
 import {Box} from "@mui/material";
 import GlobalContext from "../../framework/GlobalContext";
 import {ContainerSkeleton} from "../../components/ConsultSkeleton";
+import _ from 'lodash';
 
 const styles = theme => ({});
 
@@ -55,14 +56,14 @@ class EditUser extends BaseView {
 
     render() {
         const {messageClose} = this.props;
-        const {saveCall, user} = this.state;
-        const loading = ServerCall.noCallOrWait(this.state.loadUserCall);
+        const {saveCall, user, editUserState, loadUserCall} = this.state;
+        const loading = ServerCall.noCallOrWait(loadUserCall);
 
         return <ModalContainerView titleKey={loading ? "loading" : "edit-user-title"} titleObj={!loading && {userName: user.name}}>
             {loading ? <ContainerSkeleton/> :
                 <Box style={{padding: 20}}>
                 <EditUserFields user={user} notifyStateChange={this.getEditUserStateChangeHandler()}/>
-                <SaveCancelButtons serverCall={saveCall} disabled={false} onSaveHandler={() => this.onSave()} onCancelHandler={messageClose}/>
+                <SaveCancelButtons serverCall={saveCall} disabled={_.isNil(editUserState)} onSaveHandler={() => this.onSave()} onCancelHandler={messageClose}/>
             </Box>}
         </ModalContainerView>;
     }
