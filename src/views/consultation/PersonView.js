@@ -5,7 +5,7 @@ import {Box, FormControl, FormControlLabel, Radio, RadioGroup, TextareaAutosize,
 import BaseView from "../framework/BaseView";
 import FormLabel from "../../components/FormLabel";
 import ModalContainerView from "../framework/ModalContainerView";
-import {DateTimeUtil, ServerCall, ServerCallStatus} from "react-app-common";
+import {DateTimeUtil, ServerCall} from "react-app-common";
 import ClientService from "../../service/ClientService";
 import _ from 'lodash';
 import ServerErrorMessage from "../../components/ServerErrorMessage";
@@ -73,7 +73,7 @@ class PersonView extends BaseView {
     render() {
         const {classes, messageClose} = this.props;
         const {client, saveClientCall, missingFields, getClientCall} = this.state;
-        const loading = saveClientCall.callStatus === ServerCallStatus.WAITING || (this.editingClient && ServerCall.noCallOrWait(getClientCall));
+        const loading = (this.editingClient && ServerCall.noCallOrWait(getClientCall));
 
         return <ModalContainerView titleKey={this.editingClient ? "edit-client-title" : "add-client-title"}>
             {loading ? <ContainerSkeleton/> :

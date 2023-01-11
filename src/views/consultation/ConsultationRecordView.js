@@ -6,7 +6,7 @@ import FormLabel from "../../components/FormLabel";
 import PropTypes from 'prop-types';
 import _ from "lodash";
 import ConsultationSessionRecordService from "../../service/ConsultationSessionRecordService";
-import {ServerCall, ServerCallStatus} from "react-app-common";
+import {ServerCall} from "react-app-common";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
@@ -101,7 +101,7 @@ class ConsultationRecordView extends BaseView {
     render() {
         const {classes, messageClose, consultationSessionRecordId} = this.props;
         const {consultation, saveRecordCall, getRecordCall, missingFields, askCancelConfirmation} = this.state;
-        const loading = saveRecordCall.callStatus === ServerCallStatus.WAITING || (this.editing && ServerCall.noCallOrWait(getRecordCall));
+        const loading = this.editing && ServerCall.noCallOrWait(getRecordCall);
         if (loading)
             return <CardsSkeleton/>;
 
