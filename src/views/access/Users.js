@@ -11,6 +11,7 @@ import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
 import {GroupAdd, PersonAddAlt, Search} from "@mui/icons-material";
 import S from "../../theming/S";
+import TableSkeleton from "../../components/TableSkeleton";
 
 class Users extends BaseView {
     constructor(props, context) {
@@ -33,6 +34,7 @@ class Users extends BaseView {
         UserService.getUsers().then((response) => {
             this.setState({getUsersServerCall: ServerCall.responseReceived(this.state.getUsersServerCall, response), addUserModalStatus: ModalStatus.NOT_OPENED});
         });
+        this.setState({getUsersServerCall: ServerCall.serverCallMade(this.state.getUsersServerCall)});
     }
 
     getEditUserHandler(user) {
@@ -43,6 +45,8 @@ class Users extends BaseView {
         const {classes} = this.props;
         const {getUsersServerCall} = this.state;
         const users = User.fromResources(ServerCall.getData(getUsersServerCall));
+        const gettingUsers = ServerCall.waiting(getUsersServerCall);
+
         return <ContainerView activeTab="users" onRefresh={() => this.refresh()}>
             <Box style={S.entityListContainer} component={Paper}>
                 {this.renderIfAddUser()}
@@ -64,7 +68,7 @@ class Users extends BaseView {
                     </Box>
                 </Box>
                 <br/>
-                <TableContainer>
+                {gettingUsers ? <TableSkeleton/> : <TableContainer>
                     <Table sx={{minWidth: 700}} size="small" aria-label="customized table">
                         <TableHead>
                             <TableRow sx={S.th}>
@@ -90,7 +94,7 @@ class Users extends BaseView {
                             ))}
                         </TableBody>
                     </Table>
-                </TableContainer>
+                </TableContainer>}
                 <br/><br/>
             </Box>
             <br/><br/>
