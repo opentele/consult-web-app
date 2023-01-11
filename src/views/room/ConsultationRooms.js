@@ -20,6 +20,7 @@ import TimeScheduleField from "../../components/DurationField";
 import S from "../../theming/S";
 import ProviderChip from "../../components/ProviderChip";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
+import {ActionButton} from "../../components/ConsultButtons";
 
 const styles = theme => ({
     rooms: {
@@ -162,16 +163,11 @@ class ConsultationRooms extends BaseView {
                             {consultationRoom.canAddClient() &&
                             <Button variant="outlined" sx={S.secondaryButton} className={classes.crButton} startIcon={<Queue/>}
                                     onClick={this.getModalOpenHandler("queueManagementModalStatus",
-                                                additionalModalState)}>{i18n.t("manage-client-queue")}</Button>}
-                            {consultationRoom.canViewClients() &&
-                                <Button onClick={this.getClientListHandler(consultationRoom)} className={classes.crButton}
-                                    variant="outlined" sx={S.secondaryButton}
-                                    startIcon={<People/>}>
-                                    {ServerCall.waiting(clientListCall)
-                                                        ? <CircularProgress size={20} color="inherit"/> : i18n.t("view-clients")}</Button>}
-                            {consultationRoom.canJoinConference() &&
-                            <Button variant="contained" sx={S.secondaryButton} className={classes.crButton} startIcon={<VideoCall/>}
-                                    onClick={this.getJoinConferenceHandler(consultationRoom)}>{i18n.t("join-conference")}</Button>}
+                                        additionalModalState)}>{i18n.t("manage-client-queue")}</Button>}
+                            <ActionButton show={consultationRoom.canViewClients()} onClick={this.getClientListHandler(consultationRoom)} Icon={People}
+                                          className={classes.crButton} serverCall={clientListCall} displayKey="view-clients" variant="outlined"/>
+                            <ActionButton serverCall={setupTeleConferenceCall} className={classes.crButton} Icon={VideoCall} displayKey="join-conference"
+                                          onClick={this.getJoinConferenceHandler(consultationRoom)} show={consultationRoom.canJoinConference()} variant="contained"/>
                         </CardActions>
                     </Card>
                 })
@@ -179,10 +175,10 @@ class ConsultationRooms extends BaseView {
             <br/>
             {queueManagementModalStatus === ModalStatus.OPENED &&
             <ConsultationRoomQueue messageClose={this.getModalCloseHandler("queueManagementModalStatus")} consultationRoom={selectedConsultationRoom}
-                       autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
+                                   autocompletePlaceholderMessageKey="search-client-autocomplete-placeholder"/>}
 
             {viewClientsModalStatus === ModalStatus.OPENED &&
-                <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
+            <ConsultationRoomClientsView messageClose={this.getModalCloseHandler("viewClientsModalStatus")} clientList={clientList}/>}
 
             {editConsultationRoomStatus === ModalStatus.OPENED &&
             <CreateEditConsultationRoom roomId={selectedConsultationRoom.id}
