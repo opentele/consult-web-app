@@ -44,9 +44,9 @@ class ResetPassword extends Component {
     constructor(props) {
         super(props);
 
-        let [validUserName, userNameType] = this.validate(props.defaultUserName);
+        let [validUserName, userNameType] = this.validate("");
         this.state = {
-            userName: props.defaultUserName,
+            userName: "",
             validUserName: validUserName,
             userNameType: userNameType,
             resetPasswordMessageSent: false
@@ -83,7 +83,7 @@ class ResetPassword extends Component {
                                 variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>{i18n.t("get-reset-password-link")}</Button>
 
                         {!this.state.resetPasswordMessageSent && <Button className={classes.resetPasswordButton}
-                                fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel-button")}</Button>}
+                                fullWidth component={Link} variant="outlined" color="primary" to="/login">{i18n.t("cancel-button")}</Button>}
                     </div>
                     {this.state.resetPasswordMessageSent && <Typography className={classes.resetPasswordSent}
                                                                         variant="body1">{i18n.t(passwordResetSentMessages[this.state.userNameType])}</Typography>}

@@ -113,7 +113,7 @@ class ConsultAppBar extends BaseView {
                             <IconButton component={"a"} href="https://telesathi.com" target="_blank">
                                 <Avatar alt="Tele Sathi" src="/ts-logo.png"/>
                             </IconButton>
-                            <Link variant="h6" className={classes.brandLabel} href="/">{i18n.t('tele-sathi')}</Link>
+                            <Link variant="h6" className={classes.brandLabel} to="/">{i18n.t('tele-sathi')}</Link>
                         </Box>
                         <Box>
                             {pages.map((page) => (

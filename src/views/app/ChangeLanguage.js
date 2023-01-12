@@ -9,6 +9,7 @@ import {ServerCall} from "react-app-common";
 import GlobalContext from "../../framework/GlobalContext";
 import BaseView from "../framework/BaseView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
+import _ from 'lodash';
 
 const styles = theme => ({});
 
@@ -27,7 +28,8 @@ class ChangeLanguage extends BaseView {
 
     componentDidMount() {
         const user = GlobalContext.getUser();
-        this.loadEntity(user.id, () => UserService.loadUser(user.id), "loadUserCallToChangeLanguage", User.newUser());
+        if (!_.isNil(user))
+            this.loadEntity(user.id, () => UserService.loadUser(user.id), "loadUserCallToChangeLanguage", User.newUser());
     }
 
     updateServerResponseState(newState, serverCallName) {
