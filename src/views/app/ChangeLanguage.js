@@ -9,7 +9,6 @@ import {ServerCall} from "react-app-common";
 import GlobalContext from "../../framework/GlobalContext";
 import BaseView from "../framework/BaseView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
-import _ from 'lodash';
 
 const styles = theme => ({});
 
@@ -55,13 +54,13 @@ class ChangeLanguage extends BaseView {
 
         return <ModalContainerView titleKey="change-language-title">
             {ServerCall.noCallOrWait(this.state.loadUserCallToChangeLanguage) ? <CardsSkeleton/> :
-            <Box style={{padding: 20}}>
-                <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="languages" value={user.language}
-                            onChange={(e) => this.onLanguageChange(e)}>
-                    {Languages.map((l) => <FormControlLabel value={l.code} control={<Radio/>} label={i18n.t(l.displayKey)}/>)}
-                </RadioGroup>
+                <Box style={{padding: 20}}>
+                    <RadioGroup row aria-labelledby="demo-row-radio-buttons-group-label" name="languages" value={user.language}
+                                onChange={(e) => this.onLanguageChange(e)}>
+                        {Languages.map((l) => <FormControlLabel value={l.code} control={<Radio/>} label={i18n.t(l.displayKey)}/>)}
+                    </RadioGroup>
                 <SaveCancelButtons serverCall={loadUserCallToChangeLanguage} onCancelHandler={messageClose} onSaveHandler={() => this.saveLanguagePreference()}/>
-            </Box>}
+                </Box>}
         </ModalContainerView>;
     }
 }
