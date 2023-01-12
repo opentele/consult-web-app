@@ -5,6 +5,8 @@ import {DataElementValidator} from "react-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";
 import {Link} from "react-router-dom";
+import {ActionButton} from "../components/ConsultButtons";
+import {LockReset} from "@mui/icons-material";
 
 const styles = theme => ({
     root: {
@@ -26,7 +28,7 @@ const styles = theme => ({
         marginTop: theme.spacing.unit * 2
     },
     resetPasswordButton: {
-        marginTop: theme.spacing.unit * 1
+        marginTop: 20
     },
     resetPasswordSent: {
         marginTop: 30,
@@ -75,10 +77,11 @@ class ResetPassword extends Component {
                     <div className={classes.actions}>
                         <Button type="submit"
                                 name="resetPassword"
-                                fullWidth
+                                fullWidth={true}
                                 className={classes.resetPasswordButton}
                                 disabled={!this.state.validUserName || this.state.resetPasswordMessageSent}
-                                variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>Get Reset Password Link</Button>
+                                variant="contained" color="primary" onClick={this.getResetPasswordHandler()}>{i18n.t("get-reset-password-link")}</Button>
+
                         {!this.state.resetPasswordMessageSent && <Button className={classes.resetPasswordButton}
                                 fullWidth component={Link} variant="outlined" color="primary" to="/">{i18n.t("cancel-button")}</Button>}
                     </div>
