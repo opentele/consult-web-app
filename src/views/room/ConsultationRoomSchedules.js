@@ -13,6 +13,7 @@ import AddEditConsultationSchedule from "./AddEditConsultationSchedule";
 import {i18n} from "consult-app-common";
 import ProviderChip from "../../components/ProviderChip";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
+import GlobalContext from "../../framework/GlobalContext";
 
 const styles = theme => ({
     crsRooms: {
@@ -85,7 +86,8 @@ class ConsultationRoomSchedules extends BaseView {
                                 </Box>
                                 <TimeField value={consultationRoomSchedule.startTime} labelKey='consultation-room-start-time-label'/>
                                 <TimeField value={consultationRoomSchedule.endTime} labelKey='consultation-room-end-time-label'/>
-                                <Typography variant="h6">{`${i18n.t("schedule")}: ${i18n.t(consultationRoomSchedule.getScheduleForDisplay())}`}</Typography>
+                                <Typography variant="h6">
+                                    {`${i18n.t("schedule")}: ${i18n.t(consultationRoomSchedule.getScheduleForDisplay(GlobalContext.getUser().language))}`}</Typography>
                             </Box>
                             <Box>
                                 <Box>

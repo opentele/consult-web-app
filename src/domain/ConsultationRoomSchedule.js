@@ -30,9 +30,9 @@ class ConsultationRoomSchedule extends AbstractEntity {
         return consultationRoomSchedule;
     }
 
-    getScheduleForDisplay() {
+    getScheduleForDisplay(language) {
         const rRule = rrulestr(this.recurrenceRule);
-        return rRule.toText(undefined, RRuleStrTranslations.hindi);
+        return rRule.toText(undefined, language === "en" ? undefined : RRuleStrTranslations.hindi);
     }
 
     clone() {
