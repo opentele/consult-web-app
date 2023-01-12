@@ -6,8 +6,6 @@ import {i18n, User, UserValidator} from "consult-app-common";
 import PasswordField from "./PasswordField";
 import BaseView from "../../views/framework/BaseView";
 import GlobalContext from "../../framework/GlobalContext";
-import _ from 'lodash';
-import {CheckBox} from "@mui/icons-material";
 
 const styles = theme => ({
     eufContainer: {
@@ -42,14 +40,14 @@ const styles = theme => ({
 class EditUserFields extends BaseView {
     constructor(props, context) {
         super(props, context);
-        this.state = {user: User.clone(props.user), changingPassword: false};
-        this.setDevModeData();
+        this.state = {user: User.clone(props.user), changingPassword: false, confirmPassword: props.confirmPassword};
     }
 
     static propTypes = {
         notifyStateChange: PropTypes.func.isRequired,
         displayError: PropTypes.bool.isRequired,
-        user: PropTypes.object.isRequired
+        user: PropTypes.object.isRequired,
+        confirmPassword: PropTypes.string
     };
 
     updateState(newState) {
@@ -84,21 +82,6 @@ class EditUserFields extends BaseView {
     selfEditing() {
         const loggedInUser = GlobalContext.getUser();
         return !GlobalContext.hasUser() || loggedInUser.id === this.state.user.id;
-    }
-
-    setDevModeData() {
-        if (process.env.NODE_ENV === "development" && this.state.user.isNew()) {
-            Object.assign(this.state.user, {
-                name: "Foo",
-                userName: "foo@dueToDevMode.com",
-                password: "x",
-                providerType: "Consultant",
-                userType: "User"
-            });
-            this.state.confirmPassword = "x";
-            this.validate(this.state);
-            this.props.notifyStateChange(this.state);
-        }
     }
 
     askForPasswords() {

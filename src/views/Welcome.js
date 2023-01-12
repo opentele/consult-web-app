@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import {Box, Button, Grid, Paper, Typography} from "@mui/material";
-import {Link} from 'react-router-dom';
+import {Link, withRouter} from 'react-router-dom';
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import Login from "./Login";
@@ -28,9 +28,9 @@ const styles = theme => ({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: "center",
-        marginTop: 100
-    },
-    registrationHelp: {
+        marginTop: 100,
+        paddingTop: 40,
+        paddingBottom: 40
     }
 });
 
@@ -61,11 +61,13 @@ class Welcome extends Component {
         const {
             classes
         } = this.props;
+        const isRegistered = new URLSearchParams(this.props.location.search).get("registered");
+        const homeWelcome = isRegistered === "true" ? "login-with-signed-up-user" : "home-welcome";
 
         return (
             <Box className={classes.root}>
                 <ConsultAppBar/>
-                <Typography variant="h4" className={classes.welcome}>{i18n.t("home-welcome")}</Typography>
+                <Typography variant="h4" className={classes.welcome}>{i18n.t(homeWelcome)}</Typography>
                 <Grid container direction="row" justifyContent="center" alignItems="stretch">
                     <Grid item lg={4} xs={12}>
                         <Paper className={classes.loginCard} variant="elevation" raised={true} elevation={5}>
@@ -74,7 +76,7 @@ class Welcome extends Component {
                     </Grid>
                     <Grid lg={4} xs={12}>
                         <Paper className={classes.otherActionsCard} elevation={0}>
-                            <Typography className={classes.registrationHelp} variant="h6">{i18n.t("register-help")}</Typography>
+                            <Typography variant="h6">{i18n.t("register-help")}</Typography>
                             <Button component={Link} variant="text" color="primary" to="/register">{i18n.t("register-organisation-link")}</Button>
                         </Paper>
                     </Grid>
@@ -82,10 +84,6 @@ class Welcome extends Component {
             </Box>
         );
     }
-
-    handleTabChange = (event, value) => {
-        this.setState({tab: value});
-    }
 }
 
-export default withStyles(styles)(Welcome);
+export default withStyles(styles)(withRouter(Welcome));

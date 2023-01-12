@@ -18,6 +18,7 @@ import {ServerCall} from "react-app-common";
 import ErrorView from "./views/ErrorView";
 import ThemeHelper from "./theming/ThemeHelper";
 import RouteManager, {errorPath, loginPath} from "./framework/RouteManager";
+import {ContainerSkeleton, SkeletonView} from "./components/ConsultSkeleton";
 
 export default class App extends Component {
     constructor(props) {
@@ -66,7 +67,7 @@ export default class App extends Component {
         let pathname = window.location.pathname;
         const {isLoggedInServerCall, getUserServerCall, i18nLoading, theme} = this.state;
         if (this.isWaiting(isLoggedInServerCall, getUserServerCall) || i18nLoading)
-            return <CircularProgress/>;
+            return <SkeletonView/>;
 
         let isLoggedIn;
         if (!ServerCall.errored(isLoggedInServerCall))
@@ -125,10 +126,10 @@ export default class App extends Component {
     }
 
     getPublicRoute(loggedIn, component) {
-        return loggedIn ? <CircularProgress/> : component;
+        return loggedIn ? <SkeletonView/> : component;
     }
 
     getPrivateRoute(loggedIn, component) {
-        return loggedIn ? component : <CircularProgress/>;
+        return loggedIn ? component : <SkeletonView/>;
     }
 }

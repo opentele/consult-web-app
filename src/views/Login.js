@@ -1,10 +1,9 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
-import {Box, Button, CircularProgress, Tab, Tabs, TextField} from "@mui/material";
+import {Box, Button, CircularProgress, TextField} from "@mui/material";
 import {Link, Redirect} from 'react-router-dom';
 import ServerErrorMessage from "../components/ServerErrorMessage";
-import {Google, VerifiedUser} from "@mui/icons-material";
 import GoogleSignIn from "../components/loginSignup/GoogleSignIn";
 import {i18n, UserService} from "consult-app-common";
 import PasswordField from "../components/loginSignup/PasswordField";

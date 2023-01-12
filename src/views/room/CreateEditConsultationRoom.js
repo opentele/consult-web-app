@@ -10,7 +10,6 @@ import PropTypes from "prop-types";
 import {BeanContainer, ServerCall} from "react-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import ConsultationRoom from "../../domain/ConsultationRoom";
-import WaitBackdrop from "../../components/WaitBackdrop";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import EditProviders from "../../components/consultation/EditProviders";

@@ -1,4 +1,4 @@
-import {Box, Skeleton} from "@mui/material";
+import {Box, LinearProgress, Skeleton} from "@mui/material";
 import React from "react";
 
 function MultipleSkeletons({height, margin}) {
@@ -21,4 +21,14 @@ export function ContainerSkeleton() {
     return <Box style={{width: "500px"}}>
         <CardsSkeleton/>
     </Box>
+}
+
+export function SkeletonView() {
+    return <Box style={{width: "100%", padding: 50}}>
+        <Skeleton style={{width: "100%"}} variant="rectangular" height={10}/>
+        <Skeleton style={{width: "100%", marginTop: 20}} variant="rectangular" height={10}/>
+        <Skeleton style={{width: "100%", marginTop: 100}} variant="rectangular" height={40}/>
+        <Skeleton style={{width: "100%", marginTop: 40}} variant="rectangular" height={40}/>
+        <Skeleton style={{width: "100%", marginTop: 40}} variant="rectangular" height={40}/>
+    </Box>;
 }

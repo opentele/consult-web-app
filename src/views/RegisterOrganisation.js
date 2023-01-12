@@ -1,15 +1,18 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
 import {Box, Button, Grid, Paper, TextField, ToggleButton, ToggleButtonGroup, Typography} from '@mui/material';
-import {ServerCall, ServerCallStatus} from "react-app-common";
+import {ServerCall, ServerCallStatus, Util} from "react-app-common";
 import {i18n, User, UserService} from "consult-app-common";
 import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import ConsultAppBar from "../components/ConsultAppBar";
-import {Link} from "react-router-dom";
+import {Link, Redirect} from "react-router-dom";
 import BaseView from "./framework/BaseView";
 import EditUserFields from "../components/loginSignup/EditUserFields";
 import RegisterState from "../state/RegisterState";
+import {ActionButton} from "../components/ConsultButtons";
+import {AccountCircle, Workspaces} from "@mui/icons-material";
+import _ from 'lodash';
 
 const styles = theme => ({
     root: {
@@ -77,16 +80,28 @@ const styles = theme => ({
     }
 });
 
-
 class RegisterOrganisation extends BaseView {
     constructor(props) {
         super(props);
         this.state = {
-            editUserState: {valid: false},
+            editUserState: {valid: false, user: User.newUser()},
             registerState: RegisterState.newInstance(),
             errors: {},
             serverCall: ServerCall.createInitial()
         };
+        this.setDevModeData();
+    }
+
+    setDevModeData() {
+        if (process.env.NODE_ENV === "development" && _.isEmpty(this.state.registerState.orgName)) {
+            this.state.registerState.orgName = `Test Org ${Util.getRandomString()}`;
+            const {editUserState} = this.state;
+            editUserState.user = User.getRandomRegistrationUser();
+            editUserState.confirmPassword = "password";
+            editUserState.valid = true;
+            editUserState.errors = {};
+            editUserState.userNameType = "Email";
+        }
     }
 
     onSubmit(e) {
@@ -99,7 +114,8 @@ class RegisterOrganisation extends BaseView {
             return;
         }
 
-        let {userName, userNameType, password, name} = this.state.editUserState;
+        let {userNameType} = this.state.editUserState;
+        let {name, userName, password} = this.state.editUserState.user;
         this.makeServerCall(UserService.registerOrg(name, registerState.orgName, userName, userNameType, password));
     }
 
@@ -113,10 +129,13 @@ class RegisterOrganisation extends BaseView {
         const {
             classes
         } = this.props;
-        const {serverCall, registerState} = this.state;
+        const {serverCall, registerState, editUserState} = this.state;
 
-        if (serverCall.callStatus === ServerCallStatus.WAITING)
-            return <WaitBackdrop/>;
+        const registrationButtonDisplayKey = i18n.t(registerState.isRegisteringUser ? "self-register-user-button" : "register-org-submit-button");
+        const icon = registerState.isRegisteringUser ? AccountCircle : Workspaces;
+
+        if (ServerCall.isSuccessful(serverCall))
+            return <Redirect to="/login?registered=true"/>;
 
         return (
             <Box className={classes.root}>
@@ -152,34 +171,18 @@ class RegisterOrganisation extends BaseView {
                             />}
 
                             <EditUserFields fieldClassName={classes.registerOrgField}
-                                            user={User.newUser()}
-                                            notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}
+                                            user={editUserState.user}
+                                            confirmPassword={editUserState.confirmPassword}
+                                            notifyStateChange={(editUserState) => {
+                                                this.setState({editUserState: editUserState});
+                                            }}
                                             displayError={registerState.submissionAttempted} askForProviderType={!registerState.isRegisteringUser}/>
                             <ServerErrorMessage serverCall={serverCall} className={classes.registerOrgField}/>
 
-                            <Button type="submit" className={classes.registerButton}
-                                    fullWidth
-                                    variant="contained" color="primary"
-                                    onClick={(e) => this.onSubmit(e)}>{i18n.t(!registerState.isRegisteringUser ? "register-org-submit-button" : "self-register-user-button")}</Button>
+                            <ActionButton variant="contained" serverCall={serverCall} className={classes.registerButton} Icon={icon}
+                                          displayKey={registrationButtonDisplayKey} onClick={(e) => this.onSubmit(e)}/>
                         </Paper>
                     </Grid>
-                    {/*<Grid item lg={4} xs={12}>*/}
-                    {/*    <Paper className={classes.googleRegistrationCard} elevation={5}>*/}
-                    {/*        <Typography variant="h5" className={classes.registerText}>{i18n.t('google')}</Typography>*/}
-                    {/*        <TextField*/}
-                    {/*            name="googleSignUpOrgName"*/}
-                    {/*            autoComplete="organisation"*/}
-                    {/*            required*/}
-                    {/*            className={classes.registerOrgField}*/}
-                    {/*            label="Organisation name"*/}
-                    {/*            textValue={this.state.googleSignUpOrgName}*/}
-                    {/*            onClick={this.getValueChangedHandler("googleSignUpOrgName")}*/}
-                    {/*        />*/}
-                    {/*        <Box className={classes.googleSignInBox}>*/}
-                    {/*            <GoogleSignIn buttonText={i18n.t("sign-up-with-google")}/>*/}
-                    {/*        </Box>*/}
-                    {/*    </Paper>*/}
-                    {/*</Grid>*/}
                     <Grid item lg={4} xs={12}>
                         <Paper elevation={0} className={classes.otherActionsCard} raised={true}>
                             <Typography className={classes.loginHelp} variant="h5">{i18n.t("login-help")}</Typography>
