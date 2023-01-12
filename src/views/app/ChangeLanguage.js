@@ -9,6 +9,7 @@ import {ServerCall} from "react-app-common";
 import GlobalContext from "../../framework/GlobalContext";
 import BaseView from "../framework/BaseView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
+import _ from 'lodash';
 
 const styles = theme => ({});
 
