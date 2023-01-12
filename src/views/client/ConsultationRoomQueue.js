@@ -47,7 +47,7 @@ const ClientQueue = function ({consultationRoomClients, onDelete, loadClientsSer
                     return notLoadedYet ? <LoadingTableCell/> :
                             <TableRow key={x.client.id} hover={true} sx={S.tr}>
                                 <TableCell component="th" scope="row" style={{fontSize: "medium"}}>
-                                    {x.client.getDisplayName()}
+                                    {x.client.getDisplayName(i18n)}
                                 </TableCell>
                                 <TableCell style={{fontSize: "medium", textAlign: "center"}}>{x.queueNumber}</TableCell>
                                 <TableCell>{removingThisClient ?

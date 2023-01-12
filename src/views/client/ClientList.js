@@ -44,7 +44,7 @@ class ClientList extends BaseView {
                                     {x.name}
                                 </TableCell>
                                 <TableCell>{i18n.t(x.gender)}</TableCell>
-                                <TableCell>{x.displayAge()}</TableCell>
+                                <TableCell>{x.displayAge(i18n)}</TableCell>
                                 <TableCell>{x.registrationNumber}</TableCell>
                                 {displayQueueNumber && <TableCell>{x["queueNumber"]}</TableCell>}
                                 {displayNumberOfSessions && <TableCell>{x["numberOfSessions"]}</TableCell>}

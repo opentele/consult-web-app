@@ -122,12 +122,12 @@ class ConsultationRooms extends BaseView {
         const gettingRooms = ServerCall.waiting(getRoomsCall);
 
         return <Box className={hasRooms ? classes.rooms : classes.noRooms}>
-            {(!hasRooms && !gettingRooms) && <Typography variant={"h2"} style={{marginTop: 75}}>No Rooms</Typography>}
+            {(!hasRooms && !gettingRooms) && <Typography variant={"h2"} style={{marginTop: 75}}>{i18n.t("no-rooms")}</Typography>}
             {gettingRooms ? <CardsSkeleton/> :
                 consultationRooms.map((consultationRoom: ConsultationRoom, index) => {
                     const alerts = consultationRoom.getAlerts();
                     const additionalModalState = {selectedConsultationRoom: consultationRoom};
-                    return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id} key={index}>
+                    return <Card raised={true} elevation={3} className={classes.conferenceBox} key={consultationRoom.id}>
                         <CardContent>
                             <Box sx={{display: "flex", flexDirection: "row", justifyContent: "space-between"}} style={{width: '100%'}}>
                                 <Box sx={{display: "flex", flexDirection: "column"}}>

@@ -1,15 +1,14 @@
-import React, {Component} from "react";
+import React from "react";
 import {withStyles} from '@mui/styles';
-import {Box, Card, Grid} from '@mui/material';
+import {Box, Card, Fab, Grid} from '@mui/material';
 import PropTypes from 'prop-types';
 import FieldDisplay from "./FieldDisplay";
-import {DateTimeUtil} from "react-app-common";
-import {Fab} from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import ModalStatus from "../../views/framework/ModalStatus";
 import PersonView from "../../views/consultation/PersonView";
 import BaseView from "../../views/framework/BaseView";
 import PrintIcon from "@mui/icons-material/Print";
+import {i18n} from "consult-app-common";
 
 const styles = theme => ({
     container: {
@@ -54,8 +53,8 @@ class ClientDisplay extends BaseView {
                 <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
                     <FieldDisplay fieldName="name" fieldValue={client.name}/>
-                    <FieldDisplay fieldName="age" fieldValue={`${client.age} ${client.ageDurationType}`}/>
-                    <FieldDisplay fieldName="gender" fieldValue={client.gender}/>
+                    <FieldDisplay fieldName="age" fieldValue={`${client.age} ${i18n.t(client.ageDurationType)}`}/>
+                    <FieldDisplay fieldName="gender" fieldValue={i18n.t(client.gender)}/>
                     <FieldDisplay fieldName="mobile" fieldValue={client.mobile}/>
                     <FieldDisplay fieldName="other-details" fieldValue={client.otherDetails}/>
                     <FieldDisplay fieldName="created-by" fieldValue={client.createdBy}/>

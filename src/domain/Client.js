@@ -40,16 +40,16 @@ export default class Client extends AbstractEntity {
         return client;
     }
 
-    getDisplayName() {
-        return `${this.name}; ${this.displayAge()}; ${this.gender}`;
+    getDisplayName(i18n) {
+        return `${this.name}; ${this.displayAge(i18n)}; ${i18n.t(this.gender)}`;
     }
 
     static displayNameFromServerResource(client) {
         return `${client.name}; ${DateTimeUtil.getAgeDisplay(client.age)}; ${client.gender}`;
     }
 
-    displayAge() {
-        return `${this.age} ${this.ageDurationType}`;
+    displayAge(i18n) {
+        return `${this.age} ${i18n.t(this.ageDurationType)}`;
     }
 
     static totalConsultationsDisplay(client) {

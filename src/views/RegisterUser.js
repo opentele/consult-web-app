@@ -11,6 +11,7 @@ import {Box} from "@mui/material";
 import BaseView from "./framework/BaseView";
 import S from "../theming/S";
 import Paper from "@mui/material/Paper";
+import {CardsSkeleton} from "../components/ConsultSkeleton";
 
 const styles = theme => ({
     ruContainer: {
@@ -64,19 +65,19 @@ class RegisterUser extends BaseView {
     }
 
     render() {
-        const {serverCall, submitFailure, user, getUserCall} = this.state;
-        if (ServerCall.noCallOrWait(getUserCall))
-            return this.renderForErrorOrWait(getUserCall);
+        const {serverCall, submitFailure, getUserCall} = this.state;
 
         const {messageClose} = this.props;
         return (
             <ModalContainerView titleKey="register-new-user">
-                <Paper style={S.modalFormContainer}>
+                {ServerCall.waiting(getUserCall) ?
+                        <CardsSkeleton/> :
+                            <Paper style={S.modalFormContainer}>
                     <EditUserFields displayError={submitFailure} user={User.newUser()}
                                     notifyStateChange={(editUserState) => this.setState({editUserState: editUserState})}/>
                     <SaveCancelButtons onCancelHandler={messageClose} serverCall={serverCall} onSaveHandler={(e) => this.onRegisterUser(e)} disabled={false}/>
                     <ServerErrorMessage serverCall={serverCall}/>
-                </Paper>
+                </Paper>}
             </ModalContainerView>
         );
     }

@@ -1,4 +1,4 @@
-import {AbstractEntity} from "consult-app-common";
+import {AbstractEntity, RRuleStrTranslations} from "consult-app-common";
 import {rrulestr} from "rrule";
 import Provider from "./Provider";
 import {DateTimeUtil} from "react-app-common";
@@ -32,7 +32,7 @@ class ConsultationRoomSchedule extends AbstractEntity {
 
     getScheduleForDisplay() {
         const rRule = rrulestr(this.recurrenceRule);
-        return rRule.toText();
+        return rRule.toText(undefined, RRuleStrTranslations.hindi);
     }
 
     clone() {

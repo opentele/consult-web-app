@@ -49,8 +49,7 @@ class Home extends BaseView {
     }
 
     static propTypes = {
-        classes: PropTypes.object.isRequired,
-        user: PropTypes.object.isRequired
+        classes: PropTypes.object.isRequired
     };
 
     onTabChange(tabId) {

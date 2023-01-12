@@ -86,10 +86,10 @@ class Users extends BaseView {
                                         {x.name}
                                     </TableCell>
                                     <TableCell component="th" scope="row" key={2}>
-                                        {x.userType}
+                                        {i18n.t(x.userType)}
                                     </TableCell>
                                     <TableCell key={3}>{x.userName}</TableCell>
-                                    <TableCell key={4}>{x.providerType}</TableCell>
+                                    <TableCell key={4}>{i18n.t(x.providerType)}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
