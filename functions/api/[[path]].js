@@ -11,7 +11,7 @@ export async function onRequest(context) {
             data, // arbitrary space for passing data between middlewares
         } = context;
         const url = new URL(request.url);
-        url.hostname = "server.yyyz.link";
+        url.hostname = "app.telesathi.com";
         return await fetch(url.toString(), request);
     } catch (e) {
         return new Response(`Fail ${e.message}`);
