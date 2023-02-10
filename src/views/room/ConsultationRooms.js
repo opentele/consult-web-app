@@ -9,7 +9,7 @@ import BaseView from "../framework/BaseView";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import Client from "../../domain/Client";
 import ConsultationRoomQueue from "../client/ConsultationRoomQueue";
-import {i18n, ProviderType} from "consult-app-common";
+import {i18n, canAccessClientRecords} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";
@@ -112,7 +112,7 @@ class ConsultationRooms extends BaseView {
         } = this.state;
         const {classes} = this.props;
         const user = GlobalContext.getUser();
-        const isConsultant = user["providerType"] === ProviderType.Consultant
+        const accessClientRecords = canAccessClientRecords(user["providerType"]);
 
         if (setupTeleConferenceCall.callStatus === ServerCallStatus.SUCCESS) {
             this.props.history.push(`/teleConference?consultationRoomId=${ServerCall.getData(setupTeleConferenceCall)}`);
@@ -140,9 +140,9 @@ class ConsultationRooms extends BaseView {
                                     <TimeScheduleField additionalStyle={{marginTop: 10}}
                                                        startTime={consultationRoom.scheduledStartTime} endTime={consultationRoom.scheduledEndTime}/>
                                     <Box style={{marginTop: 10}}>
-                                        {isConsultant &&
+                                        {accessClientRecords &&
                                         <Typography>{`${i18n.t('consultation-room-number-of-clients')}: ${consultationRoom.numberOfClients}`}</Typography>}
-                                        {!_.isNil(consultationRoom.getCurrentAppointment()) && isConsultant &&
+                                        {!_.isNil(consultationRoom.getCurrentAppointment()) && accessClientRecords &&
                                         <Typography>{`${i18n.t('consultation-room-next-client-label')}: ${consultationRoom.getCurrentClientName()}`}</Typography>}
                                     </Box>
                                 </Box>

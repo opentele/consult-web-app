@@ -126,7 +126,7 @@ class ConsultAppBar extends BaseView {
                         <Box sx={{flexGrow: 0}}>
                             <IconButton onClick={() => this.switchToMode()}>{GlobalContext.isDarkTheme() ? <LightMode/> : <DarkMode/>}</IconButton>
                             <IconButton style={{marginRight: 10}} onClick={this.getOpenLanguageModalHandler()}><Translate/></IconButton>
-                            {GlobalContext.hasUser() && <Tooltip title="Open settings">
+                            {GlobalContext.hasUser() && <Tooltip title={`${GlobalContext.getUser().name} - Open settings`}>
                                 <IconButton onClick={this.handleOpenUserMenu()} sx={{p: 0}}>
                                     <Avatar alt={GlobalContext.getUser().name}/>
                                 </IconButton>

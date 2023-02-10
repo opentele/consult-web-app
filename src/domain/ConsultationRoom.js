@@ -1,6 +1,6 @@
 import _ from "lodash";
 import Alert from "./Alert";
-import {AbstractEntity, i18n} from "consult-app-common";
+import {AbstractEntity, i18n, canAccessClientRecords} from "consult-app-common";
 import GlobalContext from "../framework/GlobalContext";
 import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
@@ -54,15 +54,15 @@ class ConsultationRoom extends AbstractEntity {
     getAlerts() {
         const user = GlobalContext.getUser();
         const alerts = [];
-        if (this.hasMoreClients() && user["providerType"] === ProviderType.Moderator)
+        if (this.hasMoreClients() && canAccessClientRecords(user["providerType"]))
             alerts.push(Alert.info(i18n.t("conference-client-next", {client: this.getCurrentClientName()})));
 
-        if (this.numberOfUserClientsPending > 0 && user["providerType"] === ProviderType.Moderator)
+        if (this.numberOfUserClientsPending > 0 && canAccessClientRecords(user["providerType"]))
             alerts.push(Alert.success(i18n.t("conference-all-clients-completed", {
                 numberOfClientsCompleted: this.numberOfUserClientCompleted(),
                 numberOfClientsPending: this.numberOfUserClientsPending
             })));
-        if (!this.hasVacancy() && user["providerType"] === ProviderType.Moderator)
+        if (!this.hasVacancy() && canAccessClientRecords(user["providerType"]))
             alerts.push(Alert.error(i18n.t("conference-no-vacancy")));
 
         return alerts;
@@ -90,11 +90,11 @@ class ConsultationRoom extends AbstractEntity {
     }
 
     canViewClients() {
-        return GlobalContext.getUser().providerType === ProviderType.Consultant ? (this.numberOfClients > 0) : (this.numberOfUserClients > 0);
+        return canAccessClientRecords(GlobalContext.getUser().providerType)  ? (this.numberOfClients > 0) : (this.numberOfUserClients > 0);
     }
 
     canJoinConference() {
-        return (!this.isInPast()) && (GlobalContext.getUser().providerType === ProviderType.Consultant ?
+        return (!this.isInPast()) && (canAccessClientRecords(GlobalContext.getUser().providerType) ?
             (this.numberOfClientsPending > 0) : (this.numberOfUserClientsPending > 0));
     }
 
