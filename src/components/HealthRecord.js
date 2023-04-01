@@ -1,9 +1,7 @@
 import React from 'react';
-import {makeStyles} from '@mui/material';
-import {Accordion, AccordionDetails, AccordionSummary, Button, Card, List, TextField, Typography} from "@mui/material";
-import {ExpandMore, HourglassFull} from "@mui/icons-material";
+import {Accordion, AccordionDetails, AccordionSummary, Button, Card, makeStyles, TextField, Typography} from '@mui/material';
+import {Event, ExpandMore} from "@mui/icons-material";
 import patientRecord from '../testdata/patient-record.json';
-import {Event} from '@mui/icons-material';
 
 const useStyles = makeStyles((theme) => ({
     root: {

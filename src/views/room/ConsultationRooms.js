@@ -9,7 +9,7 @@ import BaseView from "../framework/BaseView";
 import ConsultationRoom from "../../domain/ConsultationRoom";
 import Client from "../../domain/Client";
 import ConsultationRoomQueue from "../client/ConsultationRoomQueue";
-import {i18n, canAccessClientRecords} from "consult-app-common";
+import {canAccessClientRecords, i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import GlobalContext from "../../framework/GlobalContext";
 import ConsultationRoomClientsView from "./ConsultationRoomClientsView";

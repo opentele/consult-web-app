@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from "@mui/styles";
-import {Box, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
+import {Table, TableBody, TableCell, TableContainer, TableHead, TableRow} from "@mui/material";
 import {i18n} from "consult-app-common";
 import BaseView from "../framework/BaseView";
 import {FileOpen} from "@mui/icons-material";

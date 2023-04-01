@@ -1,4 +1,4 @@
-import {AbstractEntity, i18n} from "consult-app-common";
+import {AbstractEntity} from "consult-app-common";
 import _ from 'lodash';
 
 class Provider extends AbstractEntity {

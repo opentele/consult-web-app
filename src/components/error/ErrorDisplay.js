@@ -4,7 +4,6 @@ import {Box, Button, Container, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultAppBar from "../ConsultAppBar";
 import PropTypes from 'prop-types';
-import {Link} from "react-router-dom";
 
 const styles = theme => ({
     edRoot: {

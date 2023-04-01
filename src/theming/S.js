@@ -1,4 +1,3 @@
-import _ from "lodash";
 import CommonCSS from "./CommonCSS";
 import GlobalContext from "../framework/GlobalContext";
 import {DarkColors} from "./DarkTheme";

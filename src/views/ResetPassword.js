@@ -5,8 +5,6 @@ import {DataElementValidator} from "react-app-common";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";
 import {Link} from "react-router-dom";
-import {ActionButton} from "../components/ConsultButtons";
-import {LockReset} from "@mui/icons-material";
 
 const styles = theme => ({
     root: {

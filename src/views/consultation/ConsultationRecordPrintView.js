@@ -10,7 +10,7 @@ import ClientService from "../../service/ClientService";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
 import GlobalContext from "../../framework/GlobalContext";
-import {ContainerSkeleton, TableSkeleton} from "../../components/ConsultSkeleton";
+import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({
     crpvContainer: {

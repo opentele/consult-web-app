@@ -1,4 +1,3 @@
-import _ from "lodash";
 import ActiveConferences from "../testdata/active-conferences.json";
 import Queue from "../testdata/queue.json";
 

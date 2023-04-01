@@ -1,4 +1,3 @@
-import _ from "lodash";
 import ServiceUtil from "./ServiceUtil";
 import EntityCollection from "../domain/EntityCollection";
 

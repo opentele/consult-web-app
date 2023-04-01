@@ -1,6 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import {withStyles} from '@mui/styles';
 import ErrorDisplay from "../components/error/ErrorDisplay";
 

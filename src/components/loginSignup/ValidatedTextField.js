@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import TextField from '@mui/material/TextField';
-import {withFormsy, propTypes as formsyPropTypes} from 'formsy-react';
+import {propTypes as formsyPropTypes, withFormsy} from 'formsy-react';
 import PropTypes from 'prop-types'
 
 class ValidatedTextField extends Component {

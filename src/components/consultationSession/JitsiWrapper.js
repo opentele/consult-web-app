@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import GlobalContext from "../../framework/GlobalContext";
 import Jitsi from "react-jitsi";
 
 const styles = theme => ({});

@@ -14,7 +14,7 @@ import SaveCancelButtons from "../../components/SaveCancelButtons";
 import {i18n} from "consult-app-common";
 import Paper from "@mui/material/Paper";
 import S from "../../theming/S";
-import {ContainerSkeleton, TableSkeleton} from "../../components/ConsultSkeleton";
+import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 class PersonView extends BaseView {
     constructor(props) {

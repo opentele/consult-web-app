@@ -1,7 +1,7 @@
 import React from 'react';
 
 import About from '../../views/RegisterOrganisation';
-import { MemoryRouter } from 'react-router-dom'
+import {MemoryRouter} from 'react-router-dom'
 
 //👇 This default export determines where your story goes in the story list
 export default {

@@ -1,4 +1,4 @@
-import {Box, LinearProgress, Skeleton} from "@mui/material";
+import {Box, Skeleton} from "@mui/material";
 import React from "react";
 
 function MultipleSkeletons({height, margin}) {

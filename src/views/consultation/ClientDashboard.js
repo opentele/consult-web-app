@@ -1,6 +1,6 @@
 import React from "react";
 import {withStyles} from '@mui/styles';
-import {Box, Paper} from '@mui/material';
+import {Box, Chip, Paper} from '@mui/material';
 import BaseView from "../../views/framework/BaseView";
 import ClientDisplay from "../../components/consultation/ClientDisplay";
 import ConsultationDisplay from "../../components/consultation/ConsultationDisplay";
@@ -13,6 +13,7 @@ import ModalStatus from "../framework/ModalStatus";
 import _ from 'lodash';
 import PrintView from "../framework/PrintView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
+import FormView from "./FormView";
 
 const styles = theme => ({
     container: {},
@@ -26,7 +27,8 @@ class ClientDashboard extends BaseView {
         super(props);
         this.state = {
             serverCall: ServerCall.createInitial({}),
-            printModalStatus: ModalStatus.NOT_OPENED
+            printModalStatus: ModalStatus.NOT_OPENED,
+            displayFormStatus: ModalStatus.NOT_OPENED
         };
     }
 
@@ -43,7 +45,7 @@ class ClientDashboard extends BaseView {
 
     getConsultationRecordPrintHandler() {
         return (consultationSessionRecordId) => {
-            let newState = {...this.state};
+            const newState = {...this.state};
             newState.printModalStatus = ModalStatus.OPENED;
             newState.consultationSessionRecordId = consultationSessionRecordId;
             newState.clientId = null;
@@ -52,26 +54,38 @@ class ClientDashboard extends BaseView {
     }
 
     onClientPrint(clientId) {
-        let newState = {...this.state};
+        const newState = {...this.state};
         newState.printModalStatus = ModalStatus.OPENED;
         newState.consultationSessionRecordId = null;
         newState.clientId = clientId;
         this.setState(newState);
     }
 
+    onFormOpen() {
+        const newState = {...this.state};
+        newState.displayFormStatus = ModalStatus.OPENED;
+        this.setState(newState);
+    }
+
     render() {
         const {classes, theme} = this.props;
-        const {serverCall, printModalStatus, consultationSessionRecordId, clientId} = this.state;
+        const {serverCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus} = this.state;
 
         const client = ServerCall.noCallOrWait(serverCall) ? {} : Client.fromServerResource(ServerCall.getData(serverCall));
 
         return <ContainerView activeTab="client" showBackButton={true} onRefresh={() => this.refresh()}>
             {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
-            <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
-                       messageClose={this.getModalCloseHandler("printModalStatus")}/>}
+                <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
+                           messageClose={this.getModalCloseHandler("printModalStatus")}/>}
+            {displayFormStatus === ModalStatus.OPENED && <FormView messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
+
             {ServerCall.noCallOrWait(serverCall) ? <CardsSkeleton/> :
                 <Box className={classes.container}>
-                    <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light}}/>
+                    <Box>
+                        <Chip label="Case History" clickable onClick={() => this.onFormOpen()}/>
+                    </Box>
+
+                    <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>
                     <Box className={classes.section}>
                         <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>
                     </Box>

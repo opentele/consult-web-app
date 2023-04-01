@@ -1,4 +1,3 @@
-import _ from "lodash";
 import {Card, FormControlLabel, FormLabel, Radio, RadioGroup} from "@mui/material";
 import ValidatedTextField from "./ValidatedTextField";
 import React, {Component} from "react";

@@ -2,9 +2,8 @@ import './App.css';
 import Welcome from "./views/Welcome";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 import {i18n, i18nPromise, UserService} from "consult-app-common";
-import {CircularProgress, CssBaseline, ThemeProvider} from "@mui/material";
+import {createTheme, CssBaseline, ThemeProvider} from "@mui/material";
 import RegisterOrganisation from "./views/RegisterOrganisation";
-import {createTheme} from '@mui/material';
 import ResetPassword from "./views/ResetPassword";
 import ChangePassword from "./views/ChangePassword";
 import Home from "./views/room/Home";
@@ -18,7 +17,7 @@ import {ServerCall} from "react-app-common";
 import ErrorView from "./views/ErrorView";
 import ThemeHelper from "./theming/ThemeHelper";
 import RouteManager, {errorPath, loginPath} from "./framework/RouteManager";
-import {ContainerSkeleton, SkeletonView} from "./components/ConsultSkeleton";
+import {SkeletonView} from "./components/ConsultSkeleton";
 
 export default class App extends Component {
     constructor(props) {

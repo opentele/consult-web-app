@@ -1,13 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {AppBar, Box, Dialog, Fab, Toolbar, Typography} from "@mui/material";
+import {Box, Dialog, DialogTitle, Fab} from "@mui/material";
 import Paper from '@mui/material/Paper';
 import {i18n} from "consult-app-common";
 import Draggable from 'react-draggable';
-import {DialogTitle} from "@mui/material";
 import CloseIcon from "@mui/icons-material/CloseRounded";
-import S from "../../theming/S";
 
 const styles = theme => ({
 });

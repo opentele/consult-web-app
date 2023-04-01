@@ -6,7 +6,6 @@ import ConsultAppBar from "../components/ConsultAppBar";
 import {i18n} from "consult-app-common";
 import {DataElementValidator} from "react-app-common";
 import {Link} from "react-router-dom";
-import CancelButton from "../components/CancelButton";
 
 const styles = theme => ({
     root: {

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
-import {Box, Typography, FormLabel as MuiFormLabel} from "@mui/material";
+import {FormLabel as MuiFormLabel} from "@mui/material";
 import {i18n} from "consult-app-common";
 
 class FormLabel extends Component {

@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import {User, UserService} from "consult-app-common";
@@ -7,7 +7,6 @@ import EditUserFields from "../components/loginSignup/EditUserFields";
 import SaveCancelButtons from "../components/SaveCancelButtons";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import {ServerCall} from "react-app-common";
-import {Box} from "@mui/material";
 import BaseView from "./framework/BaseView";
 import S from "../theming/S";
 import Paper from "@mui/material/Paper";

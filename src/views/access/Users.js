@@ -2,14 +2,14 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TextField, Typography} from "@mui/material";
+import {Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography} from "@mui/material";
 import {i18n, User, UserService} from "consult-app-common";
 import AddUser from "./AddUser";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";
 import RegisterUser from "../RegisterUser";
 import EditUser from "./EditUser";
-import {GroupAdd, PersonAddAlt, Search} from "@mui/icons-material";
+import {GroupAdd, PersonAddAlt} from "@mui/icons-material";
 import S from "../../theming/S";
 import {TableSkeleton} from "../../components/ConsultSkeleton";
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {withStyles} from '@mui/styles';
-import {AppBar, Avatar, Box, Button, Container, IconButton, Menu, MenuItem, Paper, Toolbar, Tooltip, Typography} from "@mui/material";
-import {Translate, Home, DarkMode, LightMode, AccountCircle, Logout} from "@mui/icons-material";
+import {AppBar, Avatar, Box, Button, IconButton, Menu, MenuItem, Paper, Toolbar, Tooltip, Typography} from "@mui/material";
+import {AccountCircle, DarkMode, LightMode, Logout, Translate} from "@mui/icons-material";
 import {Link} from "react-router-dom";
 import {BeanContainer, ServerCall} from 'react-app-common';
 import {i18n, UserService} from "consult-app-common";

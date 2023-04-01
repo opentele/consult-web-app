@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import ReactDOM from 'react-dom';
 import {withStyles} from '@mui/styles';
 import SaveButton from "./SaveButton";
 import CancelButton from "./CancelButton";

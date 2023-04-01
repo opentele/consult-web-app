@@ -1,8 +1,7 @@
 import _ from "lodash";
 import Alert from "./Alert";
-import {AbstractEntity, i18n, canAccessClientRecords} from "consult-app-common";
+import {AbstractEntity, canAccessClientRecords, i18n} from "consult-app-common";
 import GlobalContext from "../framework/GlobalContext";
-import {ProviderType} from 'consult-app-common';
 import moment from 'moment';
 import Provider from "./Provider";
 import Appointment from "./Appointment";

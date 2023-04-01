@@ -1,9 +1,8 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
 import {Box, Button, Grid, Paper, TextField, ToggleButton, ToggleButtonGroup, Typography} from '@mui/material';
-import {ServerCall, ServerCallStatus, Util} from "react-app-common";
+import {ServerCall, Util} from "react-app-common";
 import {i18n, User, UserService} from "consult-app-common";
-import WaitBackdrop from "../components/WaitBackdrop";
 import ServerErrorMessage from "../components/ServerErrorMessage";
 import ConsultAppBar from "../components/ConsultAppBar";
 import {Link, Redirect} from "react-router-dom";

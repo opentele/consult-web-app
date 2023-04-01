@@ -1,5 +1,3 @@
-import _ from "lodash";
-
 class Alert {
     type;
     message;

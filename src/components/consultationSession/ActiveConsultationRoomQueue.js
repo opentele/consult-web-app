@@ -1,12 +1,11 @@
 import React from 'react';
 import {withStyles} from '@mui/styles';
-import {Box, Button, CircularProgress, Fab, List, ListItem, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography} from '@mui/material';
-import {Add, ArrowCircleDown, ArrowCircleUp, Person, Queue, VideoCall as VideoCallIcon} from '@mui/icons-material';
+import {Box, Button, CircularProgress, List, ListItem, ListItemButton, ListItemIcon, ListItemText, Menu, MenuItem, Paper, Typography} from '@mui/material';
+import {ArrowCircleDown, ArrowCircleUp, Person, Queue, VideoCall as VideoCallIcon} from '@mui/icons-material';
 import PropTypes from 'prop-types';
 import {i18n} from "consult-app-common";
 import _ from 'lodash';
 import {Link} from "react-router-dom";
-import {ListItemButton} from "@mui/material";
 import ModalStatus from "../../views/framework/ModalStatus";
 import ConsultationRoomQueue from "../../views/client/ConsultationRoomQueue";
 import BaseView from "../../views/framework/BaseView";

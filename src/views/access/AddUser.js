@@ -5,13 +5,10 @@ import BaseView from "../framework/BaseView";
 import ModalContainerView from "../framework/ModalContainerView";
 import {i18n, User, UserService} from "consult-app-common";
 import {DataElementValidator, ServerCall, ServerCallStatus} from "react-app-common";
-import {Box, Button, TextField} from "@mui/material";
-import _ from "lodash";
+import {Alert, Box, Button, TextField} from "@mui/material";
 import CancelButton from "../../components/CancelButton";
 import ServerErrorMessage from "../../components/ServerErrorMessage";
-import EditUser from "./EditUser";
 import EditUserFields from "../../components/loginSignup/EditUserFields";
-import {Alert} from "@mui/material";
 
 const styles = theme => ({
     auMain: {

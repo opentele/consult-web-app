@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
+    "@formio/react": "^5.2.4-rc.1",
     "@mui/icons-material": "5.8.4",
     "@mui/material": "5.8.4",
     "@mui/styles": "5.8.4",
@@ -15,6 +16,7 @@
     "@rpldy/uploady": "^1.0.0",
     "bootstrap": "^4.0.0",
     "consult-app-common": "link:./../consult-app-common",
+    "formiojs": "^4.14.12",
     "formsy-react": "^2.2.5",
     "lodash": "^4.17.21",
     "moment": "^2.29.1",
@@ -71,19 +73,19 @@
     ]
   },
   "devDependencies": {
-    "react-scripts": "5.0.1",
     "@storybook/addon-actions": "^6.4.3",
     "@storybook/addon-essentials": "^6.4.3",
     "@storybook/addon-links": "^6.4.3",
     "@storybook/node-logger": "^6.4.3",
     "@storybook/preset-create-react-app": "^3.2.0",
     "@storybook/react": "^6.4.3",
-    "express": "4.17.1",
-    "http-proxy-middleware": "2.0.1",
-    "storybook-react-router": "^1.0.8",
-    "wrangler": "2.1.10",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
-    "@testing-library/user-event": "^12.1.10"
+    "@testing-library/user-event": "^12.1.10",
+    "express": "4.17.1",
+    "http-proxy-middleware": "2.0.1",
+    "react-scripts": "5.0.1",
+    "storybook-react-router": "^1.0.8",
+    "wrangler": "2.1.10"
   }
 }

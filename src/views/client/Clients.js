@@ -2,7 +2,7 @@ import React from 'react';
 import {withStyles} from '@mui/styles';
 import BaseView from "../framework/BaseView";
 import {ServerCall} from "react-app-common";
-import {Box, Button, Fab, Paper, Skeleton, TextField, Typography} from "@mui/material";
+import {Box, Button, Paper, TextField, Typography} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ModalStatus from "../framework/ModalStatus";
 import ContainerView from "../framework/ContainerView";

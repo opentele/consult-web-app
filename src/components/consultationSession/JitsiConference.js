@@ -2,7 +2,7 @@ import React from "react";
 import {withStyles} from '@mui/styles';
 import PropTypes from 'prop-types';
 import JitsiPlaceholder from "./JitsiPlaceholder";
-import {Box, CircularProgress, Fab, Paper} from "@mui/material";
+import {Box, CircularProgress, Paper} from "@mui/material";
 import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../../views/framework/BaseView";
