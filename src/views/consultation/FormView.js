@@ -21,11 +21,12 @@ class FormView extends BaseView {
 
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
-        client: PropTypes.object.isRequired
+        client: PropTypes.object.isRequired,
+        formName: PropTypes.string.isRequired
     }
 
     componentDidMount() {
-        this.makeServerCall(FormService.getFormDefinition(), "formLoadCall");
+        this.makeServerCall(FormService.getFormDefinition(this.props.formName), "formLoadCall");
     }
 
     onFormSubmit(submission) {

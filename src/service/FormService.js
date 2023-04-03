@@ -1,8 +1,13 @@
 import ServiceUtil from "./ServiceUtil";
+import GlobalContext from "../framework/GlobalContext";
 
 class FormService {
-    static getFormDefinition() {
-        return ServiceUtil.getJsonFromFullPath("https://lgubfwddfpyhbhy.form.io/casehistory");
+    static getFormDefinition(formName) {
+        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisationFormIoProjectId()}.form.io/${formName}`);
+    }
+
+    static getAllForms() {
+        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisationFormIoProjectId()}.form.io/form`);
     }
 }
 

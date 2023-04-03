@@ -45,6 +45,7 @@ class GlobalContext {
         const data = ServerCall.getData(getUserCall);
         this.setUser(User.fromResource(data));
         this.setOrganisation(data.organisationName);
+        this.setOrganisationFormIoProjectId(data.formIoProjectId);
     }
 
     _getThemeMode() {
@@ -75,6 +76,14 @@ class GlobalContext {
         if (_.isEmpty(this._getThemeMode()))
             this._setThemeMode(lightMode);
         return this._getThemeMode();
+    }
+
+    setOrganisationFormIoProjectId(formIoProjectId) {
+        this.formIoProjectId = formIoProjectId;
+    }
+
+    getOrganisationFormIoProjectId() {
+        return this.formIoProjectId;
     }
 }
 
