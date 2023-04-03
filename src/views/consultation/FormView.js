@@ -22,22 +22,23 @@ class FormView extends BaseView {
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
         client: PropTypes.object.isRequired,
-        formName: PropTypes.string.isRequired
+        form: PropTypes.object.isRequired
     }
 
     componentDidMount() {
-        this.makeServerCall(FormService.getFormDefinition(this.props.formName), "formLoadCall");
+        this.makeServerCall(FormService.getFormDefinition(this.props.form), "formLoadCall");
     }
 
     onFormSubmit(submission) {
-        this.makeServerCall(ConsultationRecordService.saveForm(this.props.client, submission), "formSaveCall");
+        const {client, form} = this.props;
+        this.makeServerCall(ConsultationRecordService.saveForm(client, form, submission), "formSaveCall");
     }
 
     render() {
-        const {messageClose, client} = this.props;
+        const {messageClose, client, form} = this.props;
         const {formLoadCall} = this.state;
 
-        return <ModalContainerView onClose={() => messageClose(false)} showCloseButton={true} titleKey="case-history" titleObj={{}}>
+        return <ModalContainerView onClose={() => messageClose(false)} showCloseButton={true} titleKey={form["title"]} titleObj={{}}>
             {ServerCall.noCallOrWait(formLoadCall) ? <CardsSkeleton/> :
                 <Box style={{padding: 30}}>
                     <Typography variant={"h5"}>{client.getDisplayName(i18n)}</Typography>

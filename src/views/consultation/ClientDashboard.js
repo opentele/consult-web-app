@@ -31,7 +31,7 @@ class ClientDashboard extends BaseView {
             getAllFormsCall: ServerCall.createInitial([]),
             printModalStatus: ModalStatus.NOT_OPENED,
             displayFormStatus: ModalStatus.NOT_OPENED,
-            selectedFormForm: null
+            selectedForm: null
         };
     }
 
@@ -65,16 +65,16 @@ class ClientDashboard extends BaseView {
         this.setState(newState);
     }
 
-    onFormOpen(formName) {
+    onFormOpen(form) {
         const newState = {...this.state};
         newState.displayFormStatus = ModalStatus.OPENED;
-        newState.selectedFormForm = formName;
+        newState.selectedForm = form;
         this.setState(newState);
     }
 
     render() {
         const {classes, theme} = this.props;
-        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, getAllFormsCall} = this.state;
+        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, getAllFormsCall, selectedForm} = this.state;
 
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
         const client = clientLoading ? {} : Client.fromServerResource(ServerCall.getData(getClientCall));
@@ -84,14 +84,16 @@ class ClientDashboard extends BaseView {
             {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
             <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
                        messageClose={this.getModalCloseHandler("printModalStatus")}/>}
-            {displayFormStatus === ModalStatus.OPENED && <FormView client={client} messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
+            {displayFormStatus === ModalStatus.OPENED &&
+            <FormView form={selectedForm} client={client}
+                      messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
 
             {clientLoading ? <CardsSkeleton/> :
                 <Box className={classes.container}>
                     {formListLoadings ? <Skeleton style={{width: "100%"}} variant="rectangular" height={40}/> :
                         <Box style={{display: "flex", flexDirection: "row-reverse", paddingRight: 20}}>
                             {ServerCall.getData(getAllFormsCall).map((x, index) => <Chip key={index} label={x["title"].toUpperCase()} clickable
-                                                                                         onClick={() => this.onFormOpen(x["name"])}/>)}
+                                                                                         onClick={() => this.onFormOpen(x)}/>)}
                         </Box>}
 
                     <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>

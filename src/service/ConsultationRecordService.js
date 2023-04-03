@@ -1,26 +1,28 @@
 import ServiceUtil from "./ServiceUtil";
 
+const ConsultationRecordEndpoint = "consultationRecord";
+
 class ConsultationRecordService {
     static getRecord(id) {
-        return ServiceUtil.getJson(`consultationSessionRecord/${id}`);
+        return ServiceUtil.getJson(`/${id}`);
     }
 
     static getRecords(clientId) {
-        return ServiceUtil.getJson(`consultationSessionRecord?clientId=${clientId}`);
+        return ServiceUtil.getJson(`${ConsultationRecordEndpoint}?clientId=${clientId}`);
     }
 
-    static save(consultationSessionRecord, client) {
-        if (consultationSessionRecord.isNew()) {
-            consultationSessionRecord.clientId = client.id;
-            return ServiceUtil.putJson("consultationSessionRecord", consultationSessionRecord);
+    static save(consultationRecord, client) {
+        if (consultationRecord.isNew()) {
+            consultationRecord.clientId = client.id;
+            return ServiceUtil.putJson(ConsultationRecordEndpoint, consultationRecord);
         }
 
-        return ServiceUtil.postJson("consultationSessionRecord", consultationSessionRecord);
+        return ServiceUtil.postJson(ConsultationRecordEndpoint, consultationRecord);
     }
 
-    static saveForm(client, formId, submission) {
-        const request = {data: submission, clientId: client.id, formId: formId};
-        return ServiceUtil.postJson("consultationSessionRecord/form", request);
+    static saveForm(client, form, submission) {
+        const request = {data: JSON.stringify(submission.data), clientId: client.id, formId: form["_id"]};
+        return ServiceUtil.postJson(`${ConsultationRecordEndpoint}/form`, request);
     }
 }
 
