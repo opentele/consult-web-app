@@ -5,6 +5,10 @@ export default class ServiceUtil {
         return RC.getJSON(`api/${relativeApiUrl}`);
     }
 
+    static getJsonFromFullPath(fullPath) {
+        return RC.getJSON(fullPath);
+    }
+
     static postJson(relativeApiUrl, obj) {
         return RC.post(`api/${relativeApiUrl}`, obj);
     }

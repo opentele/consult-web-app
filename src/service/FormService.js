@@ -2,7 +2,7 @@ import ServiceUtil from "./ServiceUtil";
 
 class FormService {
     static getFormDefinition() {
-        return ServiceUtil.getJson("https://lgubfwddfpyhbhy.form.io/casehistory");
+        return ServiceUtil.getJsonFromFullPath("https://lgubfwddfpyhbhy.form.io/casehistory");
     }
 }
 

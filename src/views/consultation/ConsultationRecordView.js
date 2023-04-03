@@ -5,7 +5,7 @@ import BaseView from "../framework/BaseView";
 import FormLabel from "../../components/FormLabel";
 import PropTypes from 'prop-types';
 import _ from "lodash";
-import ConsultationSessionRecordService from "../../service/ConsultationSessionRecordService";
+import ConsultationRecordService from "../../service/ConsultationRecordService";
 import {ServerCall} from "react-app-common";
 import SaveCancelButtons from "../../components/SaveCancelButtons";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
@@ -69,7 +69,7 @@ class ConsultationRecordView extends BaseView {
 
     componentDidMount() {
         if (this.editing)
-            this.makeServerCall(ConsultationSessionRecordService.getRecord(this.props.consultationSessionRecordId), "getRecordCall");
+            this.makeServerCall(ConsultationRecordService.getRecord(this.props.consultationSessionRecordId), "getRecordCall");
     }
 
     updateServerResponseState(newState, serverCallName) {
@@ -83,7 +83,7 @@ class ConsultationRecordView extends BaseView {
         if (!this.validate()) {
             return;
         }
-        this.makeServerCall(ConsultationSessionRecordService.save(this.state.consultation, this.props.client), "saveRecordCall")
+        this.makeServerCall(ConsultationRecordService.save(this.state.consultation, this.props.client), "saveRecordCall")
             .then(this.getEntitySaveHandler("saveRecordCall"));
     }
 

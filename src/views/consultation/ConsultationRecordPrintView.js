@@ -3,7 +3,7 @@ import {withStyles} from '@mui/styles';
 import {Box, Paper, Typography} from '@mui/material';
 import BaseView from "../framework/BaseView";
 import PropTypes from 'prop-types';
-import ConsultationSessionRecordService from "../../service/ConsultationSessionRecordService";
+import ConsultationRecordService from "../../service/ConsultationRecordService";
 import {ServerCall} from "react-app-common";
 import ConsultationSessionRecord from "../../domain/ConsultationSessionRecord";
 import ClientService from "../../service/ClientService";
@@ -47,7 +47,7 @@ class ConsultationRecordPrintView extends BaseView {
     componentDidMount() {
         let promise;
         if (this.consultationDisplayMode === "single")
-            promise = ConsultationSessionRecordService.getRecord(this.props.consultationSessionRecordId);
+            promise = ConsultationRecordService.getRecord(this.props.consultationSessionRecordId);
         else
             promise = ClientService.getClientFull(this.props.client.id);
         this.makeServerCall(promise, "getRecordCall");

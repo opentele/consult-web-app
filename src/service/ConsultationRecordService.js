@@ -1,6 +1,6 @@
 import ServiceUtil from "./ServiceUtil";
 
-class ConsultationSessionRecordService {
+class ConsultationRecordService {
     static getRecord(id) {
         return ServiceUtil.getJson(`consultationSessionRecord/${id}`);
     }
@@ -17,6 +17,11 @@ class ConsultationSessionRecordService {
 
         return ServiceUtil.postJson("consultationSessionRecord", consultationSessionRecord);
     }
+
+    static saveForm(client, formId, submission) {
+        const request = {data: submission, clientId: client.id, formId: formId};
+        return ServiceUtil.postJson("consultationSessionRecord/form", request);
+    }
 }
 
-export default ConsultationSessionRecordService;
+export default ConsultationRecordService;

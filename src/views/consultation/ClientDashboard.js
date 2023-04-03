@@ -77,7 +77,7 @@ class ClientDashboard extends BaseView {
             {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
                 <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
                            messageClose={this.getModalCloseHandler("printModalStatus")}/>}
-            {displayFormStatus === ModalStatus.OPENED && <FormView messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
+            {displayFormStatus === ModalStatus.OPENED && <FormView client={client} messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
 
             {ServerCall.noCallOrWait(serverCall) ? <CardsSkeleton/> :
                 <Box className={classes.container}>
