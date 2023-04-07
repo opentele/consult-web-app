@@ -15,7 +15,7 @@ import {ContainerSkeleton} from "../../components/ConsultSkeleton";
 
 const styles = theme => ({});
 
-class ConsultationRecordDuringConferenceView extends BaseView {
+class NativeConsultationRecordDuringConferenceView extends BaseView {
     constructor(props, context) {
         super(props, context);
         this.state = {
@@ -42,24 +42,26 @@ class ConsultationRecordDuringConferenceView extends BaseView {
         if (!loading)
             client = Client.fromServerResource(ServerCall.getData(viewClientCall));
 
+        const consultationSessionRecordsInOrder = client.getConsultationSessionRecordsInOrder();
+
         return <ModalContainerView titleKey={loading ? "loading" : "consultation-record-create-edit-title"}
                                    titleObj={!loading && {client: client.name}}>
             {loading ? <ContainerSkeleton/> :
                 <Paper style={{padding: 20, flexDirection: "column", display: "flex"}}>
                     <ConsultationRecordView client={client} messageClose={onClose} consultationSessionRecordId={client.getCurrentSessionRecordId(consultationRoom)}/>
                     <Box style={{marginTop: 40}}>
-                        {client.getConsultationSessionRecordsInOrder().map((record) =>
+                        {consultationSessionRecordsInOrder.map((record) =>
                             <Box style={{marginBottom: 20}}>
                                 <ConsultationDisplay consultationSessionRecord={record} client={client}/>
                             </Box>
                         )}
                     </Box>
-                    <Box style={{alignSelf: "flex-end"}}>
+                    {consultationSessionRecordsInOrder.length > 0 && <Box style={{alignSelf: "flex-end"}}>
                         <CancelButton onClickHandler={() => onClose(false)}/>
-                    </Box>
+                    </Box>}
                 </Paper>}
         </ModalContainerView>;
     }
 }
 
-export default withStyles(styles)(ConsultationRecordDuringConferenceView);
+export default withStyles(styles)(NativeConsultationRecordDuringConferenceView);

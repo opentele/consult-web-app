@@ -7,7 +7,7 @@ import {i18n} from "consult-app-common";
 import ConsultationRoomService from "../../service/ConsultationRoomService";
 import BaseView from "../../views/framework/BaseView";
 import {ServerCall, ServerCallStatus} from "react-app-common";
-import ConsultationRecordDuringConferenceView from "../../views/consultation/ConsultationRecordDuringConferenceView";
+import NativeConsultationRecordDuringConferenceView from "../../views/consultation/NativeConsultationRecordDuringConferenceView";
 import ModalStatus from "../../views/framework/ModalStatus";
 import JitsiWrapper from "./JitsiWrapper";
 import Button from "@mui/material/Button";
@@ -15,6 +15,9 @@ import {ArrowLeft, ArrowRight, Source} from "@mui/icons-material";
 import S from "../../theming/S";
 import ProviderChip from "../ProviderChip";
 import _ from 'lodash';
+import GlobalContext from "../../framework/GlobalContext";
+import Organisation from "../../domain/Organisation";
+import FormTypeConsultationRecordDuringConferenceView from "../../views/consultation/FormTypeConsultationRecordDuringConferenceView";
 
 const placeholder = _.isNil(process.env.REACT_APP_JITSI_PLACEHOLDER) ? false : process.env.REACT_APP_JITSI_PLACEHOLDER === "true";
 
@@ -83,6 +86,7 @@ class JitsiConference extends BaseView {
         } = this.props;
 
         const {moveTokenCall, clientRecordModalStatus} = this.state;
+        const clientRecordOpened = clientRecordModalStatus === ModalStatus.OPENED;
 
         return <Box className={[classes.jcContainer, parentClassName]} component={Paper} style={{borderRadius: 10, padding: 20}}>
             <Box style={{display: "flex", flexDirection: "row", marginBottom: 10}}>
@@ -112,12 +116,16 @@ class JitsiConference extends BaseView {
             </Box>
 
             {placeholder ? <JitsiPlaceholder key={consultationRoom.activeTeleConferenceId}/> : <JitsiWrapper roomName={consultationRoom.activeTeleConferenceId}
-                                                               providerDisplayForClient={consultationRoom.providerClientDisplay}/>}
+                                                                                                             providerDisplayForClient={consultationRoom.providerClientDisplay}/>}
 
-            {clientRecordModalStatus === ModalStatus.OPENED &&
-            <ConsultationRecordDuringConferenceView clientId={consultationRoom.getCurrentClientId()}
-                                                    onClose={this.getModalCloseHandler("clientRecordModalStatus")}
-                                                    consultationRoom={consultationRoom}/>}
+            {clientRecordOpened && GlobalContext.getOrganisation().formUsageType === Organisation.FormUsageType.Native &&
+            <NativeConsultationRecordDuringConferenceView clientId={consultationRoom.getCurrentClientId()}
+                                                          onClose={this.getModalCloseHandler("clientRecordModalStatus")}
+                                                          consultationRoom={consultationRoom}/>}
+            {clientRecordOpened && GlobalContext.getOrganisation().formUsageType === Organisation.FormUsageType.FormIO &&
+            <FormTypeConsultationRecordDuringConferenceView clientId={consultationRoom.getCurrentClientId()}
+                                                          onClose={this.getModalCloseHandler("clientRecordModalStatus")}
+                                                          consultationRoom={consultationRoom}/>}
         </Box>;
     }
 }

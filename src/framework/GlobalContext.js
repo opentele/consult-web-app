@@ -1,6 +1,7 @@
 import _ from "lodash";
 import {ServerCall} from "react-app-common";
 import {User} from "consult-app-common";
+import Organisation from "../domain/Organisation";
 
 const themeModeKey = "themeMode";
 const lightMode = "light";
@@ -44,8 +45,7 @@ class GlobalContext {
     updateContext(getUserCall) {
         const data = ServerCall.getData(getUserCall);
         this.setUser(User.fromResource(data));
-        this.setOrganisation(data.organisationName);
-        this.setOrganisationFormIoProjectId(data.formIoProjectId);
+        this.setOrganisation(Organisation.fromResponseData(data));
     }
 
     _getThemeMode() {
@@ -76,14 +76,6 @@ class GlobalContext {
         if (_.isEmpty(this._getThemeMode()))
             this._setThemeMode(lightMode);
         return this._getThemeMode();
-    }
-
-    setOrganisationFormIoProjectId(formIoProjectId) {
-        this.formIoProjectId = formIoProjectId;
-    }
-
-    getOrganisationFormIoProjectId() {
-        return this.formIoProjectId;
     }
 }
 

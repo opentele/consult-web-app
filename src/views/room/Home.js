@@ -68,7 +68,7 @@ class Home extends BaseView {
         const getTabComponent = this.tabComponents[tabState.tabIndex];
         const key = tabState.getCurrentUpdateIndex();
 
-        return _.isEmpty(GlobalContext.getOrganisation()) ?
+        return _.isNil(GlobalContext.getOrganisation().name) ?
             <NoOrganisationView onOrgRegistered={() => this.setState(Object.assign({}, this.state))}/>
             :
             <ContainerView activeTab="home" onRefresh={() => this.refresh()}>

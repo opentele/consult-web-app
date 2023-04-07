@@ -68,7 +68,7 @@ class ConsultationRecordPrintView extends BaseView {
         return <Box className={classes.crpvContainer}>
             {loading ? <ContainerSkeleton/> : <>
                 <Paper className={classes.crpvHeader} elevation={0}>
-                    <Typography variant="h4" style={{marginLeft: 20}}>{GlobalContext.getOrganisation()}</Typography>
+                    <Typography variant="h4" style={{marginLeft: 20}}>{GlobalContext.getOrganisation().name}</Typography>
                 </Paper>
                 <ClientDisplay client={client}/>
                 {this.getConsultations().map((record) => <ConsultationDisplay consultationSessionRecord={record} client={client}/>)}

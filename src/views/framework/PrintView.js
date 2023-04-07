@@ -78,7 +78,7 @@ class PrintView extends BaseView {
                         </Fab>
                         <ReactToPrint
                             content={this.reactToPrintContent}
-                            documentTitle={`${GlobalContext.getOrganisation()} - ${GlobalContext.getUser().name} - ${client.name}`}
+                            documentTitle={`${GlobalContext.getOrganisation().name} - ${GlobalContext.getUser().name} - ${client.name}`}
                             onAfterPrint={this.handleAfterPrint}
                             onBeforeGetContent={this.handleOnBeforeGetContent}
                             onBeforePrint={this.handleBeforePrint}

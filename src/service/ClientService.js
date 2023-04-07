@@ -31,7 +31,23 @@ class ClientService {
     }
 
     static getClientFull(clientId) {
-        return ServiceUtil.getJson(`client/${clientId}/full`)
+        return ServiceUtil.getJson(`client/${clientId}/full`);
+    }
+
+    static getClientWithRecentForms(clientId) {
+        return ServiceUtil.getJson(`client/${clientId}/formRecord/recent`);
+    }
+
+    static getFormData(formRecordId) {
+        return ServiceUtil.getJson(`client/form/${formRecordId}`);
+    }
+
+    static getFormRecordSummaryByForm(clientId) {
+        return ServiceUtil.getJson(`client/${clientId}/formRecordSummaryByForm`);
+    }
+
+    static getFormRecordSummaryByDate(clientId) {
+        return ServiceUtil.getJson(`client/${clientId}/formRecordSummaryByDate`);
     }
 }
 

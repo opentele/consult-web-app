@@ -3,11 +3,11 @@ import GlobalContext from "../framework/GlobalContext";
 
 class FormService {
     static getFormDefinition(form) {
-        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisationFormIoProjectId()}.form.io/${form["name"]}`);
+        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisation().formIoProjectId}.form.io/${form["name"]}`);
     }
 
     static getAllForms() {
-        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisationFormIoProjectId()}.form.io/form`);
+        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisation().formIoProjectId}.form.io/form`);
     }
 }
 

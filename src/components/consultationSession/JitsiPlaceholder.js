@@ -11,7 +11,7 @@ class JitsiPlaceholder extends Component {
     }
 
     render() {
-        return <Box key={this.props.key} sx={{
+        return <Box sx={{
                         height: 500,
                         bgcolor: '#00802b'
                     }}/>;

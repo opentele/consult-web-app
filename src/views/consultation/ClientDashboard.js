@@ -13,8 +13,9 @@ import ModalStatus from "../framework/ModalStatus";
 import _ from 'lodash';
 import PrintView from "../framework/PrintView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
-import FormView from "./FormView";
+import FormModalView from "./FormModalView";
 import FormService from "../../service/FormService";
+import FormList from "./FormList";
 
 const styles = theme => ({
     container: {},
@@ -28,7 +29,6 @@ class ClientDashboard extends BaseView {
         super(props);
         this.state = {
             getClientCall: ServerCall.createInitial({}),
-            getAllFormsCall: ServerCall.createInitial([]),
             printModalStatus: ModalStatus.NOT_OPENED,
             displayFormStatus: ModalStatus.NOT_OPENED,
             selectedForm: null
@@ -44,7 +44,6 @@ class ClientDashboard extends BaseView {
     refresh() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
         this.makeServerCall(ClientService.getClientFull(clientId), "getClientCall");
-        this.makeServerCall(FormService.getAllForms(), "getAllFormsCall");
     }
 
     getConsultationRecordPrintHandler() {
@@ -74,28 +73,22 @@ class ClientDashboard extends BaseView {
 
     render() {
         const {classes, theme} = this.props;
-        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, getAllFormsCall, selectedForm} = this.state;
+        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, selectedForm} = this.state;
 
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
         const client = clientLoading ? {} : Client.fromServerResource(ServerCall.getData(getClientCall));
-        const formListLoadings = ServerCall.noCallOrWait(getAllFormsCall);
 
         return <ContainerView activeTab="client" showBackButton={true} onRefresh={() => this.refresh()}>
             {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
             <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
                        messageClose={this.getModalCloseHandler("printModalStatus")}/>}
             {displayFormStatus === ModalStatus.OPENED &&
-            <FormView form={selectedForm} client={client}
-                      messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
+            <FormModalView form={selectedForm} client={client}
+                           messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
 
             {clientLoading ? <CardsSkeleton/> :
                 <Box className={classes.container}>
-                    {formListLoadings ? <Skeleton style={{width: "100%"}} variant="rectangular" height={40}/> :
-                        <Box style={{display: "flex", flexDirection: "row-reverse", paddingRight: 20}}>
-                            {ServerCall.getData(getAllFormsCall).map((x, index) => <Chip key={index} label={x["title"].toUpperCase()} clickable
-                                                                                         onClick={() => this.onFormOpen(x)}/>)}
-                        </Box>}
-
+                    <FormList onFormOpen={(form) => this.onFormOpen(form)}/>
                     <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>
                     <Box className={classes.section}>
                         <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>
