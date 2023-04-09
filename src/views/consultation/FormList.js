@@ -5,6 +5,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import FormService from "../../service/FormService";
 import FormMetaData from "../../domain/FormMetaData";
+import _ from 'lodash';
 
 class FormList extends BaseView {
     constructor(props) {
@@ -15,7 +16,12 @@ class FormList extends BaseView {
     }
 
     static propTypes = {
-        onFormOpen: PropTypes.func.isRequired
+        onFormOpen: PropTypes.func.isRequired,
+        editedFormIds: PropTypes.array
+    };
+
+    static defaultProps = {
+        editedFormIds: []
     };
 
     componentDidMount() {
@@ -24,14 +30,17 @@ class FormList extends BaseView {
 
     render() {
         const {getAllFormsCall} = this.state;
-        const {onFormOpen} = this.props;
+        const {onFormOpen, editedFormIds} = this.props;
         const formListLoading = ServerCall.noCallOrWait(getAllFormsCall);
         const formMetaDataList = ServerCall.getData(getAllFormsCall).map((x) => new FormMetaData(x));
 
         return formListLoading ? <Skeleton style={{width: "100%"}} variant="rectangular" height={40}/> :
             <Box style={{display: "flex", flexDirection: "row-reverse", paddingRight: 20}}>
-                {formMetaDataList.map((x: FormMetaData, index) => <Chip key={index} label={x.getTitle().toUpperCase()} clickable
-                                                                       onClick={() => onFormOpen(x)}/>)}
+                {formMetaDataList.map((x: FormMetaData, index) => {
+                    const color = _.some(editedFormIds, (editedFormId) => editedFormId === x.getId()) ? "primary" : "default";
+                    return <Chip key={index} label={x.getTitle().toUpperCase()} clickable color={color}
+                                 onClick={() => onFormOpen(x)}/>;
+                })}
             </Box>;
     }
 }

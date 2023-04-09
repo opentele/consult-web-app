@@ -113,21 +113,40 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
     }
 
     onFormOpenedForEdit(formMetaData) {
-        this.setState({formInEdit: formMetaData});
         this.makeServerCall(FormService.getFormDefinition(formMetaData), "formLoadCall");
     }
 
-    onFormEdit(formData) {
-        const newFormDataMap = {...this.state.formDataMap};
-        newFormDataMap[this.state.formInEdit.getId()] = formData;
-        this.setState({formDataMap: newFormDataMap});
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "formLoadCall")
+            newState.formInEdit = new FormMetaData(ServerCall.getData(newState[serverCallName]));
+        this.setState(newState);
+    }
+
+    onFormEdit(onChangeObject) {
+        if (onChangeObject["changed"]) {
+            const newFormDataMap = {...this.state.formDataMap};
+            newFormDataMap[this.state.formInEdit.getId()] = onChangeObject;
+            this.setState({formDataMap: newFormDataMap});
+        }
+    }
+
+    getDraftFormData() {
+        const {formInEdit, formDataMap} = this.state;
+        if (formInEdit && formDataMap[formInEdit.getId()]) {
+            return {
+                data: formDataMap[formInEdit.getId()].data
+            }
+        } else {
+            return null;
+        }
     }
 
     render() {
         const {onClose, consultationRoom} = this.props;
-        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, formInEdit, formLoadCall} = this.state;
+        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, formInEdit, formLoadCall, formDataMap} = this.state;
         const client = ServerCall.getData(getClientCall);
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
+        const draftFormData = this.getDraftFormData();
 
         return <ModalContainerView titleKey={"consultation-record-create-edit-title"}
                                    titleObj={clientLoading ? null : {client: client.name}} showCloseButton={true} onClose={() => onClose()}>
@@ -135,9 +154,17 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
                 <FormRecordsGroup groups={[]}/>
                 {clientLoading ? <ContainerSkeleton/> :
                     <Box style={{width: "1000px", height: "700px", display: "flex", flexDirection: "column"}}>
-                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpenedForEdit(formMetaData)}/>
+                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpenedForEdit(formMetaData)} editedFormIds={Object.keys(formDataMap)}/>
                         {ServerCall.waiting(formLoadCall) && <CardsSkeleton/>}
-                        {ServerCall.isSuccessful(formLoadCall) && <Form form={ServerCall.getData(formLoadCall)} onSubmit={(submission) => this.onFormSubmit(submission)} onChange={(formData) => this.onFormEdit(formData)}/>}
+                        {ServerCall.isSuccessful(formLoadCall) && !draftFormData &&
+                        <Form form={ServerCall.getData(formLoadCall)}
+                              onSubmit={(submission) => this.onFormSubmit(submission)}
+                              onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
+                        {ServerCall.isSuccessful(formLoadCall) && draftFormData &&
+                        <Form form={ServerCall.getData(formLoadCall)}
+                              submission={draftFormData}
+                              onSubmit={(submission) => this.onFormSubmit(submission)}
+                              onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
                     </Box>}
                 <FormRecordsGroup groups={[]}/>
             </Paper>
