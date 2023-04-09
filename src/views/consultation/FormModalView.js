@@ -19,7 +19,7 @@ class FormModalView extends BaseView {
     static propTypes = {
         messageClose: PropTypes.func.isRequired,
         client: PropTypes.object.isRequired,
-        form: PropTypes.object.isRequired
+        formMetaData: PropTypes.object.isRequired
     }
 
     onFormSubmit(submission) {
@@ -28,13 +28,13 @@ class FormModalView extends BaseView {
     }
 
     render() {
-        const {messageClose, client, form} = this.props;
+        const {messageClose, client, formMetaData} = this.props;
 
-        return <ModalContainerView onClose={() => messageClose(false)} showCloseButton={true} titleKey={form["title"]} titleObj={{}}>
+        return <ModalContainerView onClose={() => messageClose(false)} showCloseButton={true} titleKey={formMetaData.getTitle()} titleObj={{}}>
             {
                 <Box style={{padding: 30}}>
                     <Typography variant={"h5"}>{client.getDisplayName(i18n)}</Typography>
-                    <FormView form={form}/>
+                    <FormView formMetaData={formMetaData}/>
                 </Box>}
         </ModalContainerView>;
     }

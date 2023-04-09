@@ -16,6 +16,7 @@ import {CardsSkeleton} from "../../components/ConsultSkeleton";
 import FormModalView from "./FormModalView";
 import FormService from "../../service/FormService";
 import FormList from "./FormList";
+import FormMetaData from "../../domain/FormMetaData";
 
 const styles = theme => ({
     container: {},
@@ -64,10 +65,10 @@ class ClientDashboard extends BaseView {
         this.setState(newState);
     }
 
-    onFormOpen(form) {
+    onFormOpen(formMetaData) {
         const newState = {...this.state};
         newState.displayFormStatus = ModalStatus.OPENED;
-        newState.selectedForm = form;
+        newState.selectedForm = new FormMetaData(formMetaData);
         this.setState(newState);
     }
 
@@ -83,12 +84,12 @@ class ClientDashboard extends BaseView {
             <PrintView client={client} consultationSessionRecordId={consultationSessionRecordId}
                        messageClose={this.getModalCloseHandler("printModalStatus")}/>}
             {displayFormStatus === ModalStatus.OPENED &&
-            <FormModalView form={selectedForm} client={client}
+            <FormModalView formMetaData={selectedForm} client={client}
                            messageClose={(saved) => this.onModalClose("displayFormStatus", saved)}/>}
 
             {clientLoading ? <CardsSkeleton/> :
                 <Box className={classes.container}>
-                    <FormList onFormOpen={(form) => this.onFormOpen(form)}/>
+                    <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpen(formMetaData)}/>
                     <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>
                     <Box className={classes.section}>
                         <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>

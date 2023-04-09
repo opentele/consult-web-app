@@ -15,11 +15,11 @@ class FormView extends BaseView {
     }
 
     static propTypes = {
-        form: PropTypes.object.isRequired
+        formMetaData: PropTypes.object.isRequired
     }
 
     componentDidMount() {
-        this.makeServerCall(FormService.getFormDefinition(this.props.form), "formLoadCall");
+        this.makeServerCall(FormService.getFormDefinition(this.props.formMetaData), "formLoadCall");
     }
 
     render() {
