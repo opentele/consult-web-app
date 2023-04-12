@@ -14,9 +14,8 @@ import _ from 'lodash';
 import PrintView from "../framework/PrintView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
 import FormModalView from "./FormModalView";
-import FormService from "../../service/FormService";
 import FormList from "./FormList";
-import FormMetaData from "../../domain/FormMetaData";
+import FormMetaData from "../../domain/form/FormMetaData";
 
 const styles = theme => ({
     container: {},

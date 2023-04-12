@@ -26,8 +26,12 @@ import DescriptionIcon from '@mui/icons-material/Description';
 import {styled} from '@mui/material/styles';
 import FormList from "./FormList";
 import FormService from "../../service/FormService";
-import FormMetaData from "../../domain/FormMetaData";
+import FormMetaData from "../../domain/form/FormMetaData";
 import {Form} from "@formio/react";
+import Button from "@mui/material/Button";
+import {i18n} from "consult-app-common";
+import _ from 'lodash';
+import ConsultForm from "../../domain/form/ConsultForm";
 
 const styles = theme => ({});
 
@@ -92,7 +96,7 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
             getClientCall: ServerCall.createInitial(),
             getFormRecordSummaryByFormCall: ServerCall.createInitial({}),
             getFormRecordSummaryByDateCall: ServerCall.createInitial({}),
-            formInEdit: null,
+            currentForm: null,
             formLoadCall: ServerCall.createInitial({}),
             formDataMap: {}
         }
@@ -112,29 +116,37 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
         this.makeServerCall(ClientService.getFormRecordSummaryByDate(clientId), "getFormRecordSummaryByDateCall");
     }
 
-    onFormOpenedForEdit(formMetaData) {
-        this.makeServerCall(FormService.getFormDefinition(formMetaData), "formLoadCall");
+    onFormListLoaded(formMetaDataList: FormMetaData[]) {
+        const defaultFormMetaData = _.find(formMetaDataList, (x) => x.isDefault());
+        this.makeServerCall(FormService.getFormDefinition(defaultFormMetaData), "formLoadCall");
     }
 
-    updateServerResponseState(newState, serverCallName) {
-        if (serverCallName === "formLoadCall")
-            newState.formInEdit = new FormMetaData(ServerCall.getData(newState[serverCallName]));
-        this.setState(newState);
+    onFormOpenedForEdit(formMetaData) {
+        this.makeServerCall(FormService.getFormDefinition(formMetaData), "formLoadCall");
     }
 
     onFormEdit(onChangeObject) {
         if (onChangeObject["changed"]) {
             const newFormDataMap = {...this.state.formDataMap};
-            newFormDataMap[this.state.formInEdit.getId()] = onChangeObject;
+            newFormDataMap[this.state.currentForm.getId()] = onChangeObject;
             this.setState({formDataMap: newFormDataMap});
         }
     }
 
+    updateServerResponseState(newState, serverCallName) {
+        if (serverCallName === "formLoadCall") {
+            const form = new ConsultForm(ServerCall.getData(newState[serverCallName]));
+            newState.currentForm = form;
+            newState.formDataMap[form.getId()] = null;
+        }
+        this.setState(newState);
+    }
+
     getDraftFormData() {
-        const {formInEdit, formDataMap} = this.state;
-        if (formInEdit && formDataMap[formInEdit.getId()]) {
+        const {currentForm, formDataMap} = this.state;
+        if (currentForm && formDataMap[currentForm.getId()]) {
             return {
-                data: formDataMap[formInEdit.getId()].data
+                data: formDataMap[currentForm.getId()].data
             }
         } else {
             return null;
@@ -143,10 +155,12 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
 
     render() {
         const {onClose, consultationRoom} = this.props;
-        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, formInEdit, formLoadCall, formDataMap} = this.state;
+        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, currentForm, formLoadCall, formDataMap} = this.state;
         const client = ServerCall.getData(getClientCall);
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
         const draftFormData = this.getDraftFormData();
+        const showEmptyForm = ServerCall.isSuccessful(formLoadCall) && !draftFormData;
+        const showEditedForm = ServerCall.isSuccessful(formLoadCall) && draftFormData;
 
         return <ModalContainerView titleKey={"consultation-record-create-edit-title"}
                                    titleObj={clientLoading ? null : {client: client.name}} showCloseButton={true} onClose={() => onClose()}>
@@ -154,17 +168,24 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
                 <FormRecordsGroup groups={[]}/>
                 {clientLoading ? <ContainerSkeleton/> :
                     <Box style={{width: "1000px", height: "700px", display: "flex", flexDirection: "column"}}>
-                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpenedForEdit(formMetaData)} editedFormIds={Object.keys(formDataMap)}/>
+                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpenedForEdit(formMetaData)}
+                                  editedFormIds={Object.keys(formDataMap)}
+                                  openedForm={currentForm}
+                                  onFormListLoaded={(formMetaDataList) => this.onFormListLoaded(formMetaDataList)}/>
                         {ServerCall.waiting(formLoadCall) && <CardsSkeleton/>}
-                        {ServerCall.isSuccessful(formLoadCall) && !draftFormData &&
+
+                        {showEmptyForm &&
                         <Form form={ServerCall.getData(formLoadCall)}
                               onSubmit={(submission) => this.onFormSubmit(submission)}
                               onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
-                        {ServerCall.isSuccessful(formLoadCall) && draftFormData &&
+                        {showEditedForm &&
                         <Form form={ServerCall.getData(formLoadCall)}
                               submission={draftFormData}
                               onSubmit={(submission) => this.onFormSubmit(submission)}
                               onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
+
+                        {ServerCall.isSuccessful(formLoadCall) &&
+                        <Button variant={"contained"} color={"secondary"}>{i18n.t("clear")}</Button>}
                     </Box>}
                 <FormRecordsGroup groups={[]}/>
             </Paper>

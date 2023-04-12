@@ -1,6 +1,6 @@
 import ServiceUtil from "./ServiceUtil";
 import GlobalContext from "../framework/GlobalContext";
-import FormMetaData from "../domain/FormMetaData";
+import FormMetaData from "../domain/form/FormMetaData";
 
 class FormService {
     static getFormDefinition(form: FormMetaData) {
@@ -8,7 +8,7 @@ class FormService {
     }
 
     static getAllForms() {
-        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisation().formIoProjectId}.form.io/form?select=title,name`);
+        return ServiceUtil.getJsonFromFullPath(`https://${GlobalContext.getOrganisation().formIoProjectId}.form.io/form?select=title,name,properties`);
     }
 }
 

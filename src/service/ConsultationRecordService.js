@@ -1,5 +1,5 @@
 import ServiceUtil from "./ServiceUtil";
-import FormMetaData from "../domain/FormMetaData";
+import FormMetaData from "../domain/form/FormMetaData";
 
 const ConsultationRecordEndpoint = "consultationRecord";
 

@@ -114,7 +114,7 @@ class BaseView extends Component {
         newState[serverCallName] = ServerCall.responseReceived(this.state[serverCallName], response);
         this.updateServerResponseState(newState, serverCallName);
         if (ServerCall.isSuccessful(newState[serverCallName])) {
-            this.onSuccessfulServerCall(serverCallName);
+            this.onSuccessfulServerCall(serverCallName, newState);
         }
     }
 
@@ -123,7 +123,7 @@ class BaseView extends Component {
     }
 
     //Should be used only for making non state change calls
-    onSuccessfulServerCall(serverCallName) {
+    onSuccessfulServerCall(serverCallName, newState) {
     }
 
     getEmptyFields(obj, fieldNames) {
