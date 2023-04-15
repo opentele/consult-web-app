@@ -1,5 +1,4 @@
 import ServiceUtil from "./ServiceUtil";
-import FormMetaData from "../domain/form/FormMetaData";
 
 const ConsultationRecordEndpoint = "consultationRecord";
 
@@ -21,9 +20,17 @@ class ConsultationRecordService {
         return ServiceUtil.postJson(ConsultationRecordEndpoint, consultationRecord);
     }
 
-    static saveForm(client, form: FormMetaData, submission) {
-        const request = {data: JSON.stringify(submission.data), clientId: client.id, formId: form.getId()};
-        return ServiceUtil.postJson(`${ConsultationRecordEndpoint}/form`, request);
+    static saveForms(client, consultationRoom, formDataMap) {
+        const request = {
+            clientId: client.id,
+            consultationRoomId: consultationRoom.id
+        };
+        request.formRecords = Object.keys(formDataMap).map((x) => {
+            const formRecordRequest = {formId: x};
+            formRecordRequest.data = formDataMap[x] && JSON.stringify(formDataMap[x].data);
+            return formRecordRequest;
+        });
+        return ServiceUtil.postJson(`${ConsultationRecordEndpoint}/formRecords`, request);
     }
 }
 

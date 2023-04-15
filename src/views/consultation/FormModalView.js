@@ -22,11 +22,6 @@ class FormModalView extends BaseView {
         formMetaData: PropTypes.object.isRequired
     }
 
-    onFormSubmit(submission) {
-        const {client, form} = this.props;
-        this.makeServerCall(ConsultationRecordService.saveForm(client, form, submission), "formSaveCall");
-    }
-
     render() {
         const {messageClose, client, formMetaData} = this.props;
 

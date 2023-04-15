@@ -33,6 +33,7 @@ import {i18n} from "consult-app-common";
 import _ from 'lodash';
 import ConsultForm from "../../domain/form/ConsultForm";
 import NullConsultForm from "../../domain/form/null/NullConsultForm";
+import ConsultationRecordService from "../../service/ConsultationRecordService";
 
 const styles = theme => ({});
 
@@ -151,6 +152,12 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
         this.setState(newState);
     }
 
+    onFormSubmit() {
+        const {getClientCall, formDataMap} = this.state;
+        const client = ServerCall.getData(getClientCall);
+        this.makeServerCall(ConsultationRecordService.saveForms(client, this.props.consultationRoom, formDataMap), "formSaveCall");
+    }
+
     getDraftFormData() {
         const {currentForm, formDataMap} = this.state;
         if (currentForm && formDataMap[currentForm.getId()]) {
@@ -190,12 +197,12 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
 
                         {showFormWithoutDraftData &&
                         <Form form={ServerCall.getData(formLoadCall)}
-                              onSubmit={(submission) => this.onFormSubmit(submission)}
+                              onSubmit={() => this.onFormSubmit()}
                               onChange={(onChangeObject) => this.onFormEdit(onChangeObject)} onRender={() => this.formRendered()}/>}
                         {showFormWithDraftData &&
                         <Form form={ServerCall.getData(formLoadCall)}
                               submission={draftFormData}
-                              onSubmit={(submission) => this.onFormSubmit(submission)}
+                              onSubmit={() => this.onFormSubmit()}
                               onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
 
                         {ServerCall.isSuccessful(formLoadCall) &&
