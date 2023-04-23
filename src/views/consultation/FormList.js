@@ -1,5 +1,5 @@
 import BaseView from "../framework/BaseView";
-import {Box, Chip, Skeleton} from "@mui/material";
+import {Box, Chip, Skeleton, Typography} from "@mui/material";
 import {ServerCall} from "react-app-common";
 import React from "react";
 import PropTypes from "prop-types";
@@ -18,6 +18,7 @@ class FormList extends BaseView {
     }
 
     static propTypes = {
+        clientName: PropTypes.string.isRequired,
         onFormOpen: PropTypes.func.isRequired,
         editedFormIds: PropTypes.array,
         openedForm: PropTypes.object,
@@ -44,18 +45,21 @@ class FormList extends BaseView {
 
     render() {
         const {getAllFormsCall, formMetaDataList} = this.state;
-        const {onFormOpen, editedFormIds, openedForm} = this.props;
+        const {onFormOpen, editedFormIds, openedForm, clientName} = this.props;
         const formListLoading = ServerCall.noCallOrWait(getAllFormsCall);
 
         return formListLoading ? <Skeleton style={{width: "100%"}} variant="rectangular" height={40}/> :
-            <Box style={{display: "flex", flexDirection: "row-reverse", paddingRight: 20}}>
-                {formMetaDataList.map((x: FormMetaData, index) => {
-                    const color = x.getId() === openedForm.getId() ? "primary" : "default";
-                    const showEditIcon = _.some(editedFormIds, (editedFormId) => editedFormId === x.getId());
-                    return <Chip key={index} label={x.getTitle().toUpperCase()} clickable color={color}
-                                 icon={showEditIcon && <EditIcon/>}
-                                 onClick={() => onFormOpen(x)}/>;
-                })}
+            <Box style={{display: "flex", flexDirection: "row", justifyContent: "space-between"}}>
+                <Typography variant={"h5"} style={{marginLeft: 15}}>{clientName}</Typography>
+                <Box style={{display: "flex", flexDirection: "row-reverse", paddingRight: 20}}>
+                    {formMetaDataList.map((x: FormMetaData, index) => {
+                        const color = x.getId() === openedForm.getId() ? "primary" : "default";
+                        const showEditIcon = _.some(editedFormIds, (editedFormId) => editedFormId === x.getId());
+                        return <Chip key={index} label={x.getTitle().toUpperCase()} clickable color={color}
+                                     icon={showEditIcon && <EditIcon/>}
+                                     onClick={() => onFormOpen(x)}/>;
+                    })}
+                </Box>
             </Box>;
     }
 }

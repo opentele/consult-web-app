@@ -15,7 +15,8 @@ import PrintView from "../framework/PrintView";
 import {CardsSkeleton} from "../../components/ConsultSkeleton";
 import FormModalView from "./FormModalView";
 import FormList from "./FormList";
-import FormMetaData from "../../domain/form/FormMetaData";
+import NullConsultForm from "../../domain/form/null/NullConsultForm";
+import ConsultationFormRecordEditor from "./ConsultationFormRecordEditor";
 
 const styles = theme => ({
     container: {},
@@ -27,12 +28,13 @@ const styles = theme => ({
 class ClientDashboard extends BaseView {
     constructor(props) {
         super(props);
+        this.consultationFormRecordEditor = new ConsultationFormRecordEditor(this);
         this.state = {
             getClientCall: ServerCall.createInitial({}),
             printModalStatus: ModalStatus.NOT_OPENED,
-            displayFormStatus: ModalStatus.NOT_OPENED,
-            selectedForm: null
+            displayFormStatus: ModalStatus.NOT_OPENED
         };
+        this.consultationFormRecordEditor.onStart();
     }
 
     static propTypes = {};
@@ -64,13 +66,6 @@ class ClientDashboard extends BaseView {
         this.setState(newState);
     }
 
-    onFormOpen(formMetaData) {
-        const newState = {...this.state};
-        newState.displayFormStatus = ModalStatus.OPENED;
-        newState.selectedForm = new FormMetaData(formMetaData);
-        this.setState(newState);
-    }
-
     render() {
         const {classes, theme} = this.props;
         const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, selectedForm} = this.state;
@@ -88,10 +83,15 @@ class ClientDashboard extends BaseView {
 
             {clientLoading ? <CardsSkeleton/> :
                 <Box className={classes.container}>
-                    <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpen(formMetaData)}/>
+                    <FormList onFormOpen={(formMetaData) => this.consultationFormRecordEditor.onFormOpenedForEdit(formMetaData)}
+                              openedForm={new NullConsultForm()} clientName={client.name}
+                              onFormListLoaded={() => _.noop()}/>
                     <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>
                     <Box className={classes.section}>
                         <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>
+                    </Box>
+                    <Box style={{paddingLeft: 200, paddingRight: 200}}>
+                        {this.consultationFormRecordEditor.getForm()}
                     </Box>
                     {client.consultationSessionRecords.map((record) => {
                             return <Box className={classes.section} key={record.id}>

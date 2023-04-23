@@ -25,7 +25,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DescriptionIcon from '@mui/icons-material/Description';
 import {styled} from '@mui/material/styles';
 import FormList from "./FormList";
-import FormService from "../../service/FormService";
 import FormMetaData from "../../domain/form/FormMetaData";
 import {Form} from "@formio/react";
 import Button from "@mui/material/Button";
@@ -34,6 +33,7 @@ import _ from 'lodash';
 import ConsultForm from "../../domain/form/ConsultForm";
 import NullConsultForm from "../../domain/form/null/NullConsultForm";
 import ConsultationRecordService from "../../service/ConsultationRecordService";
+import ConsultationFormRecordEditor from "./ConsultationFormRecordEditor";
 
 const styles = theme => ({});
 
@@ -91,23 +91,16 @@ function NewForm({forms}) {
     </StyledSpeedDial>;
 }
 
-const formLifeCycleStatuses = {
-    Rendered: "Rendered",
-    NotRendered: "NotRendered"
-}
-
 class FormTypeConsultationRecordDuringConferenceView extends BaseView {
     constructor(props, context) {
         super(props, context);
+        this.consultationFormRecordEditor = new ConsultationFormRecordEditor(this, props.consultationRoom);
         this.state = {
             getClientCall: ServerCall.createInitial(),
             getFormRecordSummaryByFormCall: ServerCall.createInitial({}),
-            getFormRecordSummaryByDateCall: ServerCall.createInitial({}),
-            currentForm: new NullConsultForm(),
-            formLoadCall: ServerCall.createInitial({}),
-            formDataMap: {},
-            formLifeCycleStatus: formLifeCycleStatuses.NotRendered
-        }
+            getFormRecordSummaryByDateCall: ServerCall.createInitial({})
+        };
+        this.consultationFormRecordEditor.onStart();
     }
 
     static propTypes = {
@@ -124,64 +117,16 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
         this.makeServerCall(ClientService.getFormRecordSummaryByDate(clientId), "getFormRecordSummaryByDateCall");
     }
 
-    onFormListLoaded(formMetaDataList: FormMetaData[]) {
-        const defaultFormMetaData = _.find(formMetaDataList, (x) => x.isDefault());
-        this.makeServerCall(FormService.getFormDefinition(defaultFormMetaData), "formLoadCall");
-    }
-
-    onFormOpenedForEdit(formMetaData) {
-        this.makeServerCall(FormService.getFormDefinition(formMetaData), "formLoadCall");
-    }
-
-    onFormEdit(onChangeObject) {
-        if (onChangeObject["changed"]) {
-            const newFormDataMap = {...this.state.formDataMap};
-            newFormDataMap[this.state.currentForm.getId()] = onChangeObject;
-            this.setState({formDataMap: newFormDataMap});
-        }
-    }
-
     updateServerResponseState(newState, serverCallName) {
-        if (serverCallName === "formLoadCall") {
-            const form = new ConsultForm(ServerCall.getData(newState[serverCallName]));
-            newState.formLifeCycleStatus = formLifeCycleStatuses.NotRendered;
-            newState.currentForm = form;
-            if (_.isUndefined(newState.formDataMap[form.getId()]))
-                newState.formDataMap[form.getId()] = null;
-        }
+        this.consultationFormRecordEditor.onUpdateServerResponseState(newState, serverCallName);
         this.setState(newState);
-    }
-
-    onFormSubmit() {
-        const {getClientCall, formDataMap} = this.state;
-        const client = ServerCall.getData(getClientCall);
-        this.makeServerCall(ConsultationRecordService.saveForms(client, this.props.consultationRoom, formDataMap), "formSaveCall");
-    }
-
-    getDraftFormData() {
-        const {currentForm, formDataMap} = this.state;
-        if (currentForm && formDataMap[currentForm.getId()]) {
-            return {
-                data: formDataMap[currentForm.getId()].data
-            }
-        } else {
-            return null;
-        }
-    }
-
-    formRendered() {
-        this.setState({formLifeCycleStatus: formLifeCycleStatuses.Rendered});
     }
 
     render() {
         const {onClose, consultationRoom} = this.props;
-        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, currentForm, formLoadCall, formDataMap, formLifeCycleStatus} = this.state;
+        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, currentForm, formLoadCall, formDataMap} = this.state;
         const client = ServerCall.getData(getClientCall);
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
-        const draftFormData = this.getDraftFormData();
-        const noDraftData = _.isNil(draftFormData);
-        const showFormWithoutDraftData = ServerCall.isSuccessful(formLoadCall) && (noDraftData || formLifeCycleStatus === formLifeCycleStatuses.Rendered);
-        const showFormWithDraftData = ServerCall.isSuccessful(formLoadCall) && !noDraftData && formLifeCycleStatus === formLifeCycleStatuses.NotRendered;
 
         return <ModalContainerView titleKey={"consultation-record-create-edit-title"}
                                    titleObj={clientLoading ? null : {client: client.name}} showCloseButton={true} onClose={() => onClose()}>
@@ -189,22 +134,13 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
                 <FormRecordsGroup groups={[]}/>
                 {clientLoading ? <ContainerSkeleton/> :
                     <Box style={{width: "1000px", height: "700px", display: "flex", flexDirection: "column"}}>
-                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.onFormOpenedForEdit(formMetaData)}
+                        <FormList onFormOpen={(formMetaData: FormMetaData) => this.consultationFormRecordEditor.onFormOpenedForEdit(formMetaData)}
                                   editedFormIds={Object.keys(formDataMap)}
                                   openedForm={currentForm}
-                                  onFormListLoaded={(formMetaDataList) => this.onFormListLoaded(formMetaDataList)}/>
+                                  onFormListLoaded={(formMetaDataList) => this.consultationFormRecordEditor.onFormListLoaded(formMetaDataList)}/>
+
                         {ServerCall.waiting(formLoadCall) && <CardsSkeleton/>}
-
-                        {showFormWithoutDraftData &&
-                        <Form form={ServerCall.getData(formLoadCall)}
-                              onSubmit={() => this.onFormSubmit()}
-                              onChange={(onChangeObject) => this.onFormEdit(onChangeObject)} onRender={() => this.formRendered()}/>}
-                        {showFormWithDraftData &&
-                        <Form form={ServerCall.getData(formLoadCall)}
-                              submission={draftFormData}
-                              onSubmit={() => this.onFormSubmit()}
-                              onChange={(onChangeObject) => this.onFormEdit(onChangeObject)}/>}
-
+                        {this.consultationFormRecordEditor.getForm()}
                         {ServerCall.isSuccessful(formLoadCall) &&
                         <Button variant={"contained"} color={"secondary"}>{i18n.t("clear")}</Button>}
                     </Box>}

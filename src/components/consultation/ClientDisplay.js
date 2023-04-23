@@ -52,7 +52,6 @@ class ClientDisplay extends BaseView {
                 {this.renderAction()}
                 <Grid container spacing={2}>
                     <FieldDisplay fieldName="registration-number" fieldValue={client.registrationNumber}/>
-                    <FieldDisplay fieldName="name" fieldValue={client.name}/>
                     <FieldDisplay fieldName="age" fieldValue={`${client.age} ${i18n.t(client.ageDurationType)}`}/>
                     <FieldDisplay fieldName="gender" fieldValue={i18n.t(client.gender)}/>
                     <FieldDisplay fieldName="mobile" fieldValue={client.mobile}/>
