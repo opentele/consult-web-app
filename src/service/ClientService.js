@@ -41,14 +41,6 @@ class ClientService {
     static getFormData(formRecordId) {
         return ServiceUtil.getJson(`client/form/${formRecordId}`);
     }
-
-    static getFormRecordSummaryByForm(clientId) {
-        return ServiceUtil.getJson(`client/${clientId}/formRecordSummaryByForm`);
-    }
-
-    static getFormRecordSummaryByDate(clientId) {
-        return ServiceUtil.getJson(`client/${clientId}/formRecordSummaryByDate`);
-    }
 }
 
 export default ClientService;

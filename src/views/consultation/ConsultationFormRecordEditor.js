@@ -8,6 +8,8 @@ import ConsultForm from "../../domain/form/ConsultForm";
 import {Form} from "@formio/react";
 import React from "react";
 import ConsultationRecordService from "../../service/ConsultationRecordService";
+import {Typography} from "@mui/material";
+import {i18n} from "consult-app-common";
 
 const formLifeCycleStatuses = {
     Rendered: "Rendered",

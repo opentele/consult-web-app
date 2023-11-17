@@ -17,6 +17,10 @@ import FormModalView from "./FormModalView";
 import FormList from "./FormList";
 import NullConsultForm from "../../domain/form/null/NullConsultForm";
 import ConsultationFormRecordEditor from "./ConsultationFormRecordEditor";
+import FormRecordGroupByDate from "./form/FormRecordGroupByDate";
+import FormRecordGroupByForm from "./form/FormRecordGroupByForm";
+import ConsultationRecordService from "../../service/ConsultationRecordService";
+import FormRecordGroupsByDate from "../../domain/form/FormRecordGroupsByDate";
 
 const styles = theme => ({
     container: {},
@@ -32,7 +36,9 @@ class ClientDashboard extends BaseView {
         this.state = {
             getClientCall: ServerCall.createInitial({}),
             printModalStatus: ModalStatus.NOT_OPENED,
-            displayFormStatus: ModalStatus.NOT_OPENED
+            displayFormStatus: ModalStatus.NOT_OPENED,
+            formMetaDataList: [],
+            getFormRecordGroupByDateCall: ServerCall.createInitial({})
         };
         this.consultationFormRecordEditor.onStart();
     }
@@ -46,6 +52,7 @@ class ClientDashboard extends BaseView {
     refresh() {
         const clientId = new URLSearchParams(this.props.location.search).get("id");
         this.makeServerCall(ClientService.getClientFull(clientId), "getClientCall");
+        this.makeServerCall(ConsultationRecordService.getFormRecordSummaryByDate(clientId), "getFormRecordGroupByDateCall");
     }
 
     getConsultationRecordPrintHandler() {
@@ -68,10 +75,12 @@ class ClientDashboard extends BaseView {
 
     render() {
         const {classes, theme} = this.props;
-        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, selectedForm} = this.state;
+        const {getClientCall, printModalStatus, consultationSessionRecordId, clientId, displayFormStatus, selectedForm, formMetaDataList, getFormRecordGroupByDateCall} = this.state;
 
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
         const client = clientLoading ? {} : Client.fromServerResource(ServerCall.getData(getClientCall));
+        const formRecordGroupsByDate = ServerCall.getData(getFormRecordGroupByDateCall);
+        const recentFormRecordId = FormRecordGroupsByDate.getRecentFormRecordId();
 
         return <ContainerView activeTab="client" showBackButton={true} onRefresh={() => this.refresh()}>
             {printModalStatus === ModalStatus.OPENED && (!_.isNil(consultationSessionRecordId) || !_.isNil(clientId)) &&
@@ -85,13 +94,15 @@ class ClientDashboard extends BaseView {
                 <Box className={classes.container}>
                     <FormList onFormOpen={(formMetaData) => this.consultationFormRecordEditor.onFormOpenedForEdit(formMetaData)}
                               openedForm={new NullConsultForm()} clientName={client.name}
-                              onFormListLoaded={() => _.noop()}/>
+                              onFormListLoaded={(formMetaDataList) => this.setState({formMetaDataList: formMetaDataList})}/>
                     <Paper style={{height: theme.customProps.paperDividerHeight, borderRadius: 0, backgroundColor: theme.palette.secondary.light, marginTop: 20}}/>
                     <Box className={classes.section}>
                         <ClientDisplay client={client} onModification={() => this.refresh()} onPrint={(clientId) => this.onClientPrint(clientId)}/>
                     </Box>
-                    <Box style={{paddingLeft: 200, paddingRight: 200}}>
+                    <Box style={{display: "flex", flexDirection: "row"}}>
+                        <FormRecordGroupByDate formMetaDataList={formMetaDataList} groups={formRecordGroupsByDate}/>
                         {this.consultationFormRecordEditor.getForm()}
+                        <FormRecordGroupByForm client={client} formMetaDataList={formMetaDataList}/>
                     </Box>
                     {client.consultationSessionRecords.map((record) => {
                             return <Box className={classes.section} key={record.id}>

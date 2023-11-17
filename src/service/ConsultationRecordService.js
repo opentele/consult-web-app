@@ -4,7 +4,7 @@ const ConsultationRecordEndpoint = "consultationRecord";
 
 class ConsultationRecordService {
     static getRecord(id) {
-        return ServiceUtil.getJson(`/${id}`);
+        return ServiceUtil.getJson(`${ConsultationRecordEndpoint}/${id}`);
     }
 
     static getRecords(clientId) {
@@ -31,6 +31,18 @@ class ConsultationRecordService {
             return formRecordRequest;
         });
         return ServiceUtil.postJson(`${ConsultationRecordEndpoint}/formRecords`, request);
+    }
+
+    static getFormRecordSummaryByForm(client) {
+        return ServiceUtil.getJson(`${ConsultationRecordEndpoint}/${client.id}/formRecordSummaryByForm`);
+    }
+
+    static getFormRecordSummaryByDate(clientId) {
+        return ServiceUtil.getJson(`${ConsultationRecordEndpoint}/${clientId}/formRecordSummaryByDate`);
+    }
+
+    static getFormRecord(id) {
+        return ServiceUtil.getJson(`${ConsultationRecordEndpoint}/formRecord/${id}`);
     }
 }
 

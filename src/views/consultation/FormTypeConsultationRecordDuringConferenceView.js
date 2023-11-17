@@ -34,33 +34,9 @@ import ConsultForm from "../../domain/form/ConsultForm";
 import NullConsultForm from "../../domain/form/null/NullConsultForm";
 import ConsultationRecordService from "../../service/ConsultationRecordService";
 import ConsultationFormRecordEditor from "./ConsultationFormRecordEditor";
+import FormRecordGroupByDate from "./form/FormRecordGroupByDate";
 
 const styles = theme => ({});
-
-function FormRecordsGroup({groups, groupItemClicked}) {
-    return groups.map((g) => <Accordion expanded={true} onChange={() => {
-    }}>
-        <AccordionSummary
-            expandIcon={<ExpandMoreIcon/>}
-            aria-controls="panel1bh-content"
-            id="panel1bh-header"
-        >
-            <Typography sx={{width: '33%', flexShrink: 0}}>{g.title}</Typography>
-            <Typography sx={{color: 'text.secondary'}}>I am an accordion</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-            <List dense={false}>
-                {g.items.map((i) => <ListItem onClick={() => groupItemClicked(i, g)}>
-                        <ListItemIcon>
-                            <DescriptionIcon/>
-                        </ListItemIcon>
-                        <ListItemText primary={i.title}/>
-                    </ListItem>
-                )}
-            </List>
-        </AccordionDetails>
-    </Accordion>);
-}
 
 const StyledSpeedDial = styled(SpeedDial)(({theme}) => ({
     position: 'absolute',
@@ -96,9 +72,7 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
         super(props, context);
         this.consultationFormRecordEditor = new ConsultationFormRecordEditor(this, props.consultationRoom);
         this.state = {
-            getClientCall: ServerCall.createInitial(),
-            getFormRecordSummaryByFormCall: ServerCall.createInitial({}),
-            getFormRecordSummaryByDateCall: ServerCall.createInitial({})
+            getClientCall: ServerCall.createInitial()
         };
         this.consultationFormRecordEditor.onStart();
     }
@@ -113,8 +87,6 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
         const clientId = this.props.clientId;
 
         this.makeServerCall(ClientService.getClientWithRecentForms(clientId), "getClientCall");
-        this.makeServerCall(ClientService.getFormRecordSummaryByForm(clientId), "getFormRecordSummaryByFormCall");
-        this.makeServerCall(ClientService.getFormRecordSummaryByDate(clientId), "getFormRecordSummaryByDateCall");
     }
 
     updateServerResponseState(newState, serverCallName) {
@@ -124,14 +96,14 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
 
     render() {
         const {onClose, consultationRoom} = this.props;
-        const {getClientCall, getFormRecordSummaryByFormCall, getFormRecordSummaryByDateCall, currentForm, formLoadCall, formDataMap} = this.state;
+        const {getClientCall, getFormRecordSummaryByDateCall, currentForm, formLoadCall, formDataMap} = this.state;
         const client = ServerCall.getData(getClientCall);
         const clientLoading = ServerCall.noCallOrWait(getClientCall);
 
         return <ModalContainerView titleKey={"consultation-record-create-edit-title"}
                                    titleObj={clientLoading ? null : {client: client.name}} showCloseButton={true} onClose={() => onClose()}>
             <Paper style={{padding: 20, display: "flex", flexDirection: "row"}}>
-                <FormRecordsGroup groups={[]}/>
+                <FormRecordGroupByDate groups={[]}/>
                 {clientLoading ? <ContainerSkeleton/> :
                     <Box style={{width: "1000px", height: "700px", display: "flex", flexDirection: "column"}}>
                         <FormList onFormOpen={(formMetaData: FormMetaData) => this.consultationFormRecordEditor.onFormOpenedForEdit(formMetaData)}
@@ -144,7 +116,7 @@ class FormTypeConsultationRecordDuringConferenceView extends BaseView {
                         {ServerCall.isSuccessful(formLoadCall) &&
                         <Button variant={"contained"} color={"secondary"}>{i18n.t("clear")}</Button>}
                     </Box>}
-                <FormRecordsGroup groups={[]}/>
+                <FormRecordGroupByDate groups={[]}/>
             </Paper>
         </ModalContainerView>;
     }
